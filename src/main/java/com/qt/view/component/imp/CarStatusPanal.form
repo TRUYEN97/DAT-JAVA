@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <Properties>
+    <Property name="h" type="int" value="-1"/>
+    <Property name="round" type="int" value="20"/>
+  </Properties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="stAT" pref="179" max="32767" attributes="0"/>
+                          <Component id="stNT" pref="0" max="32767" attributes="0"/>
+                          <Component id="stCM" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="stPT" alignment="1" pref="179" max="32767" attributes="0"/>
+                          <Component id="stNP" alignment="1" max="32767" attributes="0"/>
+                          <Component id="stValue" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="stS1" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Component id="stS2" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="stS3" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="stT1" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Component id="stT2" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="stT3" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="stNP" pref="129" max="32767" attributes="0"/>
+                  <Component id="stNT" pref="0" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="stPT" alignment="0" pref="143" max="32767" attributes="0"/>
+                  <Component id="stAT" alignment="0" pref="143" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="stCM" pref="138" max="32767" attributes="0"/>
+                  <Component id="stValue" pref="138" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="stS2" alignment="0" pref="124" max="32767" attributes="0"/>
+                  <Component id="stS1" pref="124" max="32767" attributes="0"/>
+                  <Component id="stS3" pref="124" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="stT2" alignment="0" pref="124" max="32767" attributes="0"/>
+                  <Component id="stT1" alignment="1" pref="124" max="32767" attributes="0"/>
+                  <Component id="stT3" alignment="0" pref="0" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="com.qt.view.component.StatusPanel" name="stNT">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icon/NT.png"/>
+        </Property>
+        <Property name="iconName" type="java.lang.String" value="NT"/>
+      </Properties>
+    </Component>
+    <Component class="com.qt.view.component.StatusPanel" name="stNP">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icon/NP.png"/>
+        </Property>
+        <Property name="iconName" type="java.lang.String" value="NP"/>
+      </Properties>
+    </Component>
+    <Component class="com.qt.view.component.StatusPanel" name="stAT">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icon/AT.png"/>
+        </Property>
+        <Property name="iconName" type="java.lang.String" value="AT"/>
+      </Properties>
+    </Component>
+    <Component class="com.qt.view.component.StatusPanel" name="stPT">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icon/PT.png"/>
+        </Property>
+        <Property name="iconName" type="java.lang.String" value="PT"/>
+      </Properties>
+    </Component>
+    <Component class="com.qt.view.component.StatusPanel" name="stCM">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icon/CM.png"/>
+        </Property>
+        <Property name="iconName" type="java.lang.String" value="CM"/>
+      </Properties>
+    </Component>
+    <Component class="com.qt.view.component.StatusPanel" name="stS1">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icon/circle.png"/>
+        </Property>
+        <Property name="iconName" type="java.lang.String" value="S1"/>
+      </Properties>
+    </Component>
+    <Component class="com.qt.view.component.StatusPanel" name="stS3">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icon/circle.png"/>
+        </Property>
+        <Property name="iconName" type="java.lang.String" value="S3"/>
+      </Properties>
+    </Component>
+    <Component class="com.qt.view.component.StatusPanel" name="stS2">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icon/circle.png"/>
+        </Property>
+        <Property name="iconName" type="java.lang.String" value="S2"/>
+      </Properties>
+    </Component>
+    <Component class="com.qt.view.component.StatusPanel" name="stValue">
+      <Properties>
+        <Property name="iconName" type="java.lang.String" value="P"/>
+      </Properties>
+    </Component>
+    <Component class="com.qt.view.component.StatusPanel" name="stT3">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icon/point.png"/>
+        </Property>
+        <Property name="iconName" type="java.lang.String" value="T3"/>
+      </Properties>
+    </Component>
+    <Component class="com.qt.view.component.StatusPanel" name="stT2">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icon/point.png"/>
+        </Property>
+        <Property name="iconName" type="java.lang.String" value="T2"/>
+      </Properties>
+    </Component>
+    <Component class="com.qt.view.component.StatusPanel" name="stT1">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icon/point.png"/>
+        </Property>
+        <Property name="iconName" type="java.lang.String" value="T1"/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>
