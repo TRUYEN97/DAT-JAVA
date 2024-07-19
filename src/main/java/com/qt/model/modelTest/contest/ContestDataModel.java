@@ -4,6 +4,7 @@
  */
 package com.qt.model.modelTest.contest;
 
+import com.qt.model.modelTest.Errorcode;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -21,8 +22,7 @@ public class ContestDataModel {
     private String startTime = "";
     private String endTime = "";
     private long cycleTime = 0;
-    private int penaltyPoints = 0;
-    private final List<String> errorcodes;
+    private final List<Errorcode> errorcodes;
 
     public ContestDataModel(String name) {
         this.name = name;
@@ -33,25 +33,24 @@ public class ContestDataModel {
         errorcodes.clear();
     }
     
-    public void removeErrorCode(String errorCode){
+    public void removeErrorCode(Errorcode errorCode){
         if (errorCode == null) {
             return;
         }
         errorcodes.remove(errorCode);
     }
     
-    public void addErrorCode(String errorCode){
-        if (errorCode == null) {
+    public void addErrorCode(Errorcode errorcode){
+        if (errorcode == null || errorcode.getName() == null) {
             return;
         }
-        errorcodes.add(errorCode);
+        errorcodes.add(errorcode);
     }
 
     public void clear() {
         startTime = "";
         endTime = "";
         cycleTime = 0;
-        penaltyPoints = 0;
         errorcodes.clear();
     }
 

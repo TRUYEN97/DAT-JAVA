@@ -6,6 +6,7 @@ package com.qt.pretreatment;
 
 import com.qt.common.ErrorLog;
 import com.qt.common.Util;
+import com.qt.input.serial.MCUSerialHandler;
 import com.qt.interfaces.IStarter;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,17 +21,30 @@ import java.util.concurrent.Future;
  */
 public class KeyEventManagement implements IStarter {
 
-    private final Queue<Byte> keys;
+    private static volatile KeyEventManagement instance;
+    private final Queue<Integer> keys;
     private final List<KeyEventsPackage> keyEvensPackages;
     private final ExecutorService thread;
     private boolean running = false;
     private boolean stop = false;
     private Future future;
 
-    public KeyEventManagement(Queue<Byte> model) {
-        this.keys = model;
+    private  KeyEventManagement() {
+        this.keys = MCUSerialHandler.getInstance().getModel().getRemoteValues();
         this.keyEvensPackages = new ArrayList<>();
         this.thread = Executors.newSingleThreadExecutor();
+    }
+    public static KeyEventManagement getInstance(){
+        KeyEventManagement ins = instance;
+        if (ins == null) {
+            synchronized (KeyEventManagement.class) {
+                ins = instance;
+                if (ins == null) {
+                    instance = ins = new KeyEventManagement();
+                }
+            }
+        }
+        return ins;
     }
 
     @Override
@@ -42,7 +56,7 @@ public class KeyEventManagement implements IStarter {
             running = true;
             stop = false;
             IKeyEvent event;
-            byte key;
+            int key;
             KeyEventsPackage evensPackage;
             while (!stop) {
                 try {

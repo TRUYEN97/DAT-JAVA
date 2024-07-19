@@ -5,27 +5,29 @@
 package com.qt.mode.imp;
 
 import com.qt.common.ConstKey;
-import com.qt.contest.imp.GiamToc;
-import com.qt.contest.imp.KetThuc;
-import com.qt.contest.imp.TangToc;
-import com.qt.contest.imp.XuatPhat;
+import com.qt.contest.impCondition.CheckSo3;
+import com.qt.contest.impContest.GiamToc;
+import com.qt.contest.impContest.KetThuc;
+import com.qt.contest.impContest.TangToc;
+import com.qt.contest.impContest.XuatPhat;
 import com.qt.mode.AbsTestMode;
-import com.qt.model.modelTest.process.ModeParam;
 import com.qt.pretreatment.IKeyEvent;
+import com.qt.view.DuongTruongView;
 import java.util.Map;
 
 /**
  *
  * @author Admin
  */
-public class B2_DT_Offline extends AbsTestMode {
+public class B2_DT extends AbsTestMode<DuongTruongView> {
 
-    public B2_DT_Offline(ModeParam modeParam) {
-        this(modeParam, ConstKey.MODE_NAME.OFF_B2_DUONG_TRUONG);
+    public B2_DT() {
+        this(ConstKey.MODE_NAME.B2_DUONG_TRUONG);
+        this.conditions.add(new CheckSo3());
     }
 
-    public B2_DT_Offline(ModeParam modeParam, String name) {
-        super(modeParam, name);
+    public B2_DT(String name) {
+        super(new DuongTruongView(), name);
     }
 
     @Override
@@ -35,12 +37,13 @@ public class B2_DT_Offline extends AbsTestMode {
     }
 
     @Override
-    public void contestDone() {
-        System.out.println(": done ");
+    protected void contestDone() {
+        this.apiService.sendData(processModel.getId());
     }
 
     @Override
     protected void endTest() {
+        this.apiService.sendData(processModel.getId());
         System.out.println(processlHandle.processModeltoJson());
         this.hasXp = false;
         this.hasTs = false;
@@ -49,12 +52,12 @@ public class B2_DT_Offline extends AbsTestMode {
     }
 
     @Override
-    protected void createPrepareKeyEvents(Map<Byte, IKeyEvent> maps) {
+    protected void createPrepareKeyEvents(Map<Integer, IKeyEvent> maps) {
         maps.put(ConstKey.RM_KEY.CONTEST.XP, (key) -> {
             if (hasXp) {
                 return;
             }
-            addContest(new XuatPhat(contestParam, ConstKey.CT_NAME.XUAT_PHAT));
+            addContest(new XuatPhat(ConstKey.CT_NAME.XUAT_PHAT));
             hasXp = true;
         });
     }
@@ -64,7 +67,7 @@ public class B2_DT_Offline extends AbsTestMode {
     private boolean hasGs = false;
 
     @Override
-    protected void createTestKeyEvents(Map<Byte, IKeyEvent> maps) {
+    protected void createTestKeyEvents(Map<Integer, IKeyEvent> maps) {
         maps.put(ConstKey.RM_KEY.CONTEST.TS, (key) -> {
             if (!contests.isEmpty()) {
                 return;
@@ -72,7 +75,7 @@ public class B2_DT_Offline extends AbsTestMode {
             if (!hasXp || hasKt) {
                 return;
             }
-            addContest(new TangToc(contestParam, ConstKey.CT_NAME.TANG_TOC));
+            addContest(new TangToc(ConstKey.CT_NAME.TANG_TOC));
             hasTs = true;
         });
         maps.put(ConstKey.RM_KEY.CONTEST.GS, (key) -> {
@@ -82,7 +85,7 @@ public class B2_DT_Offline extends AbsTestMode {
             if (!hasXp || hasKt) {
                 return;
             }
-            addContest(new GiamToc(contestParam, ConstKey.CT_NAME.GIAM_TOC));
+            addContest(new GiamToc(ConstKey.CT_NAME.GIAM_TOC));
             hasGs = true;
         });
         maps.put(ConstKey.RM_KEY.CONTEST.KT, (key) -> {
@@ -92,7 +95,7 @@ public class B2_DT_Offline extends AbsTestMode {
             if (!hasXp || !hasTs || !hasGs || hasKt) {
                 return;
             }
-            addContest(new KetThuc(contestParam, ConstKey.CT_NAME.KET_THUC));
+            addContest(new KetThuc(ConstKey.CT_NAME.KET_THUC));
             hasKt = true;
         });
     }

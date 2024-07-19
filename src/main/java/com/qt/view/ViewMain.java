@@ -4,10 +4,8 @@
  */
 package com.qt.view;
 
-import com.qt.model.input.CarModel;
-import com.qt.model.modelTest.process.TestDataModelView;
 import java.awt.Color;
-import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
@@ -45,15 +43,16 @@ public class ViewMain extends javax.swing.JFrame {
         /* Create and display the form */
         initComponents();
         setBackground(new Color(0,0,0,0));
-    }
-
-    public void setCarModel(CarModel carModel) {
-        this.panelHome.setCarModel(carModel);
+        this.pnHome.setBackground(new Color(0,0,0,0));
     }
     
-    public void setTestDataModel(TestDataModelView testDataModel) {
-        this.panelHome.setTestDataModel(testDataModel);
+    public void setView(JPanel view){
+        if (view == null) {
+            return;
+        }
+        this.pnHome.add(view);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -63,14 +62,25 @@ public class ViewMain extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelHome = new com.qt.view.PanelHome();
+        pnHome = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
         setUndecorated(true);
         setResizable(false);
-        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
-        getContentPane().add(panelHome);
+
+        pnHome.setLayout(new javax.swing.BoxLayout(pnHome, javax.swing.BoxLayout.LINE_AXIS));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 1280, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         pack();
         setLocationRelativeTo(null);
@@ -83,11 +93,7 @@ public class ViewMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.qt.view.PanelHome panelHome;
+    private javax.swing.JPanel pnHome;
     // End of variables declaration//GEN-END:variables
-
-    public JLabel getImageLabel() {
-        return this.panelHome.getImageLabel();
-    }
 
 }

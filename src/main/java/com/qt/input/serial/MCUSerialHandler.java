@@ -58,9 +58,9 @@ public class MCUSerialHandler {
                 this.model.setSpeed(json.getFloatValue(ConstKey.CAR_MODEL_KEY.SPEED));
                 this.model.setSpeed1(json.getFloatValue(ConstKey.CAR_MODEL_KEY.SPEED_KM));
                 this.model.setRpm(json.getIntValue(ConstKey.CAR_MODEL_KEY.RPM, 0));
-                int b = json.getByte(ConstKey.CAR_MODEL_KEY.REMOTE);
+                int b = json.getIntValue(ConstKey.CAR_MODEL_KEY.REMOTE, -1);
                 if (b >= 0) {
-                    this.model.setRemoteValue((byte) b);
+                    this.model.setRemoteValue(b);
                 }
                 this.model.mathGearBoxValue();
             } catch (Exception e) {

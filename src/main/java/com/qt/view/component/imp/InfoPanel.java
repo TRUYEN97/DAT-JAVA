@@ -4,15 +4,21 @@
  */
 package com.qt.view.component.imp;
 
+import com.qt.common.ConstKey;
+import com.qt.input.camera.CameraRunner;
+import com.qt.view.frame.ChangeIdFrame;
 import com.qt.view.component.UpdateValuePanel;
 import java.awt.Color;
-import javax.swing.JLabel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  *
  * @author Admin
  */
-public class InfoPanel extends UpdateValuePanel{
+public class InfoPanel extends UpdateValuePanel {
+
+    private final ChangeIdFrame changeIdFrame;
 
     /**
      * Creates new form InfoPanel
@@ -21,12 +27,30 @@ public class InfoPanel extends UpdateValuePanel{
         super(1000);
         initComponents();
         setBackground(new Color(255, 255, 255, 70));
+        CameraRunner.getInstance().setImageLabel(lbImg);
+        this.changeIdFrame = ChangeIdFrame.getInstance();
+        this.stId.setMouseAdapter(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                InfoPanel.this.changeIdFrame.display(ChangeIdFrame.SBD);
+            }
+        });
+        this.stCarId.setMouseAdapter(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                InfoPanel.this.changeIdFrame.display(ChangeIdFrame.SX);
+            }
+
+        });
+        this.btIn.setMouseClicked((design) -> {
+            this.carModel.setRemoteValue(ConstKey.RM_KEY.IN);
+        });
     }
-    
+
     @Override
     protected void updateValues() {
-        this.stCarID.setValue(this.testDataModel.getCarId());
-        this.stID.setValue(this.testDataModel.getId());
+        this.stCarId.setValue(this.testDataModel.getCarId());
+        this.stId.setValue(this.testDataModel.getId());
         this.stModeName.setValue(this.testDataModel.getModeName());
     }
 
@@ -39,68 +63,86 @@ public class InfoPanel extends UpdateValuePanel{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         lbImg = new javax.swing.JLabel();
-        stCarID = new com.qt.view.component.StatusPanel();
-        stID = new com.qt.view.component.StatusPanel();
-        stModeName = new com.qt.view.component.StatusPanel();
+        stId = new com.qt.view.element.StatusPanel();
+        stCarId = new com.qt.view.element.StatusPanel();
+        stModeName = new com.qt.view.element.StatusPanel();
+        btIn = new com.qt.view.element.ButtonDesign();
 
         setOpaque(false);
-        setRound(20);
 
-        lbImg.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbImg.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        stCarID.setIconName("Số Xe");
-        stCarID.setValue("000");
+        lbImg.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        stID.setIconName("Số Báo Danh");
-        stID.setName(""); // NOI18N
-        stID.setValue("000");
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbImg, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lbImg, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
 
-        stModeName.setFontValue(new java.awt.Font("Arial", 1, 30)); // NOI18N
-        stModeName.setIconName("Phần Thi");
-        stModeName.setName(""); // NOI18N
-        stModeName.setValue("...");
+        stId.setIconName("SBD");
+
+        stCarId.setIconName("Số xe");
+
+        stModeName.setIconName("Phần thi");
+
+        btIn.setFontValue(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        btIn.setText("In phiếu điểm");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbImg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(stCarID, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
-                    .addComponent(stID, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
-                    .addComponent(stModeName, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE))
-                .addGap(10, 10, 10))
+                    .addComponent(stModeName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(stCarId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(stId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btIn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(lbImg, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(stCarID, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(stID, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(stModeName, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(stId, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(stCarId, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(stModeName, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
+                .addComponent(btIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.qt.view.element.ButtonDesign btIn;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lbImg;
-    private com.qt.view.component.StatusPanel stCarID;
-    private com.qt.view.component.StatusPanel stID;
-    private com.qt.view.component.StatusPanel stModeName;
+    private com.qt.view.element.StatusPanel stCarId;
+    private com.qt.view.element.StatusPanel stId;
+    private com.qt.view.element.StatusPanel stModeName;
     // End of variables declaration//GEN-END:variables
-
-    public JLabel getImageLabel() {
-        return this.lbImg;
-    }
-
 
 }

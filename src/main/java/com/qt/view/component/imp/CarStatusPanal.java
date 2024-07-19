@@ -21,22 +21,19 @@ public class CarStatusPanal extends UpdateValuePanel {
         setOpaque(false);
         setBackground(new Color(240, 240, 240, 86));
         this.stValue.setValue("0");
-        this.stNT.setBlink(true);
-        this.stNP.setBlink(true);
-        this.stPT.setBlink(true);
+        this.stNt.setBlink(true);
+        this.stNp.setBlink(true);
+        this.stPt.setBlink(true);
     }
 
     @Override
     protected void updateValues() {
-        this.stAT.setStatus(this.carModel.isAt());
-        this.stNT.setStatus(this.carModel.isNt());
-        this.stNP.setStatus(this.carModel.isNp());
-        this.stPT.setStatus(this.carModel.isPt());
-        this.stCM.setStatus(this.carModel.isCm());
-        this.stAT.setStatus(this.carModel.isAt());
-        this.stT1.setStatus(this.carModel.isT1());
-        this.stT2.setStatus(this.carModel.isT2());
-        this.stT3.setStatus(this.carModel.isT3());
+        this.stAt.setStatus(this.carModel.isAt());
+        this.stNt.setStatus(this.carModel.isNt());
+        this.stNp.setStatus(this.carModel.isNp());
+        this.stPt.setStatus(this.carModel.isPt());
+        this.stCm.setStatus(this.carModel.isCm());
+        this.stAt.setStatus(this.carModel.isAt());
         this.stS1.setStatus(this.carModel.isS1());
         this.stS2.setStatus(this.carModel.isS2());
         this.stS3.setStatus(this.carModel.isS3());
@@ -61,135 +58,107 @@ public class CarStatusPanal extends UpdateValuePanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        stNT = new com.qt.view.component.StatusPanel();
-        stNP = new com.qt.view.component.StatusPanel();
-        stAT = new com.qt.view.component.StatusPanel();
-        stPT = new com.qt.view.component.StatusPanel();
-        stCM = new com.qt.view.component.StatusPanel();
-        stS1 = new com.qt.view.component.StatusPanel();
-        stS3 = new com.qt.view.component.StatusPanel();
-        stS2 = new com.qt.view.component.StatusPanel();
-        stValue = new com.qt.view.component.StatusPanel();
-        stT3 = new com.qt.view.component.StatusPanel();
-        stT2 = new com.qt.view.component.StatusPanel();
-        stT1 = new com.qt.view.component.StatusPanel();
+        stAt = new com.qt.view.element.StatusPanel();
+        stPt = new com.qt.view.element.StatusPanel();
+        stNt = new com.qt.view.element.StatusPanel();
+        stNp = new com.qt.view.element.StatusPanel();
+        stValue = new com.qt.view.element.StatusPanel();
+        stCm = new com.qt.view.element.StatusPanel();
+        stS2 = new com.qt.view.element.StatusPanel();
+        stS1 = new com.qt.view.element.StatusPanel();
+        stS4 = new com.qt.view.element.StatusPanel();
+        stS3 = new com.qt.view.element.StatusPanel();
 
-        setH(-1);
-        setRound(20);
+        stAt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/AT.png"))); // NOI18N
+        stAt.setIconName("Dây an toàn");
 
-        stNT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/NT.png"))); // NOI18N
-        stNT.setIconName("NT");
+        stPt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/PT.png"))); // NOI18N
+        stPt.setIconName("Phanh tay");
 
-        stNP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/NP.png"))); // NOI18N
-        stNP.setIconName("NP");
+        stNt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/NT.png"))); // NOI18N
+        stNt.setIconName("Xi nhan trái");
 
-        stAT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/AT.png"))); // NOI18N
-        stAT.setIconName("AT");
+        stNp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/NP.png"))); // NOI18N
+        stNp.setIconName("Xi nhan phải");
 
-        stPT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/PT.png"))); // NOI18N
-        stPT.setIconName("PT");
+        stValue.setIcon(null);
+        stValue.setIconName("...");
 
-        stCM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/CM.png"))); // NOI18N
-        stCM.setIconName("CM");
-
-        stS1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/circle.png"))); // NOI18N
-        stS1.setIconName("S1");
-
-        stS3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/circle.png"))); // NOI18N
-        stS3.setIconName("S3");
+        stCm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/CM.png"))); // NOI18N
+        stCm.setIconName("Chết máy");
 
         stS2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/circle.png"))); // NOI18N
         stS2.setIconName("S2");
 
-        stValue.setIconName("P");
+        stS1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/circle.png"))); // NOI18N
+        stS1.setIconName("S1");
 
-        stT3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/point.png"))); // NOI18N
-        stT3.setIconName("T3");
+        stS4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/circle.png"))); // NOI18N
+        stS4.setIconName("S4");
 
-        stT2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/point.png"))); // NOI18N
-        stT2.setIconName("T2");
-
-        stT1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/point.png"))); // NOI18N
-        stT1.setIconName("T1");
+        stS3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/circle.png"))); // NOI18N
+        stS3.setIconName("S3");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(stAT, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
-                            .addComponent(stNT, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(stCM, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(stPT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
-                            .addComponent(stNP, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(stValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(stS1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(stS2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(stS3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(stT1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(stT2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(stT3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                        .addGap(6, 6, 6)))
-                .addGap(15, 15, 15))
+                    .addComponent(stPt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(stNt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
+                    .addComponent(stCm, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(stS1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(stS3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(stAt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(stNp, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                    .addComponent(stValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(stS2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(stS4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(stNP, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                    .addComponent(stNT, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(stPT, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
-                    .addComponent(stAT, javax.swing.GroupLayout.PREFERRED_SIZE, 143, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(stCM, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
-                    .addComponent(stValue, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(stS2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                    .addComponent(stS1, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                    .addComponent(stS3, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE))
+                    .addComponent(stNt, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
+                    .addComponent(stNp, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(stT2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 124, Short.MAX_VALUE)
-                    .addComponent(stT1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, Short.MAX_VALUE)
-                    .addComponent(stT3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(15, 15, 15))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(stPt, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(stAt, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(stCm, javax.swing.GroupLayout.PREFERRED_SIZE, 114, Short.MAX_VALUE)
+                    .addComponent(stValue, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(stS1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, Short.MAX_VALUE)
+                    .addComponent(stS2, javax.swing.GroupLayout.PREFERRED_SIZE, 114, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(stS3, javax.swing.GroupLayout.PREFERRED_SIZE, 114, Short.MAX_VALUE)
+                    .addComponent(stS4, javax.swing.GroupLayout.PREFERRED_SIZE, 114, Short.MAX_VALUE))
+                .addGap(34, 34, 34))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.qt.view.component.StatusPanel stAT;
-    private com.qt.view.component.StatusPanel stCM;
-    private com.qt.view.component.StatusPanel stNP;
-    private com.qt.view.component.StatusPanel stNT;
-    private com.qt.view.component.StatusPanel stPT;
-    private com.qt.view.component.StatusPanel stS1;
-    private com.qt.view.component.StatusPanel stS2;
-    private com.qt.view.component.StatusPanel stS3;
-    private com.qt.view.component.StatusPanel stT1;
-    private com.qt.view.component.StatusPanel stT2;
-    private com.qt.view.component.StatusPanel stT3;
-    private com.qt.view.component.StatusPanel stValue;
+    private com.qt.view.element.StatusPanel stAt;
+    private com.qt.view.element.StatusPanel stCm;
+    private com.qt.view.element.StatusPanel stNp;
+    private com.qt.view.element.StatusPanel stNt;
+    private com.qt.view.element.StatusPanel stPt;
+    private com.qt.view.element.StatusPanel stS1;
+    private com.qt.view.element.StatusPanel stS2;
+    private com.qt.view.element.StatusPanel stS3;
+    private com.qt.view.element.StatusPanel stS4;
+    private com.qt.view.element.StatusPanel stValue;
     // End of variables declaration//GEN-END:variables
 
 }

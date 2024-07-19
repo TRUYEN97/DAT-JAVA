@@ -67,10 +67,10 @@ public class RestAPI {
         return uploadFile(createUrl(param, url), bodyAPI, FileInfos);
     }
 
-    public Response uploadFile(String url, JsonBodyAPI bodyAPI, FileInfo... FileInfos) {
+    public Response uploadFile(String url, JsonBodyAPI bodyAPI, FileInfo... fileInfos) {
         HttpPost httpPost = new HttpPost(url);
         MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
-        for (FileInfo file : FileInfos) {
+        for (FileInfo file : fileInfos) {
             switch (file.getType()) {
                 case FILE -> {
                     String name = file.getName();
@@ -217,7 +217,7 @@ public class RestAPI {
                         }
                         Response response1 = new Response(response.getStatusLine().getStatusCode(),
                                 JsonBodyAPI.builder()
-                                        .put(Response.RESULT, true)
+                                        .put(Response.STATUS, 200)
                                         .put(Response.MESSAGE, "")
                                         .put(Response.DATA, attachment.toJSONString())
                                         .toString());
@@ -225,7 +225,7 @@ public class RestAPI {
                         return response1;
                     }
                     Response response1 = new Response(200, JsonBodyAPI.builder()
-                            .put(Response.RESULT, false)
+                            .put(Response.STATUS, -1)
                             .put(Response.MESSAGE, "Cancel").toJSONString());
                     response1.setTextComponent(textComponent);
                     return response1;
@@ -233,7 +233,7 @@ public class RestAPI {
             }
         } catch (Exception e) {
             Response response1 = new Response(-1, JsonBodyAPI.builder()
-                    .put(Response.RESULT, false)
+                    .put(Response.STATUS, -1)
                     .put(Response.MESSAGE, e.getLocalizedMessage()).toJSONString());
             response1.setTextComponent(textComponent);
             return response1;
@@ -261,7 +261,7 @@ public class RestAPI {
             }
         } catch (Exception e) {
             Response response1 = new Response(-1, JsonBodyAPI.builder()
-                    .put(Response.RESULT, false)
+                    .put(Response.STATUS, -1)
                     .put(Response.MESSAGE, e.getLocalizedMessage()).toJSONString());
             response1.setTextComponent(textComponent);
             return response1;

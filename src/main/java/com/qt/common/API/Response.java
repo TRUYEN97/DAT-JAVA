@@ -21,7 +21,6 @@ public class Response {
     private JSONObject wareHouse;
     public static final String MESSAGE = "message";
     public static final String DATA = "data";
-    public static final String RESULT = "result";
     public static final String STATUS = "status";
     private JTextComponent textComponent;
 
@@ -89,9 +88,8 @@ public class Response {
         return response;
     }
 
-    public boolean getStatus() {
-        return isResponeseAvalid() && (this.wareHouse.getBooleanValue(RESULT, false)
-                || getStringEqualsIgnoreCase(RESULT, "pass"));
+    public boolean isSuccess() {
+        return code == 200 && isResponeseAvalid() && this.wareHouse.getIntValue(STATUS) == 200;
     }
 
     public boolean getStringEquals(String key, String target) {
@@ -113,7 +111,7 @@ public class Response {
     }
 
     public boolean isFailStatusAndShowMessage(boolean showJoptionMess) throws HeadlessException {
-        if (!getStatus()) {
+        if (!isSuccess()) {
             String mess = getMessage();
             if (this.textComponent != null && !showJoptionMess) {
                 this.textComponent.setText(mess);

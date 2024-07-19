@@ -22,11 +22,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class ModeParam {
-    private final CarModel carModel;
-    private final YardModel yardModel;
-    private final SoundPlayer soundPlayer;
     private final KeyEventManagement eventManagement;
-    private final ProcessModelHandle processModelHandle;
-    private final CameraRunner cameraRunner;
-    
+    private final ProcessModel processModel;
 }

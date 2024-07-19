@@ -1,0 +1,87 @@
+{
+    "id": "1", // mã số của thí sinh dự thi
+    
+    "carId": "156", // mã số xe
+    
+    "name": "...", // họ tên của thí sinh
+    
+    "sex": 0, // giới tính của thí sinh
+    
+    "date_of_birth": "YYYY-DD-MM hh:mm:ss", // ngày tháng năm sinh của thí sinh.
+            
+    "place_of_origin": "...", // quê quán của thí sinh.
+            
+    "startTime": "2024-07-18 13:56:54", // thời gian bắt đầu thi, có giá trị ngay lần đầu gửi.
+            
+    "endTime": "2024-07-18 13:58:14", // thời gian kết thúc bài thi (sẽ có giá trị sau khi kết thúc bài thi,
+                                      // giá trị mặc định là rỗng hoặc null).
+                                              
+    "modeName": "DT-B2", // Tên của phần thi. DT(Đường trường) hoặc TH(Trong Hình), B2 là Loại bằng (B1, B2, ...).
+            
+    "score": 85, // số điểm của thí sinh.
+            
+    "cycleTime": 80555, // thời gian thi của thí sinh (sẽ có giá trị sau khi kết thúc bài thi,
+                        // giá trị mặc định là 0 hoặc null) đơn vị ms.
+                                
+    "distance": 2000.5, // khoảng cách mà thí sinh đã đi được(luôn cập nhật mỗi lần gửi) đơn vị là m.
+            
+    // danh sách các lỗi của thí sinh do giáo viên chấm.
+    "errorcodes": [{
+            "name": "QT", // tên của lỗi (QT là vi phạm quy tắc giao thông).
+                    
+            "score": 10 // số điểm bị trừ.
+        }],
+            
+    // danh sách các bài thi mà thi sinh đã hoàn thành. Rỗng hoặc null là thi sinh chưa hoành thành phần thi nào.
+    "contests": [{
+            "name": "XP", // ten phan thi (xuat phat).
+                    
+            "startTime": "2024-07-18 13:56:55", // thời gian bắt đầu bài thi.
+                    
+            "endTime": "2024-07-18 13:57:02", // thời gian kết thúc bài thi.
+                    
+            "cycleTime": 6439, // thời gian thí hoàn thành bài thi đơn vị ms.(nếu anh thấy không cần thiết thì sau này có thể bỏ)
+                    
+            "errorcodes": [] // danh sách các lỗi của thi sinh mắc phải trong phần thi này. Rỗng hoặc null là không có lỗi nào.
+        }, {
+            "name": "TS",
+            "startTime": "2024-07-18 13:57:06",
+            "endTime": "2024-07-18 13:57:16",
+            "cycleTime": 9999,
+            "errorcodes": [{
+            "name": "NT",
+            "score": 5 // Số điểm mà thí sinh bị trừ với lỗi NT(không xi nhan trái)
+        }]
+        }, {
+            "name": "GS",
+            "startTime": "2024-07-18 13:57:19",
+            "endTime": "2024-07-18 13:57:27",
+            "cycleTime": 8229,
+            "errorcodes": []
+        }, {
+            "name": "TS",
+            "startTime": "2024-07-18 13:57:31",
+            "endTime": "2024-07-18 13:57:41",
+            "cycleTime": 9795,
+            "errorcodes": []
+        }, {
+            "name": "TS",
+            "startTime": "2024-07-18 13:57:45",
+            "endTime": "2024-07-18 13:57:55",
+            "cycleTime": 10243,
+            "errorcodes": []
+        }, {
+            "name": "KT", 
+            "startTime": "2024-07-18 13:58:07",
+            "endTime": "2024-07-18 13:58:14",
+            "cycleTime": 7799,
+            "errorcodes": []
+        }],
+    "status": 1 // -1: truot, 0: dang thi, 1: dat (pass)
+}
+/// tra ve
+ {
+    "status": 200,
+    "message" "...",
+    "data": ""
+ }

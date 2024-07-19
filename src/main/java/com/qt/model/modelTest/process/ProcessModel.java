@@ -4,6 +4,8 @@
  */
 package com.qt.model.modelTest.process;
 
+import com.qt.model.input.UserModel;
+import com.qt.model.modelTest.Errorcode;
 import com.qt.model.modelTest.contest.ContestDataModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +18,11 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class ProcessModel {
+public class ProcessModel extends UserModel{
 
-    private String id = "0";
+    public static final int RUNNING = 0;
+    public static final int PASS = 1;
+    public static final int FAIL = -1;
     private String carId = "0";
     private String startTime;
     private String endTime;
@@ -26,17 +30,17 @@ public class ProcessModel {
     private int score;
     private long cycleTime;
     private double distance;
-    private final List<String> errorcodes;
+    private final List<Errorcode> errorcodes;
     private final List<ContestDataModel> contests;
-    private boolean pass;
+    private int status = RUNNING;
 
     public ProcessModel() {
         this.contests = new ArrayList<>();
         this.errorcodes = new ArrayList<>();
     }
 
-    public void addErrorcode(String errorcode) {
-        if (errorcode == null || errorcode.isBlank()) {
+    public void addErrorcode(Errorcode errorcode) {
+        if (errorcode == null || errorcode.getName() == null) {
             return;
         }
         this.errorcodes.add(errorcode);
@@ -50,9 +54,11 @@ public class ProcessModel {
     }
 
     public void clear() {
+        this.status = RUNNING;
         this.cycleTime = 0;
         this.startTime = "";
         this.endTime = "";
+        this.errorcodes.clear();
         this.contests.clear();
         this.distance = 0;
         this.score = 0;

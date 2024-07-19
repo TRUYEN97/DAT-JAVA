@@ -4,136 +4,100 @@
  */
 package com.qt.mode;
 
-import com.qt.FileService.FileService;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
-import com.qt.common.MyObjectMapper;
 import com.qt.common.Util;
-import com.qt.common.timer.TimeBase;
+import com.qt.contest.AbsCondition;
 import com.qt.contest.AbsContest;
-import com.qt.controller.ErrorcodeHandle;
+import com.qt.controller.ApiService;
+import com.qt.controller.ErrorCodeHandle;
+import com.qt.controller.FileTestService;
 import com.qt.controller.ProcessModelHandle;
+import com.qt.input.camera.CameraRunner;
 import com.qt.input.serial.MCUSerialHandler;
 import com.qt.model.input.CarModel;
 import com.qt.model.modelTest.process.ProcessModel;
-import com.qt.model.modelTest.process.ModeParam;
-import com.qt.model.input.YardModel;
 import com.qt.model.modelTest.Errorcode;
-import com.qt.model.modelTest.contest.ContestParam;
 import com.qt.output.SoundPlayer;
 import com.qt.pretreatment.IKeyEvent;
+import com.qt.pretreatment.KeyEventManagement;
 import com.qt.pretreatment.KeyEventsPackage;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import javax.swing.JPanel;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  *
  * @author Admin
+ * @param <V> view
  */
 @Getter
 @Setter
-public abstract class AbsTestMode {
+public abstract class AbsTestMode<V extends JPanel> {
 
-    private static final String LOG_PATH= "log/test";
-    protected final ModeParam modeParam;
+    protected final V view;
     protected final String name;
     protected final int scoreSpec;
     protected final CarModel carModel;
-    protected final YardModel yardModel;
     protected final ProcessModel processModel;
     protected final SoundPlayer soundPlayer;
     protected final ProcessModelHandle processlHandle;
     protected final Queue<AbsContest> contests;
     protected final KeyEventsPackage prepareEventsPackage;
     protected final KeyEventsPackage testEventsPackage;
-    protected final ErrorcodeHandle errorcodeHandle;
-    protected final ContestParam contestParam;
-    protected final FileService fileService;
-    protected final TimeBase timeBase;
+    protected final ErrorCodeHandle errorcodeHandle;
+    protected final FileTestService fileTestService;
+    protected final ApiService apiService;
+    protected final List<AbsCondition> conditions;
 
-    protected AbsTestMode(ModeParam modeParam, String name) {
-        this(modeParam, name, 80);
+    protected AbsTestMode(V view, String name) {
+        this(view, name, 80);
     }
 
-    protected AbsTestMode(ModeParam modeParam, String name, int scoreSpec) {
-        this.modeParam = modeParam;
+    protected AbsTestMode(V view, String name, int scoreSpec) {
+        this.view = view;
         this.name = name;
         this.scoreSpec = scoreSpec;
-        this.carModel = modeParam.getCarModel();
-        this.yardModel = modeParam.getYardModel();
-        this.processlHandle = modeParam.getProcessModelHandle();
+        MCUSerialHandler.getInstance().start();
+        this.carModel = MCUSerialHandler.getInstance().getModel();
+        this.processlHandle = ProcessModelHandle.getInstance();
         this.processModel = this.processlHandle.getProcessModel();
-        this.soundPlayer = modeParam.getSoundPlayer();
+        this.soundPlayer = SoundPlayer.getInstance();
         this.contests = new LinkedList<>();
-        this.errorcodeHandle = new ErrorcodeHandle(modeParam);
-        this.contestParam = new ContestParam(modeParam, errorcodeHandle);
-        this.fileService = new FileService();
-        this.timeBase = new TimeBase();
+        this.errorcodeHandle = ErrorCodeHandle.getInstance();
         this.prepareEventsPackage = initPrepareKeyEventPackage();
         this.testEventsPackage = initTestKeyEventPackage();
+        this.fileTestService = FileTestService.getInstance();
+        this.apiService = ApiService.getInstance();
+        this.conditions = new ArrayList<>();
         initErrorcode();
     }
 
     protected abstract boolean loopCheckStartTest();
 
-    public abstract void contestDone();
+    protected abstract void contestDone();
 
     protected abstract void endTest();
 
-    protected abstract void createPrepareKeyEvents(Map<Byte, IKeyEvent> events);
+    protected abstract void createPrepareKeyEvents(Map<Integer, IKeyEvent> events);
 
-    protected abstract void createTestKeyEvents(Map<Byte, IKeyEvent> events);
-
-    private KeyEventsPackage initPrepareKeyEventPackage() {
-        Map<Byte, IKeyEvent> events = new HashMap<>();
-        KeyEventsPackage epg = new KeyEventsPackage(name + "Prepare");
-        createPrepareKeyEvents(events);
-        epg.putEvents(events);
-        return epg;
-    }
-
-    private KeyEventsPackage initTestKeyEventPackage() {
-        Map<Byte, IKeyEvent> events = new HashMap<>();
-        events.put(ConstKey.ERR.CL, (key) -> {
-            this.errorcodeHandle.addBaseErrorCode(key);
-        });
-        events.put(ConstKey.ERR.HL, (key) -> {
-            this.errorcodeHandle.addBaseErrorCode(key);
-        });
-        events.put(ConstKey.ERR.QT, (key) -> {
-            this.errorcodeHandle.addBaseErrorCode(key);
-        });
-        events.put(ConstKey.ERR.RG, (key) -> {
-            this.errorcodeHandle.addBaseErrorCode(key);
-        });
-        events.put(ConstKey.ERR.TN, (key) -> {
-            this.errorcodeHandle.addBaseErrorCode(key);
-        });
-        events.put((byte) 74, (key) -> {
-            this.errorcodeHandle.addBaseErrorCode(key);
-        });
-        events.put((byte) 12, (key) -> {
-            this.errorcodeHandle.addBaseErrorCode(key);
-        });
-        KeyEventsPackage epg = new KeyEventsPackage(name + "Testing", true);
-        createTestKeyEvents(events);
-        epg.putEvents(events);
-        return epg;
-    }
-
-    public String getClassName() {
-        return getClass().getSimpleName();
-    }
+    protected abstract void createTestKeyEvents(Map<Integer, IKeyEvent> events);
 
     protected void addContest(AbsContest contest) {
         if (contest == null) {
             return;
         }
         this.contests.add(contest);
+    }
+
+    public String getClassName() {
+        return getClass().getSimpleName();
     }
 
     public AbsContest peekContests() {
@@ -147,27 +111,38 @@ public abstract class AbsTestMode {
     public void begin() {
         MCUSerialHandler.getInstance().sendReset();
         MCUSerialHandler.getInstance().sendLedOff();
-        this.modeParam.getEventManagement().addKeyEventBackAge(prepareEventsPackage);
+        this.processModel.setStatus(ProcessModel.RUNNING);
+        this.errorcodeHandle.clear();
+        KeyEventManagement.getInstance().addKeyEventBackAge(prepareEventsPackage);
         while (!loopCheckStartTest()) {
             Util.delay(200);
         }
         MCUSerialHandler.getInstance().sendLedYellowOn();
         MCUSerialHandler.getInstance().sendReset();
-        this.modeParam.getEventManagement().addKeyEventBackAge(testEventsPackage);
+        KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
         this.soundPlayer.begin();
+    }
+
+    public void endContest() {
+        this.processlHandle.update();
+        this.fileTestService.saveLogJson(this.processModel.getId(),
+                this.processlHandle.processModeltoJson().toString());
+        this.fileTestService.saveImg(this.processModel.getId(),
+                CameraRunner.getInstance().getImage());
+        contestDone();
     }
 
     public void end() {
         try {
             this.contests.clear();
-            this.modeParam.getEventManagement().remove(prepareEventsPackage);
-            this.modeParam.getEventManagement().remove(testEventsPackage);
+            KeyEventManagement.getInstance().remove(prepareEventsPackage);
+            KeyEventManagement.getInstance().remove(testEventsPackage);
             int score = this.processModel.getScore();
-            boolean pass = score >= scoreSpec;
-            this.processModel.setPass(pass);
-            this.soundPlayer.sayResultTest(score, pass);
-            saveLogJson();
-            if (pass) {
+            this.processModel.setStatus(score >= scoreSpec ? ProcessModel.PASS : ProcessModel.FAIL);
+            this.soundPlayer.sayResultTest(score, this.processlHandle.isPass());
+            this.fileTestService.saveLogJson(this.processModel.getId(),
+                    this.processlHandle.processModeltoJson().toString());
+            if (this.processlHandle.isPass()) {
                 MCUSerialHandler.getInstance().sendLedGreenOn();
             } else {
                 MCUSerialHandler.getInstance().sendLedRedOn();
@@ -177,16 +152,6 @@ public abstract class AbsTestMode {
             e.printStackTrace();
             ErrorLog.addError(this, e);
         }
-    }
-
-    private void saveLogJson() {
-        String filePathString = String.format("%s/%s/%s/jsonLog.json",
-                LOG_PATH,
-                this.timeBase.getDate(),
-                this.processModel.getId());
-        this.fileService.writeFile(filePathString,
-                this.processlHandle.processModeltoJson().toString(),
-                false);
     }
 
     private void initErrorcode() {
@@ -208,6 +173,46 @@ public abstract class AbsTestMode {
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.HL, new Errorcode("HL", 25));
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.TN, new Errorcode("TN", 25));
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.CL, new Errorcode("CL", 25));
+    }
+
+    private KeyEventsPackage initPrepareKeyEventPackage() {
+        Map<Integer, IKeyEvent> events = new HashMap<>();
+        KeyEventsPackage epg = new KeyEventsPackage(name + "Prepare");
+        createPrepareKeyEvents(events);
+        epg.putEvents(events);
+        return epg;
+    }
+
+    private KeyEventsPackage initTestKeyEventPackage() {
+        Map<Integer, IKeyEvent> events = new HashMap<>();
+        events.put(ConstKey.ERR.CL, (key) -> {
+            this.errorcodeHandle.addBaseErrorCode(key);
+        });
+        events.put(ConstKey.ERR.HL, (key) -> {
+            this.errorcodeHandle.addBaseErrorCode(key);
+        });
+        events.put(ConstKey.ERR.QT, (key) -> {
+            this.errorcodeHandle.addBaseErrorCode(key);
+        });
+        events.put(ConstKey.ERR.RG, (key) -> {
+            this.errorcodeHandle.addBaseErrorCode(key);
+        });
+        events.put(ConstKey.ERR.TN, (key) -> {
+            this.errorcodeHandle.addBaseErrorCode(key);
+        });
+        KeyEventsPackage epg = new KeyEventsPackage(name + "Testing", true);
+        createTestKeyEvents(events);
+        epg.putEvents(events);
+        return epg;
+    }
+
+    public boolean checkTestCondisions() {
+        for (AbsCondition condition : conditions) {
+            if (!condition.checkPassed() && condition.isImportant()) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

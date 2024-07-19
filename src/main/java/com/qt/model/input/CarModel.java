@@ -42,20 +42,20 @@ public class CarModel {
     public void mathGearBoxValue(){
         gearBoxValue = Util.getGearBoxVal(s1, s2, s3, s4);
     }
-    private final Queue<Byte> remoteValues = new ArrayDeque<>();
+    private final Queue<Integer> remoteValues = new ArrayDeque<>();
 
-    public void setRemoteValue(Byte value) {
+    public void setRemoteValue(Integer value) {
         if (value == null || value == -1) {
             return;
         }
         this.remoteValues.add(value);
     }
 
-    public byte peekRemoteVal() {
+    public int peekRemoteVal() {
         return this.remoteValues.peek();
     }
 
-    public byte popRemoteVal() {
+    public int popRemoteVal() {
         return this.remoteValues.poll();
     }
 

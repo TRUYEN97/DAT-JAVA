@@ -6,11 +6,9 @@ package com.qt.controller.modeController;
 
 import com.qt.common.ErrorLog;
 import com.qt.common.Util;
-import com.qt.input.serial.MCUSerialHandler;
 import com.qt.interfaces.IStarter;
 import com.qt.controller.ProcessModelHandle;
 import com.qt.mode.AbsTestMode;
-import com.qt.model.modelTest.process.ModeParam;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -30,9 +28,9 @@ public class ModeHandle implements IStarter, Runnable {
     private boolean stop = false;
     private Future testFuture;
 
-    public ModeHandle(ModeParam modeParam) {
-        this.processModelHandle = modeParam.getProcessModelHandle();
-        this.contestRunner = new ContestRunner(modeParam);
+    public ModeHandle() {
+        this.processModelHandle = ProcessModelHandle.getInstance();
+        this.contestRunner = new ContestRunner();
         this.threadPool = Executors.newSingleThreadExecutor();
     }
 

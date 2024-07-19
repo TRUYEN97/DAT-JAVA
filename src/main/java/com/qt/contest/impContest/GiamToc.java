@@ -2,31 +2,30 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.qt.contest.imp;
+package com.qt.contest.impContest;
 
 import com.qt.common.ConstKey;
 import com.qt.common.Util;
 import com.qt.contest.AbsContest;
-import com.qt.model.modelTest.contest.ContestParam;
 
 /**
  *
  * @author Admin
  */
-public class XuatPhat extends AbsContest {
+public class GiamToc extends AbsContest{
 
-    public XuatPhat(ContestParam contestParam) {
-        this(contestParam, ConstKey.CT_NAME.XUAT_PHAT);
+    public GiamToc() {
+        this(ConstKey.CT_NAME.GIAM_TOC);
     }
-
-    public XuatPhat(ContestParam contestParam, String name) {
-        super(contestParam, name, true);
+    
+    public GiamToc(String name) {
+        super( name, true);
     }
 
     @Override
     public boolean loop() {
-        System.out.println("xp");
-        Util.delay(4000);
+        System.out.println("tg");
+        Util.delay(6000);
         return true;
     }
 
@@ -35,5 +34,5 @@ public class XuatPhat extends AbsContest {
         Util.delay(1000);
         return true;
     }
-
+    
 }

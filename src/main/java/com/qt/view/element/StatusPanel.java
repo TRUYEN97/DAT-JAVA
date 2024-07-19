@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package com.qt.view.component;
+package com.qt.view.element;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -10,6 +10,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.Timer;
@@ -45,6 +46,10 @@ public class StatusPanel extends javax.swing.JPanel {
         });
     }
 
+    public void setFontNameTop(Font fontName) {
+        this.lbNameTop.setFont(fontName);
+    }
+    
     public void setFontName(Font fontName) {
         this.lbName.setFont(fontName);
     }
@@ -52,7 +57,6 @@ public class StatusPanel extends javax.swing.JPanel {
     public void setFontValue(Font fontValue) {
         this.lbIcon.setFont(fontValue);
     }
-    
     
 
     public Color getOnColor() {
@@ -87,6 +91,10 @@ public class StatusPanel extends javax.swing.JPanel {
         this.icon = icon;
         lbIcon.setIcon(icon);
     }
+    
+    public void setMouseAdapter(MouseAdapter mouseAdapter){
+        lbIcon.addMouseListener(mouseAdapter);
+    }
 
     public void setIconPath(String iconName) {
         try {
@@ -100,6 +108,10 @@ public class StatusPanel extends javax.swing.JPanel {
 
     public void setIconName(String name) {
         this.lbName.setText(name);
+    }
+    
+    public void setIconNameTop(String name) {
+        this.lbNameTop.setText(name);
     }
 
     public void setStatus(boolean st) {
@@ -174,10 +186,17 @@ public class StatusPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lbNameTop = new javax.swing.JLabel();
         lbName = new javax.swing.JLabel();
         lbIcon = new javax.swing.JLabel();
 
         setOpaque(false);
+
+        lbNameTop.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lbNameTop.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbNameTop.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        lbNameTop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lbNameTop.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
         lbName.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         lbName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -193,18 +212,21 @@ public class StatusPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lbIcon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lbName, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
+                    .addComponent(lbIcon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbNameTop, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lbIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                .addComponent(lbNameTop)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbName)
                 .addContainerGap())
@@ -215,5 +237,6 @@ public class StatusPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lbIcon;
     private javax.swing.JLabel lbName;
+    private javax.swing.JLabel lbNameTop;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,39 +5,33 @@
 package com.qt.contest;
 
 import com.qt.controller.ContestModelHandle;
-import com.qt.controller.ErrorcodeHandle;
+import com.qt.controller.ErrorCodeHandle;
 import com.qt.interfaces.IgetTime;
 import com.qt.controller.ProcessModelHandle;
+import com.qt.input.serial.MCUSerialHandler;
 import com.qt.model.modelTest.contest.ContestDataModel;
-import com.qt.model.modelTest.contest.ContestParam;
 import com.qt.model.input.CarModel;
-import com.qt.model.input.YardModel;
 import com.qt.output.SoundPlayer;
+import javax.swing.Timer;
 import lombok.Getter;
 
-/**
- *
- * @author Admin
- */
 @Getter
 public abstract class AbsContest implements IgetTime {
 
     private final ProcessModelHandle processlHandle;
-    protected final CarModel mcuModel;
-    protected final YardModel yardModel;
+    protected final CarModel carModel;
     protected final ContestDataModel contestModel;
     protected final SoundPlayer soundPlayer;
     protected final ContestModelHandle contestModelHandle;
-    protected final ErrorcodeHandle errorcodeHandle;
+    protected final ErrorCodeHandle errorcodeHandle;
     protected final boolean playSoundWhenInOut;
     protected boolean done;
 
-    public AbsContest(ContestParam contestParam, String name, boolean soundInOut) {
-        this.processlHandle = contestParam.getProcessModelHandle();
-        this.mcuModel = contestParam.getCarModel();
-        this.yardModel = contestParam.getYardModel();
-        this.soundPlayer = contestParam.getSoundPlayer();
-        this.errorcodeHandle = contestParam.getErrorcodeHandle();
+    public AbsContest(String name, boolean soundInOut) {
+        this.processlHandle = ProcessModelHandle.getInstance();
+        this.carModel = MCUSerialHandler.getInstance().getModel();
+        this.soundPlayer = SoundPlayer.getInstance();
+        this.errorcodeHandle = ErrorCodeHandle.getInstance();
         this.playSoundWhenInOut = soundInOut;
         this.contestModel = new ContestDataModel(name);
         this.contestModelHandle = new ContestModelHandle(contestModel);

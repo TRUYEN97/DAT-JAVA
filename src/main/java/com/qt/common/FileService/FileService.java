@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.qt.FileService;
+package com.qt.common.FileService;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,7 +27,7 @@ public class FileService {
             return false;
         }
         File file = initFile(name, true);
-        try ( FileWriter writer = new FileWriter(file, appand)) {
+        try (FileWriter writer = new FileWriter(file, appand)) {
             writer.write(data);
             writer.flush();
             return true;
@@ -55,7 +55,7 @@ public class FileService {
             return false;
         }
         File file = initFile(path, false);
-        try ( FileOutputStream writer = new FileOutputStream(file)) {
+        try (FileOutputStream writer = new FileOutputStream(file)) {
             writer.write(data);
             writer.flush();
             return true;
@@ -97,10 +97,10 @@ public class FileService {
 
     public String readFile(File file) {
         StringBuilder str = new StringBuilder();
-        if (!file.exists()) {
+        if (file == null || !file.exists()) {
             return str.toString();
         }
-        try ( BufferedReader reader = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 str.append(line).append("\r\n");
@@ -108,7 +108,7 @@ public class FileService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return str.toString();
+        return str.toString().trim();
     }
 
     /**
@@ -128,7 +128,7 @@ public class FileService {
     }
 
     public byte[] getByte(String path) {
-        try ( FileInputStream fileInputStream = new FileInputStream(new File(path))) {
+        try (FileInputStream fileInputStream = new FileInputStream(new File(path))) {
             return fileInputStream.readAllBytes();
         } catch (Exception e) {
             e.printStackTrace();
@@ -178,8 +178,8 @@ public class FileService {
         if (targetFile.exists() && !targetFile.delete()) {
             throw new IOException(String.format("File copy can not override!\r\n%s", targetFile.getName()));
         }
-        try ( FileInputStream inputStream = new FileInputStream(source)) {
-            try ( FileOutputStream outputStream = new FileOutputStream(targetFile)) {
+        try (FileInputStream inputStream = new FileInputStream(source)) {
+            try (FileOutputStream outputStream = new FileOutputStream(targetFile)) {
                 transferFile(inputStream, outputStream);
             }
         }
@@ -197,8 +197,8 @@ public class FileService {
             if (parent != null && !sourceFile.getPath().equals(parent.getPath())) {
                 target = new File(sourceFile.getPath().replaceFirst(parent.getPath().replaceAll("\\\\", "\\\\\\\\"),
                         destFile.getPath().replaceAll("\\\\", "\\\\\\\\")));
-            }else{
-                 target = new File(String.format("%s/%s", destFile,sourceFile.getName()));
+            } else {
+                target = new File(String.format("%s/%s", destFile, sourceFile.getName()));
             }
             copy(sourceFile, target);
         }
@@ -209,8 +209,8 @@ public class FileService {
         getAllFile(folder, files);
         return files;
     }
-    
-    private void getAllFile(File folder, List<File> files){
+
+    private void getAllFile(File folder, List<File> files) {
         if (folder == null) {
             return;
         }
@@ -219,7 +219,7 @@ public class FileService {
             return;
         }
         for (File file : folder.listFiles()) {
-           getAllFile(file, files);
+            getAllFile(file, files);
         }
     }
 

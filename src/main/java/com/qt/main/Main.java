@@ -4,9 +4,7 @@
  */
 package com.qt.main;
 
-import com.qt.input.serial.MCUSerialHandler;
 import com.qt.controller.Core;
-import com.qt.model.input.YardModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,8 +15,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            MCUSerialHandler.getInstance().start();
-            new Core(MCUSerialHandler.getInstance().getModel(), new YardModel()).start();
+            new Core().start();
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, e.getLocalizedMessage());

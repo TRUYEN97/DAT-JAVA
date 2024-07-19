@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class KeyEventsPackage {
 
-    private final Map<Byte, IKeyEvent> modeKeyEvents;
+    private final Map<Integer, IKeyEvent> modeKeyEvents;
     private boolean justMe;
     private final String name;
 
@@ -27,14 +27,14 @@ public class KeyEventsPackage {
         this.name = name;
     }
 
-    public void putEvent(byte key, IKeyEvent event) {
+    public void putEvent(int key, IKeyEvent event) {
         if (event == null) {
             return;
         }
         this.modeKeyEvents.put(key, event);
     }
 
-    public void putEvents(Map<Byte, IKeyEvent> modeKeyEvents) {
+    public void putEvents(Map<Integer, IKeyEvent> modeKeyEvents) {
         if (modeKeyEvents == null) {
             return;
         }
@@ -53,7 +53,7 @@ public class KeyEventsPackage {
         return justMe;
     }
 
-    public IKeyEvent getEven(byte key) {
+    public IKeyEvent getEven(int key) {
         return modeKeyEvents.get(key);
     }
 
@@ -68,7 +68,7 @@ public class KeyEventsPackage {
         this.modeKeyEvents.clear();
     }
 
-    public void remove(byte key) {
+    public void remove(int key) {
         this.modeKeyEvents.remove(key);
     }
 

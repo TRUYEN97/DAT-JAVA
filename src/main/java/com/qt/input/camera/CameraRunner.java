@@ -28,17 +28,35 @@ import org.opencv.videoio.Videoio;
  */
 public class CameraRunner implements IStarter {
 
+    private static volatile CameraRunner instance;
     private final ExecutorService threadPool;
     private final Camera camera;
     private Future future;
 
-    public CameraRunner() {
+    private CameraRunner() {
         this.threadPool = Executors.newSingleThreadExecutor();
         this.camera = new Camera();
     }
 
+    public static CameraRunner getInstance() {
+        CameraRunner ins = instance;
+        if (ins == null) {
+            synchronized (CameraRunner.class) {
+                ins = instance;
+                if (ins == null) {
+                    instance = ins = new CameraRunner();
+                }
+            }
+        }
+        return ins;
+    }
+
     public boolean openCamera(int index) {
         return camera.open(index);
+    }
+    
+    public BufferedImage getImage(){
+        return this.camera.image;
     }
 
     public void setImageLabel(JLabel ImgLb) {

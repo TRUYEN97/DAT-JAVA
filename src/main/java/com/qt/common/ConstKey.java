@@ -12,8 +12,8 @@ public final class ConstKey {
 
     public static final class MODE_NAME {
 
-        public static final String OFF_B2_DUONG_TRUONG = "DT-B2-OFF";
-        public static final String OFF_B2_SA_HINH = "SH-B2-OFF";
+        public static final String B2_DUONG_TRUONG = "DT-B2";
+        public static final String B2_SA_HINH = "SH-B2";
     }
 
     public static final class CT_NAME {
@@ -26,11 +26,11 @@ public final class ConstKey {
 
         public static final class ERR {
 
-            public static final byte HL = 28;//
-            public static final byte TN = 90;//
-            public static final byte RG = 66;//
-            public static final byte QT = 82;//
-            public static final byte CL = 8;
+            public static final int HL = 28;//
+            public static final int TN = 90;//
+            public static final int RG = 66;//
+            public static final int QT = 82;//
+            public static final int CL = 8;
             ////////////////74,12
             public static final int AT = 74;//
             public static final int NTP = 12;//
@@ -50,29 +50,39 @@ public final class ConstKey {
 
     public static final class RM_KEY {
 
+        public static final int IN = 10;
+
         public static final class CONFIG {
 
-            public static final byte SBD = 64;
-            public static final byte SO_XE = 67;
-            public static final byte DV = 24;
-            public static final byte CH = 13;
-            public static final byte TR = 25;
-            public static final byte CANCEL = 9;
-            public static final byte OK = 21;
+            public static final int SBD = 64;
+            public static final int SO_XE = 67;
+            public static final int BACKSPACE = 25;
+            public static final int CANCEL = 9;
+            public static final int OK = 21;
+            public static final int VK_0 = 0;
+            public static final int VK_1 = 1;
+            public static final int VK_2 = 2;
+            public static final int VK_3 = 3;
+            public static final int VK_4 = 4;
+            public static final int VK_5 = 5;
+            public static final int VK_6 = 6;
+            public static final int VK_7 = 7;
+            public static final int VK_8 = 8;
+            public static final int VK_9 = 9;
         }
 
         public static final class CONTEST {
 
-            public static final byte XP = 69;
-            public static final byte TS = 68;
-            public static final byte GS = 7;
-            public static final byte KT = 22;
+            public static final int XP = 69;
+            public static final int TS = 68;
+            public static final int GS = 7;
+            public static final int KT = 22;
         }
 
         public static final class MODE {
 
-            public static final byte B2_DT_OFF = 70;
-            public static final byte B2_ON = 71;
+            public static final int B2_DT_OFF = 70;
+            public static final int B2_ON = 71;
         }
     }
 

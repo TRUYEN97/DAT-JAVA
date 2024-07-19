@@ -6,33 +6,34 @@ package com.qt.controller.modeController;
 
 import com.qt.common.ConstKey;
 import com.qt.common.Util;
+import com.qt.contest.AbsCondition;
 import com.qt.contest.AbsContest;
-import com.qt.interfaces.IStarter;
+import com.qt.contest.impCondition.OnOffImp.CheckCM;
+import com.qt.contest.impCondition.OnOffImp.CheckRPM;
 import com.qt.controller.ProcessModelHandle;
 import com.qt.mode.AbsTestMode;
-import com.qt.model.modelTest.process.ModeParam;
 import com.qt.output.SoundPlayer;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Admin
  */
-public class ContestRunner implements IStarter, Runnable {
+public class ContestRunner implements Runnable {
 
     private final ProcessModelHandle processlHandle;
-    private final ExecutorService threadPool;
     private final SoundPlayer soundPlayer;
+    private final List<AbsCondition> conditions;
     private AbsTestMode testMode;
     private boolean testDone = false;
-    private Future testFuture;
 
-    public ContestRunner(ModeParam modeParam) {
-        this.processlHandle = modeParam.getProcessModelHandle();
-        this.threadPool = Executors.newSingleThreadExecutor();
-        this.soundPlayer = modeParam.getSoundPlayer();
+    public ContestRunner() {
+        this.processlHandle = ProcessModelHandle.getInstance();
+        this.soundPlayer = SoundPlayer.getInstance();
+        this.conditions = new ArrayList<>();
+        this.conditions.add(new CheckCM());
+        this.conditions.add(new CheckRPM());
     }
 
     public boolean setTestMode(AbsTestMode testMode) {
@@ -41,28 +42,6 @@ public class ContestRunner implements IStarter, Runnable {
         }
         this.testMode = testMode;
         return true;
-    }
-
-    @Override
-    public void start() {
-        if (isStarted()) {
-            return;
-        }
-        this.testFuture = this.threadPool.submit(this);
-    }
-
-    @Override
-    public boolean isStarted() {
-        return this.testFuture != null && !this.testFuture.isDone();
-    }
-
-    @Override
-    public void stop() {
-        testDone = true;
-        while (!isRunning()) {
-            this.testFuture.cancel(true);
-            Util.delay(200);
-        }
     }
 
     @Override
@@ -97,7 +76,7 @@ public class ContestRunner implements IStarter, Runnable {
                 this.testDone = true;
                 break;
             }
-            Util.delay(200);
+            Util.delay(100);
         }
         if (currContest.isPlaySoundWhenInOut()) {
             this.soundPlayer.startContest();
@@ -111,7 +90,7 @@ public class ContestRunner implements IStarter, Runnable {
                     this.testDone = true;
                     break;
                 }
-                Util.delay(200);
+                Util.delay(50);
             }
             currContest.end();
         }
@@ -119,7 +98,7 @@ public class ContestRunner implements IStarter, Runnable {
 
     private void end(AbsContest currContest) {
         if (this.testMode != null) {
-            this.testMode.contestDone();
+            this.testMode.endContest();
         }
         if (this.testMode == null || checkStopTestCondisions()) {
             this.testDone = true;
@@ -131,10 +110,23 @@ public class ContestRunner implements IStarter, Runnable {
     }
 
     private boolean checkStopTestCondisions() {
+        for (AbsCondition condition : conditions) {
+            if (!condition.checkPassed() && condition.isImportant()) {
+                return true;
+            }
+        }
         if (processlHandle.containContestClass(ConstKey.CT_NAME.KET_THUC)) {
             return true;
         }
-        return this.processlHandle.getProcessModel().getScore() < 80;
+        if (testMode != null) {
+            if (!testMode.checkTestCondisions()) {
+                return true;
+            }
+            if (this.processlHandle.getProcessModel().getScore() < testMode.getScoreSpec()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isRunning() {

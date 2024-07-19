@@ -4,28 +4,30 @@
  */
 package com.qt.view.component;
 
+import com.qt.controller.ProcessModelHandle;
+import com.qt.input.serial.MCUSerialHandler;
 import com.qt.model.input.CarModel;
 import com.qt.model.modelTest.process.TestDataModelView;
-import com.qt.view.DesignPanel;
+import javax.swing.JPanel;
 import javax.swing.Timer;
 
 /**
  *
  * @author Admin
  */
-public class UpdateValuePanel extends DesignPanel {
+public class UpdateValuePanel extends JPanel {
 
     protected final Timer timer;
-    protected CarModel carModel;
-    protected TestDataModelView testDataModel;
+    protected final CarModel carModel;
+    protected final TestDataModelView testDataModel;
 
     public UpdateValuePanel() {
-        this(200);
+        this(500);
     }
 
     public UpdateValuePanel(int updateTime) {
-        this.carModel = new CarModel();
-        this.testDataModel = new TestDataModelView(null, null);
+        this.carModel = MCUSerialHandler.getInstance().getModel();
+        this.testDataModel = ProcessModelHandle.getInstance().getTestDataModel();
         this.timer = new Timer(updateTime, (e) -> {
             updateValues();
         });
@@ -38,23 +40,5 @@ public class UpdateValuePanel extends DesignPanel {
 
     public TestDataModelView getTestDataModel() {
         return testDataModel;
-    }
-
-    public void setTestDataModel(TestDataModelView testDataModel) {
-        if (testDataModel == null) {
-            return;
-        }
-        this.testDataModel = testDataModel;
-    }
-
-    public CarModel getCarModel() {
-        return carModel;
-    }
-
-    public void setCarModel(CarModel carModel) {
-        if (carModel == null) {
-            return;
-        }
-        this.carModel = carModel;
     }
 }

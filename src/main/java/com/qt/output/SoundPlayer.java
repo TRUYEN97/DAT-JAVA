@@ -18,29 +18,50 @@ import javax.sound.sampled.Clip;
  */
 public class SoundPlayer {
 
+    private static volatile SoundPlayer instance;
     private final ExecutorService threadPool = Executors.newCachedThreadPool();
+    private SoundRunner soundRunner;
 
-    private SoundRunner soundRunner = new SoundRunner();
+    private SoundPlayer() {
+        this.soundRunner = new SoundRunner();
+    }
+
+    public static SoundPlayer getInstance() {
+        SoundPlayer ins = instance;
+        if (ins == null) {
+            synchronized (SoundPlayer.class) {
+                ins = instance;
+                if (ins == null) {
+                    ins = instance = new SoundPlayer();
+                }
+            }
+        }
+        return ins;
+    }
 
     public void sayResultTest(int score, boolean isPass) {
-        if (isPass) {
-            this.play(new SoundModel("congratulations.wav"));
-        } else {
-            this.play(new SoundModel("congratulations1.wav"));
-        }
-        this.play(new SoundModel("theScore.wav"));
-        sayNumber(score);
-        this.play(new SoundModel("diem.wav", 8000));
-        if (isPass) {
-            this.play(new SoundModel("success.wav"));
-        } else {
-            this.play(new SoundModel("failure.wav"));
-        }
+        new Thread(() -> {
+            if (isPass) {
+                this.play(new SoundModel("congratulations.wav"));
+            } else {
+                this.play(new SoundModel("congratulations1.wav"));
+            }
+            this.play(new SoundModel("theScore.wav"));
+            sayNumber(score);
+            this.play(new SoundModel("diem.wav", 8000));
+            if (isPass) {
+                this.play(new SoundModel("success.wav"));
+            } else {
+                this.play(new SoundModel("failure.wav"));
+            }
+        }).start();
     }
 
     public void contestName(String name) {
-        this.play(new SoundModel("contest/contest.wav"));
-        this.play(new SoundModel(String.format("contest/%s.wav", name)));
+        new Thread(() -> {
+            this.play(new SoundModel("contest/contest.wav"));
+            this.play(new SoundModel(String.format("contest/%s.wav", name)));
+        }).start();
     }
 
     public void startContest() {
@@ -59,14 +80,30 @@ public class SoundPlayer {
         play(new SoundModel("user/inputId.wav"));
     }
 
-    public void welcomeId(int num) {
-        play(new SoundModel("user/welcomeId.wav"));
-        sayNumber(num);
+    public void welcomeId(String numString) {
+        new Thread(() -> {
+            try {
+                int num = Integer.parseInt(numString.trim());
+                play(new SoundModel("user/welcomeId.wav"));
+                sayNumber(num);
+            } catch (Exception e) {
+                e.printStackTrace();
+                ErrorLog.addError(this, e);
+            }
+        }).start();
     }
 
-    public void welcomeCarId(int num) {
-        play(new SoundModel("car/carid.wav"));
-        sayNumber(num);
+    public void welcomeCarId(String numString) {
+        new Thread(() -> {
+            try {
+                int num = Integer.parseInt(numString.trim());
+                play(new SoundModel("car/carid.wav"));
+                sayNumber(num);
+            } catch (Exception e) {
+                e.printStackTrace();
+                ErrorLog.addError(this, e);
+            }
+        }).start();
     }
 
     public void inputCarId() {
@@ -101,13 +138,16 @@ public class SoundPlayer {
         if (num > 0) {
             if (ch < 10) {
                 arr[1] = new SoundModel("number/linh.wav", 15000);
-            }
-            arr[2] = new SoundModel(String.format("number/%d.wav", num), 17000);
-            if (ch >= 20) {
-                if (num == 4) {
-                    arr[2] = new SoundModel("number/tu.wav", 17000);
-                } else if (num == 1) {
-                    arr[2] = new SoundModel("number/mot.wav", 17000);
+            } else {
+                arr[2] = new SoundModel(String.format("number/%d.wav", num), 17000);
+                if (num == 5) {
+                    arr[2] = new SoundModel(String.format("number/lam.wav"), 17000);
+                } else if (ch >= 20) {
+                    if (num == 4) {
+                        arr[2] = new SoundModel("number/tu.wav", 17000);
+                    } else if (num == 1) {
+                        arr[2] = new SoundModel("number/mot.wav", 17000);
+                    }
                 }
             }
         }
@@ -123,16 +163,24 @@ public class SoundPlayer {
                 soundRunner = new SoundRunner();
             } else {
                 while (soundRunner.frameLength - soundRunner.framePosition > soundModel.num) {
-                    Util.delay(50);
+                    Util.delay(100);
                 }
                 soundRunner = new SoundRunner();
             }
             soundRunner.setPath(soundModel.path);
             threadPool.submit(soundRunner);
             while (!soundRunner.running) {
-                Util.delay(10);
+                Util.delay(100);
             }
         }
+    }
+
+    public void carIdInvalid() {
+        play(new SoundModel("car/CarIdInvalid.wav"));
+    }
+
+    public void userIdInvalid() {
+        play(new SoundModel("user/IdInvalid.wav"));
     }
 
     class SoundRunner implements Runnable {
