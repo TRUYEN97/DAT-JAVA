@@ -18,28 +18,28 @@ import java.util.Map;
  *
  * @author Admin
  */
-public class ErrorCodeHandle {
+public class ErrorcodeHandle {
 
-    private static volatile ErrorCodeHandle instance;
+    private static volatile ErrorcodeHandle instance;
     private final ProcessModel processModel;
     private final SoundPlayer soundPlayer;
     private final Map<Integer, Errorcode> mapErrorcodes;
     private final List<ErrorcodeWithContestNameModel> ewcnms;
 
-    private ErrorCodeHandle() {
+    private ErrorcodeHandle() {
         this.processModel = ProcessModelHandle.getInstance().getProcessModel();
         this.soundPlayer = SoundPlayer.getInstance();
         this.mapErrorcodes = new HashMap<>();
         this.ewcnms = new ArrayList<>();
     }
 
-    public static ErrorCodeHandle getInstance() {
-        ErrorCodeHandle ins = instance;
+    public static ErrorcodeHandle getInstance() {
+        ErrorcodeHandle ins = instance;
         if (ins == null) {
-            synchronized (ErrorCodeHandle.class) {
+            synchronized (ErrorcodeHandle.class) {
                 ins = instance;
                 if (ins == null) {
-                    instance = ins = new ErrorCodeHandle();
+                    instance = ins = new ErrorcodeHandle();
                 }
             }
         }
@@ -63,9 +63,9 @@ public class ErrorCodeHandle {
             return;
         }
         this.processModel.addErrorcode(errorcode);
-        this.processModel.subtract(errorcode.getScore());
         this.ewcnms.add(new ErrorcodeWithContestNameModel(errorcode, ""));
         this.soundPlayer.sayErrorCode(errorcode.getName());
+        this.processModel.subtract(errorcode.getScore());
     }
 
     public void addContestErrorCode(int key, ContestDataModel dataModel) {
@@ -77,8 +77,8 @@ public class ErrorCodeHandle {
             return;
         }
         this.ewcnms.add(new ErrorcodeWithContestNameModel(errorcode, dataModel.getName()));
-        this.processModel.subtract(errorcode.getScore());
         this.soundPlayer.sayErrorCode(errorcode.getName());
         dataModel.addErrorCode(errorcode);
+        this.processModel.subtract(errorcode.getScore());
     }
 }

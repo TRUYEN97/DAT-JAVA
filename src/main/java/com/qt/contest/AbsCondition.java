@@ -4,7 +4,7 @@
  */
 package com.qt.contest;
 
-import com.qt.controller.ErrorCodeHandle;
+import com.qt.controller.ErrorcodeHandle;
 import com.qt.input.serial.MCUSerialHandler;
 import com.qt.model.input.CarModel;
 
@@ -15,12 +15,12 @@ import com.qt.model.input.CarModel;
 public abstract class AbsCondition {
 
     protected final CarModel carModel;
-    private final ErrorCodeHandle codeHandle;
+    private final ErrorcodeHandle codeHandle;
     protected boolean important;
 
     public AbsCondition() {
         this.carModel = MCUSerialHandler.getInstance().getModel();
-        this.codeHandle = ErrorCodeHandle.getInstance();
+        this.codeHandle = ErrorcodeHandle.getInstance();
         this.important = false;
     }
 

@@ -12,27 +12,43 @@ import com.qt.contest.AbsContest;
  *
  * @author Admin
  */
-public class GiamToc extends AbsContest{
+public class GiamToc extends AbsContest {
+
+    private double oldDistance = 0;
+    private double oldSo = 0;
+    private double oldV = 0;
 
     public GiamToc() {
         this(ConstKey.CT_NAME.GIAM_TOC);
     }
-    
+
     public GiamToc(String name) {
-        super( name, true);
+        super(name, true, 200);
     }
 
     @Override
     public boolean loop() {
-        System.out.println("tg");
-        Util.delay(6000);
-        return true;
+        if (this.carModel.getDistance() - oldDistance >= 100) {
+            if ( oldSo - this.carModel.getGearBoxValue() == 1) {
+                addErrorCode(ConstKey.ERR.TS);
+            } else if ( oldV - this.carModel.getSpeed1() >= 5) {
+                addErrorCode(ConstKey.ERR.TT);
+            }
+            return true;
+        } else if (oldSo - this.carModel.getGearBoxValue() == 1
+                && oldV - this.carModel.getSpeed1() >= 5) {
+            return true;
+        }
+        return false;
     }
 
     @Override
     protected boolean isIntoContest() {
-        Util.delay(1000);
+        Util.delay(2000);
+        oldDistance = this.carModel.getDistance();
+        oldSo = this.carModel.getGearBoxValue();
+        oldV = this.carModel.getSpeed1();
         return true;
     }
-    
+
 }

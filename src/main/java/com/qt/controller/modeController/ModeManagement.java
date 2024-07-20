@@ -5,7 +5,7 @@
 package com.qt.controller.modeController;
 
 import com.qt.common.ConstKey;
-import com.qt.controller.FileTestService;
+import com.qt.common.Util;
 import com.qt.mode.AbsTestMode;
 import com.qt.output.Printer;
 import com.qt.output.SoundPlayer;
@@ -92,6 +92,8 @@ public class ModeManagement {
         this.eventManagement.start();
         SoundPlayer.getInstance().sayWelcome();
         this.eventManagement.addKeyEventBackAge(eventsPackage);
+        Util.delay(20000);
+        this.eventsPackage.remove(ConstKey.RM_KEY.CONFIG.SO_XE);
     }
 
 }

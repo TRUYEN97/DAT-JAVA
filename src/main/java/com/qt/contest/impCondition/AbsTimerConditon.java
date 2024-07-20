@@ -14,19 +14,21 @@ import com.qt.contest.AbsCondition;
 public abstract class AbsTimerConditon extends AbsCondition {
 
     protected final TimeS timeS;
-    protected boolean firstCheck;
 
     public AbsTimerConditon() {
-        this.timeS = new TimeS();
-        this.firstCheck = true;
+        this(0);
+    }
+    
+    public AbsTimerConditon(int spec) {
+        this.timeS = new TimeS(spec);
+    }
+    
+    public void setSpec(int spec){
+        this.timeS.setSpec(spec);
     }
 
     @Override
     public boolean checkPassed() {
-        if (firstCheck) {
-            firstCheck = false;
-            this.timeS.start(setTimeOut());
-        }
         if (signal()) {
             if (!this.timeS.onTime()) {
                 this.timeS.update();
@@ -39,7 +41,9 @@ public abstract class AbsTimerConditon extends AbsCondition {
         return true;
     }
 
-    protected abstract int setTimeOut();
+    public void resetTimer() {
+        this.timeS.update();
+    }
 
     protected abstract boolean signal();
 

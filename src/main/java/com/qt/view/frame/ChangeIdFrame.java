@@ -17,7 +17,6 @@ import com.qt.pretreatment.KeyEventsPackage;
 import com.qt.view.interfaces.MouseClicked;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.Timer;
 
 /**
  *
@@ -32,9 +31,7 @@ public class ChangeIdFrame extends javax.swing.JFrame {
     private final KeyEventsPackage eventsPackage;
     private final ProcessModel processModel;
     private final SoundPlayer soundPlayer;
-    private final Timer timer;
     private final ApiService apiService;
-    private boolean timeOut = false;
 
     public static ChangeIdFrame getInstance() {
         ChangeIdFrame idFrame = instance;
@@ -92,11 +89,6 @@ public class ChangeIdFrame extends javax.swing.JFrame {
                 KeyCheck(val);
             }
         };
-        this.timer = new Timer(20000, (e) -> {
-            timeOut = true;
-            ChangeIdFrame.this.timer.stop();
-        });
-        this.timer.start();
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -121,6 +113,7 @@ public class ChangeIdFrame extends javax.swing.JFrame {
         this.bt0.setMouseClicked(mouseClick);
         this.btOk.setMouseClicked(mouseClick);
         this.btBackspace.setMouseClicked(mouseClick);
+        this.btCancel.setMouseClicked(mouseClick);
     }
 
     private void initKeyPackage() {
@@ -169,7 +162,9 @@ public class ChangeIdFrame extends javax.swing.JFrame {
         if (val.isBlank()) {
             return;
         }
-        if (val.equalsIgnoreCase("ok")) {
+        if (val.equalsIgnoreCase("x")) {
+            this.dispose();
+        } else if (val.equalsIgnoreCase("ok")) {
             keyOkClick();
         } else if (val.equals("<--")) {
             KeyBackspaceClick();
@@ -202,6 +197,9 @@ public class ChangeIdFrame extends javax.swing.JFrame {
     }
 
     private void keyOkClick() {
+        if (ProcessModelHandle.getInstance().isTesting()) {
+            return;
+        }
         String modelVal = this.model.getStringValue();
         if (modelVal.isBlank()) {
             modelVal = "0";
@@ -255,11 +253,13 @@ public class ChangeIdFrame extends javax.swing.JFrame {
         btOk = new com.qt.view.element.ButtonDesign();
         bt0 = new com.qt.view.element.ButtonDesign();
         btBackspace = new com.qt.view.element.ButtonDesign();
+        btCancel = new com.qt.view.element.ButtonDesign();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
         setLocation(new java.awt.Point(0, 0));
         setName("ChangeIdFrame"); // NOI18N
+        setUndecorated(true);
         setResizable(false);
         setType(java.awt.Window.Type.UTILITY);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
@@ -295,6 +295,7 @@ public class ChangeIdFrame extends javax.swing.JFrame {
         bt9.setText("9");
         keybroadPanel.add(bt9);
 
+        btOk.setOnColor(new java.awt.Color(0, 255, 102));
         btOk.setText("OK");
         keybroadPanel.add(btOk);
 
@@ -304,23 +305,33 @@ public class ChangeIdFrame extends javax.swing.JFrame {
         btBackspace.setText("<--");
         keybroadPanel.add(btBackspace);
 
+        btCancel.setOnColor(new java.awt.Color(255, 102, 102));
+        btCancel.setText("X");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(stValue, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(keybroadPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(stValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(keybroadPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
+                            .addComponent(btCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(stValue, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(stValue, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(keybroadPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(keybroadPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8))
         );
 
         getContentPane().add(jPanel2);
@@ -331,9 +342,6 @@ public class ChangeIdFrame extends javax.swing.JFrame {
 
     public void display(String name) {
         if (name == null || (isVisible() && !this.model.getName().equalsIgnoreCase(name))) {
-            return;
-        }
-        if (timeOut && name.equalsIgnoreCase(SX)) {
             return;
         }
         java.awt.EventQueue.invokeLater(() -> {
@@ -358,6 +366,7 @@ public class ChangeIdFrame extends javax.swing.JFrame {
     private com.qt.view.element.ButtonDesign bt8;
     private com.qt.view.element.ButtonDesign bt9;
     private com.qt.view.element.ButtonDesign btBackspace;
+    private com.qt.view.element.ButtonDesign btCancel;
     private com.qt.view.element.ButtonDesign btOk;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel keybroadPanel;

@@ -14,24 +14,40 @@ import com.qt.contest.AbsContest;
  */
 public class TangToc extends AbsContest {
 
+    private double oldDistance = 0;
+    private double oldSo = 0;
+    private double oldV = 0;
+
     public TangToc() {
         this(ConstKey.CT_NAME.TANG_TOC);
     }
 
     public TangToc(String name) {
-        super(name, true);
+        super(name, true, 200);
     }
 
     @Override
     public boolean loop() {
-        System.out.println("ts");
-        Util.delay(8000);
-        return true;
+        if (this.carModel.getDistance() - oldDistance >= 100) {
+            if (this.carModel.getGearBoxValue() - oldSo == 1) {
+                addErrorCode(ConstKey.ERR.TS);
+            } else if (this.carModel.getSpeed1() - oldV >= 5) {
+                addErrorCode(ConstKey.ERR.TT);
+            }
+            return true;
+        } else if (this.carModel.getGearBoxValue() - oldSo == 1
+                && this.carModel.getSpeed1() - oldV >= 5) {
+            return true;
+        }
+        return false;
     }
 
     @Override
     protected boolean isIntoContest() {
-        Util.delay(1000);
+        Util.delay(2000);
+        oldDistance = this.carModel.getDistance();
+        oldSo = this.carModel.getGearBoxValue();
+        oldV = this.carModel.getSpeed1();
         return true;
     }
 

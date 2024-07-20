@@ -58,10 +58,8 @@ public class SoundPlayer {
     }
 
     public void contestName(String name) {
-        new Thread(() -> {
-            this.play(new SoundModel("contest/contest.wav"));
-            this.play(new SoundModel(String.format("contest/%s.wav", name)));
-        }).start();
+        this.play(new SoundModel("contest/contest.wav"));
+        this.play(new SoundModel(String.format("contest/%s.wav", name)));
     }
 
     public void startContest() {
@@ -81,6 +79,9 @@ public class SoundPlayer {
     }
 
     public void welcomeId(String numString) {
+        if (numString == null || numString.isBlank()) {
+            return;
+        }
         new Thread(() -> {
             try {
                 int num = Integer.parseInt(numString.trim());
@@ -94,6 +95,9 @@ public class SoundPlayer {
     }
 
     public void welcomeCarId(String numString) {
+        if (numString == null || numString.isBlank()) {
+            return;
+        }
         new Thread(() -> {
             try {
                 int num = Integer.parseInt(numString.trim());
@@ -115,7 +119,9 @@ public class SoundPlayer {
     }
 
     public void sayErrorCode(String name) {
-        play(new SoundModel(String.format("errorcode/%s.wav", name)));
+        new Thread(() -> {
+            play(new SoundModel(String.format("errorcode/%s.wav", name)));
+        }).start();
     }
 
     private void sayNumber(int num) {

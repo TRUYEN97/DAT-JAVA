@@ -50,12 +50,20 @@ public class CameraRunner implements IStarter {
         }
         return ins;
     }
-
-    public boolean openCamera(int index) {
-        return camera.open(index);
+    
+    public void setFps(int fps){
+        this.camera.setFps(fps);
     }
     
-    public BufferedImage getImage(){
+    public void setSize(int w, int h){
+        this.camera.setSize(w , h);
+    }
+
+    public void setCamera(int index) {
+        camera.setCamera(index);
+    }
+
+    public BufferedImage getImage() {
         return this.camera.image;
     }
 
@@ -75,7 +83,7 @@ public class CameraRunner implements IStarter {
             if (image == null) {
                 return false;
             }
-            return ImageIO.write(image, ".png", file);
+            return ImageIO.write(image, "PNG", file);
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
@@ -116,16 +124,19 @@ public class CameraRunner implements IStarter {
         }
         private final VideoCapture camera = new VideoCapture();
         private boolean stop;
+        private int cameraId = 0;
+        private int fps = 10;
         private JLabel imageLabel;
         private BufferedImage image;
+        private int h = 240;
+        private int w = 320;
 
-        private boolean open(int cameraID) {
-            if (this.camera.open(cameraID) && this.camera.isOpened()) {
-                camera.set(Videoio.CAP_PROP_FRAME_WIDTH, 320);
-                camera.set(Videoio.CAP_PROP_FRAME_HEIGHT, 240);
-                return true;
-            }
-            return false;
+        private void setCamera(int cameraID) {
+            this.cameraId = cameraID < 0 ? 0 : cameraID;
+        }
+
+        public void setFps(int fps) {
+            this.fps = fps < 1 ? 1 : fps;
         }
 
         private void stop() {
@@ -133,22 +144,43 @@ public class CameraRunner implements IStarter {
             this.camera.release();
         }
 
+        private boolean openCamera() {
+            try {
+                if (this.camera.open(cameraId) && this.camera.isOpened()) {
+                    camera.set(Videoio.CAP_PROP_FRAME_WIDTH, w);
+                    camera.set(Videoio.CAP_PROP_FRAME_HEIGHT, h);
+                    return true;
+                }
+                return false;
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
         @Override
         public void run() {
-            try {
-                this.stop = false;
-                Mat frameMat = new Mat();
-                while (!stop) {
-                    if (camera.isOpened() && camera.read(frameMat)) {
-                        image = matToBufferedImage(frameMat);
-                        Core.flip(frameMat, frameMat, 1);
-                        updateView(matToBufferedImage(frameMat));
+            this.stop = false;
+            while (!stop) {
+                try {
+                    while (!openCamera()) {
+                        Util.delay(1000);
                     }
-                    Util.delay(100);
+                    Mat frameMat = new Mat();
+                    while (!stop) {
+                        if (!camera.isOpened()) {
+                            break;
+                        }
+                        if (camera.read(frameMat)) {
+                            image = matToBufferedImage(frameMat);
+                            Core.flip(frameMat, frameMat, 1);
+                            updateView(matToBufferedImage(frameMat));
+                        }
+                        Util.delay(1000 / fps);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ErrorLog.addError(this, e);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                ErrorLog.addError(this, e);
             }
         }
 
@@ -177,6 +209,11 @@ public class CameraRunner implements IStarter {
             final byte[] targetPixels = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
             System.arraycopy(buffer, 0, targetPixels, 0, buffer.length);
             return img;
+        }
+
+        private void setSize(int w, int h) {
+            this.w = w < 320? 320: w;
+            this.h = h < 240? 240 : h;
         }
     }
 }

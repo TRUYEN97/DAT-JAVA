@@ -10,7 +10,8 @@ import com.qt.common.Util;
 import com.qt.contest.AbsCondition;
 import com.qt.contest.AbsContest;
 import com.qt.controller.ApiService;
-import com.qt.controller.ErrorCodeHandle;
+import com.qt.controller.CheckConditionHandle;
+import com.qt.controller.ErrorcodeHandle;
 import com.qt.controller.FileTestService;
 import com.qt.controller.ProcessModelHandle;
 import com.qt.input.camera.CameraRunner;
@@ -22,10 +23,8 @@ import com.qt.output.SoundPlayer;
 import com.qt.pretreatment.IKeyEvent;
 import com.qt.pretreatment.KeyEventManagement;
 import com.qt.pretreatment.KeyEventsPackage;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import javax.swing.JPanel;
@@ -51,10 +50,10 @@ public abstract class AbsTestMode<V extends JPanel> {
     protected final Queue<AbsContest> contests;
     protected final KeyEventsPackage prepareEventsPackage;
     protected final KeyEventsPackage testEventsPackage;
-    protected final ErrorCodeHandle errorcodeHandle;
+    protected final ErrorcodeHandle errorcodeHandle;
     protected final FileTestService fileTestService;
     protected final ApiService apiService;
-    protected final List<AbsCondition> conditions;
+    protected final CheckConditionHandle conditionHandle;
 
     protected AbsTestMode(V view, String name) {
         this(view, name, 80);
@@ -70,12 +69,12 @@ public abstract class AbsTestMode<V extends JPanel> {
         this.processModel = this.processlHandle.getProcessModel();
         this.soundPlayer = SoundPlayer.getInstance();
         this.contests = new LinkedList<>();
-        this.errorcodeHandle = ErrorCodeHandle.getInstance();
+        this.errorcodeHandle = ErrorcodeHandle.getInstance();
         this.prepareEventsPackage = initPrepareKeyEventPackage();
         this.testEventsPackage = initTestKeyEventPackage();
         this.fileTestService = FileTestService.getInstance();
         this.apiService = ApiService.getInstance();
-        this.conditions = new ArrayList<>();
+        this.conditionHandle = new CheckConditionHandle();
         initErrorcode();
     }
 
@@ -109,6 +108,7 @@ public abstract class AbsTestMode<V extends JPanel> {
     }
 
     public void begin() {
+        this.processlHandle.setTesting(false);
         MCUSerialHandler.getInstance().sendReset();
         MCUSerialHandler.getInstance().sendLedOff();
         this.processModel.setStatus(ProcessModel.RUNNING);
@@ -117,6 +117,7 @@ public abstract class AbsTestMode<V extends JPanel> {
         while (!loopCheckStartTest()) {
             Util.delay(200);
         }
+        this.processlHandle.setTesting(true);
         MCUSerialHandler.getInstance().sendLedYellowOn();
         MCUSerialHandler.getInstance().sendReset();
         KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
@@ -148,6 +149,7 @@ public abstract class AbsTestMode<V extends JPanel> {
                 MCUSerialHandler.getInstance().sendLedRedOn();
             }
             endTest();
+            this.processlHandle.setTesting(false);
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
@@ -157,6 +159,7 @@ public abstract class AbsTestMode<V extends JPanel> {
     private void initErrorcode() {
 
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.SO3, new Errorcode("SO3", 2));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TIME_OUT, new Errorcode("timeout", 5));
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.AT, new Errorcode("AT", 5));
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.NTP, new Errorcode("NTP", 5));
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.PT, new Errorcode("PT", 5));
@@ -207,12 +210,7 @@ public abstract class AbsTestMode<V extends JPanel> {
     }
 
     public boolean checkTestCondisions() {
-        for (AbsCondition condition : conditions) {
-            if (!condition.checkPassed() && condition.isImportant()) {
-                return false;
-            }
-        }
-        return true;
+        return this.conditionHandle.checkTestCondisions();
     }
 
 }

@@ -24,29 +24,30 @@ public final class ConstKey {
         public static final String GIAM_TOC = "GS";
     }
 
-        public static final class ERR {
+    public static final class ERR {
 
-            public static final int HL = 28;//
-            public static final int TN = 90;//
-            public static final int RG = 66;//
-            public static final int QT = 82;//
-            public static final int CL = 8;
-            ////////////////74,12
-            public static final int AT = 74;//
-            public static final int NTP = 12;//
-            public static final int KPT = 258;//
-            public static final int TS = 259;//
-            public static final int GS = 260;//
-            public static final int S30 = 261;//
-            public static final int S20 = 262;//
-            public static final int CM = 263;//
-            public static final int GT = 264;//
-            public static final int TT = 265;//
-            public static final int RPM = 266;//
-            public static final int PT = 267;//
-            public static final int SO3 = 268;//
-            public static final int VSO = 269;//
-        }
+        public static final int HL = 28;//
+        public static final int TN = 90;//
+        public static final int RG = 66;//
+        public static final int QT = 82;//
+        public static final int CL = 8;
+        ////////////////74,12
+        public static final int AT = 74;//
+        public static final int NTP = 12;//
+        public static final int KPT = 258;//
+        public static final int TS = 259;//
+        public static final int GS = 260;//
+        public static final int S30 = 261;//
+        public static final int S20 = 262;//
+        public static final int CM = 263;//
+        public static final int GT = 264;//
+        public static final int TT = 265;//
+        public static final int RPM = 266;//
+        public static final int PT = 267;//
+        public static final int SO3 = 268;//
+        public static final int VSO = 269;//
+        public static final int TIME_OUT = 269;//
+    }
 
     public static final class RM_KEY {
 
@@ -106,5 +107,12 @@ public final class ConstKey {
         public static final String S3 = "s3";
         public static final String S4 = "s4";
         public static final String REMOTE = "remote";
+    }
+
+    public static final class CAR_ST {
+
+        public static final int STOP = 0;
+        public static final int FORWARD = 1;
+        public static final int BACKWARD = -1;
     }
 }

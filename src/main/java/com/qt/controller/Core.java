@@ -23,6 +23,7 @@ public class Core {
     public Core() {
         this.viewMain = new ViewMain();
         this.cameraRunner = CameraRunner.getInstance();
+        this.cameraRunner.setCamera(0);
         this.modeManagement = new ModeManagement(viewMain);
         addMode();
     }
@@ -34,9 +35,8 @@ public class Core {
 
     public void start() {
         this.viewMain.display();
-        this.modeManagement.start();
-        this.cameraRunner.openCamera(0);
         this.cameraRunner.start();
+        this.modeManagement.start();
     }
 
 }

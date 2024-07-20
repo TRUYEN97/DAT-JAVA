@@ -10,11 +10,16 @@ import com.qt.contest.AbsCondition;
 import com.qt.contest.AbsContest;
 import com.qt.contest.impCondition.OnOffImp.CheckCM;
 import com.qt.contest.impCondition.OnOffImp.CheckRPM;
+import com.qt.contest.impCondition.timerCondition.TimeOutContest;
+import com.qt.controller.CheckConditionHandle;
 import com.qt.controller.ProcessModelHandle;
 import com.qt.mode.AbsTestMode;
 import com.qt.output.SoundPlayer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  *
@@ -23,17 +28,20 @@ import java.util.List;
 public class ContestRunner implements Runnable {
 
     private final ProcessModelHandle processlHandle;
-    private final SoundPlayer soundPlayer;
-    private final List<AbsCondition> conditions;
+    private final CheckConditionHandle conditionHandle;
+    private final TimeOutContest timeOutContest;
+    private final ExecutorService threadPool;
     private AbsTestMode testMode;
     private boolean testDone = false;
 
     public ContestRunner() {
         this.processlHandle = ProcessModelHandle.getInstance();
-        this.soundPlayer = SoundPlayer.getInstance();
-        this.conditions = new ArrayList<>();
-        this.conditions.add(new CheckCM());
-        this.conditions.add(new CheckRPM());
+        this.timeOutContest = new TimeOutContest();
+        this.threadPool = Executors.newSingleThreadExecutor();
+        this.conditionHandle = new CheckConditionHandle();
+        this.conditionHandle.addConditon(new CheckCM());
+        this.conditionHandle.addConditon(new CheckRPM());
+        this.conditionHandle.addConditon(this.timeOutContest);
     }
 
     public boolean setTestMode(AbsTestMode testMode) {
@@ -58,62 +66,39 @@ public class ContestRunner implements Runnable {
                 Util.delay(200);
                 continue;
             }
-            begin(currContest);
-            test(currContest);
-            end(currContest);
+            runPart(currContest.begin(), currContest);
+            if (!testDone) {
+                this.timeOutContest.setContest(currContest);
+                runPart(currContest.test(), currContest);
+                this.timeOutContest.setContest(null);
+            }
+            currContest.end();
             this.testMode.pollContests();
         }
     }
 
-    private void begin(AbsContest currContest) {
-        if (this.testMode == null) {
-            return;
-        }
-        this.processlHandle.setContest(currContest);
-        this.soundPlayer.contestName(currContest.getName());
-        while (!currContest.isStart()) {
-            if (this.testMode == null || checkStopTestCondisions()) {
+    private void runPart(Runnable runnable, AbsContest currContest) {
+        Future future = this.threadPool.submit(runnable);
+        while (!future.isDone() && !this.testDone) {
+            if (checkStopTestCondisions()) {
                 this.testDone = true;
                 break;
             }
-            Util.delay(100);
-        }
-        if (currContest.isPlaySoundWhenInOut()) {
-            this.soundPlayer.startContest();
-        }
-    }
-
-    private void test(AbsContest currContest) {
-        if (this.testMode != null && !this.testDone) {
-            while (!this.testDone && !currContest.loop()) {
-                if (checkStopTestCondisions()) {
-                    this.testDone = true;
-                    break;
-                }
-                Util.delay(50);
+            if (!currContest.checkTestCondisions()) {
+                this.testDone = true;
+                break;
             }
-            currContest.end();
         }
-    }
-
-    private void end(AbsContest currContest) {
-        if (this.testMode != null) {
-            this.testMode.endContest();
+        while (!future.isDone()) {
+            currContest.stop();
+            future.cancel(true);
+            Util.delay(200);
         }
-        if (this.testMode == null || checkStopTestCondisions()) {
-            this.testDone = true;
-        }
-        if (currContest.isPlaySoundWhenInOut()) {
-            this.soundPlayer.endContest();
-        }
-        this.processlHandle.setContest(null);
     }
 
     private boolean checkStopTestCondisions() {
-        for (AbsCondition condition : conditions) {
-            if (!condition.checkPassed() && condition.isImportant()) {
-                return true;
-            }
+        if (!this.conditionHandle.checkTestCondisions()) {
+            return true;
         }
         if (processlHandle.containContestClass(ConstKey.CT_NAME.KET_THUC)) {
             return true;

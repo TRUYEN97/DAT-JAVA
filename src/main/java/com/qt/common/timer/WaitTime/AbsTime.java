@@ -27,8 +27,12 @@ public abstract class AbsTime {
 
     public final void start(double spec) {
         this.run = true;
-        this.spec = spec;
+        this.spec = spec < 0 ? 0 : spec;
         startTime = getTimeCurrent();
+    }
+    
+    public void setSpec(double spec) {
+        this.spec = spec < 0 ? 0 : spec;
     }
 
     public double getSpec() {

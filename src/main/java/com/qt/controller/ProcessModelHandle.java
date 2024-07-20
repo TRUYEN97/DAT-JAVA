@@ -35,6 +35,7 @@ public class ProcessModelHandle implements IgetTime {
     private long startMs = 0;
     private long endMs = 0;
     private long cysleTime = -1;
+    private boolean testing;
 
     private ProcessModelHandle() {
         this.processModel = new ProcessModel();
@@ -42,6 +43,7 @@ public class ProcessModelHandle implements IgetTime {
         this.testDataModel = new TestDataModelView(this, processModel);
         this.carModel = MCUSerialHandler.getInstance().getModel();
         this.logTestService = FileTestService.getInstance();
+        this.testing = false;
         String carId = this.logTestService.getCarId();
         this.processModel.setCarId(carId == null || carId.isBlank() ? "0" : carId);
     }
@@ -63,13 +65,14 @@ public class ProcessModelHandle implements IgetTime {
         this.endMs = 0;
         this.cysleTime = -1;
         this.processModel.clear();
+        this.testing = false;
     }
 
     public void setUserId(UserModel userModel) {
-        if (userModel == null) {
+        if (userModel == null || testing) {
             return;
         }
-        this.processModel.setId(userModel.getName());
+        this.processModel.setId(userModel.getId());
         this.processModel.setName(userModel.getName());
         this.processModel.setSex(userModel.getSex());
         this.processModel.setModeName(userModel.getModeName());
@@ -77,7 +80,12 @@ public class ProcessModelHandle implements IgetTime {
         this.processModel.setPlace_of_origin(userModel.getPlace_of_origin());
     }
 
+    public void setTesting(boolean testing) {
+        this.testing = testing;
+    }
+
     public void startTest() {
+        this.testing = true;
         this.logTestService.updateDate();
         this.startMs = System.currentTimeMillis();
         this.cysleTime = -1;
@@ -125,7 +133,8 @@ public class ProcessModelHandle implements IgetTime {
     public void setContest(AbsContest absContest) {
         this.testDataModel.setContest(absContest);
     }
-    public void update(){
+
+    public void update() {
         this.processModel.setDistance(carModel.getDistance());
     }
 
@@ -133,7 +142,7 @@ public class ProcessModelHandle implements IgetTime {
         update();
         this.endMs = System.currentTimeMillis();
         this.cysleTime = endMs - startMs;
-        this.processModel.setCycleTime((endMs - startMs) / 1000);
+        this.processModel.setCycleTime(endMs - startMs);
         this.processModel.setEndTime(this.timeBase.getSimpleDateTime());
     }
 
@@ -179,5 +188,9 @@ public class ProcessModelHandle implements IgetTime {
     public void setCarID(String modelVal) {
         this.processModel.setCarId(modelVal);
         this.logTestService.writeCarId(modelVal);
+    }
+
+    public boolean isTesting() {
+        return this.testing;
     }
 }

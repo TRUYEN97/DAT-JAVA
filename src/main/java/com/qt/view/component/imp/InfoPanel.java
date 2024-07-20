@@ -18,8 +18,6 @@ import java.awt.event.MouseEvent;
  */
 public class InfoPanel extends UpdateValuePanel {
 
-    private final ChangeIdFrame changeIdFrame;
-
     /**
      * Creates new form InfoPanel
      */
@@ -28,17 +26,16 @@ public class InfoPanel extends UpdateValuePanel {
         initComponents();
         setBackground(new Color(255, 255, 255, 70));
         CameraRunner.getInstance().setImageLabel(lbImg);
-        this.changeIdFrame = ChangeIdFrame.getInstance();
         this.stId.setMouseAdapter(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                InfoPanel.this.changeIdFrame.display(ChangeIdFrame.SBD);
+                carModel.setRemoteValue(ConstKey.RM_KEY.CONFIG.SBD);
             }
         });
         this.stCarId.setMouseAdapter(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                InfoPanel.this.changeIdFrame.display(ChangeIdFrame.SX);
+                carModel.setRemoteValue(ConstKey.RM_KEY.CONFIG.SO_XE);
             }
 
         });
