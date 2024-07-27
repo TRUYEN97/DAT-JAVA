@@ -19,15 +19,16 @@ public class CheckSo3 extends AbsTimerConditon {
 
     @Override
     protected boolean signal() {
-        return this.carModel.getGearBoxValue() >= 3 && this.carModel.getSpeed1() < 20;
+        if (this.carModel.getGearBoxValue() >= 3) {
+            return this.carModel.getSpeed1() < 20;
+        } else {
+            return this.carModel.getSpeed1() >= 20;
+        }
     }
 
     @Override
     protected void action() {
         this.setErrorcode(ConstKey.ERR.SO3);
     }
-
-
-    
 
 }

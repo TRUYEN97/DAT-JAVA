@@ -55,19 +55,26 @@ public class Response {
         if (code == 404 || code == -1 || this.wareHouse == null) {
             return this.response;
         }
-        if (!isResponeseAvalid()) {
+        if (!isResponseAvalid()) {
             return null;
         }
         String val = this.wareHouse.getString(MESSAGE);
         return val == null ? response : val;
     }
 
-    public boolean isResponeseAvalid() {
+    public boolean isResponseAvalid() {
         return this.wareHouse != null;
     }
 
+    public <T> T getData(Class<T> clazz) {
+        if (!isResponseAvalid()) {
+            return null;
+        }
+        return this.wareHouse.getObject(DATA, clazz);
+    }
+    
     public <T> T getData() {
-        if (!isResponeseAvalid()) {
+        if (!isResponseAvalid()) {
             return null;
         }
         Object value = this.wareHouse.get(DATA);
@@ -78,7 +85,7 @@ public class Response {
     }
 
     public <T> List<T> getDatas(Class<T> clazz) {
-        if (!isResponeseAvalid()) {
+        if (!isResponseAvalid()) {
             return null;
         }
         return this.wareHouse.getList(DATA, clazz);
@@ -89,7 +96,7 @@ public class Response {
     }
 
     public boolean isSuccess() {
-        return code == 200 && isResponeseAvalid() && this.wareHouse.getIntValue(STATUS) == 200;
+        return code == 200 && isResponseAvalid() && this.wareHouse.getBooleanValue( STATUS, false);
     }
 
     public boolean getStringEquals(String key, String target) {

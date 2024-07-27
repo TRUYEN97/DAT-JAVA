@@ -5,6 +5,7 @@
 package com.qt.mode.imp;
 
 import com.qt.common.ConstKey;
+import com.qt.common.Util;
 import com.qt.contest.impCondition.timerCondition.CheckSo3;
 import com.qt.contest.impContest.GiamToc;
 import com.qt.contest.impContest.KetThuc;
@@ -23,10 +24,13 @@ import java.util.Map;
 public class B2_DT extends AbsTestMode<DuongTruongView> {
 
     private boolean runnable;
+    private String oldId;
+
     public B2_DT() {
         this(ConstKey.MODE_NAME.B2_DUONG_TRUONG);
         this.conditionHandle.addConditon(new CheckSo3());
         this.runnable = false;
+        this.oldId = "";
     }
 
     public B2_DT(String name) {
@@ -35,10 +39,22 @@ public class B2_DT extends AbsTestMode<DuongTruongView> {
 
     @Override
     protected boolean loopCheckStartTest() {
-        if (!runnable) {
-            int st = this.apiService.checkRunnable(this.processModel.getId(), 
-                    this.processModel.getCarId());
-            runnable = st == ApiService.START;
+        String id = this.processModel.getId();
+        if (!runnable || !oldId.equals(id)) {
+            oldId = id;
+            switch (this.apiService.checkRunnable(id)) {
+                case ApiService.START ->
+                    runnable = true;
+                case ApiService.ID_INVALID -> {
+                    soundPlayer.userIdHasTest();
+                    runnable = false;
+                    Util.delay(10000);
+                }
+                default -> {
+                    runnable = false;
+                    Util.delay(1000);
+                }
+            }
         }
         return runnable && (!contests.isEmpty() && contests.peek()
                 .getName().equals(ConstKey.CT_NAME.XUAT_PHAT));
@@ -61,9 +77,9 @@ public class B2_DT extends AbsTestMode<DuongTruongView> {
     }
 
     @Override
-    protected void createPrepareKeyEvents(Map<Integer, IKeyEvent> maps) {
-        maps.put(ConstKey.RM_KEY.CONTEST.XP, (key) -> {
-            if (hasXp && !runnable) {
+    protected void createPrepareKeyEvents(Map<String, IKeyEvent> maps) {
+        maps.put(ConstKey.KEY_BOARD.CONTEST.XP, (key) -> {
+            if (hasXp || !runnable) {
                 return;
             }
             addContest(new XuatPhat(ConstKey.CT_NAME.XUAT_PHAT));
@@ -76,8 +92,8 @@ public class B2_DT extends AbsTestMode<DuongTruongView> {
     private boolean hasGs = false;
 
     @Override
-    protected void createTestKeyEvents(Map<Integer, IKeyEvent> maps) {
-        maps.put(ConstKey.RM_KEY.CONTEST.TS, (key) -> {
+    protected void createTestKeyEvents(Map<String, IKeyEvent> maps) {
+        maps.put(ConstKey.KEY_BOARD.CONTEST.TS, (key) -> {
             if (!contests.isEmpty()) {
                 return;
             }
@@ -87,7 +103,7 @@ public class B2_DT extends AbsTestMode<DuongTruongView> {
             addContest(new TangToc(ConstKey.CT_NAME.TANG_TOC));
             hasTs = true;
         });
-        maps.put(ConstKey.RM_KEY.CONTEST.GS, (key) -> {
+        maps.put(ConstKey.KEY_BOARD.CONTEST.GS, (key) -> {
             if (!contests.isEmpty()) {
                 return;
             }
@@ -97,7 +113,10 @@ public class B2_DT extends AbsTestMode<DuongTruongView> {
             addContest(new GiamToc(ConstKey.CT_NAME.GIAM_TOC));
             hasGs = true;
         });
-        maps.put(ConstKey.RM_KEY.CONTEST.KT, (key) -> {
+        maps.put(ConstKey.KEY_BOARD.CONTEST.KT, (key) -> {
+            if (this.carModel.getDistance() < 200) {
+                return;
+            }
             if (!contests.isEmpty()) {
                 return;
             }

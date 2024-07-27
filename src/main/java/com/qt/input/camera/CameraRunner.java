@@ -125,7 +125,7 @@ public class CameraRunner implements IStarter {
         private final VideoCapture camera = new VideoCapture();
         private boolean stop;
         private int cameraId = 0;
-        private int fps = 10;
+        private int fps = 5;
         private JLabel imageLabel;
         private BufferedImage image;
         private int h = 240;
@@ -163,7 +163,7 @@ public class CameraRunner implements IStarter {
             while (!stop) {
                 try {
                     while (!openCamera()) {
-                        Util.delay(1000);
+                        Util.delay(2000);
                     }
                     Mat frameMat = new Mat();
                     while (!stop) {

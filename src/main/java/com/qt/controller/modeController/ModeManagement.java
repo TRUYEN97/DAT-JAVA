@@ -7,7 +7,7 @@ package com.qt.controller.modeController;
 import com.qt.common.ConstKey;
 import com.qt.common.Util;
 import com.qt.mode.AbsTestMode;
-import com.qt.output.Printer;
+import com.qt.output.printer.Printer;
 import com.qt.output.SoundPlayer;
 import com.qt.pretreatment.IKeyEvent;
 import com.qt.pretreatment.KeyEventsPackage;
@@ -26,7 +26,7 @@ public class ModeManagement {
     public static String DEFAULT_MODE;
     private final ViewMain viewMain;
     private final KeyEventManagement eventManagement;
-    private final Map<Integer, AbsTestMode> modes;
+    private final Map<String, AbsTestMode> modes;
     private final IKeyEvent updateModeEvent;
     private final ModeHandle modeHandle;
     private final KeyEventsPackage eventsPackage;
@@ -38,23 +38,23 @@ public class ModeManagement {
         this.modes = new HashMap<>();
         this.eventManagement = KeyEventManagement.getInstance();
         this.modeHandle = new ModeHandle();
-        this.changeIdFrame = ChangeIdFrame.getInstance();
+        this.changeIdFrame = new ChangeIdFrame();
         this.printer = new Printer();
-        this.updateModeEvent = (int key) -> {
+        this.updateModeEvent = (String key) -> {
             this.updateMode(key);
         };
         this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName());
-        this.eventsPackage.putEvent(ConstKey.RM_KEY.CONFIG.SO_XE, (key) -> {
+        this.eventsPackage.putEvent(ConstKey.KEY_BOARD.SO_XE, (key) -> {
             this.changeIdFrame.display(ChangeIdFrame.SX);
         });
-        this.eventsPackage.putEvent(ConstKey.RM_KEY.CONFIG.SBD, (key) -> {
+        this.eventsPackage.putEvent(ConstKey.KEY_BOARD.SBD, (key) -> {
             this.changeIdFrame.display(ChangeIdFrame.SBD);
         });
-        this.eventsPackage.putEvent(ConstKey.RM_KEY.IN, (key) -> {
+        this.eventsPackage.putEvent(ConstKey.KEY_BOARD.IN, (key) -> {
             this.printer.printTestResult();
         });
     }
-    public void updateMode(int key) {
+    public void updateMode(String key) {
         if (this.modes.containsKey(key)) {
             this.updateMode(this.modes.get(key));
         }
@@ -75,7 +75,7 @@ public class ModeManagement {
         return false;
     }
 
-    public void putMode(int key, AbsTestMode absTestMode) {
+    public void putMode(String key, AbsTestMode absTestMode) {
         if (absTestMode == null) {
             return;
         }
@@ -88,12 +88,11 @@ public class ModeManagement {
     }
 
     public void start() {
-        this.printer.connectToDefault();
         this.eventManagement.start();
         SoundPlayer.getInstance().sayWelcome();
         this.eventManagement.addKeyEventBackAge(eventsPackage);
         Util.delay(20000);
-        this.eventsPackage.remove(ConstKey.RM_KEY.CONFIG.SO_XE);
+        this.eventsPackage.remove(ConstKey.KEY_BOARD.SO_XE);
     }
 
 }

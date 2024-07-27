@@ -4,11 +4,15 @@
  */
 package com.qt.controller;
 
+import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.FileService.FileService;
+import com.qt.common.mylogger.MyLogger;
 import com.qt.common.timer.TimeBase;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.util.Properties;
 import javax.imageio.ImageIO;
 
 /**
@@ -20,15 +24,22 @@ public class FileTestService {
     private static final String IMAGEPNG = "image.png";
     private static final String JSON_LOGJSON = "jsonLog.json";
     private static volatile FileTestService instance;
-    private static final String LOG_PATH = "log/test";
     private final FileService fileService;
     private final TimeBase timeBase;
+    private final Properties properties;
     private String date;
 
     private FileTestService() {
         this.fileService = new FileService();
         this.timeBase = new TimeBase();
         this.date = this.timeBase.getDate();
+        this.properties = new Properties();
+        try {
+            properties.load(ErrorLog.class.getResourceAsStream("/config.properties"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            ErrorLog.addError("ApiService-constructor", ex);
+        }
     }
 
     public static FileTestService getInstance() {
@@ -91,23 +102,23 @@ public class FileTestService {
 
     public File getFileJsonPath(String id) {
         File file = new File(createStringPath(id, JSON_LOGJSON));
-        if (file.exists()) {
+        if (!file.exists()) {
             return null;
         }
         return file;
     }
 
     public File getFileImagePath(String id) {
-         File file = new File(createStringPath(id, IMAGEPNG));
-        if (file.exists()) {
+        File file = new File(createStringPath(id, IMAGEPNG));
+        if (!file.exists()) {
             return null;
         }
         return file;
     }
 
     private String createStringPath(String id, String fileName) {
-        String filePathString = String.format("%s/%s/%s/%s",
-                LOG_PATH,
+        String filePathString = String.format("%s/logTest/%s/%s/%s",
+                this.properties.getOrDefault(ConstKey.DIR_LOG, "log"),
                 this.date, id, fileName);
         return filePathString;
     }

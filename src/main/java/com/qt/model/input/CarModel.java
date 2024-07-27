@@ -37,25 +37,29 @@ public class CarModel {
     private boolean s2;
     private boolean s3;
     private boolean s4;
+    private boolean s5;
     private int gearBoxValue = 0;
+
+    public CarModel() {
+    }
     
     public void mathGearBoxValue(){
         gearBoxValue = Util.getGearBoxVal(s1, s2, s3, s4);
     }
-    private final Queue<Integer> remoteValues = new ArrayDeque<>();
+    private final Queue<String> remoteValues = new ArrayDeque<>();
 
-    public void setRemoteValue(Integer value) {
-        if (value == null || value == -1) {
+    public void setRemoteValue(String value) {
+        if (value == null || value.isBlank()) {
             return;
         }
         this.remoteValues.add(value);
     }
 
-    public int peekRemoteVal() {
+    public String peekRemoteVal() {
         return this.remoteValues.peek();
     }
 
-    public int popRemoteVal() {
+    public String popRemoteVal() {
         return this.remoteValues.poll();
     }
 

@@ -29,9 +29,9 @@ public class GiamToc extends AbsContest {
     @Override
     public boolean loop() {
         if (this.carModel.getDistance() - oldDistance >= 100) {
-            if ( oldSo - this.carModel.getGearBoxValue() == 1) {
+            if ( oldSo - this.carModel.getGearBoxValue() != 1) {
                 addErrorCode(ConstKey.ERR.TS);
-            } else if ( oldV - this.carModel.getSpeed1() >= 5) {
+            } else if ( oldV - this.carModel.getSpeed1() < 5) {
                 addErrorCode(ConstKey.ERR.TT);
             }
             return true;

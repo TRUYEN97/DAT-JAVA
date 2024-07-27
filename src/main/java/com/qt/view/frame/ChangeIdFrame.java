@@ -10,10 +10,10 @@ import com.qt.controller.ProcessModelHandle;
 import com.qt.model.config.ChangeIdModel;
 import com.qt.model.input.UserModel;
 import com.qt.model.modelTest.process.ProcessModel;
-import com.qt.model.modelTest.process.TestInfo;
 import com.qt.output.SoundPlayer;
 import com.qt.pretreatment.KeyEventManagement;
 import com.qt.pretreatment.KeyEventsPackage;
+import com.qt.view.AbsKeylistenerFrame;
 import com.qt.view.interfaces.MouseClicked;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -22,9 +22,9 @@ import java.awt.event.WindowEvent;
  *
  * @author Admin
  */
-public class ChangeIdFrame extends javax.swing.JFrame {
+public class ChangeIdFrame extends AbsKeylistenerFrame {
 
-    private static volatile ChangeIdFrame instance;
+//    private static volatile ChangeIdFrame instance;
     private final ChangeIdModel model;
     private final MouseClicked mouseClick;
     private final KeyEventManagement eventManagement;
@@ -33,23 +33,22 @@ public class ChangeIdFrame extends javax.swing.JFrame {
     private final SoundPlayer soundPlayer;
     private final ApiService apiService;
 
-    public static ChangeIdFrame getInstance() {
-        ChangeIdFrame idFrame = instance;
-        if (idFrame == null) {
-            synchronized (ChangeIdFrame.class) {
-                idFrame = instance;
-                if (idFrame == null) {
-                    instance = idFrame = new ChangeIdFrame();
-                }
-            }
-        }
-        return idFrame;
-    }
-
+//    public static ChangeIdFrame getInstance() {
+//        ChangeIdFrame idFrame = instance;
+//        if (idFrame == null) {
+//            synchronized (ChangeIdFrame.class) {
+//                idFrame = instance;
+//                if (idFrame == null) {
+//                    instance = idFrame = new ChangeIdFrame();
+//                }
+//            }
+//        }
+//        return idFrame;
+//    }
     /**
      * Creates new form ChangeCarIdFrame
      */
-    private ChangeIdFrame() {
+    public ChangeIdFrame() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -86,7 +85,7 @@ public class ChangeIdFrame extends javax.swing.JFrame {
         this.mouseClick = (bt) -> {
             if (bt != null) {
                 String val = bt.getValue();
-                KeyCheck(val);
+                keyCheck(val);
             }
         };
         this.addWindowListener(new WindowAdapter() {
@@ -117,75 +116,43 @@ public class ChangeIdFrame extends javax.swing.JFrame {
     }
 
     private void initKeyPackage() {
-        this.eventsPackage.putEvent(ConstKey.RM_KEY.CONFIG.CANCEL, (key) -> {
-            this.dispose();
-        });
-        this.eventsPackage.putEvent(ConstKey.RM_KEY.CONFIG.OK, (key) -> {
-            keyOkClick();
-        });
-        this.eventsPackage.putEvent(ConstKey.RM_KEY.CONFIG.BACKSPACE, (key) -> {
-            KeyBackspaceClick();
-        });
-        this.eventsPackage.putEvent(ConstKey.RM_KEY.CONFIG.VK_0, (key) -> {
-            KeyNumbeClick("0");
-        });
-        this.eventsPackage.putEvent(ConstKey.RM_KEY.CONFIG.VK_1, (key) -> {
-            KeyNumbeClick("1");
-        });
-        this.eventsPackage.putEvent(ConstKey.RM_KEY.CONFIG.VK_2, (key) -> {
-            KeyNumbeClick("2");
-        });
-        this.eventsPackage.putEvent(ConstKey.RM_KEY.CONFIG.VK_3, (key) -> {
-            KeyNumbeClick("3");
-        });
-        this.eventsPackage.putEvent(ConstKey.RM_KEY.CONFIG.VK_4, (key) -> {
-            KeyNumbeClick("4");
-        });
-        this.eventsPackage.putEvent(ConstKey.RM_KEY.CONFIG.VK_5, (key) -> {
-            KeyNumbeClick("5");
-        });
-        this.eventsPackage.putEvent(ConstKey.RM_KEY.CONFIG.VK_6, (key) -> {
-            KeyNumbeClick("6");
-        });
-        this.eventsPackage.putEvent(ConstKey.RM_KEY.CONFIG.VK_7, (key) -> {
-            KeyNumbeClick("7");
-        });
-        this.eventsPackage.putEvent(ConstKey.RM_KEY.CONFIG.VK_8, (key) -> {
-            KeyNumbeClick("8");
-        });
-        this.eventsPackage.putEvent(ConstKey.RM_KEY.CONFIG.VK_9, (key) -> {
-            KeyNumbeClick("9");
+        this.eventsPackage.addAnyKeyEvent((key) -> {
+            keyCheck(key);
         });
     }
 
-    private void KeyCheck(String val) {
-        if (val.isBlank()) {
+    private void keyCheck(String val) {
+        if (val == null || val.isBlank()) {
             return;
         }
-        if (val.equalsIgnoreCase("x")) {
+        if (val.equalsIgnoreCase("x") || val.equals(ConstKey.KEY_BOARD.CANCEL)) {
             this.dispose();
-        } else if (val.equalsIgnoreCase("ok")) {
+        } else if (val.equalsIgnoreCase("ok") || val.equals(ConstKey.KEY_BOARD.OK)) {
             keyOkClick();
-        } else if (val.equals("<--")) {
-            KeyBackspaceClick();
+        } else if (val.equals("<--") || val.equals(ConstKey.KEY_BOARD.BACKSPACE)) {
+            keyBackspaceClick();
         } else {
-            KeyNumbeClick(val);
+            keyNumbeClick(val);
         }
         this.stValue.setValue(this.model.getStringValue());
     }
 
-    private void KeyNumbeClick(String val) {
+    private void keyNumbeClick(String val) {
         String modelVal = this.model.getStringValue();
-        if (modelVal.length() < 3) {
-            if (modelVal.equals("0")) {
-                this.model.setValue(val);
-            } else {
-                this.model.setValue(modelVal.concat(val));
-            }
+        if (modelVal.length() >= 3
+                || val.length() != 1
+                || val.charAt(0) < '0'
+                || val.charAt(0) > '9') {
+            return;
+        }
+        if (modelVal.equals("0")) {
+            this.model.setValue(val);
+        } else {
+            this.model.setValue(modelVal.concat(val));
         }
     }
 
-    private void KeyBackspaceClick() {
+    private void keyBackspaceClick() {
         String modelVal = this.model.getStringValue();
         if (!modelVal.isBlank()) {
             if (modelVal.length() == 1) {
@@ -210,7 +177,7 @@ public class ChangeIdFrame extends javax.swing.JFrame {
             if (userModel != null) {
                 ProcessModelHandle.getInstance().setUserId(userModel);
                 this.soundPlayer.welcomeId(this.processModel.getId());
-            }else{
+            } else {
                 this.soundPlayer.userIdInvalid();
             }
         } else {
@@ -345,9 +312,15 @@ public class ChangeIdFrame extends javax.swing.JFrame {
             return;
         }
         java.awt.EventQueue.invokeLater(() -> {
+            this.eventManagement.addKeyEventBackAge(eventsPackage);
             this.model.setName(name);
-            this.model.setValue(name.equalsIgnoreCase(SBD)
-                    ? this.processModel.getId() : this.processModel.getCarId());
+            if (name.equalsIgnoreCase(SBD)) {
+                this.model.setValue(this.processModel.getId());
+                this.soundPlayer.inputId();
+            } else {
+                this.model.setValue(this.processModel.getCarId());
+                this.soundPlayer.inputCarId();
+            }
             this.stValue.setIconNameTop(this.model.getName());
             this.stValue.setValue(this.model.getStringValue());
             setVisible(true);

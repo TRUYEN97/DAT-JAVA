@@ -82,7 +82,7 @@ public class SoundPlayer {
         if (numString == null || numString.isBlank()) {
             return;
         }
-        new Thread(() -> {
+//        new Thread(() -> {
             try {
                 int num = Integer.parseInt(numString.trim());
                 play(new SoundModel("user/welcomeId.wav"));
@@ -91,14 +91,14 @@ public class SoundPlayer {
                 e.printStackTrace();
                 ErrorLog.addError(this, e);
             }
-        }).start();
+//        }).start();
     }
 
     public void welcomeCarId(String numString) {
         if (numString == null || numString.isBlank()) {
             return;
         }
-        new Thread(() -> {
+//        new Thread(() -> {
             try {
                 int num = Integer.parseInt(numString.trim());
                 play(new SoundModel("car/carid.wav"));
@@ -107,7 +107,7 @@ public class SoundPlayer {
                 e.printStackTrace();
                 ErrorLog.addError(this, e);
             }
-        }).start();
+//        }).start();
     }
 
     public void inputCarId() {
@@ -174,7 +174,7 @@ public class SoundPlayer {
                 soundRunner = new SoundRunner();
             }
             soundRunner.setPath(soundModel.path);
-            threadPool.submit(soundRunner);
+            threadPool.execute(soundRunner);
             while (!soundRunner.running) {
                 Util.delay(100);
             }
@@ -187,6 +187,14 @@ public class SoundPlayer {
 
     public void userIdInvalid() {
         play(new SoundModel("user/IdInvalid.wav"));
+    }
+
+    public void userIdHasTest() {
+        play(new SoundModel("user/idHasTest.wav"));
+    }
+
+    public void pingServerFailed() {
+        play(new SoundModel("lostPing.wav"));
     }
 
     class SoundRunner implements Runnable {

@@ -23,7 +23,7 @@ public class ErrorcodeHandle {
     private static volatile ErrorcodeHandle instance;
     private final ProcessModel processModel;
     private final SoundPlayer soundPlayer;
-    private final Map<Integer, Errorcode> mapErrorcodes;
+    private final Map<String, Errorcode> mapErrorcodes;
     private final List<ErrorcodeWithContestNameModel> ewcnms;
 
     private ErrorcodeHandle() {
@@ -50,14 +50,14 @@ public class ErrorcodeHandle {
         this.ewcnms.clear();
     }
 
-    public void putErrorCode(int key, Errorcode errorcode) {
+    public void putErrorCode(String key, Errorcode errorcode) {
         if (errorcode == null) {
             return;
         }
         this.mapErrorcodes.put(key, errorcode);
     }
 
-    public void addBaseErrorCode(int key) {
+    public void addBaseErrorCode(String key) {
         Errorcode errorcode = this.mapErrorcodes.get(key);
         if (errorcode == null || errorcode.getName() == null) {
             return;
@@ -68,7 +68,7 @@ public class ErrorcodeHandle {
         this.processModel.subtract(errorcode.getScore());
     }
 
-    public void addContestErrorCode(int key, ContestDataModel dataModel) {
+    public void addContestErrorCode(String key, ContestDataModel dataModel) {
         if (dataModel == null) {
             return;
         }

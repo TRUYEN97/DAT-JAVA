@@ -46,7 +46,7 @@ public abstract class AbsContest implements IgetTime {
         this.timeOut = timeout < 0 ? 0 : timeout;
     }
 
-    protected void addErrorCode(int errorKey) {
+    protected void addErrorCode(String errorKey) {
         this.errorcodeHandle.addContestErrorCode(errorKey, contestModel);
     }
 

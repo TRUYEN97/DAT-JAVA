@@ -4,6 +4,7 @@
  */
 package com.qt.common;
 
+import com.qt.common.communication.Communicate.Impl.Cmd.Cmd;
 import java.awt.Image;
 import java.io.File;
 import java.io.FileInputStream;
@@ -113,5 +114,10 @@ public class Util {
             Thread.sleep(time);
         } catch (InterruptedException ex) {
         }
+    }
+
+    public static boolean ping(String addr, int cycle) {
+        Cmd cmd = new Cmd();
+        return cmd.ping(addr, cycle);
     }
 }

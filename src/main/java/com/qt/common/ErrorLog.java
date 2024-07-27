@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Properties;
 
 /**
  *
@@ -18,37 +19,44 @@ import java.io.PrintStream;
  */
 public class ErrorLog {
 
-    private static final MyLogger loger = new MyLogger();
+    private static final MyLogger logger = new MyLogger();
+    private static final Properties properties = new Properties();
 
     static {
-        String filePath = String.format("Log\\ErrorLog\\%s.txt",
-                new TimeBase().getDate());
-        ErrorLog.loger.setFile(new File(filePath));
-        ErrorLog.loger.setSaveMemory(true);
+        try {
+            properties.load(ErrorLog.class.getResourceAsStream("/config.properties"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            ErrorLog.addError("ApiService-constructor", ex);
+        }
+        String dir = properties.getProperty(ConstKey.DIR_LOG, "log");
+        ErrorLog.logger.setFile(new File(dir, "error"));
+        ErrorLog.logger.setDailyLog(true);
+        ErrorLog.logger.setSaveMemory(true);
     }
 
     public static void addError(String error) {
         try {
-            ErrorLog.loger.addLog(error + "\r\n//////////////////////////////////////");
+            ErrorLog.logger.addLog(error + "\r\n//////////////////////////////////////");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
     public static void addError(Object object, Exception e) {
-        File f = ErrorLog.loger.getFile();
+        File f = ErrorLog.logger.getFile();
         if (e == null || f == null) {
-            return ;
+            return;
         }
         try {
-            ErrorLog.loger.add(String.format("%s:   [%s] ",
+            ErrorLog.logger.add(String.format("%s:   [%s] ",
                     new TimeBase().getDateTime(TimeBase.DATE_TIME_MS), object));
             e.printStackTrace(new PrintStream(new FileOutputStream(f, true)));
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         }
     }
-    
+
     public static void addError(Object object, String error) {
         String mess = String.format("error in %s : %s",
                 object.getClass().getName(), error);

@@ -30,7 +30,7 @@ public abstract class AbsCondition {
 
     public abstract boolean checkPassed();
 
-    protected void setErrorcode(int errorcode) {
+    protected void setErrorcode(String errorcode) {
         this.codeHandle.addBaseErrorCode(errorcode);
     }
 

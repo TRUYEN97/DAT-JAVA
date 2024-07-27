@@ -91,5 +91,29 @@ public class Cmd extends AbsCommunicate implements ISender, IReadStream {
             process.destroy();
         }
     }
+    private static final String PING_LINUX = "ping -c 2 %s";
+    private static final String PING_WINDOWS = "ping %s -n 1";
 
+    public boolean ping(String addr, int cycle) {
+        if (addr == null || addr.isBlank()) {
+            return false;
+        }
+        String command;
+        if (isWindowsOs()) {
+            command = String.format(PING_WINDOWS, addr);
+        } else {
+            command = String.format(PING_LINUX, addr);
+        }
+        for (int i = 0; i < cycle; i++) {
+            if (sendCommand(command)) {
+                String response = readAll().trim();
+                if (response.contains("TTL=") || response.contains("ttl=")) {
+                    return true;
+                }
+            } else {
+                break;
+            }
+        }
+        return false;
+    }
 }

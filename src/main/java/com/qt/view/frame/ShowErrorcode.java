@@ -4,11 +4,13 @@
  */
 package com.qt.view.frame;
 
+import com.qt.view.AbsKeylistenerFrame;
+
 /**
  *
  * @author Admin
  */
-public class ShowErrorcode extends javax.swing.JFrame {
+public class ShowErrorcode extends AbsKeylistenerFrame {
 
     /**
      * Creates new form ShowErrorcode

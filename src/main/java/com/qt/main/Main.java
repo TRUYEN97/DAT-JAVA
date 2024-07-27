@@ -4,7 +4,6 @@
  */
 package com.qt.main;
 
-import com.qt.controller.Core;
 import javax.swing.JOptionPane;
 
 /**

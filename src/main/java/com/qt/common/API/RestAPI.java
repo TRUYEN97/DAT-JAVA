@@ -5,12 +5,17 @@
 package com.qt.common.API;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.qt.common.ConstKey;
+import com.qt.common.ErrorLog;
+import com.qt.common.mylogger.MyLogger;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Properties;
 import javax.swing.text.JTextComponent;
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
@@ -41,9 +46,23 @@ public class RestAPI {
     private JwtUtil jwtUtil;
     private Component component;
     private JTextComponent textComponent;
+    private final MyLogger logger;
+    private final Properties properties;
 
     public RestAPI() {
         this.jwtUtil = new JwtUtil();
+        this.logger = new MyLogger();
+        this.properties = new Properties();
+        try {
+            this.properties.load(getClass().getResourceAsStream("/config.properties"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            ErrorLog.addError("ApiService-constructor", ex);
+        }
+        String dir = properties.getProperty(ConstKey.DIR_LOG, "log");
+        this.logger.setFile(new File(dir, "API"));
+        this.logger.setDailyLog(true);
+        this.logger.setSaveMemory(true);
     }
 
     public JTextComponent getTextComponent() {
@@ -70,24 +89,25 @@ public class RestAPI {
     public Response uploadFile(String url, JsonBodyAPI bodyAPI, FileInfo... fileInfos) {
         HttpPost httpPost = new HttpPost(url);
         MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
-        for (FileInfo file : fileInfos) {
-            switch (file.getType()) {
+        for (FileInfo fileInfo : fileInfos) {
+            this.logger.addLog("UPLOAD", String.format("%s - %s", fileInfo.getPartName(), fileInfo.getName()));
+            switch (fileInfo.getType()) {
                 case FILE -> {
-                    String name = file.getName();
+                    String name = fileInfo.getName();
                     FileBody body;
                     if (name == null) {
-                        body = new FileBody((File) file.getFile(), ContentType.MULTIPART_FORM_DATA);
+                        body = new FileBody((File) fileInfo.getFile(), ContentType.MULTIPART_FORM_DATA);
                     } else {
-                        body = new FileBody((File) file.getFile(), ContentType.MULTIPART_FORM_DATA, name);
+                        body = new FileBody((File) fileInfo.getFile(), ContentType.MULTIPART_FORM_DATA, name);
                     }
-                    entityBuilder.addPart("file", body);
+                    entityBuilder.addPart(fileInfo.getPartName(), body);
                 }
                 case BYTE ->
-                    entityBuilder.addBinaryBody("file", (byte[]) file.getFile(),
-                            ContentType.MULTIPART_FORM_DATA, file.getName());
+                    entityBuilder.addBinaryBody(fileInfo.getPartName(), (byte[]) fileInfo.getFile(),
+                            ContentType.MULTIPART_FORM_DATA, fileInfo.getName());
                 case INPUT_STREAM ->
-                    entityBuilder.addBinaryBody("file", (InputStream) file.getFile(),
-                            ContentType.MULTIPART_FORM_DATA, file.getName());
+                    entityBuilder.addBinaryBody(fileInfo.getPartName(), (InputStream) fileInfo.getFile(),
+                            ContentType.MULTIPART_FORM_DATA, fileInfo.getName());
                 default ->
                     throw new AssertionError("invalid file type");
             }
@@ -106,17 +126,24 @@ public class RestAPI {
         return execute(httpPost);
     }
 
-    public Response sendPost(String url, RequestParam param, JsonBodyAPI body) {
-        return sendPost(createUrl(param, url), body);
+    public Response sendPost(String url, RequestParam param, JsonBodyAPI body, boolean saveLog) {
+        return sendPost(createUrl(param, url), body, saveLog);
     }
 
     public Response sendPost(String url, JsonBodyAPI body) {
-        return sendPost(url, body.toJSONString());
+        return sendPost(url, body.toJSONString(), true);
     }
 
-    public Response sendPost(String url, String body) {
+    public Response sendPost(String url, JsonBodyAPI body, boolean saveLog) {
+        return sendPost(url, body.toJSONString(), saveLog);
+    }
+
+    public Response sendPost(String url, String body, boolean saveLog) {
+        if (saveLog) {
+            this.logger.addLog("POST", String.format("%s: %s", url, body));
+        }
         HttpPost request = new HttpPost(url);
-        return executeHaveStringBody(request, body);
+        return executeHaveStringBody(request, body, saveLog);
     }
 
     public Response sendPut(String url, RequestParam param, JsonBodyAPI body) {
@@ -131,11 +158,13 @@ public class RestAPI {
     }
 
     public Response sendPut(String url, String body) {
+        this.logger.addLog("PUT", String.format("%s: %s", url, body));
         HttpPut request = new HttpPut(url);
         return executeHaveStringBody(request, body);
     }
 
     public Response sendGet(String url) {
+        this.logger.addLog("GET", url);
         HttpGet request = new HttpGet(url);
         return execute(request);
     }
@@ -145,6 +174,7 @@ public class RestAPI {
     }
 
     public Response sendDelete(String url) {
+        this.logger.addLog("DELETE", url);
         HttpDelete request = new HttpDelete(url);
         return execute(request);
     }
@@ -169,13 +199,17 @@ public class RestAPI {
     }
 
     private Response executeHaveStringBody(HttpEntityEnclosingRequestBase request, String entity) {
+        return executeHaveStringBody(request, entity, true);
+    }
+
+    private Response executeHaveStringBody(HttpEntityEnclosingRequestBase request, String entity, boolean saveLog) {
         try {
             request.setEntity(new StringEntity(entity));
         } catch (UnsupportedEncodingException ex) {
             throw new RuntimeException(ex.getMessage());
         }
         request.setHeader("Content-Type", "application/json;charset=UTF-8");
-        return execute(request);
+        return execute(request, saveLog);
     }
 
     public Response downloadFile(String apiUrl, RequestParam param, CreatePath createPath) {
@@ -183,17 +217,18 @@ public class RestAPI {
     }
 
     public synchronized Response downloadFile(String apiUrl, CreatePath createPath) {
+        Response response = null;
         try {
             if (component != null) {
                 this.component.setCursor(new Cursor(Cursor.WAIT_CURSOR));
             }
             HttpGet httpGet = new HttpGet(apiUrl);
-            try ( CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
                 checkJwt();
                 httpGet.addHeader("Accept", "*/*");
                 httpGet.addHeader(AUTHORIZATION_KEY, jwtUtil.getJWT());
-                try ( CloseableHttpResponse response = httpClient.execute(httpGet)) {
-                    Header header = response.getFirstHeader("Content-Disposition");
+                try (CloseableHttpResponse httpRp = httpClient.execute(httpGet)) {
+                    Header header = httpRp.getFirstHeader("Content-Disposition");
                     JSONObject attachment = new JSONObject();
                     if (header != null) {
                         for (HeaderElement element : header.getElements()) {
@@ -208,66 +243,83 @@ public class RestAPI {
                     File file = createPath.createFile(attachment);
                     if (file != null) {
                         file.getParentFile().mkdirs();
-                        try ( InputStream inputStream = response.getEntity().getContent();  FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+                        try (InputStream inputStream = httpRp.getEntity().getContent(); FileOutputStream fileOutputStream = new FileOutputStream(file)) {
                             byte[] buffer = new byte[4096];
                             int bytesRead;
                             while ((bytesRead = inputStream.read(buffer)) != -1) {
                                 fileOutputStream.write(buffer, 0, bytesRead);
                             }
                         }
-                        Response response1 = new Response(response.getStatusLine().getStatusCode(),
+                        response = new Response(httpRp.getStatusLine().getStatusCode(),
                                 JsonBodyAPI.builder()
-                                        .put(Response.STATUS, 200)
+                                        .put(Response.STATUS, true)
                                         .put(Response.MESSAGE, "")
                                         .put(Response.DATA, attachment.toJSONString())
                                         .toString());
-                        response1.setTextComponent(textComponent);
-                        return response1;
+                        response.setTextComponent(textComponent);
+                        return response;
                     }
                     Response response1 = new Response(200, JsonBodyAPI.builder()
-                            .put(Response.STATUS, -1)
+                            .put(Response.STATUS, false)
                             .put(Response.MESSAGE, "Cancel").toJSONString());
                     response1.setTextComponent(textComponent);
                     return response1;
                 }
             }
         } catch (Exception e) {
-            Response response1 = new Response(-1, JsonBodyAPI.builder()
-                    .put(Response.STATUS, -1)
+            response = new Response(-1, JsonBodyAPI.builder()
+                    .put(Response.STATUS, false)
                     .put(Response.MESSAGE, e.getLocalizedMessage()).toJSONString());
-            response1.setTextComponent(textComponent);
-            return response1;
+            response.setTextComponent(textComponent);
+            return response;
         } finally {
             if (component != null) {
                 this.component.setCursor(Cursor.getDefaultCursor());
+            }
+            if (response == null) {
+                this.logger.addLog("RESPONSE", "null");
+            } else {
+                this.logger.addLog("RESPONSE", String.format("%s - %s", response.getCode(), response.getResponse()));
             }
         }
     }
 
     private synchronized Response execute(HttpUriRequest request) {
+        return execute(request, true);
+    }
+
+    private synchronized Response execute(HttpUriRequest request, boolean saveLog) {
         if (component != null) {
             this.component.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         }
-        try ( CloseableHttpClient httpClient = HttpClients.createDefault()) {
+        Response response = null;
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             checkJwt();
             request.addHeader("Accept", "*/*");
             request.addHeader(AUTHORIZATION_KEY, jwtUtil.getJWT());
-            try ( CloseableHttpResponse response = httpClient.execute(request)) {
-                String body = EntityUtils.toString(response.getEntity());
-                int statusCode = response.getStatusLine().getStatusCode();
-                Response response1 = new Response(statusCode, body);
-                response1.setTextComponent(textComponent);
-                return response1;
+            try (CloseableHttpResponse httpR = httpClient.execute(request)) {
+                String body = EntityUtils.toString(httpR.getEntity());
+                int statusCode = httpR.getStatusLine().getStatusCode();
+                response = new Response(statusCode, body);
+                response.setTextComponent(textComponent);
+                return response;
             }
         } catch (Exception e) {
-            Response response1 = new Response(-1, JsonBodyAPI.builder()
-                    .put(Response.STATUS, -1)
+            response = new Response(-1, JsonBodyAPI.builder()
+                    .put(Response.STATUS, false)
                     .put(Response.MESSAGE, e.getLocalizedMessage()).toJSONString());
-            response1.setTextComponent(textComponent);
-            return response1;
+            response.setTextComponent(textComponent);
+            return response;
         } finally {
             if (component != null) {
                 this.component.setCursor(Cursor.getDefaultCursor());
+            }
+            if (saveLog) {
+                if (response == null) {
+                    this.logger.addLog("RESPONSE", "null");
+                } else {
+                    this.logger.addLog("RESPONSE", String.format("%s - %s", response.getCode(), response.getResponse()));
+                }
             }
         }
     }

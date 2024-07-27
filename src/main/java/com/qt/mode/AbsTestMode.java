@@ -7,7 +7,6 @@ package com.qt.mode;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.Util;
-import com.qt.contest.AbsCondition;
 import com.qt.contest.AbsContest;
 import com.qt.controller.ApiService;
 import com.qt.controller.CheckConditionHandle;
@@ -84,9 +83,9 @@ public abstract class AbsTestMode<V extends JPanel> {
 
     protected abstract void endTest();
 
-    protected abstract void createPrepareKeyEvents(Map<Integer, IKeyEvent> events);
+    protected abstract void createPrepareKeyEvents(Map<String, IKeyEvent> events);
 
-    protected abstract void createTestKeyEvents(Map<Integer, IKeyEvent> events);
+    protected abstract void createTestKeyEvents(Map<String, IKeyEvent> events);
 
     protected void addContest(AbsContest contest) {
         if (contest == null) {
@@ -109,15 +108,13 @@ public abstract class AbsTestMode<V extends JPanel> {
 
     public void begin() {
         this.processlHandle.setTesting(false);
-        MCUSerialHandler.getInstance().sendReset();
-        MCUSerialHandler.getInstance().sendLedOff();
-        this.processModel.setStatus(ProcessModel.RUNNING);
-        this.errorcodeHandle.clear();
         KeyEventManagement.getInstance().addKeyEventBackAge(prepareEventsPackage);
         while (!loopCheckStartTest()) {
             Util.delay(200);
         }
         this.processlHandle.setTesting(true);
+        this.errorcodeHandle.clear();
+        this.processModel.setStatus(ProcessModel.RUNNING);
         MCUSerialHandler.getInstance().sendLedYellowOn();
         MCUSerialHandler.getInstance().sendReset();
         KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
@@ -179,7 +176,7 @@ public abstract class AbsTestMode<V extends JPanel> {
     }
 
     private KeyEventsPackage initPrepareKeyEventPackage() {
-        Map<Integer, IKeyEvent> events = new HashMap<>();
+        Map<String, IKeyEvent> events = new HashMap<>();
         KeyEventsPackage epg = new KeyEventsPackage(name + "Prepare");
         createPrepareKeyEvents(events);
         epg.putEvents(events);
@@ -187,7 +184,7 @@ public abstract class AbsTestMode<V extends JPanel> {
     }
 
     private KeyEventsPackage initTestKeyEventPackage() {
-        Map<Integer, IKeyEvent> events = new HashMap<>();
+        Map<String, IKeyEvent> events = new HashMap<>();
         events.put(ConstKey.ERR.CL, (key) -> {
             this.errorcodeHandle.addBaseErrorCode(key);
         });

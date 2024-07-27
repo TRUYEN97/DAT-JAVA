@@ -29,9 +29,9 @@ public class TangToc extends AbsContest {
     @Override
     public boolean loop() {
         if (this.carModel.getDistance() - oldDistance >= 100) {
-            if (this.carModel.getGearBoxValue() - oldSo == 1) {
+            if (this.carModel.getGearBoxValue() - oldSo != 1) {
                 addErrorCode(ConstKey.ERR.TS);
-            } else if (this.carModel.getSpeed1() - oldV >= 5) {
+            } else if (this.carModel.getSpeed1() - oldV < 5) {
                 addErrorCode(ConstKey.ERR.TT);
             }
             return true;

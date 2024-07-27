@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.qt.controller;
+package com.qt.main;
 
 import com.qt.common.ConstKey;
 import com.qt.controller.modeController.ModeManagement;
@@ -29,13 +29,13 @@ public class Core {
     }
 
     private void addMode() {
-        this.modeManagement.putMode(ConstKey.RM_KEY.MODE.B2_DT_OFF,
+        this.modeManagement.putMode(ConstKey.KEY_BOARD.MODE.B2_DT_OFF,
                 new B2_DT());
     }
 
     public void start() {
-        this.viewMain.display();
         this.cameraRunner.start();
+        this.viewMain.display();
         this.modeManagement.start();
     }
 

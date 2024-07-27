@@ -11,7 +11,7 @@ import javax.swing.JPanel;
  *
  * @author Admin
  */
-public class ViewMain extends javax.swing.JFrame {
+public class ViewMain extends AbsKeylistenerFrame {
 
     /**
      * Creates new form ViewMain
@@ -69,17 +69,18 @@ public class ViewMain extends javax.swing.JFrame {
         setUndecorated(true);
         setResizable(false);
 
+        pnHome.setBackground(new java.awt.Color(204, 204, 255));
         pnHome.setLayout(new javax.swing.BoxLayout(pnHome, javax.swing.BoxLayout.LINE_AXIS));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 1280, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(pnHome, javax.swing.GroupLayout.DEFAULT_SIZE, 1024, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(pnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();

@@ -12,7 +12,6 @@ import com.qt.common.Util;
 import com.qt.common.timer.TimeBase;
 import com.qt.input.serial.MCUSerialHandler;
 import com.qt.mode.AbsTestMode;
-import com.qt.model.modelTest.process.TestInfo;
 import com.qt.model.input.CarModel;
 import com.qt.model.input.UserModel;
 import com.qt.model.modelTest.contest.ContestDataModel;
@@ -76,8 +75,8 @@ public class ProcessModelHandle implements IgetTime {
         this.processModel.setName(userModel.getName());
         this.processModel.setSex(userModel.getSex());
         this.processModel.setModeName(userModel.getModeName());
-        this.processModel.setDate_of_birth(userModel.getDate_of_birth());
-        this.processModel.setPlace_of_origin(userModel.getPlace_of_origin());
+        this.processModel.setDateOfBirth(userModel.getDateOfBirth());
+        this.processModel.setPlaceOfOrigin(userModel.getPlaceOfOrigin());
     }
 
     public void setTesting(boolean testing) {
@@ -135,14 +134,15 @@ public class ProcessModelHandle implements IgetTime {
     }
 
     public void update() {
+        this.processModel.setCycleTime(getTestTime());
         this.processModel.setDistance(carModel.getDistance());
     }
 
     public void endTest() {
         update();
         this.endMs = System.currentTimeMillis();
-        this.cysleTime = endMs - startMs;
-        this.processModel.setCycleTime(endMs - startMs);
+        this.cysleTime =Util.getTestTime(startMs, endMs);
+        this.processModel.setCycleTime(this.cysleTime);
         this.processModel.setEndTime(this.timeBase.getSimpleDateTime());
     }
 

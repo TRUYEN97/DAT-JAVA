@@ -4,7 +4,9 @@
  */
 package com.qt.pretreatment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,7 +15,8 @@ import java.util.Map;
  */
 public class KeyEventsPackage {
 
-    private final Map<Integer, IKeyEvent> modeKeyEvents;
+    private final List<IKeyEvent> anyKeyEvents;
+    private final Map<String, IKeyEvent> keyEvents;
     private boolean justMe;
     private final String name;
 
@@ -22,23 +25,31 @@ public class KeyEventsPackage {
     }
 
     public KeyEventsPackage(String name, boolean justMe) {
-        this.modeKeyEvents = new HashMap<>();
+        this.keyEvents = new HashMap<>();
+        this.anyKeyEvents = new ArrayList<>();
         this.justMe = justMe;
         this.name = name;
     }
 
-    public void putEvent(int key, IKeyEvent event) {
+    public void addAnyKeyEvent(IKeyEvent event) {
         if (event == null) {
             return;
         }
-        this.modeKeyEvents.put(key, event);
+        this.anyKeyEvents.add(event);
     }
 
-    public void putEvents(Map<Integer, IKeyEvent> modeKeyEvents) {
+    public void putEvent(String key, IKeyEvent event) {
+        if (event == null) {
+            return;
+        }
+        this.keyEvents.put(key, event);
+    }
+
+    public void putEvents(Map<String, IKeyEvent> modeKeyEvents) {
         if (modeKeyEvents == null) {
             return;
         }
-        this.modeKeyEvents.putAll(modeKeyEvents);
+        this.keyEvents.putAll(modeKeyEvents);
     }
 
     public String getName() {
@@ -53,8 +64,18 @@ public class KeyEventsPackage {
         return justMe;
     }
 
-    public IKeyEvent getEven(int key) {
-        return modeKeyEvents.get(key);
+    public void attack(String key) {
+        IKeyEvent event = keyEvents.get(key);
+        if (event != null) {
+            event.action(key);
+        } else {
+            for (IKeyEvent anyKeyEvent : anyKeyEvents) {
+                if (anyKeyEvent == null) {
+                    continue;
+                }
+                anyKeyEvent.action(key);
+            }
+        }
     }
 
     boolean isName(String name) {
@@ -65,11 +86,16 @@ public class KeyEventsPackage {
     }
 
     public void clear() {
-        this.modeKeyEvents.clear();
+        this.keyEvents.clear();
+        this.anyKeyEvents.clear();
     }
 
-    public void remove(int key) {
-        this.modeKeyEvents.remove(key);
+    public void remove(String key) {
+        this.keyEvents.remove(key);
+    }
+
+    public void remove(IKeyEvent event) {
+        this.anyKeyEvents.remove(event);
     }
 
 }

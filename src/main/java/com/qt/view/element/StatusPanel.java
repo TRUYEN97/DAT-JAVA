@@ -192,19 +192,19 @@ public class StatusPanel extends javax.swing.JPanel {
 
         setOpaque(false);
 
-        lbNameTop.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lbNameTop.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lbNameTop.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbNameTop.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         lbNameTop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         lbNameTop.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
-        lbName.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lbName.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lbName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbName.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         lbName.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         lbName.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
-        lbIcon.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
+        lbIcon.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         lbIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbIcon.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
@@ -223,13 +223,13 @@ public class StatusPanel extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(2, 2, 2)
                 .addComponent(lbNameTop)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                .addComponent(lbIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbName)
-                .addContainerGap())
+                .addGap(4, 4, 4))
         );
     }// </editor-fold>//GEN-END:initComponents
 

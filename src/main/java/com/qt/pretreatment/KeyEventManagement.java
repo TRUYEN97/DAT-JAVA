@@ -22,19 +22,20 @@ import java.util.concurrent.Future;
 public class KeyEventManagement implements IStarter {
 
     private static volatile KeyEventManagement instance;
-    private final Queue<Integer> keys;
+    private final Queue<String> keys;
     private final List<KeyEventsPackage> keyEvensPackages;
     private final ExecutorService thread;
     private boolean running = false;
     private boolean stop = false;
     private Future future;
 
-    private  KeyEventManagement() {
+    private KeyEventManagement() {
         this.keys = MCUSerialHandler.getInstance().getModel().getRemoteValues();
         this.keyEvensPackages = new ArrayList<>();
         this.thread = Executors.newSingleThreadExecutor();
     }
-    public static KeyEventManagement getInstance(){
+
+    public static KeyEventManagement getInstance() {
         KeyEventManagement ins = instance;
         if (ins == null) {
             synchronized (KeyEventManagement.class) {
@@ -56,7 +57,7 @@ public class KeyEventManagement implements IStarter {
             running = true;
             stop = false;
             IKeyEvent event;
-            int key;
+            String key;
             KeyEventsPackage evensPackage;
             while (!stop) {
                 try {
@@ -71,10 +72,7 @@ public class KeyEventManagement implements IStarter {
                         if (evensPackage == null) {
                             continue;
                         }
-                        event = evensPackage.getEven(key);
-                        if (event != null) {
-                            event.action(key);
-                        }
+                        evensPackage.attack(key);
                         if (evensPackage.isJustMe()) {
                             break;
                         }

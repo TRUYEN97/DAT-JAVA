@@ -18,11 +18,15 @@ import lombok.Setter;
 @Setter
 public class ContestDataModel {
 
-    private final String name;
+    private String name;
     private String startTime = "";
     private String endTime = "";
     private long cycleTime = 0;
     private final List<Errorcode> errorcodes;
+
+    public ContestDataModel() {
+        this("");
+    }
 
     public ContestDataModel(String name) {
         this.name = name;

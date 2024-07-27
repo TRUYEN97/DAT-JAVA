@@ -10,6 +10,8 @@ package com.qt.common;
  */
 public final class ConstKey {
 
+     public static final String DIR_LOG = "dirLog";
+
     public static final class MODE_NAME {
 
         public static final String B2_DUONG_TRUONG = "DT-B2";
@@ -26,64 +28,62 @@ public final class ConstKey {
 
     public static final class ERR {
 
-        public static final int HL = 28;//
-        public static final int TN = 90;//
-        public static final int RG = 66;//
-        public static final int QT = 82;//
-        public static final int CL = 8;
-        ////////////////74,12
-        public static final int AT = 74;//
-        public static final int NTP = 12;//
-        public static final int KPT = 258;//
-        public static final int TS = 259;//
-        public static final int GS = 260;//
-        public static final int S30 = 261;//
-        public static final int S20 = 262;//
-        public static final int CM = 263;//
-        public static final int GT = 264;//
-        public static final int TT = 265;//
-        public static final int RPM = 266;//
-        public static final int PT = 267;//
-        public static final int SO3 = 268;//
-        public static final int VSO = 269;//
-        public static final int TIME_OUT = 269;//
+        public static final String HL = "Left";//
+        public static final String TN = "Begin";//
+        public static final String RG = "Right";//
+        public static final String QT = "+";//
+        public static final String CL = "End";
+        ////////////
+        public static final String AT = "AT";//
+        public static final String NTP = "NTP";//
+        public static final String KPT = "KPT";//
+        public static final String TS = "TS";//
+        public static final String GS = "GS";//
+        public static final String S30 = "S30";//
+        public static final String S20 = "S20";//
+        public static final String CM = "CM";//
+        public static final String GT = "GT";//
+        public static final String TT = "TT";//
+        public static final String RPM = "RPM";//
+        public static final String PT = "PT";//
+        public static final String SO3 = "SO3";//
+        public static final String VSO = "VSO";//
+        public static final String TIME_OUT = "timeout";//
     }
 
-    public static final class RM_KEY {
+    public static final class KEY_BOARD {
 
-        public static final int IN = 10;
-
-        public static final class CONFIG {
-
-            public static final int SBD = 64;
-            public static final int SO_XE = 67;
-            public static final int BACKSPACE = 25;
-            public static final int CANCEL = 9;
-            public static final int OK = 21;
-            public static final int VK_0 = 0;
-            public static final int VK_1 = 1;
-            public static final int VK_2 = 2;
-            public static final int VK_3 = 3;
-            public static final int VK_4 = 4;
-            public static final int VK_5 = 5;
-            public static final int VK_6 = 6;
-            public static final int VK_7 = 7;
-            public static final int VK_8 = 8;
-            public static final int VK_9 = 9;
-        }
+        public static final String IN = "Insert";
+        public static final String SBD = "*";
+        public static final String SO_XE = "/";
+        public static final String BACKSPACE = "Backspace";
+        public static final String CANCEL = ".";
+        public static final String OK = "Enter";
+        public static final String CTRL = "Ctrl";
+        public static final String ALT = "Alt";
+        public static final String VK_0 = "0";
+        public static final String VK_1 = "1";
+        public static final String VK_2 = "2";
+        public static final String VK_3 = "3";
+        public static final String VK_4 = "4";
+        public static final String VK_5 = "5";
+        public static final String VK_6 = "6";
+        public static final String VK_7 = "7";
+        public static final String VK_8 = "8";
+        public static final String VK_9 = "9";
 
         public static final class CONTEST {
 
-            public static final int XP = 69;
-            public static final int TS = 68;
-            public static final int GS = 7;
-            public static final int KT = 22;
+            public static final String XP = "Home";
+            public static final String TS = "Up";
+            public static final String GS = "Page Up";
+            public static final String KT = "-";
         }
 
         public static final class MODE {
 
-            public static final int B2_DT_OFF = 70;
-            public static final int B2_ON = 71;
+            public static final String B2_DT_OFF = "P";
+            public static final String B2_ON = "O";
         }
     }
 
@@ -106,6 +106,7 @@ public final class ConstKey {
         public static final String S2 = "s2";
         public static final String S3 = "s3";
         public static final String S4 = "s4";
+        public static final String S5 = "s5";
         public static final String REMOTE = "remote";
     }
 

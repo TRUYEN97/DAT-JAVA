@@ -5,16 +5,21 @@
 package com.qt.model.modelTest;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
  * @author Admin
  */
 @Getter
+@Setter
 public class Errorcode {
 
-    private final String name;
-    private final int score;
+    private String name;
+    private int score;
+
+    public Errorcode() {
+    }
 
     public Errorcode(String name, int score) {
         this.name = name;

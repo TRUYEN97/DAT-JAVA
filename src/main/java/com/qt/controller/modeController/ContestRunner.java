@@ -14,9 +14,6 @@ import com.qt.contest.impCondition.timerCondition.TimeOutContest;
 import com.qt.controller.CheckConditionHandle;
 import com.qt.controller.ProcessModelHandle;
 import com.qt.mode.AbsTestMode;
-import com.qt.output.SoundPlayer;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -73,18 +70,21 @@ public class ContestRunner implements Runnable {
                 this.timeOutContest.setContest(null);
             }
             currContest.end();
-            this.testMode.pollContests();
+            if (this.testMode != null) {
+                this.testMode.endContest();
+                this.testMode.pollContests();
+            }
         }
     }
 
     private void runPart(Runnable runnable, AbsContest currContest) {
         Future future = this.threadPool.submit(runnable);
         while (!future.isDone() && !this.testDone) {
-            if (checkStopTestCondisions()) {
+            if (!currContest.checkTestCondisions()) {
                 this.testDone = true;
                 break;
             }
-            if (!currContest.checkTestCondisions()) {
+            if (checkStopTestCondisions()) {
                 this.testDone = true;
                 break;
             }

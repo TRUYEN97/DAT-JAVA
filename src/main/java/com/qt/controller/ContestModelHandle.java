@@ -55,7 +55,7 @@ public class ContestModelHandle implements IgetTime{
 
     public void end() {
         this.endMs = System.currentTimeMillis();
-        this.cysleTime = endMs - startMs;
+        this.cysleTime = Util.getTestTime(startMs, endMs);
         this.contestModel.setEndTime(timeBase.getSimpleDateTime());
         this.contestModel.setCycleTime(this.cysleTime);
     }

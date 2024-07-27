@@ -9,5 +9,5 @@ package com.qt.pretreatment;
  * @author Admin
  */
 public interface IKeyEvent {
-    void action(int key);
+    void action(String key);
 }

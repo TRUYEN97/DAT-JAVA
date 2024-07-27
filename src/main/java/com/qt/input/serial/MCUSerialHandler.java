@@ -27,7 +27,7 @@ public class MCUSerialHandler {
 
     private MCUSerialHandler() {
         this.model = new CarModel();
-        this.serialHandler = new SerialHandler("com7", 115200); //ttyACM0
+        this.serialHandler = new SerialHandler("ttyACM0", 115200); //ttyACM0
         this.serialHandler.setFirstConnectAction(() -> {
             while (!sendReset() || !sendConfig(MCU_CONFIG_MODEL.builder().
                     encoder(1000).
@@ -50,6 +50,7 @@ public class MCUSerialHandler {
                 this.model.setS2(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.S2, false));
                 this.model.setS3(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.S3, false));
                 this.model.setS4(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.S4, false));
+                this.model.setS5(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.S5, false));
                 this.model.setT1(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.T1, false));
                 this.model.setT2(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.T2, false));
                 this.model.setT3(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.T3, false));
@@ -58,10 +59,6 @@ public class MCUSerialHandler {
                 this.model.setSpeed(json.getFloatValue(ConstKey.CAR_MODEL_KEY.SPEED));
                 this.model.setSpeed1(json.getFloatValue(ConstKey.CAR_MODEL_KEY.SPEED_KM));
                 this.model.setRpm(json.getIntValue(ConstKey.CAR_MODEL_KEY.RPM, 0));
-                int b = json.getIntValue(ConstKey.CAR_MODEL_KEY.REMOTE, -1);
-                if (b >= 0) {
-                    this.model.setRemoteValue(b);
-                }
                 this.model.mathGearBoxValue();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -99,19 +96,22 @@ public class MCUSerialHandler {
     }
 
     public void sendLedOff() {
-        this.serialHandler.send("ledoff");
+        this.serialHandler.send("roff");
     }
 
     public void sendLedGreenOn() {
-        this.serialHandler.send("g");
+        this.serialHandler.send("roff");
+        this.serialHandler.send("r1");
     }
 
     public boolean sendLedRedOn() {
-       return this.serialHandler.send("r");
+        this.serialHandler.send("roff");
+       return this.serialHandler.send("r2");
     }
 
     public boolean sendLedYellowOn() {
-        return this.serialHandler.send("y");
+        this.serialHandler.send("roff");
+        return this.serialHandler.send("r3");
     }
 
     public boolean sendReset() {

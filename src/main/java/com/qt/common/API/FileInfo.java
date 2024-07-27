@@ -17,10 +17,19 @@ public class FileInfo {
     };
     private Path name;
     private Object file;
+    private String partName;
     private final type type;
 
     public FileInfo(type type) {
         this.type = type;
+    }
+
+    public void setPartName(String partName) {
+        this.partName = partName;
+    }
+
+    public String getPartName() {
+        return partName == null ? "" : partName;
     }
 
     public type getType() {
@@ -28,8 +37,8 @@ public class FileInfo {
     }
 
     public String getName() {
-        if(name == null){
-            return  null;
+        if (name == null) {
+            return null;
         }
         return name.toString();
     }

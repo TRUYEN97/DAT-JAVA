@@ -35,6 +35,14 @@ public class MyLogger {
     }
 
     public File getFile() {
+        if (file == null) {
+            return null;
+        }
+        String nowDay = this.timeBase.getDateTime(TimeBase.YYYY_MM_DD);
+        if (dailyLog && !oldDay.equalsIgnoreCase(nowDay)) {
+            setFile(new File(file, nowDay.concat(".txt")));
+            oldDay = nowDay;
+        }
         return file;
     }
 
@@ -112,13 +120,9 @@ public class MyLogger {
             this.log.append(log);
         }
         addToQueue(log);
-        if (file != null) {
-            String nowDay = this.timeBase.getDateTime(TimeBase.YYYY_MM_DD);
-            if (dailyLog && !oldDay.equalsIgnoreCase(nowDay)) {
-                setFile(new File(file, nowDay.concat(".txt")));
-                oldDay = nowDay;
-            }
-            try ( FileWriter writer = new FileWriter(file, true)) {
+        File f = getFile();
+        if (f != null) {
+            try (FileWriter writer = new FileWriter(f, true)) {
                 writer.write(log);
                 writer.flush();
             } catch (IOException ex) {
@@ -136,7 +140,7 @@ public class MyLogger {
             this.log.append(log);
         }
         if (file != null) {
-            try ( FileWriter writer = new FileWriter(file)) {
+            try (FileWriter writer = new FileWriter(file)) {
                 writer.write(log);
                 writer.flush();
             }
@@ -157,7 +161,7 @@ public class MyLogger {
                 return null;
             }
             StringBuilder builder = new StringBuilder();
-            try ( BufferedReader reader = new BufferedReader(new FileReader(this.file))) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(this.file))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     builder.append(line).append("\r\n");
