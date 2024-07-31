@@ -6,7 +6,6 @@ package com.qt.controller.modeController;
 
 import com.qt.common.ConstKey;
 import com.qt.common.Util;
-import com.qt.contest.AbsCondition;
 import com.qt.contest.AbsContest;
 import com.qt.contest.impCondition.OnOffImp.CheckCM;
 import com.qt.contest.impCondition.OnOffImp.CheckRPM;

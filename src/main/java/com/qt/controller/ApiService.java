@@ -38,13 +38,11 @@ public class ApiService {
     private static final String RUNNABLE = "runnable";
     private static volatile ApiService insatnce;
     private final Properties properties;
-    private final FileTestService fileTestService;
     private final RestAPI restAPI;
     private final SoundPlayer soundPlayer;
 
     private ApiService() {
         this.properties = new Properties();
-        this.fileTestService = FileTestService.getInstance();
         this.restAPI = new RestAPI();
         this.soundPlayer = SoundPlayer.getInstance();
         try {
@@ -104,14 +102,7 @@ public class ApiService {
         }
         return response.getData(UserModel.class);
     }
-
-    public boolean sendData(String id) {
-        if (id == null || id.isBlank()) {
-            return false;
-        }
-        if (id.equals("0")) {
-            return true;
-        }
+    public boolean sendData(byte[] jsonFile, File imgFile) {
         if (checkPingToServer()) {
             return false;
         }
@@ -119,10 +110,31 @@ public class ApiService {
         if (url == null) {
             return false;
         }
-        File jsonFile = this.fileTestService.getFileJsonPath(id);
-        File imgFile = this.fileTestService.getFileImagePath(id);
         if (jsonFile == null || imgFile == null) {
-            ErrorLog.addError(this, "Không tìm thấy file json, png của id: " + id);
+            return false;
+        }
+        FileInfo jsonF = new FileInfo(FileInfo.type.BYTE);
+        jsonF.setFile(jsonFile);
+        jsonF.setPartName("data");
+        jsonF.setName("data.json");
+        //////////////////
+        FileInfo imgF = new FileInfo(FileInfo.type.FILE);
+        imgF.setFile(imgFile);
+        imgF.setPartName("image");
+        imgF.setName("image.png");
+        Response response = restAPI.uploadFile(url, null, jsonF, imgF);
+        return response != null && response.isSuccess();
+    }
+
+    public boolean sendData(File jsonFile, File imgFile) {
+        if (checkPingToServer()) {
+            return false;
+        }
+        String url = this.properties.getProperty(SEND_DATA);
+        if (url == null) {
+            return false;
+        }
+        if (jsonFile == null || imgFile == null) {
             return false;
         }
         FileInfo jsonF = new FileInfo(FileInfo.type.FILE);

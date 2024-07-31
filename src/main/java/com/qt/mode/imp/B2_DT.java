@@ -5,6 +5,7 @@
 package com.qt.mode.imp;
 
 import com.qt.common.ConstKey;
+import com.qt.common.ErrorLog;
 import com.qt.common.Util;
 import com.qt.contest.impCondition.timerCondition.CheckSo3;
 import com.qt.contest.impContest.GiamToc;
@@ -12,9 +13,12 @@ import com.qt.contest.impContest.KetThuc;
 import com.qt.contest.impContest.TangToc;
 import com.qt.contest.impContest.XuatPhat;
 import com.qt.controller.ApiService;
+import com.qt.input.camera.CameraRunner;
 import com.qt.mode.AbsTestMode;
 import com.qt.pretreatment.IKeyEvent;
 import com.qt.view.DuongTruongView;
+import com.qt.view.frame.ShowErrorcode;
+import java.io.File;
 import java.util.Map;
 
 /**
@@ -23,18 +27,20 @@ import java.util.Map;
  */
 public class B2_DT extends AbsTestMode<DuongTruongView> {
 
+    private final ShowErrorcode showErrorcode;
     private boolean runnable;
     private String oldId;
 
     public B2_DT() {
         this(ConstKey.MODE_NAME.B2_DUONG_TRUONG);
-        this.conditionHandle.addConditon(new CheckSo3());
-        this.runnable = false;
-        this.oldId = "";
     }
 
     public B2_DT(String name) {
         super(new DuongTruongView(), name);
+        this.showErrorcode = new ShowErrorcode();
+        this.conditionHandle.addConditon(new CheckSo3());
+        this.runnable = false;
+        this.oldId = "";
     }
 
     @Override
@@ -43,8 +49,9 @@ public class B2_DT extends AbsTestMode<DuongTruongView> {
         if (!runnable || !oldId.equals(id)) {
             oldId = id;
             switch (this.apiService.checkRunnable(id)) {
-                case ApiService.START ->
+                case ApiService.START -> {
                     runnable = true;
+                }
                 case ApiService.ID_INVALID -> {
                     soundPlayer.userIdHasTest();
                     runnable = false;
@@ -62,18 +69,40 @@ public class B2_DT extends AbsTestMode<DuongTruongView> {
 
     @Override
     protected void contestDone() {
-        this.apiService.sendData(processModel.getId());
+        String id = processModel.getId();
+        File imgFile = this.fileTestService.getFileImagePath(id);
+        if (imgFile == null) {
+            ErrorLog.addError(this, "Không tìm thấy file png của id: " + id);
+        }
+        this.apiService.sendData(processlHandle.toProcessModelJson().toString().getBytes(),
+                imgFile);
     }
 
     @Override
     protected void endTest() {
-        this.apiService.sendData(processModel.getId());
-        System.out.println(processlHandle.processModeltoJson());
-        this.hasXp = false;
-        this.hasTs = false;
-        this.hasGs = false;
-        this.hasKt = false;
-        this.runnable = false;
+        try {
+            String id = processModel.getId();
+            File imgFile = this.fileTestService.getFileImagePath(id);
+            if (imgFile == null) {
+                ErrorLog.addError(this, "Không tìm thấy file png của id: " + id);
+            }
+            if (this.apiService.sendData(processlHandle.toProcessModelJson().toString().getBytes(),
+                    imgFile)) {
+                this.soundPlayer.sendResultFailed();
+                this.fileTestService.saveBackupLog(id, oldId,
+                        CameraRunner.getInstance().getImage());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
+        } finally {
+            System.out.println(processlHandle.toProcessModelJson());
+            this.hasXp = false;
+            this.hasTs = false;
+            this.hasGs = false;
+            this.hasKt = false;
+            this.runnable = false;
+        }
     }
 
     @Override
@@ -85,6 +114,13 @@ public class B2_DT extends AbsTestMode<DuongTruongView> {
             addContest(new XuatPhat(ConstKey.CT_NAME.XUAT_PHAT));
             hasXp = true;
         });
+        maps.put(ConstKey.KEY_BOARD.SHOW_ERROR, (key) -> {
+            if (this.showErrorcode.isVisible()) {
+                this.showErrorcode.dispose();
+            } else {
+                this.showErrorcode.display();
+            }
+        });
     }
     private boolean hasXp = false;
     private boolean hasKt = false;
@@ -93,6 +129,13 @@ public class B2_DT extends AbsTestMode<DuongTruongView> {
 
     @Override
     protected void createTestKeyEvents(Map<String, IKeyEvent> maps) {
+        maps.put(ConstKey.KEY_BOARD.SHOW_ERROR, (key) -> {
+            if (this.showErrorcode.isVisible()) {
+                this.showErrorcode.dispose();
+            } else {
+                this.showErrorcode.display();
+            }
+        });
         maps.put(ConstKey.KEY_BOARD.CONTEST.TS, (key) -> {
             if (!contests.isEmpty()) {
                 return;

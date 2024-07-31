@@ -18,7 +18,7 @@ import lombok.Setter;
 @Setter
 public class ContestDataModel {
 
-    private String name;
+    private String contestName;
     private String startTime = "";
     private String endTime = "";
     private long cycleTime = 0;
@@ -29,7 +29,7 @@ public class ContestDataModel {
     }
 
     public ContestDataModel(String name) {
-        this.name = name;
+        this.contestName = name;
         this.errorcodes = new ArrayList<>();
     }
     

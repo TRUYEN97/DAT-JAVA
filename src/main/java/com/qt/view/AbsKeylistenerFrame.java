@@ -16,8 +16,10 @@ import javax.swing.JFrame;
  */
 public class AbsKeylistenerFrame extends JFrame {
 
+    protected final KeyListener keyListener;
+    
     public AbsKeylistenerFrame() {
-        this.addKeyListener(new KeyListener() {
+        keyListener = new KeyListener() {
             private final CarModel carModel = MCUSerialHandler.getInstance().getModel();
 
             @Override
@@ -45,7 +47,8 @@ public class AbsKeylistenerFrame extends JFrame {
                 }
                 this.carModel.setRemoteValue(keyText);
             }
-        });
+        };
+        this.addKeyListener(keyListener);
     }
 
 }

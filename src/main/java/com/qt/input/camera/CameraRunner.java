@@ -50,13 +50,13 @@ public class CameraRunner implements IStarter {
         }
         return ins;
     }
-    
-    public void setFps(int fps){
+
+    public void setFps(int fps) {
         this.camera.setFps(fps);
     }
-    
-    public void setSize(int w, int h){
-        this.camera.setSize(w , h);
+
+    public void setSize(int w, int h) {
+        this.camera.setSize(w, h);
     }
 
     public void setCamera(int index) {
@@ -118,12 +118,8 @@ public class CameraRunner implements IStarter {
 
     class Camera implements Runnable {
 
-        static {
-            // Tải thư viện gốc của OpenCV
-            System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        }
-        private final VideoCapture camera = new VideoCapture();
         private boolean stop;
+        private boolean firstTime = true;
         private int cameraId = 0;
         private int fps = 5;
         private JLabel imageLabel;
@@ -141,12 +137,11 @@ public class CameraRunner implements IStarter {
 
         private void stop() {
             this.stop = true;
-            this.camera.release();
         }
 
-        private boolean openCamera() {
+        private boolean openCamera(VideoCapture camera) {
             try {
-                if (this.camera.open(cameraId) && this.camera.isOpened()) {
+                if (camera.open(cameraId) && camera.isOpened()) {
                     camera.set(Videoio.CAP_PROP_FRAME_WIDTH, w);
                     camera.set(Videoio.CAP_PROP_FRAME_HEIGHT, h);
                     return true;
@@ -159,10 +154,15 @@ public class CameraRunner implements IStarter {
 
         @Override
         public void run() {
+            if (firstTime) {
+                firstTime = false;
+                System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+            }
+            VideoCapture camera = new VideoCapture();
             this.stop = false;
             while (!stop) {
                 try {
-                    while (!openCamera()) {
+                    while (!openCamera(camera)) {
                         Util.delay(2000);
                     }
                     Mat frameMat = new Mat();
@@ -182,6 +182,7 @@ public class CameraRunner implements IStarter {
                     ErrorLog.addError(this, e);
                 }
             }
+            camera.release();
         }
 
         private void updateView(Image img) {
@@ -189,7 +190,7 @@ public class CameraRunner implements IStarter {
                 return;
             }
             try {
-                img.getScaledInstance(320, 240, Image.SCALE_SMOOTH);
+                img = img.getScaledInstance(320, 240, Image.SCALE_SMOOTH);
                 imageLabel.setIcon(new ImageIcon(img));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -212,8 +213,8 @@ public class CameraRunner implements IStarter {
         }
 
         private void setSize(int w, int h) {
-            this.w = w < 320? 320: w;
-            this.h = h < 240? 240 : h;
+            this.w = w < 320 ? 320 : w;
+            this.h = h < 240 ? 240 : h;
         }
     }
 }

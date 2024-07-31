@@ -4,6 +4,7 @@
  */
 package com.qt.controller;
 
+import com.qt.controller.logTest.FileTestService;
 import com.qt.interfaces.IgetTime;
 import com.qt.contest.AbsContest;
 import com.alibaba.fastjson2.JSONObject;
@@ -23,7 +24,7 @@ import java.util.List;
  *
  * @author Admin
  */
-public class ProcessModelHandle implements IgetTime {
+public final class ProcessModelHandle implements IgetTime {
 
     private static volatile ProcessModelHandle instance;
     private final ProcessModel processModel;
@@ -43,8 +44,7 @@ public class ProcessModelHandle implements IgetTime {
         this.carModel = MCUSerialHandler.getInstance().getModel();
         this.logTestService = FileTestService.getInstance();
         this.testing = false;
-        String carId = this.logTestService.getCarId();
-        this.processModel.setCarId(carId == null || carId.isBlank() ? "0" : carId);
+        setCarID(this.logTestService.getCarId());
     }
 
     public static ProcessModelHandle getInstance() {
@@ -58,16 +58,14 @@ public class ProcessModelHandle implements IgetTime {
         }
         return ins;
     }
-
-    public void resetModel() {
-        this.startMs = 0;
-        this.endMs = 0;
-        this.cysleTime = -1;
-        this.processModel.clear();
-        this.testing = false;
+    
+    public void setCarID(String carId) {
+        carId = carId == null || carId.isBlank() ? "0" : carId;
+        this.processModel.setCarId(carId);
+        this.logTestService.writeCarId(carId);
     }
 
-    public void setUserId(UserModel userModel) {
+    public void setUserModel(UserModel userModel) {
         if (userModel == null || testing) {
             return;
         }
@@ -77,6 +75,14 @@ public class ProcessModelHandle implements IgetTime {
         this.processModel.setModeName(userModel.getModeName());
         this.processModel.setDateOfBirth(userModel.getDateOfBirth());
         this.processModel.setPlaceOfOrigin(userModel.getPlaceOfOrigin());
+    }
+
+    public void resetModel() {
+        this.startMs = 0;
+        this.endMs = 0;
+        this.cysleTime = -1;
+        this.processModel.clear();
+        this.testing = false;
     }
 
     public void setTesting(boolean testing) {
@@ -106,11 +112,11 @@ public class ProcessModelHandle implements IgetTime {
         return processModel;
     }
 
-    public JSONObject processModeltoJson() {
+    public JSONObject toProcessModelJson() {
         return MyObjectMapper.convertValue(processModel, JSONObject.class);
     }
 
-    public JSONObject testDataModeltoJson() {
+    public JSONObject toTestDataJson() {
         return MyObjectMapper.convertValue(testDataModel, JSONObject.class);
     }
 
@@ -141,7 +147,7 @@ public class ProcessModelHandle implements IgetTime {
     public void endTest() {
         update();
         this.endMs = System.currentTimeMillis();
-        this.cysleTime =Util.getTestTime(startMs, endMs);
+        this.cysleTime = Util.getTestTime(startMs, endMs);
         this.processModel.setCycleTime(this.cysleTime);
         this.processModel.setEndTime(this.timeBase.getSimpleDateTime());
     }
@@ -153,7 +159,7 @@ public class ProcessModelHandle implements IgetTime {
         }
         String modelName;
         for (ContestDataModel contestModel : contestModels) {
-            modelName = contestModel.getName();
+            modelName = contestModel.getContestName();
             if (modelName != null && modelName.equalsIgnoreCase(name)) {
                 return true;
             }
@@ -170,7 +176,7 @@ public class ProcessModelHandle implements IgetTime {
                 || index < 0) {
             return false;
         }
-        String modelName = contestModels.get(index).getName();
+        String modelName = contestModels.get(index).getContestName();
         return modelName != null && modelName.equals(name);
     }
 
@@ -184,12 +190,7 @@ public class ProcessModelHandle implements IgetTime {
     public boolean isPass() {
         return this.processModel.getStatus() == ProcessModel.PASS;
     }
-
-    public void setCarID(String modelVal) {
-        this.processModel.setCarId(modelVal);
-        this.logTestService.writeCarId(modelVal);
-    }
-
+    
     public boolean isTesting() {
         return this.testing;
     }

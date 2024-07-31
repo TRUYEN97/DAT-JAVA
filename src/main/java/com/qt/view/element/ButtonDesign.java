@@ -30,6 +30,7 @@ public class ButtonDesign extends javax.swing.JPanel {
      */
     public ButtonDesign() {
         initComponents();
+        setBackground(new Color(0, 0, 0, 0));
         this.setOpaque(false);
     }
 

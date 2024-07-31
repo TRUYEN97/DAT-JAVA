@@ -11,6 +11,7 @@ package com.qt.common;
 public final class ConstKey {
 
      public static final String DIR_LOG = "dirLog";
+     public static final String DIR_BACKUP_LOG = "dirBackupLog";
 
     public static final class MODE_NAME {
 
@@ -53,6 +54,7 @@ public final class ConstKey {
 
     public static final class KEY_BOARD {
 
+        public static final String SHOW_ERROR = "Down";
         public static final String IN = "Insert";
         public static final String SBD = "*";
         public static final String SO_XE = "/";

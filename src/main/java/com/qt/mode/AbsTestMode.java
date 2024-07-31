@@ -11,7 +11,7 @@ import com.qt.contest.AbsContest;
 import com.qt.controller.ApiService;
 import com.qt.controller.CheckConditionHandle;
 import com.qt.controller.ErrorcodeHandle;
-import com.qt.controller.FileTestService;
+import com.qt.controller.logTest.FileTestService;
 import com.qt.controller.ProcessModelHandle;
 import com.qt.input.camera.CameraRunner;
 import com.qt.input.serial.MCUSerialHandler;
@@ -124,7 +124,7 @@ public abstract class AbsTestMode<V extends JPanel> {
     public void endContest() {
         this.processlHandle.update();
         this.fileTestService.saveLogJson(this.processModel.getId(),
-                this.processlHandle.processModeltoJson().toString());
+                this.processlHandle.toProcessModelJson().toString());
         this.fileTestService.saveImg(this.processModel.getId(),
                 CameraRunner.getInstance().getImage());
         contestDone();
@@ -135,11 +135,8 @@ public abstract class AbsTestMode<V extends JPanel> {
             this.contests.clear();
             KeyEventManagement.getInstance().remove(prepareEventsPackage);
             KeyEventManagement.getInstance().remove(testEventsPackage);
-            int score = this.processModel.getScore();
-            this.processModel.setStatus(score >= scoreSpec ? ProcessModel.PASS : ProcessModel.FAIL);
-            this.soundPlayer.sayResultTest(score, this.processlHandle.isPass());
             this.fileTestService.saveLogJson(this.processModel.getId(),
-                    this.processlHandle.processModeltoJson().toString());
+                    this.processlHandle.toProcessModelJson().toString());
             if (this.processlHandle.isPass()) {
                 MCUSerialHandler.getInstance().sendLedGreenOn();
             } else {
@@ -147,6 +144,9 @@ public abstract class AbsTestMode<V extends JPanel> {
             }
             endTest();
             this.processlHandle.setTesting(false);
+            int score = this.processModel.getScore();
+            this.processModel.setStatus(score >= scoreSpec ? ProcessModel.PASS : ProcessModel.FAIL);
+            this.soundPlayer.sayResultTest(score, this.processlHandle.isPass());
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);

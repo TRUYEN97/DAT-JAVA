@@ -4,7 +4,6 @@
  */
 package com.qt.view;
 
-import com.qt.input.camera.CameraRunner;
 import javax.swing.JPanel;
 
 
@@ -20,7 +19,6 @@ public class DuongTruongView extends JPanel {
     public DuongTruongView() {
         initComponents();
 //        setOpaque(false);
-        CameraRunner.getInstance().setImageLabel(this.infoPanel1.getLbImg());
     }
     /**
      * This method is called from within the constructor to initialize the form.

@@ -90,23 +90,28 @@ public class RestAPI {
         HttpPost httpPost = new HttpPost(url);
         MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
         for (FileInfo fileInfo : fileInfos) {
+            Object data = fileInfo.getFile();
+            if (data == null) {
+                this.logger.addLog("UPLOAD", String.format("%s - %s data == null", fileInfo.getPartName(), fileInfo.getName()));
+                continue;
+            }
             this.logger.addLog("UPLOAD", String.format("%s - %s", fileInfo.getPartName(), fileInfo.getName()));
             switch (fileInfo.getType()) {
                 case FILE -> {
                     String name = fileInfo.getName();
                     FileBody body;
                     if (name == null) {
-                        body = new FileBody((File) fileInfo.getFile(), ContentType.MULTIPART_FORM_DATA);
+                        body = new FileBody((File) data, ContentType.MULTIPART_FORM_DATA);
                     } else {
-                        body = new FileBody((File) fileInfo.getFile(), ContentType.MULTIPART_FORM_DATA, name);
+                        body = new FileBody((File) data, ContentType.MULTIPART_FORM_DATA, name);
                     }
                     entityBuilder.addPart(fileInfo.getPartName(), body);
                 }
                 case BYTE ->
-                    entityBuilder.addBinaryBody(fileInfo.getPartName(), (byte[]) fileInfo.getFile(),
+                    entityBuilder.addBinaryBody(fileInfo.getPartName(), (byte[]) data,
                             ContentType.MULTIPART_FORM_DATA, fileInfo.getName());
                 case INPUT_STREAM ->
-                    entityBuilder.addBinaryBody(fileInfo.getPartName(), (InputStream) fileInfo.getFile(),
+                    entityBuilder.addBinaryBody(fileInfo.getPartName(), (InputStream) data,
                             ContentType.MULTIPART_FORM_DATA, fileInfo.getName());
                 default ->
                     throw new AssertionError("invalid file type");

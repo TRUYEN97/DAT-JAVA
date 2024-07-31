@@ -7,7 +7,6 @@ package com.qt.view.component.imp;
 import com.qt.common.ConstKey;
 import com.qt.contest.AbsContest;
 import com.qt.view.component.UpdateValuePanel;
-import com.qt.view.frame.ShowErrorcode;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -18,7 +17,6 @@ import java.awt.event.MouseEvent;
  */
 public class ValuePanal extends UpdateValuePanel {
 
-    private final ShowErrorcode showErrorcode;
     /**
      * Creates new form ValuePanal
      */
@@ -26,11 +24,10 @@ public class ValuePanal extends UpdateValuePanel {
         initComponents();
         setOpaque(false);
         setBackground(new Color(255, 255, 255, 70));
-        this.showErrorcode = new ShowErrorcode();
         this.stScore.setMouseAdapter(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                ValuePanal.this.showErrorcode.display();
+                ValuePanal.this.carModel.setRemoteValue(ConstKey.KEY_BOARD.SHOW_ERROR);
             }
         });
         this.btCl.setMouseClicked((design) -> {

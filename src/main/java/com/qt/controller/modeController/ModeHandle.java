@@ -52,6 +52,7 @@ public class ModeHandle implements IStarter, Runnable {
             }
             this.stop = false;
             while (!this.stop) {
+                Util.delay(5000);
                 begin();
                 test();
                 end();

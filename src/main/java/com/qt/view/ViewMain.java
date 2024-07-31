@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 public class ViewMain extends AbsKeylistenerFrame {
 
     /**
+     * 
      * Creates new form ViewMain
      */
     public ViewMain() {

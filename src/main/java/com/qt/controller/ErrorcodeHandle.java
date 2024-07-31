@@ -50,6 +50,10 @@ public class ErrorcodeHandle {
         this.ewcnms.clear();
     }
 
+    public List<ErrorcodeWithContestNameModel> getEwcnms() {
+        return ewcnms;
+    }
+
     public void putErrorCode(String key, Errorcode errorcode) {
         if (errorcode == null) {
             return;
@@ -76,7 +80,7 @@ public class ErrorcodeHandle {
         if (errorcode == null || errorcode.getName() == null) {
             return;
         }
-        this.ewcnms.add(new ErrorcodeWithContestNameModel(errorcode, dataModel.getName()));
+        this.ewcnms.add(new ErrorcodeWithContestNameModel(errorcode, dataModel.getContestName()));
         this.soundPlayer.sayErrorCode(errorcode.getName());
         dataModel.addErrorCode(errorcode);
         this.processModel.subtract(errorcode.getScore());

@@ -197,6 +197,10 @@ public class SoundPlayer {
         play(new SoundModel("lostPing.wav"));
     }
 
+    public void sendResultFailed() {
+        play(new SoundModel("lostConnect.wav"));
+    }
+
     class SoundRunner implements Runnable {
 
         private String path;

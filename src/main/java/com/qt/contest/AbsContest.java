@@ -59,7 +59,7 @@ public abstract class AbsContest implements IgetTime {
     }
 
     public final String getName() {
-        return this.contestModel.getName();
+        return this.contestModel.getContestName();
     }
 
     public int getStatus() {

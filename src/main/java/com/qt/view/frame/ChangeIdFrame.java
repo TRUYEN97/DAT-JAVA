@@ -24,7 +24,6 @@ import java.awt.event.WindowEvent;
  */
 public class ChangeIdFrame extends AbsKeylistenerFrame {
 
-//    private static volatile ChangeIdFrame instance;
     private final ChangeIdModel model;
     private final MouseClicked mouseClick;
     private final KeyEventManagement eventManagement;
@@ -33,18 +32,6 @@ public class ChangeIdFrame extends AbsKeylistenerFrame {
     private final SoundPlayer soundPlayer;
     private final ApiService apiService;
 
-//    public static ChangeIdFrame getInstance() {
-//        ChangeIdFrame idFrame = instance;
-//        if (idFrame == null) {
-//            synchronized (ChangeIdFrame.class) {
-//                idFrame = instance;
-//                if (idFrame == null) {
-//                    instance = idFrame = new ChangeIdFrame();
-//                }
-//            }
-//        }
-//        return idFrame;
-//    }
     /**
      * Creates new form ChangeCarIdFrame
      */
@@ -175,7 +162,7 @@ public class ChangeIdFrame extends AbsKeylistenerFrame {
         if (this.model.getName().equals(SBD)) {
             UserModel userModel = this.apiService.checkUserId(modelVal);
             if (userModel != null) {
-                ProcessModelHandle.getInstance().setUserId(userModel);
+                ProcessModelHandle.getInstance().setUserModel(userModel);
                 this.soundPlayer.welcomeId(this.processModel.getId());
             } else {
                 this.soundPlayer.userIdInvalid();
@@ -223,6 +210,7 @@ public class ChangeIdFrame extends AbsKeylistenerFrame {
         btCancel = new com.qt.view.element.ButtonDesign();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Nhập");
         setAlwaysOnTop(true);
         setLocation(new java.awt.Point(0, 0));
         setName("ChangeIdFrame"); // NOI18N

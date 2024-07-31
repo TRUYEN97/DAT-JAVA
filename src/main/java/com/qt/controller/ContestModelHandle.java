@@ -30,7 +30,7 @@ public class ContestModelHandle implements IgetTime{
     }
 
     public String getName() {
-        return this.contestModel.getName();
+        return this.contestModel.getContestName();
     }
     
     public ContestDataModel getContestModel() {

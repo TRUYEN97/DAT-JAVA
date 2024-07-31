@@ -34,7 +34,7 @@ public class StatusPanel extends javax.swing.JPanel {
      */
     public StatusPanel() {
         initComponents();
-//        setBackground(new Color(242, 242, 242, 150));
+        setBackground(new Color(242, 242, 242, 10));
         this.setOpaque(false);
         round = 30;
         blink = false;

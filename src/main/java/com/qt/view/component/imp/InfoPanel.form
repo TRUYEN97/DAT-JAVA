@@ -22,12 +22,12 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="lbImg" max="32767" attributes="0"/>
+                  <Component id="lbImg" min="-2" pref="320" max="-2" attributes="0"/>
                   <Component id="stModeName" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="stCarId" pref="157" max="32767" attributes="0"/>
+                      <Component id="stCarId" max="32767" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="stId" pref="157" max="32767" attributes="0"/>
+                      <Component id="stId" max="32767" attributes="0"/>
                   </Group>
                   <Component id="btIn" alignment="0" max="32767" attributes="0"/>
               </Group>
@@ -38,17 +38,18 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="lbImg" min="-2" pref="241" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="stCarId" min="-2" pref="93" max="-2" attributes="0"/>
                   <Component id="stId" min="-2" pref="93" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="stModeName" min="-2" pref="96" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="stModeName" min="-2" pref="90" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="btIn" min="-2" pref="51" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
