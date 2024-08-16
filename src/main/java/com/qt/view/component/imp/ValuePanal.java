@@ -105,16 +105,16 @@ public class ValuePanal extends UpdateValuePanel {
         btTn = new com.qt.view.element.ButtonDesign();
         btHl = new com.qt.view.element.ButtonDesign();
 
-        stDistance.setIconName("Quãng đường (m)");
+        stDistance.setIconName("S (m)");
         stDistance.setValue("0");
 
-        stV.setIconName("Vận tốc (Km/h)");
+        stV.setIconName("V (Km/h)");
         stV.setValue("0");
 
-        stTime.setIconName("Thời gian (S)");
+        stTime.setIconName("T (S)");
         stTime.setValue("0");
 
-        stTotalTime.setIconName("Tổng thời gian (s)");
+        stTotalTime.setIconName("TT(s)");
         stTotalTime.setValue("0");
 
         stRpm.setIconName("RPM");

@@ -70,6 +70,9 @@ public class B2_DT extends AbsTestMode<DuongTruongView> {
     @Override
     protected void contestDone() {
         String id = processModel.getId();
+        if (id == null || id.equals("0")) {
+            return;
+        }
         File imgFile = this.fileTestService.getFileImagePath(id);
         if (imgFile == null) {
             ErrorLog.addError(this, "Không tìm thấy file png của id: " + id);
@@ -82,6 +85,9 @@ public class B2_DT extends AbsTestMode<DuongTruongView> {
     protected void endTest() {
         try {
             String id = processModel.getId();
+            if (id == null || id.equals("0")) {
+                return;
+            }
             File imgFile = this.fileTestService.getFileImagePath(id);
             if (imgFile == null) {
                 ErrorLog.addError(this, "Không tìm thấy file png của id: " + id);

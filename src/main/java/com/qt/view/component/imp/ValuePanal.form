@@ -74,25 +74,25 @@
   <SubComponents>
     <Component class="com.qt.view.element.StatusPanel" name="stDistance">
       <Properties>
-        <Property name="iconName" type="java.lang.String" value="Qu&#xe3;ng &#x111;&#x1b0;&#x1edd;ng (m)"/>
+        <Property name="iconName" type="java.lang.String" value="S (m)"/>
         <Property name="value" type="java.lang.String" value="0"/>
       </Properties>
     </Component>
     <Component class="com.qt.view.element.StatusPanel" name="stV">
       <Properties>
-        <Property name="iconName" type="java.lang.String" value="V&#x1ead;n t&#x1ed1;c (Km/h)"/>
+        <Property name="iconName" type="java.lang.String" value="V (Km/h)"/>
         <Property name="value" type="java.lang.String" value="0"/>
       </Properties>
     </Component>
     <Component class="com.qt.view.element.StatusPanel" name="stTime">
       <Properties>
-        <Property name="iconName" type="java.lang.String" value="Th&#x1edd;i gian (S)"/>
+        <Property name="iconName" type="java.lang.String" value="T (S)"/>
         <Property name="value" type="java.lang.String" value="0"/>
       </Properties>
     </Component>
     <Component class="com.qt.view.element.StatusPanel" name="stTotalTime">
       <Properties>
-        <Property name="iconName" type="java.lang.String" value="T&#x1ed5;ng th&#x1edd;i gian (s)"/>
+        <Property name="iconName" type="java.lang.String" value="TT(s)"/>
         <Property name="value" type="java.lang.String" value="0"/>
       </Properties>
     </Component>

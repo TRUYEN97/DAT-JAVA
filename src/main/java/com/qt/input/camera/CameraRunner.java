@@ -148,6 +148,8 @@ public class CameraRunner implements IStarter {
                 }
                 return false;
             } catch (Exception e) {
+                e.printStackTrace();
+                ErrorLog.addError(this, e);
                 return false;
             }
         }

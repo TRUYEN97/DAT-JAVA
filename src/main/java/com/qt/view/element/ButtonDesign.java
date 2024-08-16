@@ -73,7 +73,7 @@ public class ButtonDesign extends javax.swing.JPanel {
 
         lbValue = new javax.swing.JLabel();
 
-        lbValue.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        lbValue.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lbValue.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbValue.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         lbValue.addMouseListener(new java.awt.event.MouseAdapter() {
