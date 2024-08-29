@@ -10,8 +10,14 @@ package com.qt.common;
  */
 public final class ConstKey {
 
-     public static final String DIR_LOG = "dirLog";
-     public static final String DIR_BACKUP_LOG = "dirBackupLog";
+    public static final String CHECK_INFO = "checkInfo";
+    public static final String SERVER_PING_ADDR = "serverIp";
+    public static final String CHECK_CAR_ID = "checkCarId";
+    public static final String CHECK_USER_ID = "checkUserId";
+    public static final String SEND_DATA = "sendData";
+    public static final String RUNNABLE = "runnable";
+    public static final String DIR_LOG = "dirLog";
+    public static final String DIR_BACKUP_LOG = "dirBackupLog";
 
     public static final class MODE_NAME {
 

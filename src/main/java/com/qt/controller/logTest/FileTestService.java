@@ -7,7 +7,8 @@ package com.qt.controller.logTest;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.FileService.FileService;
-import com.qt.common.timer.TimeBase;
+import com.qt.controller.ProcessModelHandle;
+import com.qt.model.modelTest.process.ProcessModel;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,16 +25,13 @@ public class FileTestService {
     public static final String JSON_LOGJSON = "jsonLog.json";
     private static volatile FileTestService instance;
     private final FileService fileService;
-    private final TimeBase timeBase;
     private final BackupLogHandle backupLogHandle;
     private final File backupDir;
     private final File logDir;
-    private String date;
+    private ProcessModel processModel;
 
     private FileTestService() {
         this.fileService = new FileService();
-        this.timeBase = new TimeBase();
-        this.date = this.timeBase.getDate();
         Properties properties = new Properties();
         this.backupLogHandle = new BackupLogHandle();
         try {
@@ -61,10 +59,10 @@ public class FileTestService {
         return ins;
     }
 
-    public void updateDate() {
-        this.date = this.timeBase.getDate();
+    public void setProcessModel(ProcessModel processModel) {
+        this.processModel = processModel;
     }
-
+    
     public boolean saveImg(String id, BufferedImage image) {
         try {
             return saveImg(image, createLogPathString(id, IMAGEPNG));
@@ -140,13 +138,18 @@ public class FileTestService {
     }
     
     private String createBackupLogPathString(String id, String fileName) {
-        return createPathString(backupDir, id, fileName);
+        String filePathString = String.format("%s/logTest/%s/%s/%s/%s",
+                backupLogHandle,
+                id,
+                fileName);
+        return filePathString;
     }
 
     public String createPathString(File root, String id, String fileName) {
-        String filePathString = String.format("%s/logTest/%s/%s/%s",
+        String filePathString = String.format("%s/logTest/%s/%s/%s/%s",
                 root,
-                this.date,
+                this.processModel.getKiThi(),
+                this.processModel.getCaThi(),
                 id,
                 fileName);
         return filePathString;

@@ -20,11 +20,8 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="infoPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="valuePanal1" pref="384" max="32767" attributes="0"/>
-                  <Component id="duongTruongContestPanel1" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <Component id="valuePanal1" pref="384" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="carStatusPanal1" min="-2" pref="284" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
@@ -35,14 +32,9 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="infoPanel1" pref="568" max="32767" attributes="0"/>
+                  <Component id="infoPanel1" max="32767" attributes="0"/>
+                  <Component id="valuePanal1" pref="568" max="32767" attributes="0"/>
                   <Component id="carStatusPanal1" alignment="0" pref="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="valuePanal1" min="-2" pref="439" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="duongTruongContestPanel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -60,8 +52,6 @@
     <Component class="com.qt.view.component.imp.ValuePanal" name="valuePanal1">
     </Component>
     <Component class="com.qt.view.component.imp.CarStatusPanal" name="carStatusPanal1">
-    </Component>
-    <Component class="com.qt.view.component.imp.DuongTruongContestPanel" name="duongTruongContestPanel1">
     </Component>
   </SubComponents>
 </Form>

@@ -7,6 +7,7 @@ package com.qt.contest;
 import com.qt.controller.ErrorcodeHandle;
 import com.qt.input.serial.MCUSerialHandler;
 import com.qt.model.input.CarModel;
+import com.qt.model.modelTest.contest.ContestDataModel;
 
 /**
  *
@@ -15,6 +16,7 @@ import com.qt.model.input.CarModel;
 public abstract class AbsCondition {
 
     protected final CarModel carModel;
+    protected ContestDataModel contestDataModel;
     private final ErrorcodeHandle codeHandle;
     protected boolean important;
 
@@ -24,6 +26,10 @@ public abstract class AbsCondition {
         this.important = false;
     }
 
+    public void setContestDataModel(ContestDataModel contestDataModel) {
+        this.contestDataModel = contestDataModel;
+    }
+
     protected void setImporttant(boolean st) {
         this.important = st;
     }
@@ -31,7 +37,11 @@ public abstract class AbsCondition {
     public abstract boolean checkPassed();
 
     protected void setErrorcode(String errorcode) {
-        this.codeHandle.addBaseErrorCode(errorcode);
+        if (contestDataModel == null) {
+            this.codeHandle.addBaseErrorCode(errorcode);
+        } else {
+            this.codeHandle.addContestErrorCode(errorcode, contestDataModel);
+        }
     }
 
     public boolean isImportant() {

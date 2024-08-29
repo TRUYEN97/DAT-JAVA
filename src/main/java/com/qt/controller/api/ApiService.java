@@ -2,13 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.qt.controller;
+package com.qt.controller.api;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.API.FileInfo;
 import com.qt.common.API.JsonBodyAPI;
 import com.qt.common.API.Response;
 import com.qt.common.API.RestAPI;
+import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.Util;
 import com.qt.controller.modeController.ModeManagement;
@@ -31,11 +32,6 @@ public class ApiService {
     public static final int WAIT = 0;
     private static final String CAN_START = "canStart";
     private static final String ID = "id";
-    private static final String SERVER_PING_ADDR = "serverPing";
-    private static final String CHECK_CAR_ID = "checkCarId";
-    private static final String CHECK_USER_ID = "checkUserId";
-    private static final String SEND_DATA = "sendData";
-    private static final String RUNNABLE = "runnable";
     private static volatile ApiService insatnce;
     private final Properties properties;
     private final RestAPI restAPI;
@@ -67,7 +63,7 @@ public class ApiService {
     }
 
     public boolean checkCarId(String id) {
-        String url = this.properties.getProperty(CHECK_CAR_ID);
+        String url = this.properties.getProperty(ConstKey.CHECK_CAR_ID);
         if (checkPingToServer()) {
             return false;
         }
@@ -90,7 +86,7 @@ public class ApiService {
         if (checkPingToServer()) {
             return null;
         }
-        String url = this.properties.getProperty(CHECK_USER_ID);
+        String url = this.properties.getProperty(ConstKey.CHECK_USER_ID);
         if (url == null) {
             ErrorLog.addError(this, "không tìm thấy: checkUserId url");
             return null;
@@ -102,12 +98,14 @@ public class ApiService {
         }
         return response.getData(UserModel.class);
     }
+
     public boolean sendData(byte[] jsonFile, File imgFile) {
         if (checkPingToServer()) {
             return false;
         }
-        String url = this.properties.getProperty(SEND_DATA);
+        String url = this.properties.getProperty(ConstKey.SEND_DATA);
         if (url == null) {
+            ErrorLog.addError(this, "không tìm thấy: sendData url");
             return false;
         }
         if (jsonFile == null || imgFile == null) {
@@ -130,8 +128,9 @@ public class ApiService {
         if (checkPingToServer()) {
             return false;
         }
-        String url = this.properties.getProperty(SEND_DATA);
+        String url = this.properties.getProperty(ConstKey.SEND_DATA);
         if (url == null) {
+            ErrorLog.addError(this, "không tìm thấy: sendData url");
             return false;
         }
         if (jsonFile == null || imgFile == null) {
@@ -150,10 +149,14 @@ public class ApiService {
         return response != null && response.isSuccess();
     }
 
+    public boolean pingToServer() {
+        String addr = this.properties.getProperty(ConstKey.SERVER_PING_ADDR);
+        return Util.ping(addr, 2);
+    }
+
     private boolean checkPingToServer() {
-        String addr = this.properties.getProperty(SERVER_PING_ADDR);
-        if (!Util.ping(addr, 2)) {
-            ErrorLog.addError(this, "không thể ping đến server: " + addr);
+        if (!pingToServer()) {
+            ErrorLog.addError(this, "không thể ping đến server");
             this.soundPlayer.pingServerFailed();
             return true;
         }
@@ -170,9 +173,9 @@ public class ApiService {
         if (checkPingToServer()) {
             return WAIT;
         }
-        String url = this.properties.getProperty(RUNNABLE);
+        String url = this.properties.getProperty(ConstKey.RUNNABLE);
         if (url == null) {
-            ErrorLog.addError(this, "không tìm thấy: checkUserId url");
+            ErrorLog.addError(this, "không tìm thấy: runnable url");
             return URL_INVALID;
         }
         Response response = restAPI.sendPost(url, JsonBodyAPI.builder()
@@ -183,5 +186,17 @@ public class ApiService {
         }
         JSONObject data = response.getData();
         return data.getIntValue(CAN_START, -1);
+    }
+
+    public Response checkInfo() {
+        if (pingToServer()) {
+            return null;
+        }
+        String url = this.properties.getProperty(ConstKey.CHECK_INFO);
+        if (url == null) {
+            ErrorLog.addError(this, "không tìm thấy: checkInfo url");
+            return null;
+        }
+        return restAPI.sendPost(url, JsonBodyAPI.builder(), false);
     }
 }

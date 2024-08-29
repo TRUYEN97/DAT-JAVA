@@ -176,6 +176,8 @@ public class CameraRunner implements IStarter {
                             image = matToBufferedImage(frameMat);
                             Core.flip(frameMat, frameMat, 1);
                             updateView(matToBufferedImage(frameMat));
+                        }else{
+                            break;
                         }
                         Util.delay(1000 / fps);
                     }

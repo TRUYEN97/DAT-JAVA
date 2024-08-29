@@ -12,17 +12,18 @@ import lombok.Setter;
  * @author Admin
  */
 @Getter
-@Setter
 public class Errorcode {
 
     private String name;
+    private String description;
     private int score;
 
     public Errorcode() {
     }
 
-    public Errorcode(String name, int score) {
+    public Errorcode(String name, int score, String description) {
         this.name = name;
         this.score = score;
+        this.description = description;
     }
 }

@@ -55,7 +55,7 @@ public class ContestRunner implements Runnable {
         while (this.testMode != null && !this.testDone) {
             currContest = this.testMode.peekContests();
             if (this.testMode == null || checkStopTestCondisions()) {
-                this.testDone = true;
+                stop();
                 break;
             }
             if (currContest == null) {
@@ -80,11 +80,11 @@ public class ContestRunner implements Runnable {
         Future future = this.threadPool.submit(runnable);
         while (!future.isDone() && !this.testDone) {
             if (!currContest.checkTestCondisions()) {
-                this.testDone = true;
+                stop();
                 break;
             }
             if (checkStopTestCondisions()) {
-                this.testDone = true;
+                stop();
                 break;
             }
         }
@@ -111,6 +111,10 @@ public class ContestRunner implements Runnable {
             }
         }
         return false;
+    }
+
+    public void stop() {
+        this.testDone = true;
     }
 
     public boolean isRunning() {

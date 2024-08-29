@@ -8,11 +8,13 @@ import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.Util;
 import com.qt.contest.AbsContest;
-import com.qt.controller.ApiService;
+import com.qt.controller.api.ApiService;
 import com.qt.controller.CheckConditionHandle;
 import com.qt.controller.ErrorcodeHandle;
 import com.qt.controller.logTest.FileTestService;
 import com.qt.controller.ProcessModelHandle;
+import com.qt.controller.api.PingAPI;
+import com.qt.controller.modeController.ModeHandle;
 import com.qt.input.camera.CameraRunner;
 import com.qt.input.serial.MCUSerialHandler;
 import com.qt.model.input.CarModel;
@@ -22,6 +24,7 @@ import com.qt.output.SoundPlayer;
 import com.qt.pretreatment.IKeyEvent;
 import com.qt.pretreatment.KeyEventManagement;
 import com.qt.pretreatment.KeyEventsPackage;
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -53,6 +56,9 @@ public abstract class AbsTestMode<V extends JPanel> {
     protected final FileTestService fileTestService;
     protected final ApiService apiService;
     protected final CheckConditionHandle conditionHandle;
+    protected final PingAPI pingAPI;
+    private ModeHandle modeHandle;
+    private boolean cancel;
 
     protected AbsTestMode(V view, String name) {
         this(view, name, 80);
@@ -61,6 +67,7 @@ public abstract class AbsTestMode<V extends JPanel> {
     protected AbsTestMode(V view, String name, int scoreSpec) {
         this.view = view;
         this.name = name;
+        this.cancel = false;
         this.scoreSpec = scoreSpec;
         MCUSerialHandler.getInstance().start();
         this.carModel = MCUSerialHandler.getInstance().getModel();
@@ -74,6 +81,7 @@ public abstract class AbsTestMode<V extends JPanel> {
         this.fileTestService = FileTestService.getInstance();
         this.apiService = ApiService.getInstance();
         this.conditionHandle = new CheckConditionHandle();
+        this.pingAPI = new PingAPI();
         initErrorcode();
     }
 
@@ -107,6 +115,7 @@ public abstract class AbsTestMode<V extends JPanel> {
     }
 
     public void begin() {
+        this.cancel = false;
         this.processlHandle.setTesting(false);
         KeyEventManagement.getInstance().addKeyEventBackAge(prepareEventsPackage);
         while (!loopCheckStartTest()) {
@@ -119,15 +128,39 @@ public abstract class AbsTestMode<V extends JPanel> {
         MCUSerialHandler.getInstance().sendReset();
         KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
         this.soundPlayer.begin();
+        this.pingAPI.start();
+        updateLog();
+        upTestDataToServer();
     }
 
     public void endContest() {
         this.processlHandle.update();
+        updateLog();
+        upTestDataToServer();
+        contestDone();
+    }
+
+    protected void updateLog() {
         this.fileTestService.saveLogJson(this.processModel.getId(),
                 this.processlHandle.toProcessModelJson().toString());
         this.fileTestService.saveImg(this.processModel.getId(),
                 CameraRunner.getInstance().getImage());
-        contestDone();
+    }
+
+    protected boolean upTestDataToServer() {
+        if (cancel) {
+            return true;
+        }
+        String id = processModel.getId();
+        if (id == null || id.equals("0")) {
+            return true;
+        }
+        File imgFile = this.fileTestService.getFileImagePath(id);
+        if (imgFile == null) {
+            ErrorLog.addError(this, "Không tìm thấy file png của id: " + id);
+        }
+        return this.apiService.sendData(processlHandle.toProcessModelJson().toString().getBytes(),
+                imgFile);
     }
 
     public void end() {
@@ -135,12 +168,18 @@ public abstract class AbsTestMode<V extends JPanel> {
             this.contests.clear();
             KeyEventManagement.getInstance().remove(prepareEventsPackage);
             KeyEventManagement.getInstance().remove(testEventsPackage);
-            this.fileTestService.saveLogJson(this.processModel.getId(),
-                    this.processlHandle.toProcessModelJson().toString());
             if (this.processlHandle.isPass()) {
                 MCUSerialHandler.getInstance().sendLedGreenOn();
             } else {
                 MCUSerialHandler.getInstance().sendLedRedOn();
+            }
+            this.pingAPI.stop();
+            updateLog();
+            if (!upTestDataToServer()) {
+                String id = processModel.getId();
+                this.soundPlayer.sendResultFailed();
+                this.fileTestService.saveBackupLog(id, processlHandle.toProcessModelJson().toString(),
+                        CameraRunner.getInstance().getImage());
             }
             endTest();
             this.processlHandle.setTesting(false);
@@ -155,24 +194,24 @@ public abstract class AbsTestMode<V extends JPanel> {
 
     private void initErrorcode() {
 
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.SO3, new Errorcode("SO3", 2));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TIME_OUT, new Errorcode("timeout", 5));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.AT, new Errorcode("AT", 5));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.NTP, new Errorcode("NTP", 5));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.PT, new Errorcode("PT", 5));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TS, new Errorcode("TS", 5));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.GS, new Errorcode("GS", 5));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TT, new Errorcode("TT", 5));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.GT, new Errorcode("GT", 5));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.S20, new Errorcode("S20", 5));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.RG, new Errorcode("RG", 5));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.CM, new Errorcode("CM", 5));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.RPM, new Errorcode("RPM", 5));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.QT, new Errorcode("QT", 10));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.S30, new Errorcode("S30", 25));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.HL, new Errorcode("HL", 25));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TN, new Errorcode("TN", 25));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.CL, new Errorcode("CL", 25));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.SO3, new Errorcode("SO3", 2, "TAY SO KO PHU HOP"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TIME_OUT, new Errorcode("timeout", 5, "QUA THOI GIAN"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.AT, new Errorcode("AT", 5, "DAY AN TOAN"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.NTP, new Errorcode("NTP", 5, "KHONG XI NHAN"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.PT, new Errorcode("PT", 5, "PHANH TAY"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TS, new Errorcode("TS", 5, "KO TANG DUOC SO"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.GS, new Errorcode("GS", 5, "KO GIAM DUOC SO"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TT, new Errorcode("TT", 5, "KO TANG TOC DO"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.GT, new Errorcode("GT", 5, "KO GIAM TOC DO"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.S20, new Errorcode("S20",5, "QUA 20 GIAY"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.RG, new Errorcode("RG", 5, "RUNG GIAT"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.CM, new Errorcode("CM", 5, "CHET MAY"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.RPM, new Errorcode("RPM", 5, "QUA VONG TUA"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.QT, new Errorcode("QT", 10, "QUY TAC GIAO THONG"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.S30, new Errorcode("S30", 25, "QUA 30 GIAY"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.HL, new Errorcode("HL", 25, "HIEU LENH"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TN, new Errorcode("TN", 25, "GAY TAI NAN"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.CL, new Errorcode("CL", 25, "CHOANG LAI"));
     }
 
     private KeyEventsPackage initPrepareKeyEventPackage() {
@@ -208,6 +247,10 @@ public abstract class AbsTestMode<V extends JPanel> {
 
     public boolean checkTestCondisions() {
         return this.conditionHandle.checkTestCondisions();
+    }
+
+    public void cancelTest() {
+        this.cancel = true;
     }
 
 }

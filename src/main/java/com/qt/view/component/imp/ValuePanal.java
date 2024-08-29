@@ -30,34 +30,6 @@ public class ValuePanal extends UpdateValuePanel {
                 ValuePanal.this.carModel.setRemoteValue(ConstKey.KEY_BOARD.SHOW_ERROR);
             }
         });
-        this.btCl.setMouseClicked((design) -> {
-            this.carModel.setRemoteValue(ConstKey.ERR.CL);
-        });
-        this.btHl.setMouseClicked((design) -> {
-            this.carModel.setRemoteValue(ConstKey.ERR.HL);
-        });
-        this.btQt.setMouseClicked((design) -> {
-            this.carModel.setRemoteValue(ConstKey.ERR.QT);
-        });
-        this.btRg.setMouseClicked((design) -> {
-            this.carModel.setRemoteValue(ConstKey.ERR.RG);
-        });
-        this.btTn.setMouseClicked((design) -> {
-            this.carModel.setRemoteValue(ConstKey.ERR.TN);
-        });
-        //////////////////////////
-        this.btXp.setMouseClicked((design) -> {
-            this.carModel.setRemoteValue(ConstKey.KEY_BOARD.CONTEST.XP);
-        });
-        this.btTs.setMouseClicked((design) -> {
-            this.carModel.setRemoteValue(ConstKey.KEY_BOARD.CONTEST.TS);
-        });
-        this.btGs.setMouseClicked((design) -> {
-            this.carModel.setRemoteValue(ConstKey.KEY_BOARD.CONTEST.GS);
-        });
-        this.btKt.setMouseClicked((design) -> {
-            this.carModel.setRemoteValue(ConstKey.KEY_BOARD.CONTEST.KT);
-        });
     }
 
     @Override
@@ -93,17 +65,6 @@ public class ValuePanal extends UpdateValuePanel {
         stRpm = new com.qt.view.element.StatusPanel();
         stScore = new com.qt.view.element.StatusPanel();
         stCurrContest = new com.qt.view.element.StatusPanel();
-        pnBaiThi = new javax.swing.JPanel();
-        btXp = new com.qt.view.element.ButtonDesign();
-        btTs = new com.qt.view.element.ButtonDesign();
-        btGs = new com.qt.view.element.ButtonDesign();
-        btKt = new com.qt.view.element.ButtonDesign();
-        pnTruDiem = new javax.swing.JPanel();
-        btCl = new com.qt.view.element.ButtonDesign();
-        btQt = new com.qt.view.element.ButtonDesign();
-        btRg = new com.qt.view.element.ButtonDesign();
-        btTn = new com.qt.view.element.ButtonDesign();
-        btHl = new com.qt.view.element.ButtonDesign();
 
         stDistance.setIconName("S (m)");
         stDistance.setValue("0");
@@ -126,37 +87,6 @@ public class ValuePanal extends UpdateValuePanel {
         stCurrContest.setIconName("");
         stCurrContest.setIconNameTop("Phần thi hiện tại");
 
-        pnBaiThi.setLayout(new java.awt.GridLayout(1, 4));
-
-        btXp.setText("Xuất phát");
-        pnBaiThi.add(btXp);
-
-        btTs.setText("Tăng tốc");
-        pnBaiThi.add(btTs);
-
-        btGs.setText("Giảm tốc");
-        pnBaiThi.add(btGs);
-
-        btKt.setText("Kết thúc");
-        pnBaiThi.add(btKt);
-
-        pnTruDiem.setLayout(new java.awt.GridLayout(1, 5));
-
-        btCl.setText("CL");
-        pnTruDiem.add(btCl);
-
-        btQt.setText("QT");
-        pnTruDiem.add(btQt);
-
-        btRg.setText("RG");
-        pnTruDiem.add(btRg);
-
-        btTn.setText("TN");
-        pnTruDiem.add(btTn);
-
-        btHl.setText("HL");
-        pnTruDiem.add(btHl);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -164,19 +94,17 @@ public class ValuePanal extends UpdateValuePanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(pnBaiThi, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
                     .addComponent(stCurrContest, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(stTotalTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(stTotalTime, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
                             .addComponent(stDistance, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(stScore, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(stRpm, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(stRpm, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
                             .addComponent(stV, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(stTime, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(pnTruDiem, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                            .addComponent(stTime, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -197,27 +125,12 @@ public class ValuePanal extends UpdateValuePanel {
                         .addComponent(stScore, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(stCurrContest, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnBaiThi, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnTruDiem, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.qt.view.element.ButtonDesign btCl;
-    private com.qt.view.element.ButtonDesign btGs;
-    private com.qt.view.element.ButtonDesign btHl;
-    private com.qt.view.element.ButtonDesign btKt;
-    private com.qt.view.element.ButtonDesign btQt;
-    private com.qt.view.element.ButtonDesign btRg;
-    private com.qt.view.element.ButtonDesign btTn;
-    private com.qt.view.element.ButtonDesign btTs;
-    private com.qt.view.element.ButtonDesign btXp;
-    private javax.swing.JPanel pnBaiThi;
-    private javax.swing.JPanel pnTruDiem;
     private com.qt.view.element.StatusPanel stCurrContest;
     private com.qt.view.element.StatusPanel stDistance;
     private com.qt.view.element.StatusPanel stRpm;

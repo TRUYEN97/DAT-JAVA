@@ -16,12 +16,12 @@ public class ErrorcodeWithContestNameModel extends Errorcode {
     private final String contestName;
 
     public ErrorcodeWithContestNameModel(Errorcode errorcode, String contestName) {
-        super(errorcode.getName(), errorcode.getScore());
+        super(errorcode.getName(), errorcode.getScore(), errorcode.getDescription());
         this.contestName = contestName == null ? "" : contestName;
     }
 
-    public ErrorcodeWithContestNameModel(String name, int score, String contestName) {
-        super(name, score);
+    public ErrorcodeWithContestNameModel(String name, int score, String contestName, String des) {
+        super(name, score, des);
         this.contestName = contestName;
     }
 

@@ -17,6 +17,8 @@ public class UserModel {
     
     private String id = "0";
     private String name = "";
+    private String kiThi = "";
+    private String caThi = "";
     private String modeName = "";
     private String dateOfBirth = "";
     private String placeOfOrigin = "";

@@ -42,7 +42,7 @@ public class ListErrorcode<T> extends JList<ErrorcodeWithContestNameModel> {
     public ListCellRenderer<? super ErrorcodeWithContestNameModel> getCellRenderer() {
         return (JList<? extends ErrorcodeWithContestNameModel> list, ErrorcodeWithContestNameModel value, int index, boolean isSelected, boolean cellHasFocus) -> {
             if (value == null) {
-                value = new ErrorcodeWithContestNameModel("", 0, "");
+                value = new ErrorcodeWithContestNameModel("", 0, "", "");
             }
             if (index >= errorcodeItems.size()) {
                 errorcodeItems.add(new ErrorcodeItem(value.getName(),

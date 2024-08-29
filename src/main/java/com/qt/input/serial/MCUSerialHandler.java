@@ -27,7 +27,7 @@ public class MCUSerialHandler {
 
     private MCUSerialHandler() {
         this.model = new CarModel();
-        this.serialHandler = new SerialHandler("ttyACM0", 115200); //ttyACM0
+        this.serialHandler = new SerialHandler("com7", 115200); //ttyACM0
         this.serialHandler.setFirstConnectAction(() -> {
             while (!sendReset() || !sendConfig(MCU_CONFIG_MODEL.builder().
                     encoder(1000).

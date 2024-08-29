@@ -6,7 +6,7 @@ package com.qt.controller.logTest;
 
 import com.qt.common.ErrorLog;
 import com.qt.common.Util;
-import com.qt.controller.ApiService;
+import com.qt.controller.api.ApiService;
 import java.io.File;
 
 /**
@@ -35,7 +35,7 @@ public class BackupLogHandle implements Runnable {
                     files = backupDir.listFiles();
                     if (files != null && files.length > 0) {
                         for (File file : files) {
-                            if (file != null && isBackupOk(file)) {
+                            if (file != null && upload(file)) {
                                 file.delete();
                             }
                         }
@@ -63,7 +63,7 @@ public class BackupLogHandle implements Runnable {
                 if (idDir == null) {
                     continue;
                 }
-                if (!idDir.isDirectory()) {
+                if (idDir.isFile()) {
                     idDir.delete();
                 } else if (!upload(idDir)) {
                     rs = false;

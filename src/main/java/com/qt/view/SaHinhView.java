@@ -11,12 +11,12 @@ import javax.swing.JPanel;
  *
  * @author Admin
  */
-public class DuongTruongView extends JPanel {
+public class SaHinhView extends JPanel {
 
     /**
      * Creates new form PanelHome
      */
-    public DuongTruongView() {
+    public SaHinhView() {
         initComponents();
 //        setOpaque(false);
     }
@@ -32,7 +32,6 @@ public class DuongTruongView extends JPanel {
         infoPanel1 = new com.qt.view.component.imp.InfoPanel();
         valuePanal1 = new com.qt.view.component.imp.ValuePanal();
         carStatusPanal1 = new com.qt.view.component.imp.CarStatusPanal();
-        duongTruongContestPanel1 = new com.qt.view.component.imp.DuongTruongContestPanel();
 
         infoPanel1.setBackground(new java.awt.Color(102, 102, 255));
 
@@ -44,9 +43,7 @@ public class DuongTruongView extends JPanel {
                 .addContainerGap()
                 .addComponent(infoPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(valuePanal1, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
-                    .addComponent(duongTruongContestPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(valuePanal1, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(carStatusPanal1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -56,13 +53,9 @@ public class DuongTruongView extends JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(infoPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
-                    .addComponent(carStatusPanal1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(valuePanal1, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(duongTruongContestPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(infoPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(valuePanal1, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
+                    .addComponent(carStatusPanal1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -70,7 +63,6 @@ public class DuongTruongView extends JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.qt.view.component.imp.CarStatusPanal carStatusPanal1;
-    private com.qt.view.component.imp.DuongTruongContestPanel duongTruongContestPanel1;
     private com.qt.view.component.imp.InfoPanel infoPanel1;
     private com.qt.view.component.imp.ValuePanal valuePanal1;
     // End of variables declaration//GEN-END:variables

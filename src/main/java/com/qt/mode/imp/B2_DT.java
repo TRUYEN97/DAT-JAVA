@@ -4,6 +4,8 @@
  */
 package com.qt.mode.imp;
 
+import com.alibaba.fastjson2.JSONObject;
+import com.qt.common.API.Response;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.Util;
@@ -12,13 +14,11 @@ import com.qt.contest.impContest.GiamToc;
 import com.qt.contest.impContest.KetThuc;
 import com.qt.contest.impContest.TangToc;
 import com.qt.contest.impContest.XuatPhat;
-import com.qt.controller.ApiService;
-import com.qt.input.camera.CameraRunner;
+import com.qt.controller.api.ApiService;
 import com.qt.mode.AbsTestMode;
 import com.qt.pretreatment.IKeyEvent;
 import com.qt.view.DuongTruongView;
 import com.qt.view.frame.ShowErrorcode;
-import java.io.File;
 import java.util.Map;
 
 /**
@@ -41,6 +41,9 @@ public class B2_DT extends AbsTestMode<DuongTruongView> {
         this.conditionHandle.addConditon(new CheckSo3());
         this.runnable = false;
         this.oldId = "";
+        this.pingAPI.setPingAPIReceive((responce) -> {
+            analysisRespmoce(responce);
+        });
     }
 
     @Override
@@ -69,46 +72,16 @@ public class B2_DT extends AbsTestMode<DuongTruongView> {
 
     @Override
     protected void contestDone() {
-        String id = processModel.getId();
-        if (id == null || id.equals("0")) {
-            return;
-        }
-        File imgFile = this.fileTestService.getFileImagePath(id);
-        if (imgFile == null) {
-            ErrorLog.addError(this, "Không tìm thấy file png của id: " + id);
-        }
-        this.apiService.sendData(processlHandle.toProcessModelJson().toString().getBytes(),
-                imgFile);
     }
 
     @Override
     protected void endTest() {
-        try {
-            String id = processModel.getId();
-            if (id == null || id.equals("0")) {
-                return;
-            }
-            File imgFile = this.fileTestService.getFileImagePath(id);
-            if (imgFile == null) {
-                ErrorLog.addError(this, "Không tìm thấy file png của id: " + id);
-            }
-            if (this.apiService.sendData(processlHandle.toProcessModelJson().toString().getBytes(),
-                    imgFile)) {
-                this.soundPlayer.sendResultFailed();
-                this.fileTestService.saveBackupLog(id, oldId,
-                        CameraRunner.getInstance().getImage());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            ErrorLog.addError(this, e);
-        } finally {
-            System.out.println(processlHandle.toProcessModelJson());
-            this.hasXp = false;
-            this.hasTs = false;
-            this.hasGs = false;
-            this.hasKt = false;
-            this.runnable = false;
-        }
+        System.out.println(processlHandle.toProcessModelJson());
+        this.hasXp = false;
+        this.hasTs = false;
+        this.hasGs = false;
+        this.hasKt = false;
+        this.runnable = false;
     }
 
     @Override
@@ -175,5 +148,29 @@ public class B2_DT extends AbsTestMode<DuongTruongView> {
             addContest(new KetThuc(ConstKey.CT_NAME.KET_THUC));
             hasKt = true;
         });
+    }
+
+    private void analysisRespmoce(Response responce) {
+        if (responce == null) {
+            return;
+        }
+        if (!responce.isSuccess() || responce.getData() == null) {
+            return;
+        }
+        String requestString = responce.getData(JSONObject.class).getString("request");
+        if (requestString == null) {
+            return;
+        }
+        switch (requestString) {
+            case "capNhat" -> {
+                updateLog();
+                upTestDataToServer();
+            }
+            case "huyThi" -> {
+                if (getModeHandle() != null) {
+                    getModeHandle().stop();
+                }
+            }
+        }
     }
 }

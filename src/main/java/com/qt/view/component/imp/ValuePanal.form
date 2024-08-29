@@ -19,22 +19,20 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="pnBaiThi" pref="344" max="32767" attributes="0"/>
                   <Component id="stCurrContest" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="stTotalTime" max="32767" attributes="0"/>
+                          <Component id="stTotalTime" pref="169" max="32767" attributes="0"/>
                           <Component id="stDistance" max="32767" attributes="0"/>
                           <Component id="stScore" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="stRpm" max="32767" attributes="0"/>
+                          <Component id="stRpm" pref="169" max="32767" attributes="0"/>
                           <Component id="stV" alignment="1" max="32767" attributes="0"/>
                           <Component id="stTime" alignment="1" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <Component id="pnTruDiem" pref="0" max="32767" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -62,10 +60,6 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="stCurrContest" min="-2" pref="104" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="pnBaiThi" min="-2" pref="67" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="pnTruDiem" min="-2" pref="46" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -114,68 +108,5 @@
         <Property name="iconNameTop" type="java.lang.String" value="Ph&#x1ea7;n thi hi&#x1ec7;n t&#x1ea1;i"/>
       </Properties>
     </Component>
-    <Container class="javax.swing.JPanel" name="pnBaiThi">
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-        <Property name="columns" type="int" value="4"/>
-        <Property name="rows" type="int" value="1"/>
-      </Layout>
-      <SubComponents>
-        <Component class="com.qt.view.element.ButtonDesign" name="btXp">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Xu&#x1ea5;t ph&#xe1;t"/>
-          </Properties>
-        </Component>
-        <Component class="com.qt.view.element.ButtonDesign" name="btTs">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="T&#x103;ng t&#x1ed1;c"/>
-          </Properties>
-        </Component>
-        <Component class="com.qt.view.element.ButtonDesign" name="btGs">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Gi&#x1ea3;m t&#x1ed1;c"/>
-          </Properties>
-        </Component>
-        <Component class="com.qt.view.element.ButtonDesign" name="btKt">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="K&#x1ebf;t th&#xfa;c"/>
-          </Properties>
-        </Component>
-      </SubComponents>
-    </Container>
-    <Container class="javax.swing.JPanel" name="pnTruDiem">
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-        <Property name="columns" type="int" value="5"/>
-        <Property name="rows" type="int" value="1"/>
-      </Layout>
-      <SubComponents>
-        <Component class="com.qt.view.element.ButtonDesign" name="btCl">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="CL"/>
-          </Properties>
-        </Component>
-        <Component class="com.qt.view.element.ButtonDesign" name="btQt">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="QT"/>
-          </Properties>
-        </Component>
-        <Component class="com.qt.view.element.ButtonDesign" name="btRg">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="RG"/>
-          </Properties>
-        </Component>
-        <Component class="com.qt.view.element.ButtonDesign" name="btTn">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="TN"/>
-          </Properties>
-        </Component>
-        <Component class="com.qt.view.element.ButtonDesign" name="btHl">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="HL"/>
-          </Properties>
-        </Component>
-      </SubComponents>
-    </Container>
   </SubComponents>
 </Form>

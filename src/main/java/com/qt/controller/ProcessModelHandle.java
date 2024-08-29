@@ -43,6 +43,7 @@ public final class ProcessModelHandle implements IgetTime {
         this.testDataModel = new TestDataModelView(this, processModel);
         this.carModel = MCUSerialHandler.getInstance().getModel();
         this.logTestService = FileTestService.getInstance();
+        this.logTestService.setProcessModel(processModel);
         this.testing = false;
         setCarID(this.logTestService.getCarId());
     }
@@ -91,7 +92,6 @@ public final class ProcessModelHandle implements IgetTime {
 
     public void startTest() {
         this.testing = true;
-        this.logTestService.updateDate();
         this.startMs = System.currentTimeMillis();
         this.cysleTime = -1;
         this.processModel.setCycleTime(0);

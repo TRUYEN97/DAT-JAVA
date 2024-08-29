@@ -39,6 +39,7 @@ public class ModeHandle implements IStarter, Runnable {
             return false;
         }
         this.testMode = testMode;
+        this.testMode.setModeHandle(this);
         this.processModelHandle.setMode(testMode);
         this.contestRunner.setTestMode(testMode);
         return true;
@@ -98,10 +99,11 @@ public class ModeHandle implements IStarter, Runnable {
 
     @Override
     public void stop() {
-        if (this.running) {
-            return;
-        }
         this.stop = true;
+        this.contestRunner.stop();
+        if (this.testMode != null) {
+            this.testMode.cancelTest();
+        }
         while (!isStarted()) {
             this.testFuture.cancel(true);
             Util.delay(200);

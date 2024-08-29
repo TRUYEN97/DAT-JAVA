@@ -39,7 +39,7 @@ public class XuatPhat extends AbsContest {
     public boolean loop() {
         this.timeOut20s.checkPassed();
         this.timeOut30s.checkPassed();
-        if (firstCheck) {
+        if (getDistance() > 1 && this.firstCheck) {
             firstCheck = false;
             if (!this.carModel.isAt()) {
                 this.addErrorCode(ConstKey.ERR.AT);
@@ -51,7 +51,7 @@ public class XuatPhat extends AbsContest {
                 this.addErrorCode(ConstKey.ERR.PT);
             }
         }
-        if (this.carModel.getDistance() - oldDistance >= 15) {
+        if (getDistance() >= 15) {
             addErrorCode(ConstKey.ERR.TS);
             return true;
         } else if (this.carModel.getGearBoxValue() >= 3
@@ -59,6 +59,10 @@ public class XuatPhat extends AbsContest {
             return true;
         }
         return false;
+    }
+
+    private double getDistance() {
+        return this.carModel.getDistance() - oldDistance;
     }
 
     @Override
@@ -70,7 +74,9 @@ public class XuatPhat extends AbsContest {
         Util.delay(3000);
         oldDistance = this.carModel.getDistance();
         this.timeOut20s.resetTimer();
+        this.timeOut20s.setContestDataModel(contestModel);
         this.timeOut30s.resetTimer();
+        this.timeOut30s.setContestDataModel(contestModel);
         return true;
     }
 

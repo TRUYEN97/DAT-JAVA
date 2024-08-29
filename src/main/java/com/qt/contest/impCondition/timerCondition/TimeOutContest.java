@@ -24,6 +24,7 @@ public class TimeOutContest extends AbsTimerConditon {
         this.contest = contest;
         if (contest != null) {
             this.setSpec(contest.getTimeout());
+            this.setContestDataModel(contest.getContestModel());
             this.resetTimer();
         }
     }

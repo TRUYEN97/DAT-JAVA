@@ -6,7 +6,6 @@ package com.qt.input.serial;
 
 import com.qt.common.communication.Communicate.Impl.Comport.ComPort;
 import com.qt.common.communication.socket.Unicast.commons.Interface.IReceiver;
-import javax.swing.Action;
 
 
 /**
