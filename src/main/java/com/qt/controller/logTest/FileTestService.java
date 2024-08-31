@@ -7,7 +7,6 @@ package com.qt.controller.logTest;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.FileService.FileService;
-import com.qt.controller.ProcessModelHandle;
 import com.qt.model.modelTest.process.ProcessModel;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -138,7 +137,7 @@ public class FileTestService {
     }
     
     private String createBackupLogPathString(String id, String fileName) {
-        String filePathString = String.format("%s/logTest/%s/%s/%s/%s",
+        String filePathString = String.format("%s/logTest/%s/%s",
                 backupLogHandle,
                 id,
                 fileName);
@@ -146,10 +145,9 @@ public class FileTestService {
     }
 
     public String createPathString(File root, String id, String fileName) {
-        String filePathString = String.format("%s/logTest/%s/%s/%s/%s",
+        String filePathString = String.format("%s/logTest/%s/%s/%s",
                 root,
-                this.processModel.getKiThi(),
-                this.processModel.getCaThi(),
+                this.processModel.getExamId(),
                 id,
                 fileName);
         return filePathString;
