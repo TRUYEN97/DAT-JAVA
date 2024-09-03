@@ -69,7 +69,6 @@ public abstract class AbsTestMode<V extends JPanel> {
         this.name = name;
         this.cancel = false;
         this.scoreSpec = scoreSpec;
-        MCUSerialHandler.getInstance().start();
         this.carModel = MCUSerialHandler.getInstance().getModel();
         this.processlHandle = ProcessModelHandle.getInstance();
         this.processModel = this.processlHandle.getProcessModel();

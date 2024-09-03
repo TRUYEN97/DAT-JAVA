@@ -88,6 +88,15 @@ public final class ConstKey {
             public static final String KT = "-";
         }
 
+        public static final class ERROR {
+
+            public static final String HL = ConstKey.ERR.HL;//
+            public static final String TN = ConstKey.ERR.TN;//
+            public static final String RG = ConstKey.ERR.RG;//
+            public static final String QT = ConstKey.ERR.QT;//
+            public static final String CL = ConstKey.ERR.CL;
+        }
+
         public static final class MODE {
 
             public static final String B2_DT_OFF = "P";

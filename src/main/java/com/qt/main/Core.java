@@ -7,6 +7,8 @@ package com.qt.main;
 import com.qt.common.ConstKey;
 import com.qt.controller.modeController.ModeManagement;
 import com.qt.input.camera.CameraRunner;
+import com.qt.input.serial.KeyBoardSerialHandler;
+import com.qt.input.serial.MCUSerialHandler;
 import com.qt.mode.imp.B2_DT;
 import com.qt.view.ViewMain;
 
@@ -34,6 +36,8 @@ public class Core {
     }
 
     public void start() {
+        KeyBoardSerialHandler.getInstance().start();
+        MCUSerialHandler.getInstance().start();
         this.cameraRunner.start();
         this.viewMain.display();
         this.modeManagement.start();
