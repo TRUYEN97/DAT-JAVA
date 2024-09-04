@@ -45,6 +45,10 @@ public class ModeHandle implements IStarter, Runnable {
         return true;
     }
 
+    public AbsTestMode getTestMode() {
+        return testMode;
+    }
+
     @Override
     public void run() {
         try {

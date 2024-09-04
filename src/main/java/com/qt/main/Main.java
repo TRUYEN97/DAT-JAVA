@@ -4,6 +4,9 @@
  */
 package com.qt.main;
 
+import com.qt.input.camera.CameraRunner;
+import com.qt.input.serial.KeyBoardSerialHandler;
+import com.qt.input.serial.MCUSerialHandler;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,7 +17,10 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            new Core().start();
+            CameraRunner.getInstance();
+            KeyBoardSerialHandler.getInstance();
+            MCUSerialHandler.getInstance();
+            Core.getInstance().start();
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, e.getLocalizedMessage());

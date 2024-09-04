@@ -7,6 +7,8 @@ package com.qt.view.frame;
 import com.qt.common.ConstKey;
 import com.qt.controller.api.ApiService;
 import com.qt.controller.ProcessModelHandle;
+import com.qt.controller.modeController.ModeManagement;
+import com.qt.main.Core;
 import com.qt.model.config.ChangeIdModel;
 import com.qt.model.input.UserModel;
 import com.qt.model.modelTest.process.ProcessModel;
@@ -163,6 +165,12 @@ public class ChangeIdFrame extends AbsKeylistenerFrame {
             UserModel userModel = this.apiService.checkUserId(modelVal);
             if (userModel != null) {
                 ProcessModelHandle.getInstance().setUserModel(userModel);
+                String modeName = userModel.getModeName();
+                ModeManagement modeManagement = Core.getInstance().getModeManagement();
+                if (modeName != null && !modeName.isBlank()) {
+                    modeManagement.updateMode(modeName);
+                }
+                userModel.setModeName(modeManagement.getCurrentMode().getName());
                 this.soundPlayer.welcomeId(this.processModel.getId());
             } else {
                 this.soundPlayer.userIdInvalid();

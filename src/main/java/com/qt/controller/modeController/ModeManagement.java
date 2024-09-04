@@ -74,6 +74,10 @@ public class ModeManagement {
         }
         return false;
     }
+    
+    public AbsTestMode getCurrentMode(){
+        return this.modeHandle.getTestMode();
+    }
 
     public void putMode(String key, AbsTestMode absTestMode) {
         if (absTestMode == null) {
