@@ -47,7 +47,7 @@ public class B2_DT extends AbsTestMode<DuongTruongView> {
     }
 
     @Override
-    protected boolean loopCheckStartTest() {
+    protected boolean loopCheckCanTest() {
         String id = this.processModel.getId();
         if (!runnable || !oldId.equals(id)) {
             oldId = id;

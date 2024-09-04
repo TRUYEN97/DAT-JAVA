@@ -19,7 +19,6 @@ public class UserModel {
     private String name = "";
     private String examName = "";
     private String examId = "";
-    private String caThi = "";
     private String modeName = "";
     private String dateOfBirth = "";
     private String placeOfOrigin = "";

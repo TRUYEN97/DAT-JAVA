@@ -72,7 +72,7 @@ public class Response {
         }
         return this.wareHouse.getObject(DATA, clazz);
     }
-    
+
     public <T> T getData() {
         if (!isResponseAvalid()) {
             return null;
@@ -96,7 +96,10 @@ public class Response {
     }
 
     public boolean isSuccess() {
-        return code == 200 && isResponseAvalid() && this.wareHouse.getBooleanValue( STATUS, false);
+        return code == 200
+                && isResponseAvalid()
+                && (this.wareHouse.getBooleanValue(STATUS, false)
+                || this.wareHouse.getIntValue(STATUS, -1) == 200);
     }
 
     public boolean getStringEquals(String key, String target) {

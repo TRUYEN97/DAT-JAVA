@@ -84,7 +84,7 @@ public abstract class AbsTestMode<V extends JPanel> {
         initErrorcode();
     }
 
-    protected abstract boolean loopCheckStartTest();
+    protected abstract boolean loopCheckCanTest();
 
     protected abstract void contestDone();
 
@@ -117,7 +117,10 @@ public abstract class AbsTestMode<V extends JPanel> {
         this.cancel = false;
         this.processlHandle.setTesting(false);
         KeyEventManagement.getInstance().addKeyEventBackAge(prepareEventsPackage);
-        while (!loopCheckStartTest()) {
+        while (!loopCheckCanTest()) {
+            Util.delay(200);
+        }
+        while (!loopCheckCanTest()) {
             Util.delay(200);
         }
         this.processlHandle.setTesting(true);
@@ -173,6 +176,8 @@ public abstract class AbsTestMode<V extends JPanel> {
                 MCUSerialHandler.getInstance().sendLedRedOn();
             }
             this.pingAPI.stop();
+            int score = this.processModel.getScore();
+            this.processModel.setStatus(score >= scoreSpec ? ProcessModel.PASS : ProcessModel.FAIL);
             updateLog();
             if (!upTestDataToServer()) {
                 String id = processModel.getId();
@@ -182,8 +187,6 @@ public abstract class AbsTestMode<V extends JPanel> {
             }
             endTest();
             this.processlHandle.setTesting(false);
-            int score = this.processModel.getScore();
-            this.processModel.setStatus(score >= scoreSpec ? ProcessModel.PASS : ProcessModel.FAIL);
             this.soundPlayer.sayResultTest(score, this.processlHandle.isPass());
         } catch (Exception e) {
             e.printStackTrace();
@@ -202,7 +205,7 @@ public abstract class AbsTestMode<V extends JPanel> {
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.GS, new Errorcode("GS", 5, "KO GIAM DUOC SO"));
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.TT, new Errorcode("TT", 5, "KO TANG TOC DO"));
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.GT, new Errorcode("GT", 5, "KO GIAM TOC DO"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.S20, new Errorcode("S20",5, "QUA 20 GIAY"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.S20, new Errorcode("S20", 5, "QUA 20 GIAY"));
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.RG, new Errorcode("RG", 5, "RUNG GIAT"));
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.CM, new Errorcode("CM", 5, "CHET MAY"));
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.RPM, new Errorcode("RPM", 5, "QUA VONG TUA"));

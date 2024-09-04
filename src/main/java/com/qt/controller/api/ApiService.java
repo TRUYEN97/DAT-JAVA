@@ -93,7 +93,6 @@ public class ApiService {
         }
         Response response = restAPI.sendPost(url, JsonBodyAPI.builder().put(ID, id));
         if (!response.isSuccess()) {
-
             return null;
         }
         return response.getData(UserModel.class);
