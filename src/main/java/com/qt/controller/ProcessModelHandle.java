@@ -188,7 +188,7 @@ public final class ProcessModelHandle implements IgetTime {
     }
 
     public boolean isPass() {
-        return this.processModel.getStatus() == ProcessModel.PASS;
+        return this.processModel.getContestsResult() == ProcessModel.PASS;
     }
     
     public boolean isTesting() {

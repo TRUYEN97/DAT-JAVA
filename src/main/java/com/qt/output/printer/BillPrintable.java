@@ -15,7 +15,6 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.util.List;
-import javax.swing.ImageIcon;
 
 /**
  *
@@ -55,7 +54,7 @@ public class BillPrintable implements Printable {
             drawString(g2d, y += yShift, "NGAY THI: %s", this.processData.getStartTime());
             drawString(g2d, y += yShift, "SO DIEM: %s/100", this.processData.getScore());
             drawString(g2d, y += yShift, "KET QUA: %s",
-                    this.processData.getStatus() == ProcessModel.PASS ? "DAT" : "KHONG DAT");
+                    this.processData.getContestsResult() == ProcessModel.PASS ? "DAT" : "KHONG DAT");
             if (!this.errorcodes.isEmpty()) {
                 drawString(g2d, y += headerRectHeight, "CAC LOI:");
                 for (ErrorcodeWithContestNameModel errorcode : errorcodes) {

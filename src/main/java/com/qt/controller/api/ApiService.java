@@ -12,11 +12,13 @@ import com.qt.common.API.RestAPI;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.Util;
+import com.qt.common.timer.TimeBase;
 import com.qt.controller.modeController.ModeManagement;
 import com.qt.model.input.UserModel;
 import com.qt.output.SoundPlayer;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -63,89 +65,96 @@ public class ApiService {
     }
 
     public boolean checkCarId(String id) {
-        String url = this.properties.getProperty(ConstKey.CHECK_CAR_ID);
-        if (checkPingToServer()) {
+        try {
+            String url = this.properties.getProperty(ConstKey.CHECK_CAR_ID);
+            if (checkPingToServer()) {
+                return false;
+            }
+            if (url == null) {
+                ErrorLog.addError(this, "không tìm thấy: checkCarId url");
+                return false;
+            }
+            Response response = restAPI.sendPost(url, JsonBodyAPI.builder().put(ID, id));
+            return response != null && response.isSuccess();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
             return false;
         }
-        if (url == null) {
-            ErrorLog.addError(this, "không tìm thấy: checkCarId url");
-            return false;
-        }
-        Response response = restAPI.sendPost(url, JsonBodyAPI.builder().put(ID, id));
-        return response != null && response.isSuccess();
     }
 
     public UserModel checkUserId(String id) {
-        if (id == null || id.isBlank() || "0".equals(id)) {
-            UserModel userModel = new UserModel();
-            userModel.setId("0");
-            userModel.setName("");
-            userModel.setModeName(ModeManagement.DEFAULT_MODE);
-            return userModel;
-        }
-        if (checkPingToServer()) {
+        try {
+            if (id == null || id.isBlank() || "0".equals(id)) {
+                UserModel userModel = new UserModel();
+                userModel.setId("0");
+                userModel.setName("");
+                userModel.setModeName(ModeManagement.DEFAULT_MODE);
+                return userModel;
+            }
+            if (checkPingToServer()) {
+                return null;
+            }
+            String url = this.properties.getProperty(ConstKey.CHECK_USER_ID);
+            if (url == null) {
+                ErrorLog.addError(this, "không tìm thấy: checkUserId url");
+                return null;
+            }
+            Response response = restAPI.sendPost(url, JsonBodyAPI.builder().put(ID, id));
+            if (!response.isSuccess()) {
+                return null;
+            }
+            return response.getData(UserModel.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
             return null;
         }
-        String url = this.properties.getProperty(ConstKey.CHECK_USER_ID);
-        if (url == null) {
-            ErrorLog.addError(this, "không tìm thấy: checkUserId url");
-            return null;
-        }
-        Response response = restAPI.sendPost(url, JsonBodyAPI.builder().put(ID, id));
-        if (!response.isSuccess()) {
-            return null;
-        }
-        return response.getData(UserModel.class);
     }
 
-    public boolean sendData(byte[] jsonFile, File imgFile) {
-        if (checkPingToServer()) {
+    public boolean sendData(JSONObject jSONObject, File imgFile) {
+        try {
+            if (checkPingToServer()) {
+                return false;
+            }
+            String url = this.properties.getProperty(ConstKey.SEND_DATA);
+            if (url == null) {
+                ErrorLog.addError(this, "không tìm thấy: sendData url");
+                return false;
+            }
+            if (jSONObject == null || jSONObject.isEmpty()) {
+                return false;
+            }
+            jSONObject.put(ConstKey.VEHICLE_TIME, new TimeBase().getSimpleDateTime());
+            FileInfo jsonF = new FileInfo(FileInfo.type.BYTE);
+            jsonF.setFile(jSONObject.toString().getBytes());
+            jsonF.setPartName("data");
+            jsonF.setName("data.json");
+            //////////////////
+            FileInfo imgF = new FileInfo(FileInfo.type.FILE);
+            imgF.setFile(imgFile);
+            imgF.setPartName("image");
+            imgF.setName("image.png");
+            Response response = restAPI.uploadFile(url, null, jsonF, imgF);
+            return response != null && response.isSuccess();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
             return false;
         }
-        String url = this.properties.getProperty(ConstKey.SEND_DATA);
-        if (url == null) {
-            ErrorLog.addError(this, "không tìm thấy: sendData url");
-            return false;
-        }
-        if (jsonFile == null || imgFile == null) {
-            return false;
-        }
-        FileInfo jsonF = new FileInfo(FileInfo.type.BYTE);
-        jsonF.setFile(jsonFile);
-        jsonF.setPartName("data");
-        jsonF.setName("data.json");
-        //////////////////
-        FileInfo imgF = new FileInfo(FileInfo.type.FILE);
-        imgF.setFile(imgFile);
-        imgF.setPartName("image");
-        imgF.setName("image.png");
-        Response response = restAPI.uploadFile(url, null, jsonF, imgF);
-        return response != null && response.isSuccess();
     }
 
     public boolean sendData(File jsonFile, File imgFile) {
-        if (checkPingToServer()) {
+        try {
+            if (jsonFile == null || !jsonFile.exists()) {
+                return false;
+            }
+            return sendData(JSONObject.parseObject(Files.readString(jsonFile.toPath())), imgFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
             return false;
         }
-        String url = this.properties.getProperty(ConstKey.SEND_DATA);
-        if (url == null) {
-            ErrorLog.addError(this, "không tìm thấy: sendData url");
-            return false;
-        }
-        if (jsonFile == null || imgFile == null) {
-            return false;
-        }
-        FileInfo jsonF = new FileInfo(FileInfo.type.FILE);
-        jsonF.setFile(jsonFile);
-        jsonF.setPartName("data");
-        jsonF.setName(jsonFile.getName());
-        //////////////////
-        FileInfo imgF = new FileInfo(FileInfo.type.FILE);
-        imgF.setFile(jsonFile);
-        imgF.setPartName("image");
-        imgF.setName(jsonFile.getName());
-        Response response = restAPI.uploadFile(url, null, jsonF, imgF);
-        return response != null && response.isSuccess();
     }
 
     public boolean pingToServer() {
@@ -163,39 +172,51 @@ public class ApiService {
     }
 
     public int checkRunnable(String id) {
-        if (id == null || id.isBlank()) {
+        try {
+            if (id == null || id.isBlank()) {
+                return WAIT;
+            }
+            if (id.equals("0")) {
+                return START;
+            }
+            if (checkPingToServer()) {
+                return WAIT;
+            }
+            String url = this.properties.getProperty(ConstKey.RUNNABLE);
+            if (url == null) {
+                ErrorLog.addError(this, "không tìm thấy: runnable url");
+                return URL_INVALID;
+            }
+            Response response = restAPI.sendPost(url, JsonBodyAPI.builder()
+                    .put(ID, id), false);
+            if (!response.isResponseAvalid()) {
+                ErrorLog.addError(this, response.getResponse());
+                return API_INVALID;
+            }
+            JSONObject data = response.getData();
+            return data.getIntValue(CAN_START, -1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
             return WAIT;
         }
-        if (id.equals("0")) {
-            return START;
-        }
-        if (checkPingToServer()) {
-            return WAIT;
-        }
-        String url = this.properties.getProperty(ConstKey.RUNNABLE);
-        if (url == null) {
-            ErrorLog.addError(this, "không tìm thấy: runnable url");
-            return URL_INVALID;
-        }
-        Response response = restAPI.sendPost(url, JsonBodyAPI.builder()
-                .put(ID, id), false);
-        if (!response.isResponseAvalid()) {
-            ErrorLog.addError(this, response.getResponse());
-            return API_INVALID;
-        }
-        JSONObject data = response.getData();
-        return data.getIntValue(CAN_START, -1);
     }
 
     public Response checkInfo() {
-        if (pingToServer()) {
+        try {
+            if (pingToServer()) {
+                return null;
+            }
+            String url = this.properties.getProperty(ConstKey.CHECK_INFO);
+            if (url == null) {
+                ErrorLog.addError(this, "không tìm thấy: checkInfo url");
+                return null;
+            }
+            return restAPI.sendPost(url, JsonBodyAPI.builder(), false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
             return null;
         }
-        String url = this.properties.getProperty(ConstKey.CHECK_INFO);
-        if (url == null) {
-            ErrorLog.addError(this, "không tìm thấy: checkInfo url");
-            return null;
-        }
-        return restAPI.sendPost(url, JsonBodyAPI.builder(), false);
     }
 }

@@ -7,7 +7,6 @@ package com.qt.mode.imp;
 import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.API.Response;
 import com.qt.common.ConstKey;
-import com.qt.common.ErrorLog;
 import com.qt.common.Util;
 import com.qt.contest.impCondition.timerCondition.CheckSo3;
 import com.qt.contest.impContest.GiamToc;

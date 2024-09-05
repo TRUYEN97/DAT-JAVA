@@ -117,15 +117,12 @@ public abstract class AbsTestMode<V extends JPanel> {
         this.cancel = false;
         this.processlHandle.setTesting(false);
         KeyEventManagement.getInstance().addKeyEventBackAge(prepareEventsPackage);
-        while (!loopCheckCanTest()) {
-            Util.delay(200);
-        }
-        while (!loopCheckCanTest()) {
+        while (!loopCheck()) {
             Util.delay(200);
         }
         this.processlHandle.setTesting(true);
         this.errorcodeHandle.clear();
-        this.processModel.setStatus(ProcessModel.RUNNING);
+        this.processModel.setContestsResult(ProcessModel.RUNNING);
         MCUSerialHandler.getInstance().sendLedYellowOn();
         MCUSerialHandler.getInstance().sendReset();
         KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
@@ -161,7 +158,7 @@ public abstract class AbsTestMode<V extends JPanel> {
         if (imgFile == null) {
             ErrorLog.addError(this, "Không tìm thấy file png của id: " + id);
         }
-        return this.apiService.sendData(processlHandle.toProcessModelJson().toString().getBytes(),
+        return this.apiService.sendData(processlHandle.toProcessModelJson(),
                 imgFile);
     }
 
@@ -177,7 +174,7 @@ public abstract class AbsTestMode<V extends JPanel> {
             }
             this.pingAPI.stop();
             int score = this.processModel.getScore();
-            this.processModel.setStatus(score >= scoreSpec ? ProcessModel.PASS : ProcessModel.FAIL);
+            this.processModel.setContestsResult(score >= scoreSpec ? ProcessModel.PASS : ProcessModel.FAIL);
             updateLog();
             if (!upTestDataToServer()) {
                 String id = processModel.getId();
@@ -186,6 +183,7 @@ public abstract class AbsTestMode<V extends JPanel> {
                         CameraRunner.getInstance().getImage());
             }
             endTest();
+            this.processModel.setId("");
             this.processlHandle.setTesting(false);
             this.soundPlayer.sayResultTest(score, this.processlHandle.isPass());
         } catch (Exception e) {
@@ -253,6 +251,14 @@ public abstract class AbsTestMode<V extends JPanel> {
 
     public void cancelTest() {
         this.cancel = true;
+    }
+
+    private boolean loopCheck() {
+        String id = this.processModel.getId();
+        if (id == null || id.isBlank()) {
+            return false;
+        }
+        return loopCheckCanTest();
     }
 
 }

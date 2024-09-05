@@ -32,7 +32,7 @@ public class ProcessModel extends UserModel{
     private double distance;
     private final List<Errorcode> errorcodes;
     private final List<ContestDataModel> contests;
-    private int status = RUNNING;
+    private int contestsResult = RUNNING;
 
     public ProcessModel() {
         this.contests = new ArrayList<>();
@@ -54,7 +54,7 @@ public class ProcessModel extends UserModel{
     }
 
     public void clear() {
-        this.status = RUNNING;
+        this.contestsResult = RUNNING;
         this.cycleTime = 0;
         this.startTime = "";
         this.endTime = "";

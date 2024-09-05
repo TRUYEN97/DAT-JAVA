@@ -10,6 +10,7 @@ package com.qt.common;
  */
 public final class ConstKey {
 
+    public static final String VEHICLE_TIME = "vehicleTime";
     public static final String CHECK_INFO = "checkInfo";
     public static final String SERVER_PING_ADDR = "serverIp";
     public static final String CHECK_CAR_ID = "checkCarId";
