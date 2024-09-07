@@ -86,7 +86,7 @@ public class BackupLogHandle implements Runnable {
                 jsonF = file;
             }
         }
-        if (jsonF == null || this.apiService.sendData(jsonF, imgF)) {
+        if (jsonF == null || this.apiService.sendData(jsonF, imgF) == ApiService.PASS) {
             Util.deleteFolder(idDir);
             return true;
         }

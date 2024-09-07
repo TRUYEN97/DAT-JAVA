@@ -19,7 +19,7 @@ import com.qt.input.camera.CameraRunner;
 import com.qt.input.serial.MCUSerialHandler;
 import com.qt.model.input.CarModel;
 import com.qt.model.modelTest.process.ProcessModel;
-import com.qt.model.modelTest.Errorcode;
+import com.qt.model.modelTest.ErrorCode;
 import com.qt.output.SoundPlayer;
 import com.qt.pretreatment.IKeyEvent;
 import com.qt.pretreatment.KeyEventManagement;
@@ -117,12 +117,12 @@ public abstract class AbsTestMode<V extends JPanel> {
         this.cancel = false;
         this.processlHandle.setTesting(false);
         KeyEventManagement.getInstance().addKeyEventBackAge(prepareEventsPackage);
+        this.errorcodeHandle.clear();
+        this.processlHandle.resetModel();
         while (!loopCheck()) {
             Util.delay(200);
         }
-        this.processlHandle.setTesting(true);
-        this.errorcodeHandle.clear();
-        this.processModel.setContestsResult(ProcessModel.RUNNING);
+        this.processlHandle.startTest();
         MCUSerialHandler.getInstance().sendLedYellowOn();
         MCUSerialHandler.getInstance().sendReset();
         KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
@@ -146,13 +146,13 @@ public abstract class AbsTestMode<V extends JPanel> {
                 CameraRunner.getInstance().getImage());
     }
 
-    protected boolean upTestDataToServer() {
+    protected int upTestDataToServer() {
         if (cancel) {
-            return true;
+            return ApiService.PASS;
         }
         String id = processModel.getId();
         if (id == null || id.equals("0")) {
-            return true;
+            return ApiService.PASS;
         }
         File imgFile = this.fileTestService.getFileImagePath(id);
         if (imgFile == null) {
@@ -176,11 +176,20 @@ public abstract class AbsTestMode<V extends JPanel> {
             int score = this.processModel.getScore();
             this.processModel.setContestsResult(score >= scoreSpec ? ProcessModel.PASS : ProcessModel.FAIL);
             updateLog();
-            if (!upTestDataToServer()) {
+            int rs = ApiService.FAIL;
+            for (int i = 0; i < 3; i++) {
+                rs = upTestDataToServer();
+                if (rs == ApiService.PASS) {
+                    break;
+                }
+            }
+            if (rs == ApiService.DISCONNECT) {
                 String id = processModel.getId();
                 this.soundPlayer.sendResultFailed();
                 this.fileTestService.saveBackupLog(id, processlHandle.toProcessModelJson().toString(),
                         CameraRunner.getInstance().getImage());
+            } else if (rs == ApiService.FAIL) {
+                //
             }
             endTest();
             this.processModel.setId("");
@@ -194,24 +203,24 @@ public abstract class AbsTestMode<V extends JPanel> {
 
     private void initErrorcode() {
 
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.SO3, new Errorcode("SO3", 2, "TAY SO KO PHU HOP"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TIME_OUT, new Errorcode("timeout", 5, "QUA THOI GIAN"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.AT, new Errorcode("AT", 5, "DAY AN TOAN"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.NTP, new Errorcode("NTP", 5, "KHONG XI NHAN"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.PT, new Errorcode("PT", 5, "PHANH TAY"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TS, new Errorcode("TS", 5, "KO TANG DUOC SO"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.GS, new Errorcode("GS", 5, "KO GIAM DUOC SO"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TT, new Errorcode("TT", 5, "KO TANG TOC DO"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.GT, new Errorcode("GT", 5, "KO GIAM TOC DO"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.S20, new Errorcode("S20", 5, "QUA 20 GIAY"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.RG, new Errorcode("RG", 5, "RUNG GIAT"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.CM, new Errorcode("CM", 5, "CHET MAY"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.RPM, new Errorcode("RPM", 5, "QUA VONG TUA"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.QT, new Errorcode("QT", 10, "QUY TAC GIAO THONG"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.S30, new Errorcode("S30", 25, "QUA 30 GIAY"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.HL, new Errorcode("HL", 25, "HIEU LENH"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TN, new Errorcode("TN", 25, "GAY TAI NAN"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.CL, new Errorcode("CL", 25, "CHOANG LAI"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.SO3, new ErrorCode("SO3", 2, "TAY SO KO PHU HOP"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TIME_OUT, new ErrorCode("timeout", 5, "QUA THOI GIAN"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.AT, new ErrorCode("AT", 5, "DAY AN TOAN"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.NTP, new ErrorCode("NTP", 5, "KHONG XI NHAN"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.PT, new ErrorCode("PT", 5, "PHANH TAY"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TS, new ErrorCode("TS", 5, "KO TANG DUOC SO"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.GS, new ErrorCode("GS", 5, "KO GIAM DUOC SO"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TT, new ErrorCode("TT", 5, "KO TANG TOC DO"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.GT, new ErrorCode("GT", 5, "KO GIAM TOC DO"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.S20, new ErrorCode("S20", 5, "QUA 20 GIAY"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.RG, new ErrorCode("RG", 5, "RUNG GIAT"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.CM, new ErrorCode("CM", 5, "CHET MAY"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.RPM, new ErrorCode("RPM", 5, "QUA VONG TUA"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.QT, new ErrorCode("QT", 10, "QUY TAC GIAO THONG"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.S30, new ErrorCode("S30", 25, "QUA 30 GIAY"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.HL, new ErrorCode("HL", 25, "HIEU LENH"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TN, new ErrorCode("TN", 25, "GAY TAI NAN"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.CL, new ErrorCode("CL", 25, "CHOANG LAI"));
     }
 
     private KeyEventsPackage initPrepareKeyEventPackage() {

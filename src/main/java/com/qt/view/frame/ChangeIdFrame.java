@@ -162,7 +162,7 @@ public class ChangeIdFrame extends AbsKeylistenerFrame {
         }
         dispose();
         if (this.model.getName().equals(SBD)) {
-            UserModel userModel = this.apiService.checkUserId(modelVal);
+            UserModel userModel = this.apiService.checkUserId(modelVal, this.processModel.getCarId());
             if (userModel != null) {
                 ProcessModelHandle.getInstance().setUserModel(userModel);
                 String modeName = userModel.getModeName();

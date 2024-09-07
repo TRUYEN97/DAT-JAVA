@@ -4,7 +4,7 @@
  */
 package com.qt.controller;
 
-import com.qt.model.modelTest.Errorcode;
+import com.qt.model.modelTest.ErrorCode;
 import com.qt.model.modelTest.ErrorcodeWithContestNameModel;
 import com.qt.model.modelTest.contest.ContestDataModel;
 import com.qt.model.modelTest.process.ProcessModel;
@@ -23,7 +23,7 @@ public class ErrorcodeHandle {
     private static volatile ErrorcodeHandle instance;
     private final ProcessModel processModel;
     private final SoundPlayer soundPlayer;
-    private final Map<String, Errorcode> mapErrorcodes;
+    private final Map<String, ErrorCode> mapErrorcodes;
     private final List<ErrorcodeWithContestNameModel> ewcnms;
 
     private ErrorcodeHandle() {
@@ -54,7 +54,7 @@ public class ErrorcodeHandle {
         return ewcnms;
     }
 
-    public void putErrorCode(String key, Errorcode errorcode) {
+    public void putErrorCode(String key, ErrorCode errorcode) {
         if (errorcode == null) {
             return;
         }
@@ -62,7 +62,7 @@ public class ErrorcodeHandle {
     }
 
     public void addBaseErrorCode(String key) {
-        Errorcode errorcode = this.mapErrorcodes.get(key);
+        ErrorCode errorcode = this.mapErrorcodes.get(key);
         if (errorcode == null || errorcode.getName() == null) {
             return;
         }
@@ -76,7 +76,7 @@ public class ErrorcodeHandle {
         if (dataModel == null) {
             return;
         }
-        Errorcode errorcode = this.mapErrorcodes.get(key);
+        ErrorCode errorcode = this.mapErrorcodes.get(key);
         if (errorcode == null || errorcode.getName() == null) {
             return;
         }

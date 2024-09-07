@@ -81,9 +81,7 @@ public class ModeHandle implements IStarter, Runnable {
 
     private void begin() {
         this.testMode.begin();
-        this.processModelHandle.resetModel();
         this.running = true;
-        this.processModelHandle.startTest();
     }
 
     private void test() {

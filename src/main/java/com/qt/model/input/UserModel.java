@@ -17,9 +17,11 @@ public class UserModel {
     
     private String id = "0";
     private String name = "";
-    private String examName = "";
+    private String examStatus = "";
+    private String mobile = "";
     private String examId = "";
     private String modeName = "";
+    private String rank = "";
     private String dateOfBirth = "";
     private String placeOfOrigin = "";
     private int sex = 0;

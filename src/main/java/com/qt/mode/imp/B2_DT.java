@@ -135,7 +135,9 @@ public class B2_DT extends AbsTestMode<DuongTruongView> {
             hasGs = true;
         });
         maps.put(ConstKey.KEY_BOARD.CONTEST.KT, (key) -> {
-            if (this.carModel.getDistance() < 200) {
+            String id = processModel.getCarId();
+            int distance = id == null || id.equals("0") ? 200 : 2000;
+            if (this.carModel.getDistance() < distance) {
                 return;
             }
             if (!contests.isEmpty()) {

@@ -11,11 +11,11 @@ import lombok.Getter;
  * @author Admin
  */
 @Getter
-public class ErrorcodeWithContestNameModel extends Errorcode {
+public class ErrorcodeWithContestNameModel extends ErrorCode {
 
     private final String contestName;
 
-    public ErrorcodeWithContestNameModel(Errorcode errorcode, String contestName) {
+    public ErrorcodeWithContestNameModel(ErrorCode errorcode, String contestName) {
         super(errorcode.getName(), errorcode.getScore(), errorcode.getDescription());
         this.contestName = contestName == null ? "" : contestName;
     }

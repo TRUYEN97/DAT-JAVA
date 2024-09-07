@@ -98,8 +98,7 @@ public class Response {
     public boolean isSuccess() {
         return code == 200
                 && isResponseAvalid()
-                && (this.wareHouse.getBooleanValue(STATUS, false)
-                || this.wareHouse.getIntValue(STATUS, -1) == 200);
+                && this.wareHouse.getBooleanValue(STATUS, false);
     }
 
     public boolean getStringEquals(String key, String target) {

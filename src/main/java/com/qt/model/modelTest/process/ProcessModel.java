@@ -5,7 +5,7 @@
 package com.qt.model.modelTest.process;
 
 import com.qt.model.input.UserModel;
-import com.qt.model.modelTest.Errorcode;
+import com.qt.model.modelTest.ErrorCode;
 import com.qt.model.modelTest.contest.ContestDataModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,20 +30,20 @@ public class ProcessModel extends UserModel{
     private int score;
     private long cycleTime;
     private double distance;
-    private final List<Errorcode> errorcodes;
+    private final List<ErrorCode> errorCodes;
     private final List<ContestDataModel> contests;
     private int contestsResult = RUNNING;
 
     public ProcessModel() {
         this.contests = new ArrayList<>();
-        this.errorcodes = new ArrayList<>();
+        this.errorCodes = new ArrayList<>();
     }
 
-    public void addErrorcode(Errorcode errorcode) {
+    public void addErrorcode(ErrorCode errorcode) {
         if (errorcode == null || errorcode.getName() == null) {
             return;
         }
-        this.errorcodes.add(errorcode);
+        this.errorCodes.add(errorcode);
     }
 
     public void addContestModel(ContestDataModel contestModel) {
@@ -56,9 +56,9 @@ public class ProcessModel extends UserModel{
     public void clear() {
         this.contestsResult = RUNNING;
         this.cycleTime = 0;
-        this.startTime = "";
-        this.endTime = "";
-        this.errorcodes.clear();
+        this.startTime = null;
+        this.endTime = null;
+        this.errorCodes.clear();
         this.contests.clear();
         this.distance = 0;
         this.score = 0;

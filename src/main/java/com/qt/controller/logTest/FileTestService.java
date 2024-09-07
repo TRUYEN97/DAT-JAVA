@@ -137,8 +137,8 @@ public class FileTestService {
     }
     
     private String createBackupLogPathString(String id, String fileName) {
-        String filePathString = String.format("%s/logTest/%s/%s",
-                backupLogHandle,
+        String filePathString = String.format("%s/%s/%s",
+                backupDir,
                 id,
                 fileName);
         return filePathString;

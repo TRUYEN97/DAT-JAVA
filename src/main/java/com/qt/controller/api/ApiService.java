@@ -32,6 +32,9 @@ public class ApiService {
     public static final int ID_INVALID = -1;
     public static final int START = 1;
     public static final int WAIT = 0;
+    public static final int PASS = 1;
+    public static final int FAIL = 0;
+    public static final int DISCONNECT = -1;
     private static final String CAN_START = "canStart";
     private static final String ID = "id";
     private static volatile ApiService insatnce;
@@ -83,7 +86,7 @@ public class ApiService {
         }
     }
 
-    public UserModel checkUserId(String id) {
+    public UserModel checkUserId(String id, String carID) {
         try {
             if (id == null || id.isBlank() || "0".equals(id)) {
                 UserModel userModel = new UserModel();
@@ -100,7 +103,8 @@ public class ApiService {
                 ErrorLog.addError(this, "không tìm thấy: checkUserId url");
                 return null;
             }
-            Response response = restAPI.sendPost(url, JsonBodyAPI.builder().put(ID, id));
+            Response response = restAPI.sendPost(url, JsonBodyAPI.builder()
+                    .put(ID, id).put(CAR_ID, carID));
             if (!response.isSuccess()) {
                 return null;
             }
@@ -111,19 +115,20 @@ public class ApiService {
             return null;
         }
     }
+    protected static final String CAR_ID = "carId";
 
-    public boolean sendData(JSONObject jSONObject, File imgFile) {
+    public int sendData(JSONObject jSONObject, File imgFile) {
         try {
             if (checkPingToServer()) {
-                return false;
+                return DISCONNECT;
             }
             String url = this.properties.getProperty(ConstKey.SEND_DATA);
             if (url == null) {
                 ErrorLog.addError(this, "không tìm thấy: sendData url");
-                return false;
+                return FAIL;
             }
             if (jSONObject == null || jSONObject.isEmpty()) {
-                return false;
+                return FAIL;
             }
             jSONObject.put(ConstKey.VEHICLE_TIME, new TimeBase().getSimpleDateTime());
             FileInfo jsonF = new FileInfo(FileInfo.type.BYTE);
@@ -136,24 +141,24 @@ public class ApiService {
             imgF.setPartName("image");
             imgF.setName("image.png");
             Response response = restAPI.uploadFile(url, null, jsonF, imgF);
-            return response != null && response.isSuccess();
+            return response != null && response.isSuccess() ? PASS : FAIL;
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
-            return false;
+            return FAIL;
         }
     }
 
-    public boolean sendData(File jsonFile, File imgFile) {
+    public int sendData(File jsonFile, File imgFile) {
         try {
             if (jsonFile == null || !jsonFile.exists()) {
-                return false;
+                return FAIL;
             }
             return sendData(JSONObject.parseObject(Files.readString(jsonFile.toPath())), imgFile);
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
-            return false;
+            return FAIL;
         }
     }
 
@@ -193,8 +198,8 @@ public class ApiService {
                 ErrorLog.addError(this, response.getResponse());
                 return API_INVALID;
             }
-            JSONObject data = response.getData();
-            return data.getIntValue(CAN_START, -1);
+            Integer data = response.getData();
+            return data == null ? ID_INVALID : START;
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);

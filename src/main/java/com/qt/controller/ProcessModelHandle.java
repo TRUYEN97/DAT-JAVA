@@ -76,6 +76,9 @@ public final class ProcessModelHandle implements IgetTime {
         this.processModel.setModeName(userModel.getModeName());
         this.processModel.setDateOfBirth(userModel.getDateOfBirth());
         this.processModel.setPlaceOfOrigin(userModel.getPlaceOfOrigin());
+        this.processModel.setExamId(userModel.getExamId());
+        this.processModel.setExamStatus(userModel.getExamStatus());
+        this.processModel.setRank(userModel.getRank());
     }
 
     public void resetModel() {
@@ -91,14 +94,15 @@ public final class ProcessModelHandle implements IgetTime {
     }
 
     public void startTest() {
+        this.processModel.setContestsResult(ProcessModel.RUNNING);
         this.testing = true;
         this.startMs = System.currentTimeMillis();
         this.cysleTime = -1;
         this.processModel.setCycleTime(0);
         this.processModel.setStartTime(this.timeBase.getSimpleDateTime());
-        this.processModel.setEndTime("");
+        this.processModel.setEndTime(null);
         this.processModel.getContests().clear();
-        this.processModel.getErrorcodes().clear();
+        this.processModel.getErrorCodes().clear();
         this.processModel.setDistance(0);
         this.processModel.setScore(100);
         ///////////////////////////////////
