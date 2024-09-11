@@ -4,6 +4,7 @@
  */
 package com.qt.input.serial;
 
+import com.qt.common.ErrorLog;
 import com.qt.common.communication.Communicate.Impl.Comport.ComPort;
 import com.qt.common.communication.socket.Unicast.commons.Interface.IReceiver;
 
@@ -78,6 +79,7 @@ public class SerialHandler implements Runnable {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                ErrorLog.addError(this, e);
             }
         }
     }

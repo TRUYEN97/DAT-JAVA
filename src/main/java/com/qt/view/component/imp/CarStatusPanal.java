@@ -4,6 +4,7 @@
  */
 package com.qt.view.component.imp;
 
+import com.qt.input.serial.MCUSerialHandler;
 import com.qt.view.component.UpdateValuePanel;
 import java.awt.Color;
 
@@ -26,8 +27,14 @@ public class CarStatusPanal extends UpdateValuePanel {
         this.stPt.setBlink(true);
     }
 
+    private boolean st = false;
     @Override
     protected void updateValues() {
+//        boolean conn = MCUSerialHandler.getInstance().isConnect();
+//        if (conn != st) {
+//            st = conn;
+//            setBackground(st? new Color(140, 240, 140, 86) : new Color(240, 240, 240, 86));
+//        }
         this.stAt.setStatus(this.carModel.isAt());
         this.stNt.setStatus(this.carModel.isNt());
         this.stNp.setStatus(this.carModel.isNp());

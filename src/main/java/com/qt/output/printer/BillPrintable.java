@@ -6,7 +6,9 @@ package com.qt.output.printer;
 
 import com.qt.common.ErrorLog;
 import com.qt.controller.ErrorcodeHandle;
+import com.qt.model.modelTest.ErrorCode;
 import com.qt.model.modelTest.ErrorcodeWithContestNameModel;
+import com.qt.model.modelTest.contest.ContestDataModel;
 import com.qt.model.modelTest.process.ProcessModel;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -14,6 +16,7 @@ import java.awt.Graphics2D;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,11 +26,9 @@ import java.util.List;
 public class BillPrintable implements Printable {
 
     private final ProcessModel processData;
-    private final List<ErrorcodeWithContestNameModel> errorcodes;
 
     public BillPrintable(ProcessModel processData) {
         this.processData = processData;
-        this.errorcodes = ErrorcodeHandle.getInstance().getEwcnms();
     }
 
     @Override
@@ -35,7 +36,6 @@ public class BillPrintable implements Printable {
         if (this.processData == null || pageIndex > 0) {
             return NO_SUCH_PAGE;
         }
-//        ImageIcon icon = new ImageIcon(getClass().getResource("/bill_icon.png"));
         Graphics2D g2d = (Graphics2D) graphics;
         g2d.translate((int) pageFormat.getImageableX(), (int) pageFormat.getImageableY());
         try {
@@ -53,12 +53,15 @@ public class BillPrintable implements Printable {
             drawString(g2d, y += yShift, "HO TEN: %s", this.processData.getName());
             drawString(g2d, y += yShift, "NGAY THI: %s", this.processData.getStartTime());
             drawString(g2d, y += yShift, "SO DIEM: %s/100", this.processData.getScore());
-            drawString(g2d, y += yShift, "KET QUA: %s",
-                    this.processData.getContestsResult() == ProcessModel.PASS ? "DAT" : "KHONG DAT");
-            if (!this.errorcodes.isEmpty()) {
+            drawString(g2d, y += yShift, "KET QUA: %s", getContestResult());
+            List<ErrorcodeWithContestNameModel> errorcodes = getErrorCode();
+            if (!errorcodes.isEmpty()) {
                 drawString(g2d, y += headerRectHeight, "CAC LOI:");
                 for (ErrorcodeWithContestNameModel errorcode : errorcodes) {
-                    drawString(g2d, y += yShift, "%s, -%s", errorcode.getDescription(), errorcode.getScore());
+                    drawString(g2d, y += yShift, "%s, -%s, %s",
+                            errorcode.getDescription(),
+                            errorcode.getScore(),
+                            errorcode.getContestName());
                 }
             }
             drawString(g2d, y += headerRectHeight, "------------------------------");
@@ -69,6 +72,43 @@ public class BillPrintable implements Printable {
             ErrorLog.addError(this, e);
         }
         return PAGE_EXISTS;
+    }
+
+    private Object getContestResult() {
+        int rs = this.processData.getContestsResult();
+        switch (rs) {
+            case ProcessModel.PASS -> {
+                return "DAT";
+            }
+            case ProcessModel.FAIL -> {
+                return "KHONG DAT";
+            }
+            case ProcessModel.RUNNING -> {
+                return "DANG THI";
+            }
+        }
+        return rs;
+    }
+
+    protected List<ErrorcodeWithContestNameModel> getErrorCode() {
+        //        ImageIcon icon = new ImageIcon(getClass().getResource("/bill_icon.png"));
+        List<ErrorcodeWithContestNameModel> errorcodes = new ArrayList<>();
+        if (!this.processData.getErrorCodes().isEmpty()) {
+            for (ErrorCode errorCode : this.processData.getErrorCodes()) {
+                errorcodes.add(new ErrorcodeWithContestNameModel(errorCode, ""));
+            }
+        }
+        if (!this.processData.getContests().isEmpty()) {
+            for (ContestDataModel contest : this.processData.getContests()) {
+                if (contest == null || contest.getErrorcodes().isEmpty()) {
+                    continue;
+                }
+                for (ErrorCode errorCode : contest.getErrorcodes()) {
+                    errorcodes.add(new ErrorcodeWithContestNameModel(errorCode, contest.getContestName()));
+                }
+            }
+        }
+        return errorcodes;
     }
 
     private void drawString(Graphics2D g2d, int y, String format, Object... params) {

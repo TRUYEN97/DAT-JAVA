@@ -21,4 +21,6 @@ public class MCU_CONFIG_MODEL {
     private int distance_udtime;
     private int rpm_udtime;
     private int senddt_udtime;
+    private int nt_time;
+    private int np_time;
 }

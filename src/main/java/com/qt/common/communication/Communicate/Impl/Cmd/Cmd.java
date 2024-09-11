@@ -51,14 +51,14 @@ public class Cmd extends AbsCommunicate implements ISender, IReadStream {
 
     @Override
     public boolean insertCommand(String command, Object... params) {
-        destroy();
-        String newCommand = params.length == 0 ? command : String.format(command, params);
-        if (isWindowsOs) {
-            this.builder.command("cmd.exe", "/c", newCommand);
-        } else {
-            this.builder.command(newCommand);
-        }
         try {
+            destroy();
+            String newCommand = params.length == 0 ? command : String.format(command, params);
+            if (isWindowsOs) {
+                this.builder.command("cmd.exe", "/c", newCommand);
+            } else {
+                this.builder.command("sh", "-c", newCommand);
+            }
             this.process = builder.start();
             this.input.setReader(process.getInputStream());
             this.out = new PrintStream(process.getOutputStream());
@@ -105,8 +105,10 @@ public class Cmd extends AbsCommunicate implements ISender, IReadStream {
             command = String.format(PING_LINUX, addr);
         }
         for (int i = 0; i < cycle; i++) {
+            System.out.println(command);
             if (sendCommand(command)) {
                 String response = readAll().trim();
+                System.out.println(response);
                 if (response.contains("TTL=") || response.contains("ttl=")) {
                     return true;
                 }

@@ -27,19 +27,22 @@ public class MCUSerialHandler {
 
     private MCUSerialHandler() {
         this.model = new CarModel();
-        this.serialHandler = new SerialHandler("com7", 115200); //ttyS0
+        this.serialHandler = new SerialHandler("ttyS0", 115200); //ttyS0
         this.serialHandler.setFirstConnectAction(() -> {
             while (!sendReset() || !sendConfig(MCU_CONFIG_MODEL.builder().
-                    encoder(1000).
+                    encoder(100).
                     rpm_udtime(500).
                     senddt_udtime(100).
                     distance_udtime(500).
+                    nt_time(1000).
+                    np_time(1000).
                     build())) {
                 Util.delay(500);
             }
         });
         this.serialHandler.setReceiver((serial, data) -> {
             try {
+                System.out.println(data);
                 JSONObject json = JSONObject.parseObject(data);
                 this.model.setAt(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.AT, false));
                 this.model.setCm(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.CM, false));

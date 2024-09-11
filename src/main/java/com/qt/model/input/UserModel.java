@@ -19,7 +19,7 @@ public class UserModel {
     private String name = "";
     private String examStatus = "";
     private String mobile = "";
-    private String examId = "";
+    private String examId = "0";
     private String modeName = "";
     private String rank = "";
     private String dateOfBirth = "";
