@@ -16,6 +16,8 @@ import com.qt.common.timer.TimeBase;
 import com.qt.controller.modeController.ModeManagement;
 import com.qt.model.input.UserModel;
 import com.qt.output.SoundPlayer;
+import com.qt.view.component.ShowMessagePanel;
+import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -45,6 +47,7 @@ public class ApiService {
     private ApiService() {
         this.properties = new Properties();
         this.restAPI = new RestAPI();
+        this.restAPI.setTextComponent(ShowMessagePanel.getInstance());
         this.soundPlayer = SoundPlayer.getInstance();
         try {
             this.properties.load(getClass().getResourceAsStream("/config.properties"));
@@ -223,5 +226,9 @@ public class ApiService {
             ErrorLog.addError(this, e);
             return null;
         }
+    }
+
+    public void setRootFrame(Component component) {
+        this.restAPI.setComponent(component);
     }
 }

@@ -16,6 +16,7 @@ import com.qt.output.SoundPlayer;
 import com.qt.pretreatment.KeyEventManagement;
 import com.qt.pretreatment.KeyEventsPackage;
 import com.qt.view.AbsKeylistenerFrame;
+import com.qt.view.element.ButtonDesign;
 import com.qt.view.interfaces.MouseClicked;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -71,6 +72,20 @@ public class ChangeIdFrame extends AbsKeylistenerFrame {
         this.processModel = ProcessModelHandle.getInstance().getProcessModel();
         this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName(), true);
         this.apiService = ApiService.getInstance();
+        this.addButton(bt0);
+        this.addButton(bt1);
+        this.addButton(bt2);
+        this.addButton(bt3);
+        this.addButton(bt4);
+        this.addButton(bt5);
+        this.addButton(bt6);
+        this.addButton(bt7);
+        this.addButton(bt8);
+        this.addButton(bt9);
+        this.addButton(bt0);
+        this.addButton(ConstKey.KEY_BOARD.BACKSPACE, btBackspace);
+        this.addButton(btCancel);
+        this.addButton(ConstKey.KEY_BOARD.OK, btOk);
         this.mouseClick = (bt) -> {
             if (bt != null) {
                 String val = bt.getValue();
@@ -88,20 +103,9 @@ public class ChangeIdFrame extends AbsKeylistenerFrame {
     }
 
     private void initMouseClickEvent() {
-        this.bt0.setMouseClicked(mouseClick);
-        this.bt1.setMouseClicked(mouseClick);
-        this.bt2.setMouseClicked(mouseClick);
-        this.bt3.setMouseClicked(mouseClick);
-        this.bt4.setMouseClicked(mouseClick);
-        this.bt5.setMouseClicked(mouseClick);
-        this.bt6.setMouseClicked(mouseClick);
-        this.bt7.setMouseClicked(mouseClick);
-        this.bt8.setMouseClicked(mouseClick);
-        this.bt9.setMouseClicked(mouseClick);
-        this.bt0.setMouseClicked(mouseClick);
-        this.btOk.setMouseClicked(mouseClick);
-        this.btBackspace.setMouseClicked(mouseClick);
-        this.btCancel.setMouseClicked(mouseClick);
+        for (ButtonDesign buttonDesign : eventsPackage.getEventButtonBlink().getButtonDesigns().values()) {
+            buttonDesign.setMouseClicked(mouseClick);
+        }
     }
 
     private void initKeyPackage() {
@@ -163,15 +167,21 @@ public class ChangeIdFrame extends AbsKeylistenerFrame {
         dispose();
         if (this.model.getName().equals(SBD)) {
             UserModel userModel = this.apiService.checkUserId(modelVal, this.processModel.getCarId());
-            if (userModel != null) {
-                ProcessModelHandle.getInstance().setUserModel(userModel);
+            String id;
+            if (userModel != null && (id = userModel.getId()) != null) {
                 String modeName = userModel.getModeName();
+                String rank = userModel.getRank();
                 ModeManagement modeManagement = Core.getInstance().getModeManagement();
-                if (modeName != null && !modeName.isBlank()) {
-                    modeManagement.updateMode(modeName);
+                if (id.equals("0")) {
+                    ProcessModelHandle.getInstance().setUserModel(userModel);
+                    this.soundPlayer.practice();
+                } else if (modeName != null && rank != null
+                        && modeManagement.updateMode(modeName, rank)) {
+                    ProcessModelHandle.getInstance().setUserModel(userModel);
+                    this.soundPlayer.welcomeId(this.processModel.getId());
+                } else {
+                    this.soundPlayer.modeInvalid();
                 }
-                userModel.setModeName(modeManagement.getCurrentMode().getName());
-                this.soundPlayer.welcomeId(this.processModel.getId());
             } else {
                 this.soundPlayer.userIdInvalid();
             }
@@ -341,4 +351,12 @@ public class ChangeIdFrame extends AbsKeylistenerFrame {
     private javax.swing.JPanel keybroadPanel;
     private com.qt.view.element.StatusPanel stValue;
     // End of variables declaration//GEN-END:variables
+
+    private void addButton(ButtonDesign bt) {
+        this.eventsPackage.getEventButtonBlink().putButtonBlinkEvent(bt.getValue(), bt);
+    }
+
+    private void addButton(String key, ButtonDesign bt) {
+        this.eventsPackage.getEventButtonBlink().putButtonBlinkEvent(key, bt);
+    }
 }

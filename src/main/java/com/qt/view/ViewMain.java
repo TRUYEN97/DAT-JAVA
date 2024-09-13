@@ -4,6 +4,7 @@
  */
 package com.qt.view;
 
+import com.qt.view.component.ShowMessagePanel;
 import java.awt.Color;
 import javax.swing.JPanel;
 
@@ -13,12 +14,14 @@ import javax.swing.JPanel;
  */
 public class ViewMain extends AbsKeylistenerFrame {
 
+    private static volatile ViewMain instance;
+
     /**
-     * 
+     *
      * Creates new form ViewMain
      */
     public ViewMain() {
-         /* Set the Nimbus look and feel */
+        /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -43,14 +46,30 @@ public class ViewMain extends AbsKeylistenerFrame {
 
         /* Create and display the form */
         initComponents();
-        setBackground(new Color(0,0,0,0));
-        this.pnHome.setBackground(new Color(0,0,0,0));
+        setBackground(new Color(0, 0, 0, 0));
+        this.pnHome.setBackground(new Color(0, 0, 0, 0));
+        this.messagePanel.add(ShowMessagePanel.getInstance());
     }
-    
-    public void setView(JPanel view){
-        if (view == null) {
+
+    public static ViewMain getInstance() {
+        ViewMain ins = instance;
+        if (ins == null) {
+            synchronized (ViewMain.class) {
+                ins = instance;
+                if (ins == null) {
+                    ins = instance = new ViewMain();
+                }
+            }
+        }
+        return ins;
+    }
+    private JPanel oldView;
+    public void setView(JPanel view) {
+        if (view == null || oldView != null && oldView.equals(view)) {
             return;
         }
+        oldView = view;
+        this.pnHome.removeAll();
         this.pnHome.add(view);
     }
 
@@ -64,6 +83,7 @@ public class ViewMain extends AbsKeylistenerFrame {
     private void initComponents() {
 
         pnHome = new javax.swing.JPanel();
+        messagePanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
@@ -73,15 +93,21 @@ public class ViewMain extends AbsKeylistenerFrame {
         pnHome.setBackground(new java.awt.Color(204, 204, 255));
         pnHome.setLayout(new javax.swing.BoxLayout(pnHome, javax.swing.BoxLayout.LINE_AXIS));
 
+        messagePanel.setLayout(new javax.swing.BoxLayout(messagePanel, javax.swing.BoxLayout.LINE_AXIS));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnHome, javax.swing.GroupLayout.DEFAULT_SIZE, 1024, Short.MAX_VALUE)
+            .addComponent(messagePanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(pnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 549, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(messagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -95,6 +121,7 @@ public class ViewMain extends AbsKeylistenerFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel messagePanel;
     private javax.swing.JPanel pnHome;
     // End of variables declaration//GEN-END:variables
 

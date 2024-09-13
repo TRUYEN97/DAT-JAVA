@@ -22,7 +22,8 @@ public final class ConstKey {
 
     public static final class MODE_NAME {
 
-        public static final String B2_DUONG_TRUONG = "DT-B2";
+        public static final String DUONG_TRUONG = "DT";
+        public static final String SA_HINH = "SH";
         public static final String B2_SA_HINH = "SH-B2";
     }
 
@@ -61,6 +62,10 @@ public final class ConstKey {
 
     public static final class KEY_BOARD {
 
+        public static final String DOWN = "Down";
+        public static final String LEFT = "Left";
+        public static final String RIGHT = "Right";
+        public static final String UP = "Up";
         public static final String SHOW_ERROR = "Down";
         public static final String IN = "Insert";
         public static final String SBD = "*";

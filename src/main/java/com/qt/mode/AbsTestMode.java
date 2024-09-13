@@ -27,6 +27,7 @@ import com.qt.pretreatment.KeyEventsPackage;
 import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import javax.swing.JPanel;
@@ -44,6 +45,8 @@ public abstract class AbsTestMode<V extends JPanel> {
 
     protected final V view;
     protected final String name;
+    protected final String fullName;
+    protected final List<String> ranks;
     protected final int scoreSpec;
     protected final CarModel carModel;
     protected final ProcessModel processModel;
@@ -60,13 +63,15 @@ public abstract class AbsTestMode<V extends JPanel> {
     private ModeHandle modeHandle;
     private boolean cancel;
 
-    protected AbsTestMode(V view, String name) {
-        this(view, name, 80);
+    protected AbsTestMode(V view, String name, List<String> ranks) {
+        this(view, name, 80, ranks);
     }
 
-    protected AbsTestMode(V view, String name, int scoreSpec) {
+    protected AbsTestMode(V view, String name, int scoreSpec, List<String> ranks) {
         this.view = view;
         this.name = name;
+        this.fullName = creareFullName(ranks);
+        this.ranks = ranks;
         this.cancel = false;
         this.scoreSpec = scoreSpec;
         this.carModel = MCUSerialHandler.getInstance().getModel();
@@ -81,7 +86,17 @@ public abstract class AbsTestMode<V extends JPanel> {
         this.apiService = ApiService.getInstance();
         this.conditionHandle = new CheckConditionHandle();
         this.pingAPI = new PingAPI();
-        initErrorcode();
+    }
+    
+
+    private String creareFullName(List<String> ranks) {
+        StringBuilder builder = new StringBuilder(name);
+        builder.append(" (");
+        for (String rank : ranks) {
+            builder.append(" ").append(rank);
+        }
+        builder.append(" )");
+        return builder.toString();
     }
 
     protected abstract boolean loopCheckCanTest();
@@ -185,11 +200,11 @@ public abstract class AbsTestMode<V extends JPanel> {
             }
             if (rs == ApiService.DISCONNECT) {
                 String id = processModel.getId();
-                this.soundPlayer.sendResultFailed();
+                this.soundPlayer.sendlostConnect();
                 this.fileTestService.saveBackupLog(id, processlHandle.toProcessModelJson().toString(),
                         CameraRunner.getInstance().getImage());
             } else if (rs == ApiService.FAIL) {
-                //
+                this.soundPlayer.sendResultFailed();
             }
             endTest();
             this.processModel.setId("");
@@ -200,29 +215,7 @@ public abstract class AbsTestMode<V extends JPanel> {
             ErrorLog.addError(this, e);
         }
     }
-
-    private void initErrorcode() {
-
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.SO3, new ErrorCode("SO3", 2, "TAY SO KO PHU HOP"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TIME_OUT, new ErrorCode("timeout", 5, "QUA THOI GIAN"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.AT, new ErrorCode("AT", 5, "DAY AN TOAN"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.NTP, new ErrorCode("NTP", 5, "KHONG XI NHAN"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.PT, new ErrorCode("PT", 5, "PHANH TAY"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TS, new ErrorCode("TS", 5, "KO TANG DUOC SO"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.GS, new ErrorCode("GS", 5, "KO GIAM DUOC SO"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TT, new ErrorCode("TT", 5, "KO TANG TOC DO"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.GT, new ErrorCode("GT", 5, "KO GIAM TOC DO"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.S20, new ErrorCode("S20", 5, "QUA 20 GIAY"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.RG, new ErrorCode("RG", 5, "RUNG GIAT"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.CM, new ErrorCode("CM", 5, "CHET MAY"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.RPM, new ErrorCode("RPM", 5, "QUA VONG TUA"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.QT, new ErrorCode("QT", 10, "QUY TAC GIAO THONG"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.S30, new ErrorCode("S30", 25, "QUA 30 GIAY"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.HL, new ErrorCode("HL", 25, "HIEU LENH"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TN, new ErrorCode("TN", 25, "GAY TAI NAN"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.CL, new ErrorCode("CL", 25, "CHOANG LAI"));
-    }
-
+   
     private KeyEventsPackage initPrepareKeyEventPackage() {
         Map<String, IKeyEvent> events = new HashMap<>();
         KeyEventsPackage epg = new KeyEventsPackage(name + "Prepare");
@@ -268,6 +261,20 @@ public abstract class AbsTestMode<V extends JPanel> {
             return false;
         }
         return loopCheckCanTest();
+    }
+
+    public boolean isMode(String modeName, String rank) {
+        if (modeName == null || rank == null) {
+            return false;
+        }
+        if (this.name.equalsIgnoreCase(modeName)) {
+            for (String rk : ranks) {
+                if (rk != null && rk.equalsIgnoreCase(rank)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

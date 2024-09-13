@@ -15,7 +15,7 @@ import lombok.Setter;
 @Setter
 public class UserModel {
     
-    private String id = "0";
+    private String id = "";
     private String name = "";
     private String examStatus = "";
     private String mobile = "";

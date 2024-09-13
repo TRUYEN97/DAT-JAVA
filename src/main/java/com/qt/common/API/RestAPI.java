@@ -8,6 +8,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.mylogger.MyLogger;
+import com.qt.view.component.ShowMessagePanel;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.io.File;
@@ -16,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
-import javax.swing.text.JTextComponent;
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
 import org.apache.http.NameValuePair;
@@ -45,7 +45,7 @@ public class RestAPI {
     public static final String AUTHORIZATION_KEY = "authorization";
     private JwtUtil jwtUtil;
     private Component component;
-    private JTextComponent textComponent;
+    private ShowMessagePanel showMessagePanel;
     private final MyLogger logger;
     private final Properties properties;
 
@@ -64,13 +64,9 @@ public class RestAPI {
         this.logger.setDailyLog(true);
         this.logger.setSaveMemory(true);
     }
-
-    public JTextComponent getTextComponent() {
-        return textComponent;
-    }
-
-    public void setTextComponent(JTextComponent textComponent) {
-        this.textComponent = textComponent;
+    
+    public void setTextComponent(ShowMessagePanel messagePanel) {
+        this.showMessagePanel = messagePanel;
     }
 
     public RestAPI(Component component) {
@@ -260,22 +256,21 @@ public class RestAPI {
                                         .put(Response.STATUS, true)
                                         .put(Response.MESSAGE, "")
                                         .put(Response.DATA, attachment.toJSONString())
-                                        .toString());
-                        response.setTextComponent(textComponent);
+                                        .toString(), showMessagePanel);
                         return response;
                     }
                     Response response1 = new Response(200, JsonBodyAPI.builder()
                             .put(Response.STATUS, false)
-                            .put(Response.MESSAGE, "Cancel").toJSONString());
-                    response1.setTextComponent(textComponent);
+                            .put(Response.MESSAGE, "Cancel").toJSONString(),
+                            showMessagePanel);
                     return response1;
                 }
             }
         } catch (Exception e) {
             response = new Response(-1, JsonBodyAPI.builder()
                     .put(Response.STATUS, false)
-                    .put(Response.MESSAGE, e.getLocalizedMessage()).toJSONString());
-            response.setTextComponent(textComponent);
+                    .put(Response.MESSAGE, e.getLocalizedMessage()).toJSONString(),
+                    showMessagePanel);
             return response;
         } finally {
             if (component != null) {
@@ -305,15 +300,14 @@ public class RestAPI {
             try (CloseableHttpResponse httpR = httpClient.execute(request)) {
                 String body = EntityUtils.toString(httpR.getEntity());
                 int statusCode = httpR.getStatusLine().getStatusCode();
-                response = new Response(statusCode, body);
-                response.setTextComponent(textComponent);
+                response = new Response(statusCode, body, showMessagePanel);
                 return response;
             }
         } catch (Exception e) {
             response = new Response(-1, JsonBodyAPI.builder()
                     .put(Response.STATUS, false)
-                    .put(Response.MESSAGE, e.getLocalizedMessage()).toJSONString());
-            response.setTextComponent(textComponent);
+                    .put(Response.MESSAGE, e.getLocalizedMessage()).toJSONString(),
+                    showMessagePanel);
             return response;
         } finally {
             if (component != null) {

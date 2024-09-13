@@ -18,24 +18,25 @@ import com.qt.mode.AbsTestMode;
 import com.qt.pretreatment.IKeyEvent;
 import com.qt.view.DuongTruongView;
 import com.qt.view.frame.ShowErrorcode;
+import java.util.List;
 import java.util.Map;
 
 /**
  *
  * @author Admin
  */
-public class B2_DT extends AbsTestMode<DuongTruongView> {
+public class DT_B2_C_MODE extends AbsTestMode<DuongTruongView> {
 
     private final ShowErrorcode showErrorcode;
     private boolean runnable;
     private String oldId;
 
-    public B2_DT() {
-        this(ConstKey.MODE_NAME.B2_DUONG_TRUONG);
+    public DT_B2_C_MODE() {
+        this(ConstKey.MODE_NAME.DUONG_TRUONG, List.of("B2", "C"));
     }
 
-    public B2_DT(String name) {
-        super(new DuongTruongView(), name);
+    public DT_B2_C_MODE(String name, List<String> ranks) {
+        super(new DuongTruongView(), name, ranks);
         this.showErrorcode = new ShowErrorcode();
         this.conditionHandle.addConditon(new CheckSo3());
         this.runnable = false;

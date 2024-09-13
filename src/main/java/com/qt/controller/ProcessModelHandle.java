@@ -17,7 +17,7 @@ import com.qt.model.input.CarModel;
 import com.qt.model.input.UserModel;
 import com.qt.model.modelTest.contest.ContestDataModel;
 import com.qt.model.modelTest.process.ProcessModel;
-import com.qt.model.modelTest.process.TestDataModelView;
+import com.qt.model.modelTest.process.TestDataViewModel;
 import java.util.List;
 
 /**
@@ -28,7 +28,7 @@ public final class ProcessModelHandle implements IgetTime {
 
     private static volatile ProcessModelHandle instance;
     private final ProcessModel processModel;
-    private final TestDataModelView testDataModel;
+    private final TestDataViewModel testDataModel;
     private final TimeBase timeBase;
     private final CarModel carModel;
     private final FileTestService logTestService;
@@ -40,7 +40,7 @@ public final class ProcessModelHandle implements IgetTime {
     private ProcessModelHandle() {
         this.processModel = new ProcessModel();
         this.timeBase = new TimeBase();
-        this.testDataModel = new TestDataModelView(this, processModel);
+        this.testDataModel = new TestDataViewModel(this, processModel);
         this.carModel = MCUSerialHandler.getInstance().getModel();
         this.logTestService = FileTestService.getInstance();
         this.logTestService.setProcessModel(processModel);
@@ -108,7 +108,7 @@ public final class ProcessModelHandle implements IgetTime {
         ///////////////////////////////////
     }
 
-    public TestDataModelView getTestDataModel() {
+    public TestDataViewModel getTestDataModel() {
         return testDataModel;
     }
 
@@ -189,6 +189,7 @@ public final class ProcessModelHandle implements IgetTime {
             return;
         }
         this.processModel.setModeName(testMode.getName());
+        this.testDataModel.setModeFullName(testMode.getFullName());
     }
 
     public boolean isPass() {

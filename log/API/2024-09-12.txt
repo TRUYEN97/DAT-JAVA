@@ -1,0 +1,10 @@
+2024-09-12 08:02:46.009:   [POST] http://14.170.154.76:84/sathach/api/road/v1/checkcontestant: {"id":"2","carId":"0"}
+2024-09-12 08:03:07.536:   [RESPONSE] -1 - {"status":false,"message":"Connect to 14.170.154.76:84 [/14.170.154.76] failed: Connection timed out: connect"}
+2024-09-12 09:00:52.591:   [POST] http://14.170.154.76:84/sathach/api/road/v1/checkcontestant: {"id":"2","carId":"0"}
+2024-09-12 09:01:13.988:   [RESPONSE] -1 - {"status":false,"message":"Connect to 14.170.154.76:84 [/14.170.154.76] failed: Connection timed out: connect"}
+2024-09-12 09:04:30.044:   [POST] http://14.170.154.76:84/sathach/api/road/v1/checkcar/: {"id":"2"}
+2024-09-12 09:04:51.438:   [RESPONSE] -1 - {"status":false,"message":"Connect to 14.170.154.76:84 [/14.170.154.76] failed: Connection timed out: connect"}
+2024-09-12 09:50:38.632:   [POST] http://14.170.154.76:84/sathach/api/road/v1/checkcar/: {"id":"2"}
+2024-09-12 09:51:00.034:   [RESPONSE] -1 - {"status":false,"message":"Connect to 14.170.154.76:84 [/14.170.154.76] failed: Connection timed out: connect"}
+2024-09-12 09:51:13.415:   [POST] http://14.170.154.76:84/sathach/api/road/v1/checkcontestant: {"id":"2","carId":"0"}
+2024-09-12 09:51:34.459:   [RESPONSE] -1 - {"status":false,"message":"Connect to 14.170.154.76:84 [/14.170.154.76] failed: Connection timed out: connect"}

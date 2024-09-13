@@ -5,6 +5,7 @@
 package com.qt.view.component.imp;
 
 import com.qt.common.ConstKey;
+import com.qt.pretreatment.KeyEventManagement;
 import com.qt.view.component.UpdateValuePanel;
 import java.awt.Color;
 
@@ -14,6 +15,8 @@ import java.awt.Color;
  */
 public class DuongTruongContestPanel extends UpdateValuePanel {
 
+    private KeyEventManagement eventManagement;
+
     /**
      * Creates new form DuongTruongContestPanel
      */
@@ -21,7 +24,16 @@ public class DuongTruongContestPanel extends UpdateValuePanel {
         initComponents();
         setOpaque(false);
         setBackground(new Color(255, 255, 255, 70));
-        
+        eventManagement = KeyEventManagement.getInstance();
+        eventManagement.getEventButtonBlink().putButtonBlinkEvent(ConstKey.KEY_BOARD.ERROR.CL, btCl);
+        eventManagement.getEventButtonBlink().putButtonBlinkEvent(ConstKey.KEY_BOARD.ERROR.HL, btHl);
+        eventManagement.getEventButtonBlink().putButtonBlinkEvent(ConstKey.KEY_BOARD.ERROR.QT, btQt);
+        eventManagement.getEventButtonBlink().putButtonBlinkEvent(ConstKey.KEY_BOARD.ERROR.RG, btRg);
+        eventManagement.getEventButtonBlink().putButtonBlinkEvent(ConstKey.KEY_BOARD.ERROR.TN, btTn);
+        eventManagement.getEventButtonBlink().putButtonBlinkEvent(ConstKey.KEY_BOARD.CONTEST.KT, btKt);
+        eventManagement.getEventButtonBlink().putButtonBlinkEvent(ConstKey.KEY_BOARD.CONTEST.GS, btGs);
+        eventManagement.getEventButtonBlink().putButtonBlinkEvent(ConstKey.KEY_BOARD.CONTEST.TS, btTs);
+        eventManagement.getEventButtonBlink().putButtonBlinkEvent(ConstKey.KEY_BOARD.CONTEST.XP, btXp);
         this.btCl.setMouseClicked((design) -> {
             this.carModel.setRemoteValue(ConstKey.ERR.CL);
         });
@@ -114,9 +126,10 @@ public class DuongTruongContestPanel extends UpdateValuePanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(pnBaiThi, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnBaiThi, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnTruDiem, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(pnTruDiem, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

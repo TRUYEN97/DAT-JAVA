@@ -4,6 +4,7 @@
  */
 package com.qt.pretreatment;
 
+import com.qt.view.element.ButtonDesign;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,20 +18,26 @@ public class KeyEventsPackage {
 
     private final List<IKeyEvent> anyKeyEvents;
     private final Map<String, IKeyEvent> keyEvents;
+    private final KeyEventButtonBlink eventButtonBlink;
     private boolean justMe;
     private final String name;
 
     public KeyEventsPackage(String name) {
         this(name, false);
     }
-
+    
     public KeyEventsPackage(String name, boolean justMe) {
         this.keyEvents = new HashMap<>();
         this.anyKeyEvents = new ArrayList<>();
         this.justMe = justMe;
         this.name = name;
+        this.eventButtonBlink = new KeyEventButtonBlink();
     }
 
+    public KeyEventButtonBlink getEventButtonBlink() {
+        return eventButtonBlink;
+    }
+    
     public void addAnyKeyEvent(IKeyEvent event) {
         if (event == null) {
             return;
@@ -65,6 +72,7 @@ public class KeyEventsPackage {
     }
 
     public void attack(String key) {
+        this.eventButtonBlink.attack(key);
         IKeyEvent event = keyEvents.get(key);
         if (event != null) {
             event.action(key);

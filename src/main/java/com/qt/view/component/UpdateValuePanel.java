@@ -7,7 +7,7 @@ package com.qt.view.component;
 import com.qt.controller.ProcessModelHandle;
 import com.qt.input.serial.MCUSerialHandler;
 import com.qt.model.input.CarModel;
-import com.qt.model.modelTest.process.TestDataModelView;
+import com.qt.model.modelTest.process.TestDataViewModel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -19,7 +19,7 @@ public class UpdateValuePanel extends JPanel {
 
     protected final Timer timer;
     protected final CarModel carModel;
-    protected final TestDataModelView testDataModel;
+    protected final TestDataViewModel testDataModel;
 
     public UpdateValuePanel() {
         this(500);
@@ -38,7 +38,7 @@ public class UpdateValuePanel extends JPanel {
         
     }
 
-    public TestDataModelView getTestDataModel() {
+    public TestDataViewModel getTestDataModel() {
         return testDataModel;
     }
 }

@@ -5,17 +5,16 @@
 package com.qt.controller.modeController;
 
 import com.qt.common.ConstKey;
-import com.qt.common.Util;
 import com.qt.mode.AbsTestMode;
 import com.qt.output.printer.Printer;
 import com.qt.output.SoundPlayer;
-import com.qt.pretreatment.IKeyEvent;
 import com.qt.pretreatment.KeyEventsPackage;
 import com.qt.pretreatment.KeyEventManagement;
 import com.qt.view.frame.ChangeIdFrame;
 import com.qt.view.ViewMain;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.Timer;
 
 /**
  *
@@ -26,23 +25,20 @@ public class ModeManagement {
     public static String DEFAULT_MODE;
     private final ViewMain viewMain;
     private final KeyEventManagement eventManagement;
-    private final Map<String, AbsTestMode> modes;
-    private final IKeyEvent updateModeEvent;
+    private final List<AbsTestMode> modes;
     private final ModeHandle modeHandle;
     private final KeyEventsPackage eventsPackage;
     private final ChangeIdFrame changeIdFrame;
     private final Printer printer;
+    private Timer timer;
 
     public ModeManagement(ViewMain viewMain) {
         this.viewMain = viewMain;
-        this.modes = new HashMap<>();
+        this.modes = new ArrayList<>();
         this.eventManagement = KeyEventManagement.getInstance();
         this.modeHandle = new ModeHandle();
         this.changeIdFrame = new ChangeIdFrame();
         this.printer = new Printer();
-        this.updateModeEvent = (String key) -> {
-            this.updateMode(key);
-        };
         this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName());
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.SO_XE, (key) -> {
             this.changeIdFrame.display(ChangeIdFrame.SX);
@@ -53,11 +49,29 @@ public class ModeManagement {
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.IN, (key) -> {
             this.printer.printTestResult();
         });
+        this.timer = new Timer(20000, (e) -> {
+            moveChangeCarIdEvent();
+        });
+        this.eventManagement.start();
     }
-    public void updateMode(String key) {
-        if (this.modes.containsKey(key)) {
-            this.updateMode(this.modes.get(key));
+
+    public List<AbsTestMode> getModes() {
+        return modes;
+    }
+
+    private void moveChangeCarIdEvent() {
+        this.eventsPackage.remove(ConstKey.KEY_BOARD.SO_XE);
+        this.timer.stop();
+        this.timer = null;
+    }
+
+    public boolean updateMode(String modeName, String rank) {
+        for (AbsTestMode mode : modes) {
+            if (mode != null && mode.isMode(modeName, rank)) {
+                return updateMode(mode);
+            }
         }
+        return false;
     }
 
     public boolean updateMode(AbsTestMode testMode) {
@@ -74,29 +88,25 @@ public class ModeManagement {
         }
         return false;
     }
-    
-    public AbsTestMode getCurrentMode(){
+
+    public AbsTestMode getCurrentMode() {
         return this.modeHandle.getTestMode();
     }
 
-    public void putMode(String key, AbsTestMode absTestMode) {
+    public void addMode(AbsTestMode absTestMode) {
         if (absTestMode == null) {
             return;
         }
         if (this.modes.isEmpty() && !this.modeHandle.isStarted()) {
-            this.updateMode(absTestMode);
             DEFAULT_MODE = absTestMode.getName();
         }
-        this.modes.put(key, absTestMode);
-        this.eventsPackage.putEvent(key, updateModeEvent);
+        this.modes.add(absTestMode);
     }
 
     public void start() {
-        this.eventManagement.start();
         SoundPlayer.getInstance().sayWelcome();
         this.eventManagement.addKeyEventBackAge(eventsPackage);
-        Util.delay(20000);
-        this.eventsPackage.remove(ConstKey.KEY_BOARD.SO_XE);
+        this.timer.start();
     }
 
 }

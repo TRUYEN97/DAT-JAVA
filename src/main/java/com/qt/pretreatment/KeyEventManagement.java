@@ -8,8 +8,11 @@ import com.qt.common.ErrorLog;
 import com.qt.common.Util;
 import com.qt.input.serial.MCUSerialHandler;
 import com.qt.interfaces.IStarter;
+import com.qt.view.element.ButtonDesign;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,6 +28,7 @@ public class KeyEventManagement implements IStarter {
     private final Queue<String> keys;
     private final List<KeyEventsPackage> keyEvensPackages;
     private final ExecutorService thread;
+    private final KeyEventButtonBlink eventButtonBlink;
     private boolean running = false;
     private boolean stop = false;
     private Future future;
@@ -33,6 +37,11 @@ public class KeyEventManagement implements IStarter {
         this.keys = MCUSerialHandler.getInstance().getModel().getRemoteValues();
         this.keyEvensPackages = new ArrayList<>();
         this.thread = Executors.newSingleThreadExecutor();
+        this.eventButtonBlink = new KeyEventButtonBlink();
+    }
+
+    public KeyEventButtonBlink getEventButtonBlink() {
+        return eventButtonBlink;
     }
 
     public static KeyEventManagement getInstance() {
@@ -61,12 +70,13 @@ public class KeyEventManagement implements IStarter {
             KeyEventsPackage evensPackage;
             while (!stop) {
                 try {
-                    Util.delay(100);
                     if (keys.isEmpty()) {
+                        Util.delay(100);
                         continue;
                     }
                     key = keys.poll();
                     System.out.println(key);
+                    this.eventButtonBlink.attack(key);
                     for (int i = this.keyEvensPackages.size() - 1; i >= 0; i--) {
                         evensPackage = this.keyEvensPackages.get(i);
                         if (evensPackage == null) {

@@ -106,19 +106,14 @@ public class ButtonDesign extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    public void buttonOn() {
+    public void buttonClick() {
         if (mouseClicked != null) {
             mouseClicked.click(this);
         }
-        if (!status) {
-            status = true;
-            repaint();
-        }
-        Util.delay(50);
-        buttonOff();
+        blink();
     }
 
-    
+
     private void lbValueMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbValueMousePressed
         if (evt.getButton() != MouseEvent.BUTTON1) {
             return;
@@ -192,5 +187,22 @@ public class ButtonDesign extends javax.swing.JPanel {
 
     public String getValue() {
         return this.lbValue.getText();
+    }
+
+    public void hightLight() {
+        if (!status) {
+            status = true;
+            repaint();
+        }
+    }
+
+    public void removeHightLight() {
+        buttonOff();
+    }
+
+    public void blink() {
+        hightLight();
+        Util.delay(86);
+        buttonOff();
     }
 }

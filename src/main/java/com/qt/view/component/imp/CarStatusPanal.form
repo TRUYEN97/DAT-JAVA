@@ -41,30 +41,31 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="stNt" pref="82" max="32767" attributes="0"/>
-                  <Component id="stNp" pref="82" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="stNt" pref="76" max="32767" attributes="0"/>
+                  <Component id="stNp" pref="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="stPt" alignment="0" max="32767" attributes="0"/>
-                  <Component id="stAt" alignment="0" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="stAt" max="32767" attributes="0"/>
+                  <Component id="stPt" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="stCm" alignment="0" pref="107" max="32767" attributes="0"/>
-                  <Component id="stValue" alignment="0" pref="107" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="stCm" pref="107" max="32767" attributes="0"/>
+                  <Component id="stValue" pref="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="stS1" alignment="0" pref="107" max="32767" attributes="0"/>
-                  <Component id="stS2" alignment="0" pref="107" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="stS1" pref="101" max="32767" attributes="0"/>
+                  <Component id="stS2" pref="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="stS3" alignment="0" pref="107" max="32767" attributes="0"/>
-                  <Component id="stS4" alignment="0" pref="107" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="stS4" min="-2" pref="99" max="-2" attributes="0"/>
+                  <Component id="stS3" pref="0" max="32767" attributes="0"/>
               </Group>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

@@ -105,10 +105,8 @@ public class Cmd extends AbsCommunicate implements ISender, IReadStream {
             command = String.format(PING_LINUX, addr);
         }
         for (int i = 0; i < cycle; i++) {
-            System.out.println(command);
             if (sendCommand(command)) {
                 String response = readAll().trim();
-                System.out.println(response);
                 if (response.contains("TTL=") || response.contains("ttl=")) {
                     return true;
                 }

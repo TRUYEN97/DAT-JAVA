@@ -5,16 +5,14 @@
 package com.qt.common.API;
 
 import com.alibaba.fastjson2.JSONObject;
-import java.awt.HeadlessException;
+import com.qt.view.component.ShowMessagePanel;
 import java.util.List;
-import javax.swing.JOptionPane;
-import javax.swing.text.JTextComponent;
 
 /**
  *
  * @author Administrator
  */
-public class Response {
+public final class Response {
 
     private final int code;
     private final String response;
@@ -22,9 +20,8 @@ public class Response {
     public static final String MESSAGE = "message";
     public static final String DATA = "data";
     public static final String STATUS = "status";
-    private JTextComponent textComponent;
 
-    public Response(int code, String response) {
+    public Response(int code, String response, ShowMessagePanel textComponent) {
         this.code = code;
         this.response = response;
         if (response == null || response.isBlank()) {
@@ -33,19 +30,11 @@ public class Response {
         }
         try {
             this.wareHouse = JSONObject.parseObject(response);
+            if (textComponent != null) {
+                textComponent.showMess(getMessage());
+            }
         } catch (Exception e) {
         }
-    }
-
-    public void setTextComponent(JTextComponent textComponent) {
-        this.textComponent = textComponent;
-        if (this.textComponent != null) {
-            this.textComponent.setText(null);
-        }
-    }
-
-    public JTextComponent getTextComponent() {
-        return textComponent;
     }
 
     public String getMessage() {
@@ -117,19 +106,6 @@ public class Response {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    public boolean isFailStatusAndShowMessage(boolean showJoptionMess) throws HeadlessException {
-        if (!isSuccess()) {
-            String mess = getMessage();
-            if (this.textComponent != null && !showJoptionMess) {
-                this.textComponent.setText(mess);
-            } else {
-                JOptionPane.showMessageDialog(null, String.valueOf(mess));
-            }
-            return true;
-        }
-        return false;
     }
 
     public int getCode() {

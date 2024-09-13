@@ -48,18 +48,18 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="lbImg" min="-2" pref="241" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="stCarId" min="-2" pref="93" max="-2" attributes="0"/>
-                  <Component id="stId" min="-2" pref="93" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="stId" pref="87" max="32767" attributes="0"/>
+                  <Component id="stCarId" pref="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="stModeName" min="-2" pref="90" max="-2" attributes="0"/>
+              <Component id="stModeName" min="-2" pref="100" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="btIn" pref="82" max="32767" attributes="0"/>
-                  <Component id="stServer" pref="0" max="32767" attributes="0"/>
+                  <Component id="btIn" max="32767" attributes="0"/>
+                  <Component id="stServer" min="-2" pref="82" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="12" max="32767" attributes="0"/>
+              <EmptySpace pref="8" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

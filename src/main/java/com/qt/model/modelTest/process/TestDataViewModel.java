@@ -4,7 +4,6 @@
  */
 package com.qt.model.modelTest.process;
 
-import com.qt.model.modelTest.process.ProcessModel;
 import com.qt.contest.AbsContest;
 import com.qt.interfaces.IgetTime;
 
@@ -12,15 +11,24 @@ import com.qt.interfaces.IgetTime;
  *
  * @author Admin
  */
-public class TestDataModelView implements IgetTime {
+public class TestDataViewModel implements IgetTime {
 
     private final IgetTime igetTime;
     private final ProcessModel processModel;
+    private String modeFullName;
     private AbsContest contest;
 
-    public TestDataModelView(IgetTime igetTime, ProcessModel processModel) {
+    public TestDataViewModel(IgetTime igetTime, ProcessModel processModel) {
             this.igetTime = igetTime;
             this.processModel = processModel;
+    }
+
+    public String getModeFullName() {
+        return modeFullName;
+    }
+
+    public void setModeFullName(String modeFullName) {
+        this.modeFullName = modeFullName;
     }
 
     public void setContest(AbsContest contest) {

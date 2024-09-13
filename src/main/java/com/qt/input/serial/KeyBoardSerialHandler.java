@@ -5,13 +5,8 @@
  */
 package com.qt.input.serial;
 
-import com.alibaba.fastjson2.JSONObject;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
-import com.qt.common.MyObjectMapper;
-import com.qt.common.Util;
-import com.qt.model.config.MCU_CONFIG_MODEL;
 import com.qt.model.input.CarModel;
 import java.util.HashMap;
 import java.util.Map;

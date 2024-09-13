@@ -9,6 +9,7 @@ import com.qt.common.ErrorLog;
 import com.qt.common.Util;
 import com.qt.common.communication.Communicate.Impl.Cmd.Cmd;
 import com.qt.input.camera.CameraRunner;
+import com.qt.pretreatment.KeyEventManagement;
 import com.qt.view.component.UpdateValuePanel;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
@@ -44,6 +45,9 @@ public class InfoPanel extends UpdateValuePanel {
             }
 
         });
+        KeyEventManagement.getInstance()
+                .getEventButtonBlink()
+                .putButtonBlinkEvent(ConstKey.KEY_BOARD.IN, btIn);
         this.btIn.setMouseClicked((design) -> {
             this.carModel.setRemoteValue(ConstKey.KEY_BOARD.IN);
         });
@@ -55,7 +59,7 @@ public class InfoPanel extends UpdateValuePanel {
             new Thread(() -> {
                 Cmd cmd = new Cmd();
                 while (true) {
-                    if (cmd.ping(ip, 1)) {
+                    if (cmd.ping(ip, 2)) {
                         this.stServer.setOn();
                     } else {
                         this.stServer.setOff();
@@ -77,7 +81,7 @@ public class InfoPanel extends UpdateValuePanel {
     protected void updateValues() {
         this.stCarId.setValue(this.testDataModel.getCarId());
         this.stId.setValue(this.testDataModel.getId());
-        this.stModeName.setValue(this.testDataModel.getModeName());
+        this.stModeName.setValue(this.testDataModel.getModeFullName());
     }
 
     /**
@@ -139,16 +143,16 @@ public class InfoPanel extends UpdateValuePanel {
                 .addContainerGap()
                 .addComponent(lbImg, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(stCarId, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(stId, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(stId, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                    .addComponent(stCarId, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(stModeName, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(stModeName, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btIn, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
-                    .addComponent(stServer, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                    .addComponent(btIn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(stServer, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(8, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

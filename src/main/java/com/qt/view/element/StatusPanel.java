@@ -192,13 +192,13 @@ public class StatusPanel extends javax.swing.JPanel {
 
         setOpaque(false);
 
-        lbNameTop.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lbNameTop.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         lbNameTop.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbNameTop.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         lbNameTop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         lbNameTop.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
-        lbName.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lbName.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         lbName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbName.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         lbName.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
