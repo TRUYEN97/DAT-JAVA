@@ -4,14 +4,13 @@
  */
 package com.qt.controller.logTest;
 
-import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.FileService.FileService;
+import com.qt.common.Setting;
 import com.qt.model.modelTest.process.ProcessModel;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
 import javax.imageio.ImageIO;
 
 /**
@@ -31,16 +30,9 @@ public class FileTestService {
 
     private FileTestService() {
         this.fileService = new FileService();
-        Properties properties = new Properties();
+        this.backupDir = new File(Setting.getInstance().getBackUpLogDir());
+        this.logDir = new File(Setting.getInstance().getLogDir());
         this.backupLogHandle = new BackupLogHandle();
-        try {
-            properties.load(ErrorLog.class.getResourceAsStream("/config.properties"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            ErrorLog.addError("ApiService-constructor", ex);
-        }
-        this.backupDir = new File(properties.getProperty(ConstKey.DIR_BACKUP_LOG, "logBackup"));
-        this.logDir = new File(properties.getProperty(ConstKey.DIR_LOG, "log"));
         this.backupLogHandle.setBackupDir(this.backupDir);
         new Thread(backupLogHandle).start();
     }
@@ -145,7 +137,7 @@ public class FileTestService {
     }
 
     public String createPathString(File root, String id, String fileName) {
-        String filePathString = String.format("%s/logTest/%s/%s/%s",
+        String filePathString = String.format("%s/logTest/ExamId-%s/%s/%s",
                 root,
                 this.processModel.getExamId(),
                 id,

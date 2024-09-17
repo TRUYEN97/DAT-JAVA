@@ -212,6 +212,14 @@ public class SoundPlayer {
     public void practice() {
         play(new SoundModel("cheDoOnTap.wav"));
     }
+
+    public void sayChecking() {
+        play(new SoundModel("checking.wav"));
+    }
+    
+    public void pleasePrepare() {
+        play(new SoundModel("pleasePrepare.wav"));
+    }
     
     class SoundRunner implements Runnable {
         

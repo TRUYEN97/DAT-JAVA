@@ -24,7 +24,6 @@ public class CarModel {
     private double distance;
     private int rpm;
     private float speed;
-    private float speed1;
     private boolean nt;
     private boolean np;
     private boolean at;

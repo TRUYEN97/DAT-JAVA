@@ -5,9 +5,7 @@
 package com.qt.contest.impContest;
 
 import com.qt.common.ConstKey;
-import com.qt.common.Util;
 import com.qt.contest.AbsContest;
-import com.qt.contest.impCondition.timerCondition.CheckTimeOut20s;
 import com.qt.contest.impCondition.timerCondition.CheckTimeOut30s;
 
 /**
@@ -16,7 +14,6 @@ import com.qt.contest.impCondition.timerCondition.CheckTimeOut30s;
  */
 public class XuatPhat extends AbsContest {
 
-    private final CheckTimeOut20s timeOut20s;
     private final CheckTimeOut30s timeOut30s;
 
     public XuatPhat() {
@@ -24,9 +21,9 @@ public class XuatPhat extends AbsContest {
     }
 
     public XuatPhat(String name) {
-        super(name, true, 200);
-        this.timeOut20s = new CheckTimeOut20s();
+        super(name, name, false, true, 2000);
         this.timeOut30s = new CheckTimeOut30s();
+        this.conditionHandle.addConditon(new CheckTimeOut30s());
     }
 
     private boolean firstCheck = true;
@@ -37,25 +34,34 @@ public class XuatPhat extends AbsContest {
 
     @Override
     public boolean loop() {
-        this.timeOut20s.checkPassed();
-        this.timeOut30s.checkPassed();
-        if (getDistance() > 1 && this.firstCheck) {
+        if (getDistance() > 0.1 && this.firstCheck) {
             firstCheck = false;
             if (!this.carModel.isAt()) {
                 this.addErrorCode(ConstKey.ERR.AT);
             }
             if (!this.carModel.isNt()) {
-                this.addErrorCode(ConstKey.ERR.NTP);
+                this.addErrorCode(ConstKey.ERR.NT);
             }
             if (this.carModel.isPt()) {
-                this.addErrorCode(ConstKey.ERR.PT);
+                this.addErrorCode(ConstKey.ERR.NPT);
+            }
+        }
+        int so = this.carModel.getGearBoxValue();
+        switch (so) {
+            case 1 -> {
+                hasSo1 = true;
+            }
+            case 2 -> {
+                hasSo2 = true;
+            }
+            case 3 -> {
+                hasSo3 = true;
             }
         }
         if (getDistance() >= 15) {
-            addErrorCode(ConstKey.ERR.TS);
-            return true;
-        } else if (this.carModel.getGearBoxValue() >= 3
-                && hasSo1 && hasSo2 && hasSo3) {
+            if (so < 3 || !hasSo1 || !hasSo2 || !hasSo3) {
+                addErrorCode(ConstKey.ERR.TS);
+            }
             return true;
         }
         return false;
@@ -71,12 +77,8 @@ public class XuatPhat extends AbsContest {
         hasSo2 = false;
         hasSo3 = false;
         firstCheck = true;
-        Util.delay(3000);
         oldDistance = this.carModel.getDistance();
-        this.timeOut20s.resetTimer();
-        this.timeOut20s.setContestDataModel(contestModel);
         this.timeOut30s.resetTimer();
-        this.timeOut30s.setContestDataModel(contestModel);
         return true;
     }
 

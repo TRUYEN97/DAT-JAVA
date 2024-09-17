@@ -21,9 +21,9 @@ public class CarStatusPanal extends UpdateValuePanel {
         setOpaque(false);
         setBackground(new Color(240, 240, 240, 86));
         this.stValue.setValue("0");
-        this.stNt.setBlink(true);
-        this.stNp.setBlink(true);
-        this.stPt.setBlink(true);
+//        this.stNt.setBlink(true);
+//        this.stNp.setBlink(true);
+//        this.stPt.setBlink(true);
     }
 
     private boolean st = false;

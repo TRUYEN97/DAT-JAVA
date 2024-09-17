@@ -14,13 +14,9 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@Builder
 public class MCU_CONFIG_MODEL {
     //{"encoder":900,"distance_udtime":200,"speed_udtime":500,"rpm_udtime":250,"senddt_udtime":200,"speed":0.1}
-    private int encoder;
-    private int distance_udtime;
-    private int rpm_udtime;
-    private int senddt_udtime;
-    private int nt_time;
-    private int np_time;
+    private double encoder = 6.59;
+    private int nt_time = 500;
+    private int np_time = 500;
 }

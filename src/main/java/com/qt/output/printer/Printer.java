@@ -14,8 +14,6 @@ import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.awt.print.Printable;
 import java.awt.print.PrinterJob;
-import javax.print.PrintService;
-import javax.print.attribute.standard.MediaSizeName;
 
 /**
  *
@@ -52,8 +50,12 @@ public class Printer {
     }
 
     public boolean printTestResult() {
+        return printTestResult(this.processModel.getId());
+    }
+
+    public boolean printTestResult(String id) {
         try {
-            String data = this.fileTestService.getDataOf(this.processModel.getId());
+            String data = this.fileTestService.getDataOf(id);
             if (data == null || data.isBlank() || data.charAt(0) != '{') {
                 return false;
             }

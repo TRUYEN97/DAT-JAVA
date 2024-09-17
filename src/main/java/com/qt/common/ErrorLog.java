@@ -20,17 +20,9 @@ import java.util.Properties;
 public class ErrorLog {
 
     private static final MyLogger logger = new MyLogger();
-    private static final Properties properties = new Properties();
 
     static {
-        try {
-            properties.load(ErrorLog.class.getResourceAsStream("/config.properties"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            ErrorLog.addError("ApiService-constructor", ex);
-        }
-        String dir = properties.getProperty(ConstKey.DIR_LOG, "log");
-        ErrorLog.logger.setFile(new File(dir, "error"));
+        ErrorLog.logger.setFile(new File(Setting.getInstance().getLogDir(), "error"));
         ErrorLog.logger.setDailyLog(true);
         ErrorLog.logger.setSaveMemory(true);
     }

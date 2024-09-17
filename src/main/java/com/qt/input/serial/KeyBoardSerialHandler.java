@@ -24,7 +24,7 @@ public class KeyBoardSerialHandler {
     private final Map<String, String> keyMap;
 
     private KeyBoardSerialHandler() {
-        this.model = new CarModel();
+        this.model = MCUSerialHandler.getInstance().getModel();
         this.keyMap = new HashMap<>();
         this.serialHandler = new SerialHandler("ttyACM0", 115200); //ttyACM0
         this.serialHandler.setReceiver((serial, data) -> {
@@ -67,6 +67,12 @@ public class KeyBoardSerialHandler {
         this.keyMap.put("C5", ConstKey.KEY_BOARD.ERROR.QT);
         this.keyMap.put("D5", ConstKey.KEY_BOARD.ERROR.RG);
         this.keyMap.put("E5", ConstKey.KEY_BOARD.ERROR.TN);
+        
+        this.keyMap.put("A6", ConstKey.KEY_BOARD.LEFT);
+        this.keyMap.put("B6", ConstKey.KEY_BOARD.RIGHT);
+        this.keyMap.put("C6", ConstKey.KEY_BOARD.UP);
+        this.keyMap.put("D6", ConstKey.KEY_BOARD.DOWN);
+        this.keyMap.put("E6", ConstKey.KEY_BOARD.POWER);
     }
     
 

@@ -22,7 +22,7 @@ public class ContestDataModel {
     private String startTime = "";
     private String endTime = "";
     private long cycleTime = 0;
-    private final List<ErrorCode> errorcodes;
+    private final List<ErrorCode> errorCodes;
 
     public ContestDataModel() {
         this("");
@@ -30,32 +30,32 @@ public class ContestDataModel {
 
     public ContestDataModel(String name) {
         this.contestName = name;
-        this.errorcodes = new ArrayList<>();
+        this.errorCodes = new ArrayList<>();
     }
     
     public void clearErrorCode(){
-        errorcodes.clear();
+        errorCodes.clear();
     }
     
     public void removeErrorCode(ErrorCode errorCode){
         if (errorCode == null) {
             return;
         }
-        errorcodes.remove(errorCode);
+        errorCodes.remove(errorCode);
     }
     
     public void addErrorCode(ErrorCode errorcode){
         if (errorcode == null || errorcode.getName() == null) {
             return;
         }
-        errorcodes.add(errorcode);
+        errorCodes.add(errorcode);
     }
 
     public void clear() {
         startTime = "";
         endTime = "";
         cycleTime = 0;
-        errorcodes.clear();
+        errorCodes.clear();
     }
 
 }

@@ -4,6 +4,7 @@
  */
 package com.qt.mode;
 
+import com.qt.common.API.Response;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.Util;
@@ -19,18 +20,19 @@ import com.qt.input.camera.CameraRunner;
 import com.qt.input.serial.MCUSerialHandler;
 import com.qt.model.input.CarModel;
 import com.qt.model.modelTest.process.ProcessModel;
-import com.qt.model.modelTest.ErrorCode;
 import com.qt.output.SoundPlayer;
+import com.qt.output.printer.Printer;
 import com.qt.pretreatment.IKeyEvent;
 import com.qt.pretreatment.KeyEventManagement;
 import com.qt.pretreatment.KeyEventsPackage;
+import com.qt.view.frame.ShowErrorcode;
+import com.qt.view.modeView.AbsModeView;
 import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import javax.swing.JPanel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,7 +43,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public abstract class AbsTestMode<V extends JPanel> {
+public abstract class AbsTestMode<V extends AbsModeView> {
 
     protected final V view;
     protected final String name;
@@ -60,6 +62,8 @@ public abstract class AbsTestMode<V extends JPanel> {
     protected final ApiService apiService;
     protected final CheckConditionHandle conditionHandle;
     protected final PingAPI pingAPI;
+    protected final ShowErrorcode showErrorcode;
+    protected final Printer printer;
     private ModeHandle modeHandle;
     private boolean cancel;
 
@@ -74,6 +78,7 @@ public abstract class AbsTestMode<V extends JPanel> {
         this.ranks = ranks;
         this.cancel = false;
         this.scoreSpec = scoreSpec;
+        this.showErrorcode = new ShowErrorcode();
         this.carModel = MCUSerialHandler.getInstance().getModel();
         this.processlHandle = ProcessModelHandle.getInstance();
         this.processModel = this.processlHandle.getProcessModel();
@@ -86,8 +91,11 @@ public abstract class AbsTestMode<V extends JPanel> {
         this.apiService = ApiService.getInstance();
         this.conditionHandle = new CheckConditionHandle();
         this.pingAPI = new PingAPI();
+        this.printer = new Printer();
+        this.pingAPI.setPingAPIReceive((responce) -> {
+            analysisResponce(responce);
+        });
     }
-    
 
     private String creareFullName(List<String> ranks) {
         StringBuilder builder = new StringBuilder(name);
@@ -108,6 +116,8 @@ public abstract class AbsTestMode<V extends JPanel> {
     protected abstract void createPrepareKeyEvents(Map<String, IKeyEvent> events);
 
     protected abstract void createTestKeyEvents(Map<String, IKeyEvent> events);
+
+    protected abstract void analysisResponce(Response responce);
 
     protected void addContest(AbsContest contest) {
         if (contest == null) {
@@ -134,17 +144,19 @@ public abstract class AbsTestMode<V extends JPanel> {
         KeyEventManagement.getInstance().addKeyEventBackAge(prepareEventsPackage);
         this.errorcodeHandle.clear();
         this.processlHandle.resetModel();
-        while (!loopCheck()) {
+        MCUSerialHandler.getInstance().sendReset();
+        while (!loopCheck() && !this.cancel) {
             Util.delay(200);
         }
-        this.processlHandle.startTest();
-        MCUSerialHandler.getInstance().sendLedYellowOn();
-        MCUSerialHandler.getInstance().sendReset();
-        KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
-        this.soundPlayer.begin();
-        this.pingAPI.start();
-        updateLog();
-        upTestDataToServer();
+        if (!cancel) {
+            this.soundPlayer.begin();
+            this.processlHandle.startTest();
+            MCUSerialHandler.getInstance().sendLedYellowOn();
+            KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
+            this.pingAPI.start();
+            updateLog();
+            upTestDataToServer();
+        }
     }
 
     public void endContest() {
@@ -188,6 +200,7 @@ public abstract class AbsTestMode<V extends JPanel> {
                 MCUSerialHandler.getInstance().sendLedRedOn();
             }
             this.pingAPI.stop();
+            this.printer.printTestResult();
             int score = this.processModel.getScore();
             this.processModel.setContestsResult(score >= scoreSpec ? ProcessModel.PASS : ProcessModel.FAIL);
             updateLog();
@@ -215,9 +228,16 @@ public abstract class AbsTestMode<V extends JPanel> {
             ErrorLog.addError(this, e);
         }
     }
-   
+
     private KeyEventsPackage initPrepareKeyEventPackage() {
         Map<String, IKeyEvent> events = new HashMap<>();
+        events.put(ConstKey.KEY_BOARD.SHOW_ERROR, (key) -> {
+            if (this.showErrorcode.isVisible()) {
+                this.showErrorcode.dispose();
+            } else {
+                this.showErrorcode.display();
+            }
+        });
         KeyEventsPackage epg = new KeyEventsPackage(name + "Prepare");
         createPrepareKeyEvents(events);
         epg.putEvents(events);
@@ -248,7 +268,16 @@ public abstract class AbsTestMode<V extends JPanel> {
     }
 
     public boolean checkTestCondisions() {
-        return this.conditionHandle.checkTestCondisions();
+        if (this.conditionHandle.checkTestCondisions()) {
+            return true;
+        }
+        String id = this.processModel.getId();
+        if (id != null && !id.isBlank() && id.equals("0")) {
+            if (this.processlHandle.getProcessModel().getScore() < getScoreSpec()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void cancelTest() {

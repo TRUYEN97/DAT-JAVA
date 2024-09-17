@@ -20,7 +20,7 @@ public class CheckReleasePt extends AbsOnOffCondition{
 
     @Override
     protected void action() {
-        setErrorcode(ConstKey.ERR.PT);
+        setErrorcode(ConstKey.ERR.NPT);
     }
     
 }

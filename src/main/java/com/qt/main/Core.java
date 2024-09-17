@@ -9,7 +9,8 @@ import com.qt.controller.ErrorcodeHandle;
 import com.qt.controller.api.ApiService;
 import com.qt.controller.modeController.ModeManagement;
 import com.qt.input.camera.CameraRunner;
-import com.qt.mode.imp.DT_B2_C_MODE;
+import com.qt.mode.imp.DT_B2_MODE;
+import com.qt.mode.imp.SH_B2_MODE;
 import com.qt.model.modelTest.ErrorCode;
 import com.qt.view.ViewMain;
 import com.qt.view.frame.ChooseModeFrame;
@@ -40,12 +41,15 @@ public class Core {
         addMode();
         initErrorcode();
     }
-     private void initErrorcode() {
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.SO3, new ErrorCode("SO3", 2, "TAY SO KO PHU HOP"));
+
+    private void initErrorcode() {
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.SO3, new ErrorCode("SO3", 2, "TAY SO KHONG PHU HOP"));
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.TIME_OUT, new ErrorCode("timeout", 5, "QUA THOI GIAN"));
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.AT, new ErrorCode("AT", 5, "DAY AN TOAN"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.NTP, new ErrorCode("NTP", 5, "KHONG XI NHAN"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.PT, new ErrorCode("PT", 5, "PHANH TAY"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.NT, new ErrorCode("NT", 5, "KHONG XI NHAN TRAI"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.NP, new ErrorCode("NP", 5, "KHONG XI NHAN PHAI"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.KPT, new ErrorCode("KPT", 5, "KHONG KEO PHANH TAY"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.NPT, new ErrorCode("NPT", 5, "KHONG NHA PHANH TAY"));
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.TS, new ErrorCode("TS", 5, "KO TANG DUOC SO"));
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.GS, new ErrorCode("GS", 5, "KO GIAM DUOC SO"));
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.TT, new ErrorCode("TT", 5, "KO TANG TOC DO"));
@@ -61,7 +65,6 @@ public class Core {
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.CL, new ErrorCode("CL", 25, "CHOANG LAI"));
     }
 
-
     public static Core getInstance() {
         Core ins = instance;
         if (ins == null) {
@@ -76,7 +79,8 @@ public class Core {
     }
 
     private void addMode() {
-        this.modeManagement.addMode(new DT_B2_C_MODE());
+        this.modeManagement.addMode(new DT_B2_MODE());
+        this.modeManagement.addMode(new SH_B2_MODE());
     }
 
     public void start() {

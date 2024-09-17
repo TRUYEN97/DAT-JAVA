@@ -26,18 +26,22 @@ public abstract class AbsContest implements IgetTime {
     protected final SoundPlayer soundPlayer;
     protected final ContestModelHandle contestModelHandle;
     protected final ErrorcodeHandle errorcodeHandle;
-    protected final boolean playSoundWhenInOut;
+    protected final boolean playSoundWhenIn;
+    protected final boolean playSoundWhenOut;
     protected final CheckConditionHandle conditionHandle;
+    protected final String nameSound;
     protected int status;
     protected boolean stop;
     protected int timeOut;
 
-    public AbsContest(String name, boolean soundInOut, int timeout) {
+    public AbsContest(String name, String nameSound, boolean soundIn, boolean soundOut, int timeout) {
+        this.nameSound = name;
         this.processlHandle = ProcessModelHandle.getInstance();
         this.carModel = MCUSerialHandler.getInstance().getModel();
         this.soundPlayer = SoundPlayer.getInstance();
         this.errorcodeHandle = ErrorcodeHandle.getInstance();
-        this.playSoundWhenInOut = soundInOut;
+        this.playSoundWhenIn = soundIn;
+        this.playSoundWhenOut = soundOut;
         this.contestModel = new ContestDataModel(name);
         this.contestModelHandle = new ContestModelHandle(contestModel);
         this.conditionHandle = new CheckConditionHandle();
@@ -46,6 +50,10 @@ public abstract class AbsContest implements IgetTime {
         this.timeOut = timeout < 0 ? 0 : timeout;
     }
 
+    public String getNameSound() {
+        return nameSound;
+    }
+    
     protected void addErrorCode(String errorKey) {
         this.errorcodeHandle.addContestErrorCode(errorKey, contestModel);
     }
@@ -84,14 +92,14 @@ public abstract class AbsContest implements IgetTime {
             this.status = WAIT;
             this.stop = false;
             this.processlHandle.setContest(this);
-            this.soundPlayer.contestName(getName());
             while (!isIntoContest() && !stop) {
                 Util.delay(50);
             }
-            if (this.playSoundWhenInOut) {
+            this.contestModelHandle.start();
+            this.soundPlayer.contestName(nameSound);
+            if (this.playSoundWhenIn) {
                 this.soundPlayer.startContest();
             }
-            this.contestModelHandle.start();
             this.status = RUNNING;
         };
     }
@@ -110,7 +118,7 @@ public abstract class AbsContest implements IgetTime {
         status = DONE;
         this.contestModelHandle.end();
         this.processlHandle.addContestModel(contestModel);
-        if (this.playSoundWhenInOut) {
+        if (this.playSoundWhenOut) {
             this.soundPlayer.endContest();
         }
         this.processlHandle.setContest(null);

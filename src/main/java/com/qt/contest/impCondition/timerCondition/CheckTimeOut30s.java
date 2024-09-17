@@ -17,6 +17,7 @@ public class CheckTimeOut30s extends AbsTimerConditon {
 
     public CheckTimeOut30s() {
         super(30);
+        setImporttant(true);
     }
     
     public void setOldDisTance(double oldDisTance) {

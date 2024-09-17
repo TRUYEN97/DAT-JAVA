@@ -29,14 +29,7 @@ public class MCUSerialHandler {
         this.model = new CarModel();
         this.serialHandler = new SerialHandler("ttyS0", 115200); //ttyS0
         this.serialHandler.setFirstConnectAction(() -> {
-            while (!sendReset() || !sendConfig(MCU_CONFIG_MODEL.builder().
-                    encoder(100).
-                    rpm_udtime(500).
-                    senddt_udtime(100).
-                    distance_udtime(500).
-                    nt_time(1000).
-                    np_time(1000).
-                    build())) {
+            while (!sendReset() || !sendConfig(new MCU_CONFIG_MODEL())) {
                 Util.delay(500);
             }
         });
@@ -44,7 +37,7 @@ public class MCUSerialHandler {
             try {
                 System.out.println(data);
                 JSONObject json = JSONObject.parseObject(data);
-                this.model.setAt(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.AT, false));
+                this.model.setAt(!json.getBooleanValue(ConstKey.CAR_MODEL_KEY.AT, false));
                 this.model.setCm(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.CM, false));
                 this.model.setNp(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.NP, false));
                 this.model.setNt(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.NT, false));
@@ -60,7 +53,6 @@ public class MCUSerialHandler {
                 this.model.setStatus(json.getIntValue(ConstKey.CAR_MODEL_KEY.STATUS, 0));
                 this.model.setDistance(json.getDoubleValue(ConstKey.CAR_MODEL_KEY.DISTANCE));
                 this.model.setSpeed(json.getFloatValue(ConstKey.CAR_MODEL_KEY.SPEED));
-                this.model.setSpeed1(json.getFloatValue(ConstKey.CAR_MODEL_KEY.SPEED_KM));
                 this.model.setRpm(json.getIntValue(ConstKey.CAR_MODEL_KEY.RPM, 0));
                 this.model.mathGearBoxValue();
             } catch (Exception e) {

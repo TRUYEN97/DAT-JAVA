@@ -5,15 +5,20 @@
 package com.qt.controller.modeController;
 
 import com.qt.common.ConstKey;
+import com.qt.common.ErrorLog;
+import com.qt.controller.ChangeCarId;
+import com.qt.controller.ChangeUserId;
+import com.qt.controller.PrintWithKeyBoard;
+import com.qt.input.camera.CameraRunner;
 import com.qt.mode.AbsTestMode;
-import com.qt.output.printer.Printer;
 import com.qt.output.SoundPlayer;
 import com.qt.pretreatment.KeyEventsPackage;
 import com.qt.pretreatment.KeyEventManagement;
-import com.qt.view.frame.ChangeIdFrame;
 import com.qt.view.ViewMain;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import javax.swing.Timer;
 
 /**
@@ -28,8 +33,11 @@ public class ModeManagement {
     private final List<AbsTestMode> modes;
     private final ModeHandle modeHandle;
     private final KeyEventsPackage eventsPackage;
-    private final ChangeIdFrame changeIdFrame;
-    private final Printer printer;
+    private final PrintWithKeyBoard printWithKeyBoard;
+    private final CameraRunner cameraRunner;
+    private final ChangeUserId changeUserId;
+    private final ChangeCarId changeCarId;
+    private final ExecutorService threadPool;
     private Timer timer;
 
     public ModeManagement(ViewMain viewMain) {
@@ -37,17 +45,20 @@ public class ModeManagement {
         this.modes = new ArrayList<>();
         this.eventManagement = KeyEventManagement.getInstance();
         this.modeHandle = new ModeHandle();
-        this.changeIdFrame = new ChangeIdFrame();
-        this.printer = new Printer();
+        this.printWithKeyBoard = new PrintWithKeyBoard();
+        this.cameraRunner = CameraRunner.getInstance();
         this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName());
+        this.changeUserId = new ChangeUserId();
+        this.changeCarId = new ChangeCarId();
+        this.threadPool = Executors.newSingleThreadExecutor();
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.SO_XE, (key) -> {
-            this.changeIdFrame.display(ChangeIdFrame.SX);
+            this.threadPool.submit(this.changeCarId);
         });
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.SBD, (key) -> {
-            this.changeIdFrame.display(ChangeIdFrame.SBD);
+            this.threadPool.submit(this.changeUserId);
         });
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.IN, (key) -> {
-            this.printer.printTestResult();
+            this.threadPool.submit(this.printWithKeyBoard);
         });
         this.timer = new Timer(20000, (e) -> {
             moveChangeCarIdEvent();
@@ -75,18 +86,33 @@ public class ModeManagement {
     }
 
     public boolean updateMode(AbsTestMode testMode) {
-        if (this.modeHandle.isRunning()) {
-            return false;
-        }
-        if (this.modeHandle.isStarted()) {
-            this.modeHandle.stop();
-        }
-        if (this.modeHandle.setTestMode(testMode)) {
-            this.modeHandle.start();
-            this.viewMain.setView(testMode.getView());
+        AbsTestMode currMode = this.modeHandle.getTestMode();
+        if (currMode != null && currMode.equals(testMode)) {
+            System.out.println(currMode.getFullName());
             return true;
         }
-        return false;
+        try {
+            this.modeHandle.setWait(true);
+            if (this.modeHandle.isRunning()) {
+                return false;
+            }
+            if (this.modeHandle.isStarted()) {
+                this.modeHandle.stop();
+            }
+            if (this.modeHandle.setTestMode(testMode)) {
+                this.modeHandle.start();
+                this.viewMain.setView(testMode.getView());
+                this.cameraRunner.setTestModeView(testMode.getView());
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
+            return false;
+        } finally {
+            this.modeHandle.setWait(false);
+        }
     }
 
     public AbsTestMode getCurrentMode() {

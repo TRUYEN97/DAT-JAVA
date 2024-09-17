@@ -30,7 +30,7 @@ public abstract class AbsCondition {
         this.contestDataModel = contestDataModel;
     }
 
-    protected void setImporttant(boolean st) {
+    public void setImporttant(boolean st) {
         this.important = st;
     }
 

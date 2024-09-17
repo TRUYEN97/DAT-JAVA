@@ -5,7 +5,6 @@
 package com.qt.output.printer;
 
 import com.qt.common.ErrorLog;
-import com.qt.controller.ErrorcodeHandle;
 import com.qt.model.modelTest.ErrorCode;
 import com.qt.model.modelTest.ErrorcodeWithContestNameModel;
 import com.qt.model.modelTest.contest.ContestDataModel;
@@ -39,21 +38,19 @@ public class BillPrintable implements Printable {
         Graphics2D g2d = (Graphics2D) graphics;
         g2d.translate((int) pageFormat.getImageableX(), (int) pageFormat.getImageableY());
         try {
-            int y = 40;
+            int y = 10;
             int yShift = 10;
             int headerRectHeight = 15;
-            g2d.setFont(new Font("Monospaced", Font.PLAIN, 9));
+            g2d.setFont(new Font("Monospaced", Font.PLAIN, 12));
 //            g2d.drawImage(icon.getImage(), 40, 0, 40, 40, null);
-            drawString(g2d, y += headerRectHeight, "******************************");
+            drawString(g2d, y += headerRectHeight, "Sat hach vien: ");
+            drawString(g2d, y += yShift * 3, "******************************");
             drawString(g2d, y += yShift, "  TRUNG TAM SHLX QUAN KHU 1");
-            drawString(g2d, y += yShift, "  %s", this.processData.getModeName());
             drawString(g2d, y += headerRectHeight, "------------------------------");
             drawString(g2d, y += yShift, "SBD: %s", this.processData.getId());
             drawString(g2d, y += yShift, "SO XE: %s", this.processData.getCarId());
             drawString(g2d, y += yShift, "HO TEN: %s", this.processData.getName());
             drawString(g2d, y += yShift, "NGAY THI: %s", this.processData.getStartTime());
-            drawString(g2d, y += yShift, "SO DIEM: %s/100", this.processData.getScore());
-            drawString(g2d, y += yShift, "KET QUA: %s", getContestResult());
             List<ErrorcodeWithContestNameModel> errorcodes = getErrorCode();
             if (!errorcodes.isEmpty()) {
                 drawString(g2d, y += headerRectHeight, "CAC LOI:");
@@ -65,8 +62,10 @@ public class BillPrintable implements Printable {
                 }
             }
             drawString(g2d, y += headerRectHeight, "------------------------------");
+            drawString(g2d, y += yShift, "SO DIEM: %s/100", this.processData.getScore());
+            drawString(g2d, y += yShift, "KET QUA: %s", getContestResult());
             drawString(g2d, y += yShift, "THI SINH KI TEN:   ");
-            drawString(g2d, y += yShift, "******************************");
+            drawString(g2d, y += yShift * 2, "******************************");
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
@@ -100,10 +99,10 @@ public class BillPrintable implements Printable {
         }
         if (!this.processData.getContests().isEmpty()) {
             for (ContestDataModel contest : this.processData.getContests()) {
-                if (contest == null || contest.getErrorcodes().isEmpty()) {
+                if (contest == null || contest.getErrorCodes().isEmpty()) {
                     continue;
                 }
-                for (ErrorCode errorCode : contest.getErrorcodes()) {
+                for (ErrorCode errorCode : contest.getErrorCodes()) {
                     errorcodes.add(new ErrorcodeWithContestNameModel(errorCode, contest.getContestName()));
                 }
             }

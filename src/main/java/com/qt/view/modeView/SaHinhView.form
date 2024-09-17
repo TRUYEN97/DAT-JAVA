@@ -18,14 +18,11 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="infoPanel1" min="-2" max="-2" attributes="0"/>
+              <Component id="infoPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="valuePanal1" pref="384" max="32767" attributes="0"/>
-                  <Component id="duongTruongContestPanel1" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="carStatusPanal1" min="-2" pref="284" max="-2" attributes="0"/>
+              <Component id="valuePanal" pref="384" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="carStatusPanal" min="-2" pref="284" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -35,13 +32,9 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Component id="valuePanal1" min="-2" pref="410" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="duongTruongContestPanel1" max="32767" attributes="0"/>
-                  </Group>
-                  <Component id="carStatusPanal1" alignment="0" max="32767" attributes="0"/>
-                  <Component id="infoPanel1" alignment="0" pref="0" max="32767" attributes="0"/>
+                  <Component id="carStatusPanal" max="32767" attributes="0"/>
+                  <Component id="valuePanal" min="-2" max="-2" attributes="0"/>
+                  <Component id="infoPanel" alignment="0" pref="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -49,18 +42,16 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="com.qt.view.component.imp.InfoPanel" name="infoPanel1">
+    <Component class="com.qt.view.component.imp.InfoPanel" name="infoPanel">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="66" red="66" type="rgb"/>
         </Property>
       </Properties>
     </Component>
-    <Component class="com.qt.view.component.imp.ValuePanal" name="valuePanal1">
+    <Component class="com.qt.view.component.imp.ValuePanal" name="valuePanal">
     </Component>
-    <Component class="com.qt.view.component.imp.CarStatusPanal" name="carStatusPanal1">
-    </Component>
-    <Component class="com.qt.view.component.imp.DuongTruongContestPanel" name="duongTruongContestPanel1">
+    <Component class="com.qt.view.component.imp.CarStatusPanal" name="carStatusPanal">
     </Component>
   </SubComponents>
 </Form>

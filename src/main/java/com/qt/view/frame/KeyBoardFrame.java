@@ -5,14 +5,8 @@
 package com.qt.view.frame;
 
 import com.qt.common.ConstKey;
-import com.qt.controller.api.ApiService;
-import com.qt.controller.ProcessModelHandle;
-import com.qt.controller.modeController.ModeManagement;
-import com.qt.main.Core;
+import com.qt.common.Util;
 import com.qt.model.config.ChangeIdModel;
-import com.qt.model.input.UserModel;
-import com.qt.model.modelTest.process.ProcessModel;
-import com.qt.output.SoundPlayer;
 import com.qt.pretreatment.KeyEventManagement;
 import com.qt.pretreatment.KeyEventsPackage;
 import com.qt.view.AbsKeylistenerFrame;
@@ -25,20 +19,18 @@ import java.awt.event.WindowEvent;
  *
  * @author Admin
  */
-public class ChangeIdFrame extends AbsKeylistenerFrame {
+public class KeyBoardFrame extends AbsKeylistenerFrame {
 
     private final ChangeIdModel model;
     private final MouseClicked mouseClick;
     private final KeyEventManagement eventManagement;
     private final KeyEventsPackage eventsPackage;
-    private final ProcessModel processModel;
-    private final SoundPlayer soundPlayer;
-    private final ApiService apiService;
+    private int st;
 
     /**
      * Creates new form ChangeCarIdFrame
      */
-    public ChangeIdFrame() {
+    public KeyBoardFrame() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -52,14 +44,16 @@ public class ChangeIdFrame extends AbsKeylistenerFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ChangeIdFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(KeyBoardFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ChangeIdFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(KeyBoardFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ChangeIdFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(KeyBoardFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ChangeIdFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(KeyBoardFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
@@ -67,11 +61,8 @@ public class ChangeIdFrame extends AbsKeylistenerFrame {
         initComponents();
 //        setBackground(new Color(0, 0, 0, 0));
         this.model = new ChangeIdModel();
-        this.soundPlayer = SoundPlayer.getInstance();
         this.eventManagement = KeyEventManagement.getInstance();
-        this.processModel = ProcessModelHandle.getInstance().getProcessModel();
         this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName(), true);
-        this.apiService = ApiService.getInstance();
         this.addButton(bt0);
         this.addButton(bt1);
         this.addButton(bt2);
@@ -95,7 +86,8 @@ public class ChangeIdFrame extends AbsKeylistenerFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                ChangeIdFrame.this.eventManagement.remove(eventsPackage);
+                KeyBoardFrame.this.eventManagement.remove(eventsPackage);
+                st = -1;
             }
         });
         initKeyPackage();
@@ -119,9 +111,9 @@ public class ChangeIdFrame extends AbsKeylistenerFrame {
             return;
         }
         if (val.equalsIgnoreCase("x") || val.equals(ConstKey.KEY_BOARD.CANCEL)) {
-            this.dispose();
+            st = -1;
         } else if (val.equalsIgnoreCase("ok") || val.equals(ConstKey.KEY_BOARD.OK)) {
-            keyOkClick();
+            st = 1;
         } else if (val.equals("<--") || val.equals(ConstKey.KEY_BOARD.BACKSPACE)) {
             keyBackspaceClick();
         } else {
@@ -156,44 +148,6 @@ public class ChangeIdFrame extends AbsKeylistenerFrame {
         }
     }
 
-    private void keyOkClick() {
-        if (ProcessModelHandle.getInstance().isTesting()) {
-            return;
-        }
-        String modelVal = this.model.getStringValue();
-        if (modelVal.isBlank()) {
-            modelVal = "0";
-        }
-        dispose();
-        if (this.model.getName().equals(SBD)) {
-            UserModel userModel = this.apiService.checkUserId(modelVal, this.processModel.getCarId());
-            String id;
-            if (userModel != null && (id = userModel.getId()) != null) {
-                String modeName = userModel.getModeName();
-                String rank = userModel.getRank();
-                ModeManagement modeManagement = Core.getInstance().getModeManagement();
-                if (id.equals("0")) {
-                    ProcessModelHandle.getInstance().setUserModel(userModel);
-                    this.soundPlayer.practice();
-                } else if (modeName != null && rank != null
-                        && modeManagement.updateMode(modeName, rank)) {
-                    ProcessModelHandle.getInstance().setUserModel(userModel);
-                    this.soundPlayer.welcomeId(this.processModel.getId());
-                } else {
-                    this.soundPlayer.modeInvalid();
-                }
-            } else {
-                this.soundPlayer.userIdInvalid();
-            }
-        } else {
-            if (this.apiService.checkCarId(modelVal)) {
-                ProcessModelHandle.getInstance().setCarID(modelVal);
-                this.soundPlayer.welcomeCarId(this.processModel.getCarId());
-            } else {
-                this.soundPlayer.carIdInvalid();
-            }
-        }
-    }
     public static final String SBD = "Số báo danh";
     public static final String SX = "Số xe";
 
@@ -313,24 +267,22 @@ public class ChangeIdFrame extends AbsKeylistenerFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    public void display(String name) {
+    public String getValue(String name) {
         if (name == null || (isVisible() && !this.model.getName().equalsIgnoreCase(name))) {
-            return;
+            return null;
         }
-        java.awt.EventQueue.invokeLater(() -> {
-            this.eventManagement.addKeyEventBackAge(eventsPackage);
-            this.model.setName(name);
-            if (name.equalsIgnoreCase(SBD)) {
-                this.model.setValue(this.processModel.getId());
-                this.soundPlayer.inputId();
-            } else {
-                this.model.setValue(this.processModel.getCarId());
-                this.soundPlayer.inputCarId();
-            }
-            this.stValue.setIconNameTop(this.model.getName());
-            this.stValue.setValue(this.model.getStringValue());
-            setVisible(true);
-        });
+        this.eventManagement.addKeyEventBackAge(eventsPackage);
+        this.model.setName(name);
+        this.model.setValue("");
+        this.stValue.setIconNameTop(this.model.getName());
+        setVisible(true);
+        this.st = 0;
+        while (this.st == 0) {
+            Util.delay(500);
+        }
+        setVisible(false);
+        dispose();
+        return st > 0 ? this.model.getStringValue() : null;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

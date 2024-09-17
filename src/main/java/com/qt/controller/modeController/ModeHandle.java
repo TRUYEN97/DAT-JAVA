@@ -27,6 +27,7 @@ public class ModeHandle implements IStarter, Runnable {
     private boolean running = false;
     private boolean stop = false;
     private Future testFuture;
+    private boolean wait;
 
     public ModeHandle() {
         this.processModelHandle = ProcessModelHandle.getInstance();
@@ -55,12 +56,16 @@ public class ModeHandle implements IStarter, Runnable {
             if (isRunning() || this.testMode == null) {
                 return;
             }
-            this.stop = false;
-            while (!this.stop) {
-                Util.delay(5000);
+            wait = false;
+            while (true) {
+                while (wait) {
+                    Util.delay(1000);
+                }
                 begin();
-                test();
-                end();
+                if (!stop) {
+                    test();
+                    end();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,6 +87,7 @@ public class ModeHandle implements IStarter, Runnable {
     private void begin() {
         this.testMode.begin();
         this.running = true;
+        this.stop = false;
     }
 
     private void test() {
@@ -106,10 +112,6 @@ public class ModeHandle implements IStarter, Runnable {
         if (this.testMode != null) {
             this.testMode.cancelTest();
         }
-        while (!isStarted()) {
-            this.testFuture.cancel(true);
-            Util.delay(200);
-        }
     }
 
     @Override
@@ -118,5 +120,9 @@ public class ModeHandle implements IStarter, Runnable {
             return;
         }
         this.testFuture = this.threadPool.submit(this);
+    }
+
+    void setWait(boolean st) {
+        this.wait = st;
     }
 }

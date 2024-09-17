@@ -35,7 +35,7 @@ public class ValuePanal extends UpdateValuePanel {
     @Override
     protected void updateValues() {
         this.stDistance.setValue(String.format("%.1f", this.carModel.getDistance()));
-        this.stV.setValue(String.format("%.1f", this.carModel.getSpeed1()));
+        this.stV.setValue(String.format("%.1f", this.carModel.getSpeed()));
         this.stRpm.setValue(String.format("%s", this.carModel.getRpm()));
         this.stScore.setValue(String.format("%s", this.testDataModel.getScore()));
         this.stTotalTime.setValue(String.format("%d", this.testDataModel.getTestTime() / 1000));

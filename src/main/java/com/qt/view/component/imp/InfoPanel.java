@@ -6,24 +6,22 @@ package com.qt.view.component.imp;
 
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
+import com.qt.common.Setting;
 import com.qt.common.Util;
 import com.qt.common.communication.Communicate.Impl.Cmd.Cmd;
-import com.qt.input.camera.CameraRunner;
 import com.qt.pretreatment.KeyEventManagement;
 import com.qt.view.component.UpdateValuePanel;
+import com.qt.view.modeView.IgetImgLabel;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.util.Properties;
 import javax.swing.JLabel;
 
 /**
  *
  * @author Admin
  */
-public class InfoPanel extends UpdateValuePanel {
-
+public class InfoPanel extends UpdateValuePanel implements IgetImgLabel {
 
     /**
      * Creates new form InfoPanel
@@ -51,11 +49,8 @@ public class InfoPanel extends UpdateValuePanel {
         this.btIn.setMouseClicked((design) -> {
             this.carModel.setRemoteValue(ConstKey.KEY_BOARD.IN);
         });
-        CameraRunner.getInstance().setImageLabel(lbImg);
         try {
-            Properties properties = new Properties();
-            properties.load(getClass().getResourceAsStream("/config.properties"));
-            String ip = properties.getProperty(ConstKey.SERVER_PING_ADDR);
+            String ip = Setting.getInstance().getServerPingIp();
             new Thread(() -> {
                 Cmd cmd = new Cmd();
                 while (true) {
@@ -67,14 +62,10 @@ public class InfoPanel extends UpdateValuePanel {
                     Util.delay(1000);
                 }
             }).start();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             ErrorLog.addError("ApiService-constructor", ex);
         }
-    }
-
-    public JLabel getLbImg() {
-        return lbImg;
     }
 
     @Override
@@ -165,5 +156,10 @@ public class InfoPanel extends UpdateValuePanel {
     private com.qt.view.element.StatusPanel stModeName;
     private com.qt.view.element.StatusPanel stServer;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public JLabel getImgLabel() {
+        return this.lbImg;
+    }
 
 }

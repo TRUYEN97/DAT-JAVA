@@ -8,11 +8,8 @@ import com.qt.common.ErrorLog;
 import com.qt.common.Util;
 import com.qt.input.serial.MCUSerialHandler;
 import com.qt.interfaces.IStarter;
-import com.qt.view.element.ButtonDesign;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -65,13 +62,12 @@ public class KeyEventManagement implements IStarter {
         this.future = this.thread.submit(() -> {
             running = true;
             stop = false;
-            IKeyEvent event;
             String key;
             KeyEventsPackage evensPackage;
             while (!stop) {
                 try {
+                    Util.delay(100);
                     if (keys.isEmpty()) {
-                        Util.delay(100);
                         continue;
                     }
                     key = keys.poll();

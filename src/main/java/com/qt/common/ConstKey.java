@@ -12,6 +12,7 @@ public final class ConstKey {
 
     public static final String VEHICLE_TIME = "vehicleTime";
     public static final String CHECK_INFO = "checkInfo";
+    public static final String CONFIG_PATH = "configPath";
     public static final String SERVER_PING_ADDR = "serverIp";
     public static final String CHECK_CAR_ID = "checkCarId";
     public static final String CHECK_USER_ID = "checkUserId";
@@ -19,12 +20,15 @@ public final class ConstKey {
     public static final String RUNNABLE = "runnable";
     public static final String DIR_LOG = "dirLog";
     public static final String DIR_BACKUP_LOG = "dirBackupLog";
+    
+    public static final class CAR_CONFIG {
+        public static final String MCU_CONFIG = "mcuConfig";
+    }
 
     public static final class MODE_NAME {
 
         public static final String DUONG_TRUONG = "DT";
         public static final String SA_HINH = "SH";
-        public static final String B2_SA_HINH = "SH-B2";
     }
 
     public static final class CT_NAME {
@@ -44,7 +48,8 @@ public final class ConstKey {
         public static final String CL = "End";
         ////////////
         public static final String AT = "AT";//
-        public static final String NTP = "NTP";//
+        public static final String NT = "NT";//
+        public static final String NP = "NP";//
         public static final String KPT = "KPT";//
         public static final String TS = "TS";//
         public static final String GS = "GS";//
@@ -54,7 +59,7 @@ public final class ConstKey {
         public static final String GT = "GT";//
         public static final String TT = "TT";//
         public static final String RPM = "RPM";//
-        public static final String PT = "PT";//
+        public static final String NPT = "PT";//
         public static final String SO3 = "SO3";//
         public static final String VSO = "VSO";//
         public static final String TIME_OUT = "timeout";//
@@ -62,6 +67,7 @@ public final class ConstKey {
 
     public static final class KEY_BOARD {
 
+        public static final String POWER = "Power";
         public static final String DOWN = "Down";
         public static final String LEFT = "Left";
         public static final String RIGHT = "Right";

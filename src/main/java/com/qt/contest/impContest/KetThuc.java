@@ -19,9 +19,8 @@ public class KetThuc extends AbsContest {
     }
 
     public KetThuc(String name) {
-        super(name, true, 200);
+        super(name, name, false, true, 2000);
     }
-    private boolean firstCheck = true;
     private long oldMill;
     private boolean isStop = false;
     private boolean kpt = true;
@@ -29,20 +28,17 @@ public class KetThuc extends AbsContest {
 
     @Override
     public boolean loop() {
-        if (firstCheck) {
-            firstCheck = false;
-            if (!this.carModel.isNp()) {
-                this.addErrorCode(ConstKey.ERR.NTP);
-            }
-        }
         if (this.carModel.getStatus() == ConstKey.CAR_ST.STOP || isStop) {
             this.isStop = true;
+            if (!this.carModel.isNp()) {
+                this.addErrorCode(ConstKey.ERR.NP);
+            }
             long deta = System.currentTimeMillis() - oldMill;
-            if (so && deta >= 3 && this.carModel.getGearBoxValue() != 0) {
+            if (so && deta >= 3000 && this.carModel.getGearBoxValue() != 0) {
                 this.addErrorCode(ConstKey.ERR.VSO);
                 so = false;
             }
-            if (kpt && deta >= 5 && !this.carModel.isPt()) {
+            if (kpt && deta >= 5000 && !this.carModel.isPt()) {
                 this.addErrorCode(ConstKey.ERR.KPT);
                 kpt = false;
                 return true;
@@ -55,7 +51,6 @@ public class KetThuc extends AbsContest {
 
     @Override
     protected boolean isIntoContest() {
-        firstCheck = true;
         Util.delay(3000);
         oldMill = System.currentTimeMillis();
         return true;

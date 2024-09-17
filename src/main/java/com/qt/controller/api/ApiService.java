@@ -11,6 +11,7 @@ import com.qt.common.API.Response;
 import com.qt.common.API.RestAPI;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
+import com.qt.common.Setting;
 import com.qt.common.Util;
 import com.qt.common.timer.TimeBase;
 import com.qt.controller.modeController.ModeManagement;
@@ -19,9 +20,7 @@ import com.qt.output.SoundPlayer;
 import com.qt.view.component.ShowMessagePanel;
 import java.awt.Component;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Properties;
 
 /**
  *
@@ -40,21 +39,15 @@ public class ApiService {
     private static final String CAN_START = "canStart";
     private static final String ID = "id";
     private static volatile ApiService insatnce;
-    private final Properties properties;
+    private final Setting setting;
     private final RestAPI restAPI;
     private final SoundPlayer soundPlayer;
 
     private ApiService() {
-        this.properties = new Properties();
+        this.setting = Setting.getInstance();
         this.restAPI = new RestAPI();
         this.restAPI.setTextComponent(ShowMessagePanel.getInstance());
         this.soundPlayer = SoundPlayer.getInstance();
-        try {
-            this.properties.load(getClass().getResourceAsStream("/config.properties"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            ErrorLog.addError("ApiService-constructor", ex);
-        }
     }
 
     public static ApiService getInstance() {
@@ -72,7 +65,7 @@ public class ApiService {
 
     public boolean checkCarId(String id) {
         try {
-            String url = this.properties.getProperty(ConstKey.CHECK_CAR_ID);
+            String url = this.setting.getCheckCarIdUrl();
             if (checkPingToServer()) {
                 return false;
             }
@@ -94,14 +87,12 @@ public class ApiService {
             if (id == null || id.isBlank() || "0".equals(id)) {
                 UserModel userModel = new UserModel();
                 userModel.setId("0");
-                userModel.setName("");
-                userModel.setModeName(ModeManagement.DEFAULT_MODE);
                 return userModel;
             }
             if (checkPingToServer()) {
                 return null;
             }
-            String url = this.properties.getProperty(ConstKey.CHECK_USER_ID);
+            String url = this.setting.getCheckUserIdUrl();
             if (url == null) {
                 ErrorLog.addError(this, "không tìm thấy: checkUserId url");
                 return null;
@@ -125,7 +116,7 @@ public class ApiService {
             if (checkPingToServer()) {
                 return DISCONNECT;
             }
-            String url = this.properties.getProperty(ConstKey.SEND_DATA);
+            String url = this.setting.getSendDataUrl();
             if (url == null) {
                 ErrorLog.addError(this, "không tìm thấy: sendData url");
                 return FAIL;
@@ -166,14 +157,14 @@ public class ApiService {
     }
 
     public boolean pingToServer() {
-        String addr = this.properties.getProperty(ConstKey.SERVER_PING_ADDR);
+        String addr = this.setting.getServerPingIp();
         return Util.ping(addr, 2);
     }
 
     private boolean checkPingToServer() {
         if (!pingToServer()) {
             ErrorLog.addError(this, "không thể ping đến server");
-            this.soundPlayer.pingServerFailed();
+//            this.soundPlayer.pingServerFailed();
             return true;
         }
         return false;
@@ -190,7 +181,7 @@ public class ApiService {
             if (checkPingToServer()) {
                 return WAIT;
             }
-            String url = this.properties.getProperty(ConstKey.RUNNABLE);
+            String url = this.setting.getProperty(ConstKey.RUNNABLE);
             if (url == null) {
                 ErrorLog.addError(this, "không tìm thấy: runnable url");
                 return URL_INVALID;
@@ -215,7 +206,7 @@ public class ApiService {
             if (pingToServer()) {
                 return null;
             }
-            String url = this.properties.getProperty(ConstKey.CHECK_INFO);
+            String url = this.setting.getCheckCommandUrl();
             if (url == null) {
                 ErrorLog.addError(this, "không tìm thấy: checkInfo url");
                 return null;

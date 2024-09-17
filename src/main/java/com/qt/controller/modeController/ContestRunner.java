@@ -35,8 +35,6 @@ public class ContestRunner implements Runnable {
         this.timeOutContest = new TimeOutContest();
         this.threadPool = Executors.newSingleThreadExecutor();
         this.conditionHandle = new CheckConditionHandle();
-        this.conditionHandle.addConditon(new CheckCM());
-        this.conditionHandle.addConditon(new CheckRPM());
         this.conditionHandle.addConditon(this.timeOutContest);
     }
 
@@ -104,9 +102,6 @@ public class ContestRunner implements Runnable {
         }
         if (testMode != null) {
             if (!testMode.checkTestCondisions()) {
-                return true;
-            }
-            if (this.processlHandle.getProcessModel().getScore() < testMode.getScoreSpec()) {
                 return true;
             }
         }

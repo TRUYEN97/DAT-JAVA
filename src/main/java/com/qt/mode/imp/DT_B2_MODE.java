@@ -8,6 +8,8 @@ import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.API.Response;
 import com.qt.common.ConstKey;
 import com.qt.common.Util;
+import com.qt.contest.impCondition.OnOffImp.CheckCM;
+import com.qt.contest.impCondition.OnOffImp.CheckRPM;
 import com.qt.contest.impCondition.timerCondition.CheckSo3;
 import com.qt.contest.impContest.GiamToc;
 import com.qt.contest.impContest.KetThuc;
@@ -16,8 +18,7 @@ import com.qt.contest.impContest.XuatPhat;
 import com.qt.controller.api.ApiService;
 import com.qt.mode.AbsTestMode;
 import com.qt.pretreatment.IKeyEvent;
-import com.qt.view.DuongTruongView;
-import com.qt.view.frame.ShowErrorcode;
+import com.qt.view.modeView.DuongTruongView;
 import java.util.List;
 import java.util.Map;
 
@@ -25,25 +26,22 @@ import java.util.Map;
  *
  * @author Admin
  */
-public class DT_B2_C_MODE extends AbsTestMode<DuongTruongView> {
+public class DT_B2_MODE extends AbsTestMode<DuongTruongView> {
 
-    private final ShowErrorcode showErrorcode;
     private boolean runnable;
     private String oldId;
 
-    public DT_B2_C_MODE() {
+    public DT_B2_MODE() {
         this(ConstKey.MODE_NAME.DUONG_TRUONG, List.of("B2", "C"));
     }
 
-    public DT_B2_C_MODE(String name, List<String> ranks) {
+    public DT_B2_MODE(String name, List<String> ranks) {
         super(new DuongTruongView(), name, ranks);
-        this.showErrorcode = new ShowErrorcode();
         this.conditionHandle.addConditon(new CheckSo3());
+        this.conditionHandle.addConditon(new CheckCM());
+        this.conditionHandle.addConditon(new CheckRPM());
         this.runnable = false;
         this.oldId = "";
-        this.pingAPI.setPingAPIReceive((responce) -> {
-            analysisRespmoce(responce);
-        });
     }
 
     @Override
@@ -87,18 +85,11 @@ public class DT_B2_C_MODE extends AbsTestMode<DuongTruongView> {
     @Override
     protected void createPrepareKeyEvents(Map<String, IKeyEvent> maps) {
         maps.put(ConstKey.KEY_BOARD.CONTEST.XP, (key) -> {
-            if (hasXp || !runnable) {
+            if (hasXp || !runnable || this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
                 return;
             }
             addContest(new XuatPhat(ConstKey.CT_NAME.XUAT_PHAT));
             hasXp = true;
-        });
-        maps.put(ConstKey.KEY_BOARD.SHOW_ERROR, (key) -> {
-            if (this.showErrorcode.isVisible()) {
-                this.showErrorcode.dispose();
-            } else {
-                this.showErrorcode.display();
-            }
         });
     }
     private boolean hasXp = false;
@@ -116,6 +107,9 @@ public class DT_B2_C_MODE extends AbsTestMode<DuongTruongView> {
             }
         });
         maps.put(ConstKey.KEY_BOARD.CONTEST.TS, (key) -> {
+            if (this.carModel.getGearBoxValue() >= 5) {
+                return;
+            }
             if (!contests.isEmpty()) {
                 return;
             }
@@ -126,6 +120,9 @@ public class DT_B2_C_MODE extends AbsTestMode<DuongTruongView> {
             hasTs = true;
         });
         maps.put(ConstKey.KEY_BOARD.CONTEST.GS, (key) -> {
+            if (this.carModel.getGearBoxValue() <= 1) {
+                return;
+            }
             if (!contests.isEmpty()) {
                 return;
             }
@@ -136,7 +133,7 @@ public class DT_B2_C_MODE extends AbsTestMode<DuongTruongView> {
             hasGs = true;
         });
         maps.put(ConstKey.KEY_BOARD.CONTEST.KT, (key) -> {
-            String id = processModel.getCarId();
+            String id = processModel.getId();
             int distance = id == null || id.equals("0") ? 200 : 2000;
             if (this.carModel.getDistance() < distance) {
                 return;
@@ -152,7 +149,8 @@ public class DT_B2_C_MODE extends AbsTestMode<DuongTruongView> {
         });
     }
 
-    private void analysisRespmoce(Response responce) {
+    @Override
+    protected void analysisResponce(Response responce) {
         if (responce == null) {
             return;
         }

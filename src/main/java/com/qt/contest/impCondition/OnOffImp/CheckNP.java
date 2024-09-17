@@ -21,7 +21,7 @@ public class CheckNP extends AbsOnOffCondition{
 
     @Override
     protected void action() {
-        this.setErrorcode(ConstKey.ERR.NTP);
+        this.setErrorcode(ConstKey.ERR.NP);
     }
     
 }
