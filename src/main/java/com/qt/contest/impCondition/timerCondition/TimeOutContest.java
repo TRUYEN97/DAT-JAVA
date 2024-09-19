@@ -17,10 +17,15 @@ public class TimeOutContest extends AbsTimerConditon {
     private AbsContest contest;
 
     public TimeOutContest() {
-        super();
+        this(null);
     }
 
-    public void setContest(AbsContest contest) {
+    public TimeOutContest(AbsContest contest) {
+        super();
+        setContest(contest);
+    }
+
+    public final void setContest(AbsContest contest) {
         this.contest = contest;
         if (contest != null) {
             this.setSpec(contest.getTimeout());

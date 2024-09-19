@@ -8,6 +8,7 @@ import com.qt.controller.logTest.FileTestService;
 import com.qt.interfaces.IgetTime;
 import com.qt.contest.AbsContest;
 import com.alibaba.fastjson2.JSONObject;
+import com.qt.common.CarConfig;
 import com.qt.common.MyObjectMapper;
 import com.qt.common.Util;
 import com.qt.common.timer.TimeBase;
@@ -45,7 +46,7 @@ public final class ProcessModelHandle implements IgetTime {
         this.logTestService = FileTestService.getInstance();
         this.logTestService.setProcessModel(processModel);
         this.testing = false;
-        setCarID(this.logTestService.getCarId());
+        setCarID(CarConfig.getInstance().getCarId());
     }
 
     public static ProcessModelHandle getInstance() {
@@ -59,11 +60,11 @@ public final class ProcessModelHandle implements IgetTime {
         }
         return ins;
     }
-    
+
     public void setCarID(String carId) {
         carId = carId == null || carId.isBlank() ? "0" : carId;
         this.processModel.setCarId(carId);
-        this.logTestService.writeCarId(carId);
+        CarConfig.getInstance().setCarId(carId);
     }
 
     public void setUserModel(UserModel userModel) {
@@ -163,6 +164,9 @@ public final class ProcessModelHandle implements IgetTime {
         }
         String modelName;
         for (ContestDataModel contestModel : contestModels) {
+            if (contestModel.getEndTime() == null || contestModel.getEndTime().isBlank()) {
+                continue;
+            }
             modelName = contestModel.getContestName();
             if (modelName != null && modelName.equalsIgnoreCase(name)) {
                 return true;
@@ -195,7 +199,7 @@ public final class ProcessModelHandle implements IgetTime {
     public boolean isPass() {
         return this.processModel.getContestsResult() == ProcessModel.PASS;
     }
-    
+
     public boolean isTesting() {
         return this.testing;
     }

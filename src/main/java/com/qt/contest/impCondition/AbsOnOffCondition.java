@@ -4,7 +4,6 @@
  */
 package com.qt.contest.impCondition;
 
-import com.qt.common.ConstKey;
 import com.qt.contest.AbsCondition;
 
 /**

@@ -275,6 +275,7 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
         this.model.setName(name);
         this.model.setValue("");
         this.stValue.setIconNameTop(this.model.getName());
+        this.stValue.setValue(this.model.getStringValue());
         setVisible(true);
         this.st = 0;
         while (this.st == 0) {

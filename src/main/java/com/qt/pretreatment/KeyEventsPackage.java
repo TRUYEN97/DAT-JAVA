@@ -4,7 +4,6 @@
  */
 package com.qt.pretreatment;
 
-import com.qt.view.element.ButtonDesign;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,9 +15,9 @@ import java.util.Map;
  */
 public class KeyEventsPackage {
 
-    private final List<IKeyEvent> anyKeyEvents;
-    private final Map<String, IKeyEvent> keyEvents;
-    private final KeyEventButtonBlink eventButtonBlink;
+    protected final List<IKeyEvent> anyKeyEvents;
+    protected final Map<String, IKeyEvent> keyEvents;
+    protected final KeyEventButtonBlink eventButtonBlink;
     private boolean justMe;
     private final String name;
 
@@ -38,15 +37,30 @@ public class KeyEventsPackage {
         return eventButtonBlink;
     }
     
+    public void merge(KeyEventsPackage keyEventsPackage){
+        putEvents(keyEventsPackage.keyEvents);
+        addAllAnyKeyEvent(keyEventsPackage.anyKeyEvents);
+        eventButtonBlink.addAllButtonBlinkEvent(keyEventsPackage.eventButtonBlink.getButtonDesigns());
+    }
+    
     public void addAnyKeyEvent(IKeyEvent event) {
-        if (event == null) {
+        if (event == null || this.anyKeyEvents.contains(event)) {
             return;
         }
         this.anyKeyEvents.add(event);
     }
+    
+    public void addAllAnyKeyEvent(List<IKeyEvent> events) {
+        if (events == null) {
+            return;
+        }
+        for (IKeyEvent event : events) {
+            addAnyKeyEvent(event);
+        }
+    }
 
     public void putEvent(String key, IKeyEvent event) {
-        if (event == null) {
+        if (event == null || this.keyEvents.containsKey(key)) {
             return;
         }
         this.keyEvents.put(key, event);
@@ -56,7 +70,12 @@ public class KeyEventsPackage {
         if (modeKeyEvents == null) {
             return;
         }
-        this.keyEvents.putAll(modeKeyEvents);
+        for (String key : modeKeyEvents.keySet()) {
+            if (keyEvents.containsKey(key)) {
+                continue;
+            }
+            this.keyEvents.put(key, modeKeyEvents.get(key));
+        }
     }
 
     public String getName() {

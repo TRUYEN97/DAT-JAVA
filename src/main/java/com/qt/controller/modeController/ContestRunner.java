@@ -4,14 +4,8 @@
  */
 package com.qt.controller.modeController;
 
-import com.qt.common.ConstKey;
 import com.qt.common.Util;
 import com.qt.contest.AbsContest;
-import com.qt.contest.impCondition.OnOffImp.CheckCM;
-import com.qt.contest.impCondition.OnOffImp.CheckRPM;
-import com.qt.contest.impCondition.timerCondition.TimeOutContest;
-import com.qt.controller.CheckConditionHandle;
-import com.qt.controller.ProcessModelHandle;
 import com.qt.mode.AbsTestMode;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,19 +17,12 @@ import java.util.concurrent.Future;
  */
 public class ContestRunner implements Runnable {
 
-    private final ProcessModelHandle processlHandle;
-    private final CheckConditionHandle conditionHandle;
-    private final TimeOutContest timeOutContest;
     private final ExecutorService threadPool;
     private AbsTestMode testMode;
     private boolean testDone = false;
 
     public ContestRunner() {
-        this.processlHandle = ProcessModelHandle.getInstance();
-        this.timeOutContest = new TimeOutContest();
         this.threadPool = Executors.newSingleThreadExecutor();
-        this.conditionHandle = new CheckConditionHandle();
-        this.conditionHandle.addConditon(this.timeOutContest);
     }
 
     public boolean setTestMode(AbsTestMode testMode) {
@@ -52,7 +39,7 @@ public class ContestRunner implements Runnable {
         AbsContest currContest;
         while (this.testMode != null && !this.testDone) {
             currContest = this.testMode.peekContests();
-            if (this.testMode == null || checkStopTestCondisions()) {
+            if (this.testMode == null || testMode.isTestCondisionsFailed()) {
                 stop();
                 break;
             }
@@ -62,9 +49,7 @@ public class ContestRunner implements Runnable {
             }
             runPart(currContest.begin(), currContest);
             if (!testDone) {
-                this.timeOutContest.setContest(currContest);
                 runPart(currContest.test(), currContest);
-                this.timeOutContest.setContest(null);
             }
             currContest.end();
             if (this.testMode != null) {
@@ -77,11 +62,11 @@ public class ContestRunner implements Runnable {
     private void runPart(Runnable runnable, AbsContest currContest) {
         Future future = this.threadPool.submit(runnable);
         while (!future.isDone() && !this.testDone) {
-            if (!currContest.checkTestCondisions()) {
+            if (currContest.isTestCondisionsFailed()) {
                 stop();
                 break;
             }
-            if (checkStopTestCondisions()) {
+            if (testMode == null || testMode.isTestCondisionsFailed()) {
                 stop();
                 break;
             }
@@ -91,21 +76,6 @@ public class ContestRunner implements Runnable {
             future.cancel(true);
             Util.delay(200);
         }
-    }
-
-    private boolean checkStopTestCondisions() {
-        if (!this.conditionHandle.checkTestCondisions()) {
-            return true;
-        }
-        if (processlHandle.containContestClass(ConstKey.CT_NAME.KET_THUC)) {
-            return true;
-        }
-        if (testMode != null) {
-            if (!testMode.checkTestCondisions()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public void stop() {

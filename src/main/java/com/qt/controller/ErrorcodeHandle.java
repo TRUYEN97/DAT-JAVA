@@ -4,6 +4,8 @@
  */
 package com.qt.controller;
 
+import com.qt.common.ErrorLog;
+import com.qt.controller.api.ApiService;
 import com.qt.model.modelTest.ErrorCode;
 import com.qt.model.modelTest.ErrorcodeWithContestNameModel;
 import com.qt.model.modelTest.contest.ContestDataModel;
@@ -13,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  *
@@ -21,16 +25,22 @@ import java.util.Map;
 public class ErrorcodeHandle {
 
     private static volatile ErrorcodeHandle instance;
+    private final ProcessModelHandle processModelHandle;
     private final ProcessModel processModel;
     private final SoundPlayer soundPlayer;
     private final Map<String, ErrorCode> mapErrorcodes;
     private final List<ErrorcodeWithContestNameModel> ewcnms;
+    private final ApiService apiService;
+    private final ExecutorService threadPool;
 
     private ErrorcodeHandle() {
-        this.processModel = ProcessModelHandle.getInstance().getProcessModel();
+        this.processModelHandle = ProcessModelHandle.getInstance();
+        this.processModel = this.processModelHandle.getProcessModel();
         this.soundPlayer = SoundPlayer.getInstance();
         this.mapErrorcodes = new HashMap<>();
         this.ewcnms = new ArrayList<>();
+        this.apiService = ApiService.getInstance();
+        this.threadPool = Executors.newSingleThreadExecutor();
     }
 
     public static ErrorcodeHandle getInstance() {
@@ -62,27 +72,43 @@ public class ErrorcodeHandle {
     }
 
     public void addBaseErrorCode(String key) {
-        ErrorCode errorcode = this.mapErrorcodes.get(key);
-        if (errorcode == null || errorcode.getName() == null) {
-            return;
+        try {
+            ErrorCode errorcode = this.mapErrorcodes.get(key);
+            if (errorcode == null || errorcode.getName() == null) {
+                return;
+            }
+            this.processModel.addErrorcode(errorcode);
+            this.ewcnms.add(new ErrorcodeWithContestNameModel(errorcode, ""));
+            this.soundPlayer.sayErrorCode(errorcode.getName());
+            this.processModel.subtract(errorcode.getScore());
+            this.threadPool.execute(() -> {
+                this.apiService.sendData(this.processModel, null);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
         }
-        this.processModel.addErrorcode(errorcode);
-        this.ewcnms.add(new ErrorcodeWithContestNameModel(errorcode, ""));
-        this.soundPlayer.sayErrorCode(errorcode.getName());
-        this.processModel.subtract(errorcode.getScore());
     }
 
     public void addContestErrorCode(String key, ContestDataModel dataModel) {
-        if (dataModel == null) {
-            return;
+        try {
+            if (dataModel == null) {
+                return;
+            }
+            ErrorCode errorcode = this.mapErrorcodes.get(key);
+            if (errorcode == null || errorcode.getName() == null) {
+                return;
+            }
+            this.ewcnms.add(new ErrorcodeWithContestNameModel(errorcode, dataModel.getContestName()));
+            this.soundPlayer.sayErrorCode(errorcode.getName());
+            dataModel.addErrorCode(errorcode);
+            this.processModel.subtract(errorcode.getScore());
+            this.threadPool.execute(() -> {
+                this.apiService.sendData(this.processModel, null);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
         }
-        ErrorCode errorcode = this.mapErrorcodes.get(key);
-        if (errorcode == null || errorcode.getName() == null) {
-            return;
-        }
-        this.ewcnms.add(new ErrorcodeWithContestNameModel(errorcode, dataModel.getContestName()));
-        this.soundPlayer.sayErrorCode(errorcode.getName());
-        dataModel.addErrorCode(errorcode);
-        this.processModel.subtract(errorcode.getScore());
     }
 }

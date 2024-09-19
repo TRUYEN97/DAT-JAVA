@@ -7,6 +7,7 @@ package com.qt.mode;
 import com.qt.common.API.Response;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
+import com.qt.common.TestStatusLogger;
 import com.qt.common.Util;
 import com.qt.contest.AbsContest;
 import com.qt.controller.api.ApiService;
@@ -33,6 +34,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -64,6 +67,7 @@ public abstract class AbsTestMode<V extends AbsModeView> {
     protected final PingAPI pingAPI;
     protected final ShowErrorcode showErrorcode;
     protected final Printer printer;
+    private final ExecutorService threadPool;
     private ModeHandle modeHandle;
     private boolean cancel;
 
@@ -86,12 +90,13 @@ public abstract class AbsTestMode<V extends AbsModeView> {
         this.contests = new LinkedList<>();
         this.errorcodeHandle = ErrorcodeHandle.getInstance();
         this.prepareEventsPackage = initPrepareKeyEventPackage();
-        this.testEventsPackage = initTestKeyEventPackage();
+        this.testEventsPackage = initTestKeyEventPackage(prepareEventsPackage);
         this.fileTestService = FileTestService.getInstance();
         this.apiService = ApiService.getInstance();
         this.conditionHandle = new CheckConditionHandle();
         this.pingAPI = new PingAPI();
         this.printer = new Printer();
+        this.threadPool = Executors.newSingleThreadExecutor();
         this.pingAPI.setPingAPIReceive((responce) -> {
             analysisResponce(responce);
         });
@@ -139,31 +144,50 @@ public abstract class AbsTestMode<V extends AbsModeView> {
     }
 
     public void begin() {
-        this.cancel = false;
-        this.processlHandle.setTesting(false);
-        KeyEventManagement.getInstance().addKeyEventBackAge(prepareEventsPackage);
-        this.errorcodeHandle.clear();
-        this.processlHandle.resetModel();
-        MCUSerialHandler.getInstance().sendReset();
-        while (!loopCheck() && !this.cancel) {
-            Util.delay(200);
-        }
-        if (!cancel) {
-            this.soundPlayer.begin();
-            this.processlHandle.startTest();
-            MCUSerialHandler.getInstance().sendLedYellowOn();
-            KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
-            this.pingAPI.start();
-            updateLog();
-            upTestDataToServer();
+        try {
+            this.cancel = false;
+            this.processlHandle.setTesting(false);
+            KeyEventManagement.getInstance().addKeyEventBackAge(prepareEventsPackage);
+            this.errorcodeHandle.clear();
+            this.processlHandle.resetModel();
+            MCUSerialHandler.getInstance().sendReset();
+            while (!loopCheck() && !this.cancel) {
+                Util.delay(200);
+            }
+            KeyEventManagement.getInstance().remove(prepareEventsPackage);
+            if (!cancel) {
+                TestStatusLogger.getInstance().setTestStatus(
+                        this.processModel.getId(),
+                        this.processModel.getExamId());
+                MCUSerialHandler.getInstance().sendReset();
+                this.soundPlayer.begin();
+                this.processlHandle.startTest();
+                MCUSerialHandler.getInstance().sendLedYellowOn();
+                KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
+                this.pingAPI.start();
+                updateLog();
+                this.threadPool.execute(() -> {
+                    upTestDataToServer();
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
         }
     }
 
     public void endContest() {
-        this.processlHandle.update();
-        updateLog();
-        upTestDataToServer();
-        contestDone();
+        try {
+            this.processlHandle.update();
+            updateLog();
+            this.threadPool.execute(() -> {
+                upTestDataToServer();
+            });
+            contestDone();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
+        }
     }
 
     protected void updateLog() {
@@ -220,6 +244,7 @@ public abstract class AbsTestMode<V extends AbsModeView> {
                 this.soundPlayer.sendResultFailed();
             }
             endTest();
+            TestStatusLogger.getInstance().remove();
             this.processModel.setId("");
             this.processlHandle.setTesting(false);
             this.soundPlayer.sayResultTest(score, this.processlHandle.isPass());
@@ -244,35 +269,21 @@ public abstract class AbsTestMode<V extends AbsModeView> {
         return epg;
     }
 
-    private KeyEventsPackage initTestKeyEventPackage() {
+    private KeyEventsPackage initTestKeyEventPackage(KeyEventsPackage prepareEventsPackage) {
         Map<String, IKeyEvent> events = new HashMap<>();
-        events.put(ConstKey.ERR.CL, (key) -> {
-            this.errorcodeHandle.addBaseErrorCode(key);
-        });
-        events.put(ConstKey.ERR.HL, (key) -> {
-            this.errorcodeHandle.addBaseErrorCode(key);
-        });
-        events.put(ConstKey.ERR.QT, (key) -> {
-            this.errorcodeHandle.addBaseErrorCode(key);
-        });
-        events.put(ConstKey.ERR.RG, (key) -> {
-            this.errorcodeHandle.addBaseErrorCode(key);
-        });
-        events.put(ConstKey.ERR.TN, (key) -> {
-            this.errorcodeHandle.addBaseErrorCode(key);
-        });
         KeyEventsPackage epg = new KeyEventsPackage(name + "Testing", true);
         createTestKeyEvents(events);
         epg.putEvents(events);
+        epg.merge(prepareEventsPackage);
         return epg;
     }
 
-    public boolean checkTestCondisions() {
-        if (this.conditionHandle.checkTestCondisions()) {
+    public boolean isTestCondisionsFailed() {
+        if (this.conditionHandle.isTestCondisionsFailed()) {
             return true;
         }
         String id = this.processModel.getId();
-        if (id != null && !id.isBlank() && id.equals("0")) {
+        if (id != null && !id.isBlank() && !id.equals("0")) {
             if (this.processlHandle.getProcessModel().getScore() < getScoreSpec()) {
                 return true;
             }

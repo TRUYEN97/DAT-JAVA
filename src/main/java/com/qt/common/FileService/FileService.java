@@ -88,7 +88,10 @@ public class FileService {
 
     private File initFile(String name, boolean appand) {
         File file = new File(name);
-        file.getParentFile().mkdirs();
+        File ParentFile = file.getParentFile();
+        if (ParentFile != null && !ParentFile.exists()) {
+            ParentFile.mkdirs();
+        }
         if (!appand && file.exists()) {
             file.delete();
         }

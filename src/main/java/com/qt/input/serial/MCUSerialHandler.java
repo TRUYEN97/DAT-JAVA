@@ -7,6 +7,7 @@ package com.qt.input.serial;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.qt.common.CarConfig;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.MyObjectMapper;
@@ -29,9 +30,12 @@ public class MCUSerialHandler {
         this.model = new CarModel();
         this.serialHandler = new SerialHandler("ttyS0", 115200); //ttyS0
         this.serialHandler.setFirstConnectAction(() -> {
-            while (!sendReset() || !sendConfig(new MCU_CONFIG_MODEL())) {
+            System.out.println("send MCU config");
+            while (!sendConfig(CarConfig.getInstance().getMcuConfig())) {
                 Util.delay(500);
             }
+            System.out.println("send MCU reset ok");
+            
         });
         this.serialHandler.setReceiver((serial, data) -> {
             try {

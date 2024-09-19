@@ -112,18 +112,6 @@ public class FileTestService {
         return file;
     }
 
-    public String getCarId() {
-        String carid = this.fileService.readFile(new File("log/carId.txt"));
-        return carid == null ? "0" : carid.trim();
-    }
-
-    public void writeCarId(String carId) {
-        if (carId == null || carId.isBlank()) {
-            return;
-        }
-        this.fileService.writeFile("log/carId.txt", carId, false);
-    }
-
     private String createLogPathString(String id, String fileName) {
         return createPathString(logDir, id, fileName);
     }

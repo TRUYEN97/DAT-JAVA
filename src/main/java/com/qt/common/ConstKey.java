@@ -10,18 +10,28 @@ package com.qt.common;
  */
 public final class ConstKey {
 
+    public static final class URL {
+
+        public static final String CHECK_UPDATE_URL = "checkUpdateUrl";
+        public static final String CHECK_CAR_ID_URL = "checkCarIdUrl";
+        public static final String CHECK_USER_ID_URL = "checkUserIdUrl";
+        public static final String SEND_DATA_URL = "sendDataUrl";
+        public static final String RUNNABLE_URL = "runnableUrl";
+        public static final String CANCEL_REQUEST_URL = "cancelUrl";
+        public static final String SERVER_PING_ADDR = "serverIp";
+    }
+
+    public static final class PATH {
+
+        public static final String DIR_LOG = "dirLog";
+        public static final String CONFIG_PATH = "configPath";
+        public static final String DIR_BACKUP_LOG = "dirBackupLog";
+    }
+
     public static final String VEHICLE_TIME = "vehicleTime";
-    public static final String CHECK_INFO = "checkInfo";
-    public static final String CONFIG_PATH = "configPath";
-    public static final String SERVER_PING_ADDR = "serverIp";
-    public static final String CHECK_CAR_ID = "checkCarId";
-    public static final String CHECK_USER_ID = "checkUserId";
-    public static final String SEND_DATA = "sendData";
-    public static final String RUNNABLE = "runnable";
-    public static final String DIR_LOG = "dirLog";
-    public static final String DIR_BACKUP_LOG = "dirBackupLog";
-    
+
     public static final class CAR_CONFIG {
+
         public static final String MCU_CONFIG = "mcuConfig";
     }
 

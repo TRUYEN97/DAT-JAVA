@@ -5,6 +5,7 @@
 package com.qt.main;
 
 import com.qt.common.ConstKey;
+import com.qt.common.TestStatusLogger;
 import com.qt.controller.ErrorcodeHandle;
 import com.qt.controller.api.ApiService;
 import com.qt.controller.modeController.ModeManagement;
@@ -29,6 +30,7 @@ public class Core {
     private final CameraRunner cameraRunner;
     private final ChooseModeFrame chooseModeFrame;
     private final ErrorcodeHandle errorcodeHandle;
+    private final TestStatusLogger statusLogger;
 
     private Core() {
         this.viewMain = ViewMain.getInstance();
@@ -38,6 +40,7 @@ public class Core {
         this.modeManagement = new ModeManagement(viewMain);
         this.chooseModeFrame = new ChooseModeFrame(this.modeManagement);
         this.errorcodeHandle = ErrorcodeHandle.getInstance();
+        this.statusLogger = TestStatusLogger.getInstance();
         addMode();
         initErrorcode();
     }
@@ -88,6 +91,7 @@ public class Core {
         this.cameraRunner.start();
         this.viewMain.display();
         this.modeManagement.start();
+        this.statusLogger.check();
     }
 
 }

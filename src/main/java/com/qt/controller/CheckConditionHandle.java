@@ -5,6 +5,7 @@
 package com.qt.controller;
 
 import com.qt.contest.AbsCondition;
+import com.qt.model.modelTest.contest.ContestDataModel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,24 +16,33 @@ import java.util.List;
 public class CheckConditionHandle {
 
     private final List<AbsCondition> conditions;
+    private final ContestDataModel contestDataModel;
 
     public CheckConditionHandle() {
-        this.conditions = new ArrayList<>();
+        this(null);
     }
-    
-    public void addConditon(AbsCondition condition){
+
+    public CheckConditionHandle(ContestDataModel contestDataModel) {
+        this.conditions = new ArrayList<>();
+        this.contestDataModel = contestDataModel;
+    }
+
+    public void addConditon(AbsCondition condition) {
         if (condition == null) {
-            return ;
+            return;
+        }
+        if (this.contestDataModel != null) {
+            condition.setContestDataModel(contestDataModel);
         }
         this.conditions.add(condition);
     }
 
-    public boolean checkTestCondisions() {
+    public boolean isTestCondisionsFailed() {
         for (AbsCondition condition : conditions) {
             if (!condition.checkPassed() && condition.isImportant()) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 }

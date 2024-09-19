@@ -11,12 +11,12 @@ import com.qt.common.API.Response;
 import com.qt.common.API.RestAPI;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
+import com.qt.common.MyObjectMapper;
 import com.qt.common.Setting;
 import com.qt.common.Util;
 import com.qt.common.timer.TimeBase;
-import com.qt.controller.modeController.ModeManagement;
 import com.qt.model.input.UserModel;
-import com.qt.output.SoundPlayer;
+import com.qt.model.modelTest.process.ProcessModel;
 import com.qt.view.component.ShowMessagePanel;
 import java.awt.Component;
 import java.io.File;
@@ -41,13 +41,11 @@ public class ApiService {
     private static volatile ApiService insatnce;
     private final Setting setting;
     private final RestAPI restAPI;
-    private final SoundPlayer soundPlayer;
 
     private ApiService() {
         this.setting = Setting.getInstance();
         this.restAPI = new RestAPI();
         this.restAPI.setTextComponent(ShowMessagePanel.getInstance());
-        this.soundPlayer = SoundPlayer.getInstance();
     }
 
     public static ApiService getInstance() {
@@ -111,7 +109,7 @@ public class ApiService {
     }
     protected static final String CAR_ID = "carId";
 
-    public int sendData(JSONObject jSONObject, File imgFile) {
+    public synchronized int sendData(JSONObject jSONObject, File imgFile) {
         try {
             if (checkPingToServer()) {
                 return DISCONNECT;
@@ -143,7 +141,25 @@ public class ApiService {
         }
     }
 
-    public int sendData(File jsonFile, File imgFile) {
+    public synchronized int sendData(ProcessModel processModel, File imgFile) {
+        try {
+            if (processModel == null) {
+                return FAIL;
+            }
+            String id = processModel.getId();
+            if (id == null || id.equals("0")) {
+                return ApiService.PASS;
+            }
+            return sendData(MyObjectMapper.convertValue(processModel, JSONObject.class),
+                    imgFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
+            return FAIL;
+        }
+    }
+
+    public synchronized int sendData(File jsonFile, File imgFile) {
         try {
             if (jsonFile == null || !jsonFile.exists()) {
                 return FAIL;
@@ -181,7 +197,7 @@ public class ApiService {
             if (checkPingToServer()) {
                 return WAIT;
             }
-            String url = this.setting.getProperty(ConstKey.RUNNABLE);
+            String url = this.setting.getCheckRunnableUrl();
             if (url == null) {
                 ErrorLog.addError(this, "không tìm thấy: runnable url");
                 return URL_INVALID;
@@ -221,5 +237,19 @@ public class ApiService {
 
     public void setRootFrame(Component component) {
         this.restAPI.setComponent(component);
+    }
+
+    public void sendCancelRequest(String id, String examId) {
+        if (id == null || id.isBlank() || examId == null || examId.isBlank()) {
+            return;
+        }
+        String url = this.setting.getCancelRequestUrl();
+        if (url == null) {
+            ErrorLog.addError(this, "không tìm thấy: checkInfo url");
+            return;
+        }
+        restAPI.sendPost(url, JsonBodyAPI.builder()
+                .put("id", id)
+                .put("examId", examId), true);
     }
 }

@@ -5,18 +5,15 @@
 package com.qt.common.API;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.qt.common.ConstKey;
-import com.qt.common.ErrorLog;
+import com.qt.common.Setting;
 import com.qt.common.mylogger.MyLogger;
 import com.qt.view.component.ShowMessagePanel;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.Properties;
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
 import org.apache.http.NameValuePair;
@@ -47,19 +44,11 @@ public class RestAPI {
     private Component component;
     private ShowMessagePanel showMessagePanel;
     private final MyLogger logger;
-    private final Properties properties;
 
     public RestAPI() {
         this.jwtUtil = new JwtUtil();
         this.logger = new MyLogger();
-        this.properties = new Properties();
-        try {
-            this.properties.load(getClass().getResourceAsStream("/config.properties"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            ErrorLog.addError("ApiService-constructor", ex);
-        }
-        String dir = properties.getProperty(ConstKey.DIR_LOG, "log");
+        String dir = Setting.getInstance().getLogDir();
         this.logger.setFile(new File(dir, "API"));
         this.logger.setDailyLog(true);
         this.logger.setSaveMemory(true);

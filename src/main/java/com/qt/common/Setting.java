@@ -41,11 +41,15 @@ public class Setting {
     }
 
     public String getBackUpLogDir() {
-        return properties.getProperty(ConstKey.DIR_BACKUP_LOG, "logBackup");
+        return properties.getProperty(ConstKey.PATH.DIR_BACKUP_LOG, "logBackup");
     }
 
     public String getLogDir() {
-        return properties.getProperty(ConstKey.DIR_LOG, "log");
+        return properties.getProperty(ConstKey.PATH.DIR_LOG, "log");
+    }
+
+    public String getConfigPath() {
+        return properties.getProperty(ConstKey.PATH.CONFIG_PATH, "config/carConfig.json");
     }
 
     public String getProperty(String key) {
@@ -57,27 +61,30 @@ public class Setting {
     }
 
     public String getServerPingIp() {
-        return properties.getProperty(ConstKey.SERVER_PING_ADDR);
+        return properties.getProperty(ConstKey.URL.SERVER_PING_ADDR);
     }
 
     public String getSendDataUrl() {
-        return properties.getProperty(ConstKey.SEND_DATA);
+        return properties.getProperty(ConstKey.URL.SEND_DATA_URL);
     }
 
     public String getCheckCarIdUrl() {
-        return properties.getProperty(ConstKey.CHECK_CAR_ID);
+        return properties.getProperty(ConstKey.URL.CHECK_CAR_ID_URL);
     }
 
     public String getCheckUserIdUrl() {
-        return properties.getProperty(ConstKey.CHECK_USER_ID);
+        return properties.getProperty(ConstKey.URL.CHECK_USER_ID_URL);
     }
 
     public String getCheckCommandUrl() {
-        return properties.getProperty(ConstKey.CHECK_INFO);
+        return properties.getProperty(ConstKey.URL.CHECK_UPDATE_URL);
     }
 
-    public String getConfigPath() {
-        return properties.getProperty(ConstKey.CHECK_INFO, "carConfig.json");
+    public String getCancelRequestUrl() {
+        return properties.getProperty(ConstKey.URL.CANCEL_REQUEST_URL);
     }
 
+    public String getCheckRunnableUrl() {
+         return properties.getProperty(ConstKey.URL.RUNNABLE_URL);
+    }
 }
