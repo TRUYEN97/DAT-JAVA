@@ -39,7 +39,7 @@ public class TangToc extends AbsContest {
         }
         if (this.carModel.getDistance() - oldDistance >= 100) {
             if (detaS < 1 || !hasChaged) {
-                addErrorCode(ConstKey.ERR.TS);
+                addErrorCode(ConstKey.ERR.INCORRECT_GEAR_SHIFT);
             } else if (detaV < 5) {
                 addErrorCode(ConstKey.ERR.TT);
             }

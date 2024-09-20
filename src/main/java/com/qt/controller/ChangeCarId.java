@@ -36,8 +36,12 @@ public class ChangeCarId implements Runnable {
         }
         this.soundPlayer.sayChecking();
         if (this.apiService.checkCarId(value)) {
-            ProcessModelHandle.getInstance().setCarID(value);
-            this.soundPlayer.welcomeCarId(this.processModel.getCarId());
+            if (ProcessModelHandle.getInstance().isTesting()) {
+                this.soundPlayer.canNotChange();
+            } else {
+                ProcessModelHandle.getInstance().setCarID(value);
+                this.soundPlayer.welcomeCarId(this.processModel.getCarId());
+            }
         } else {
             this.soundPlayer.carIdInvalid();
         }

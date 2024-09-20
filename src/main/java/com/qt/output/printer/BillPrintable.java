@@ -6,6 +6,7 @@ package com.qt.output.printer;
 
 import com.qt.common.ErrorLog;
 import com.qt.model.modelTest.ErrorCode;
+import com.qt.model.modelTest.ErrorCodeInfo;
 import com.qt.model.modelTest.ErrorcodeWithContestNameModel;
 import com.qt.model.modelTest.contest.ContestDataModel;
 import com.qt.model.modelTest.process.ProcessModel;
@@ -56,8 +57,8 @@ public class BillPrintable implements Printable {
                 drawString(g2d, y += headerRectHeight, "CAC LOI:");
                 for (ErrorcodeWithContestNameModel errorcode : errorcodes) {
                     drawString(g2d, y += yShift, "%s, -%s, %s",
-                            errorcode.getDescription(),
-                            errorcode.getScore(),
+                            errorcode.getErrName(),
+                            errorcode.getErrPoint(),
                             errorcode.getContestName());
                 }
             }
@@ -94,7 +95,9 @@ public class BillPrintable implements Printable {
         List<ErrorcodeWithContestNameModel> errorcodes = new ArrayList<>();
         if (!this.processData.getErrorCodes().isEmpty()) {
             for (ErrorCode errorCode : this.processData.getErrorCodes()) {
-                errorcodes.add(new ErrorcodeWithContestNameModel(errorCode, ""));
+                if (errorCode instanceof ErrorCodeInfo codeInfo) {
+                    errorcodes.add(new ErrorcodeWithContestNameModel(codeInfo, ""));
+                }
             }
         }
         if (!this.processData.getContests().isEmpty()) {
@@ -103,7 +106,9 @@ public class BillPrintable implements Printable {
                     continue;
                 }
                 for (ErrorCode errorCode : contest.getErrorCodes()) {
-                    errorcodes.add(new ErrorcodeWithContestNameModel(errorCode, contest.getContestName()));
+                    if (errorCode instanceof ErrorCodeInfo codeInfo) {
+                        errorcodes.add(new ErrorcodeWithContestNameModel(codeInfo, contest.getContestName()));
+                    }
                 }
             }
         }

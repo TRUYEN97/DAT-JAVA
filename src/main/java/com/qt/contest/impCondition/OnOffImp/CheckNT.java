@@ -21,7 +21,7 @@ public class CheckNT extends AbsOnOffCondition{
 
     @Override
     protected void action() {
-        this.setErrorcode(ConstKey.ERR.NT);
+        this.setErrorcode(ConstKey.ERR.NO_SIGNAL_TURN_LEFT);
     }
     
 }

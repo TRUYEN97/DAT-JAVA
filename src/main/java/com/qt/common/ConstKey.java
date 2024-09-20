@@ -51,15 +51,57 @@ public final class ConstKey {
 
     public static final class ERR {
 
+        public static final String DISQUALIFIED = "DISQUALIFIED";
+        public static final String FAILED_COMPLETE_PARKING = "FAILED_COMPLETE_PARKING";
+        public static final String IGNORED_PARKING = "IGNORED_PARKING";
+        public static final String WRONG_WAY = "WRONG_WAY";
+        public static final String WRONG_LANE = "WRONG_LANE";
+        public static final String INCORRECTLY_FINISHED = "INCORRECTLY_FINISHED";
+        public static final String WHEEL_OUT_OF_PATH = "WHEEL_OUT_OF_PATH";
+        public static final String ROLLED_BACK_OVER_50M = "ROLLED_BACK_OVER_50M";
+        public static final String DONT_STOP_AS_REQUIRED_2 = "DONT_STOP_AS_REQUIRED_2";
+        public static final String STOP_AFTER_DES_2 = "STOP_AFTER_DES_2";
+        public static final String OVER_30S_TO_START = "OVER_30S_TO_START";
+        public static final String FAILED_PASS_INTERSECTION_OVER_30S = "FAILED_PASS_INTERSECTION_OVER_30S";
+        public static final String NO_EMERGENCY_SIGNAL = "NO_EMERGENCY_SIGNAL";
+        public static final String RAN_A_RED_LIGHT = "RAN_A_RED_LIGHT";
+        public static final String ENGINE_SPEED_EXCEEDED_4000_RPM = "ENGINE_SPEED_EXCEEDED_4000_RPM";
+        public static final String INCORRECT_PARCKING = "INCORRECT_PARCKING";
+        public static final String ENGINE_STALLED = "ENGINE_STALLED";
+        public static final String NO_SIGNAL_TURN_RIGHT = "NO_SIGNAL_TURN_RIGHT";
+        public static final String NO_SIGNAL_TURN_LEFT = "NO_SIGNAL_TURN_LEFT";
+        public static final String NO_SIGNAL_RIGHT_END = "NO_SIGNAL_RIGHT_END";
+        public static final String INCORRECT_GEAR_DOWNSHIFT = "INCORRECT_GEAR_DOWNSHIFT";
+        public static final String FAILED_TO_SHIFT_HIGH_GEAR = "FAILED_TO_SHIFT_HIGH_GEAR";
+        public static final String FAILED_TO_SHIFT_LOW_GEAR = "FAILED_TO_SHIFT_LOW_GEAR";
+        public static final String FAILED_TO_REACH_REQUIRED_SPEED = "FAILED_TO_REACH_REQUIRED_SPEED";
+        public static final String INCORRECT_GEAR_SHIFT = "INCORRECT_GEAR_SHIFT";
+        public static final String PARCKED_WRONG_POS = "PARCKED_WRONG_POS";
+        public static final String FAILED_PASS_INTERSECTION_OVER_20S = "FAILED_PASS_INTERSECTION_OVER_20S";
+        public static final String DONT_STOP_AS_REQUIRED = "DONT_STOP_AS_REQUIRED";
+        public static final String STOP_AFTER_DES = "STOP_AFTER_DES";
+        public static final String STOP_BEFORE_DES = "STOP_BEFORE_DES";
+        public static final String SIGNAL_KEPT_ON_OVER_5M = "SIGNAL_KEPT_ON_OVER_5M";
+        public static final String NO_START_SIGNAL_LEFT = "NO_START_SIGNAL_LEFT";
+        public static final String OVER_20S_TO_START = "OVER_20S_TO_START";
+        public static final String ERR_PAUSE_MOVE2 = "errPauseMove2";
+        public static final String IGNORED_STOP_SIGNAL = "IGNORED_STOP_SIGNAL";
+        public static final String WHEEL_CROSSED_LINE = "WHEEL_CROSSED_LINE";
+        public static final String TIME_LIMIT_EXCEEDED = "TIME_LIMIT_EXCEEDED";
+        public static final String OVERALL_TIME_EXCEEDED = "OVERALL_TIME_EXCEEDED";
+        public static final String SPEED_LIMIT_EXCEEDED = "SPEED_LIMIT_EXCEEDED";
+        ////
+
         public static final String HL = "Left";//
         public static final String TN = "Begin";//
         public static final String RG = "Right";//
         public static final String QT = "+";//
         public static final String CL = "End";
         ////////////
+
         public static final String AT = "AT";//
-        public static final String NT = "NT";//
-        public static final String NP = "NP";//
+//        public static final String NT = "NT";//
+//        public static final String NP = "NP";//
         public static final String KPT = "KPT";//
         public static final String TS = "TS";//
         public static final String GS = "GS";//
@@ -72,7 +114,7 @@ public final class ConstKey {
         public static final String NPT = "PT";//
         public static final String SO3 = "SO3";//
         public static final String VSO = "VSO";//
-        public static final String TIME_OUT = "timeout";//
+        public static final String TIME_OUT = "TIME_LIMIT_EXCEEDED";//
     }
 
     public static final class KEY_BOARD {

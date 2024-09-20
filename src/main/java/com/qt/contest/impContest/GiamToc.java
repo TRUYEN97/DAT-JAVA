@@ -36,7 +36,7 @@ public class GiamToc extends AbsContest {
         }
         if (this.carModel.getDistance() - oldDistance >= 100) {
             if (detaG < 1 || !hasChaged) {
-                addErrorCode(ConstKey.ERR.GS);
+                addErrorCode(ConstKey.ERR.INCORRECT_GEAR_DOWNSHIFT);
             } else if (detaV < 5) {
                 addErrorCode(ConstKey.ERR.GT);
             }

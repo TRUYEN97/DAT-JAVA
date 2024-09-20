@@ -21,7 +21,7 @@ public class CheckNP extends AbsOnOffCondition{
 
     @Override
     protected void action() {
-        this.setErrorcode(ConstKey.ERR.NP);
+        this.setErrorcode(ConstKey.ERR.NO_SIGNAL_TURN_RIGHT);
     }
     
 }

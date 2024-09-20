@@ -4,26 +4,27 @@
  */
 package com.qt.model.modelTest;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  *
  * @author Admin
  */
-@Getter
+
 public class ErrorCode {
+    protected final String errKey;
+    protected final int errPoint;
 
-    private String name;
-    private String description;
-    private int score;
-
-    public ErrorCode() {
+    public ErrorCode(String errKey, int errPoint) {
+        this.errKey = errKey;
+        this.errPoint = errPoint;
     }
 
-    public ErrorCode(String name, int score, String description) {
-        this.name = name;
-        this.score = score;
-        this.description = description;
+    public String getErrKey() {
+        return errKey;
     }
+
+    public int getErrPoint() {
+        return errPoint;
+    }
+    
+    
 }

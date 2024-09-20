@@ -43,6 +43,9 @@ public class ChangeUserId implements Runnable {
         this.soundPlayer.sayChecking();
         UserModel userModel = this.apiService.checkUserId(value, this.processModel.getCarId());
         String id;
+        if (ProcessModelHandle.getInstance().isTesting()) {
+            this.soundPlayer.canNotChange();
+        }
         if (userModel != null && (id = userModel.getId()) != null) {
             String modeName = userModel.getModeName();
             String rank = userModel.getRank();
@@ -55,7 +58,9 @@ public class ChangeUserId implements Runnable {
                 if (!this.infoFrame.isAccept()) {
                     return;
                 }
-                if (modeName != null && rank != null
+                if (ProcessModelHandle.getInstance().isTesting()) {
+                    this.soundPlayer.canNotChange();
+                } else if (modeName != null && rank != null
                         && modeManagement.updateMode(modeName, rank)) {
                     ProcessModelHandle.getInstance().setUserModel(userModel);
                     this.soundPlayer.welcomeId(id);

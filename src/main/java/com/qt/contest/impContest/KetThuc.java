@@ -31,7 +31,7 @@ public class KetThuc extends AbsContest {
         if (this.carModel.getStatus() == ConstKey.CAR_ST.STOP || isStop) {
             this.isStop = true;
             if (!this.carModel.isNp()) {
-                this.addErrorCode(ConstKey.ERR.NP);
+                this.addErrorCode(ConstKey.ERR.NO_SIGNAL_RIGHT_END);
             }
             long deta = System.currentTimeMillis() - oldMill;
             if (so && deta >= 3000 && this.carModel.getGearBoxValue() != 0) {

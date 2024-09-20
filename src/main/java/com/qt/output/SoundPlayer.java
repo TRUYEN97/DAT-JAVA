@@ -17,15 +17,15 @@ import javax.sound.sampled.Clip;
  * @author Admin
  */
 public class SoundPlayer {
-    
+
     private static volatile SoundPlayer instance;
     private final ExecutorService threadPool = Executors.newCachedThreadPool();
     private SoundRunner soundRunner;
-    
+
     private SoundPlayer() {
         this.soundRunner = new SoundRunner();
     }
-    
+
     public static SoundPlayer getInstance() {
         SoundPlayer ins = instance;
         if (ins == null) {
@@ -38,7 +38,7 @@ public class SoundPlayer {
         }
         return ins;
     }
-    
+
     public void sayResultTest(int score, boolean isPass) {
         new Thread(() -> {
             if (isPass) {
@@ -56,28 +56,28 @@ public class SoundPlayer {
             }
         }).start();
     }
-    
+
     public void contestName(String name) {
         this.play(new SoundModel("contest/contest.wav"));
         this.play(new SoundModel(String.format("contest/%s.wav", name)));
     }
-    
+
     public void startContest() {
         this.play(new SoundModel("warning/contestStart.wav", true));
     }
-    
+
     public void endContest() {
         this.play(new SoundModel("warning/contestFinish.wav", true));
     }
-    
+
     public void sayWelcome() {
         this.play(new SoundModel("welcome.wav"));
     }
-    
+
     public void inputId() {
         play(new SoundModel("user/inputId.wav"));
     }
-    
+
     public void welcomeId(String numString) {
         if (numString == null || numString.isBlank()) {
             return;
@@ -93,7 +93,7 @@ public class SoundPlayer {
         }
 //        }).start();
     }
-    
+
     public void welcomeCarId(String numString) {
         if (numString == null || numString.isBlank()) {
             return;
@@ -109,21 +109,21 @@ public class SoundPlayer {
         }
 //        }).start();
     }
-    
+
     public void inputCarId() {
         play(new SoundModel("car/inputCar.wav"));
     }
-    
+
     public void begin() {
         play(new SoundModel("contest/begin.wav"));
     }
-    
+
     public void sayErrorCode(String name) {
         new Thread(() -> {
             play(new SoundModel(String.format("errorcode/%s.wav", name)));
         }).start();
     }
-    
+
     private void sayNumber(int num) {
         if (num < 10) {
             play(new SoundModel(String.format("number/%d.wav", num)));
@@ -159,7 +159,7 @@ public class SoundPlayer {
         }
         play(arr);
     }
-    
+
     private synchronized void play(SoundModel... soundModels) {
         for (SoundModel soundModel : soundModels) {
             if (soundModel == null) {
@@ -180,35 +180,35 @@ public class SoundPlayer {
             }
         }
     }
-    
+
     public void carIdInvalid() {
         play(new SoundModel("car/CarIdInvalid.wav"));
     }
-    
+
     public void userIdInvalid() {
         play(new SoundModel("user/IdInvalid.wav"));
     }
-    
+
     public void userIdHasTest() {
         play(new SoundModel("user/idHasTest.wav"));
     }
-    
+
     public void pingServerFailed() {
         play(new SoundModel("lostPing.wav"));
     }
-    
+
     public void sendResultFailed() {
         play(new SoundModel("sendDataFailed.wav"));
     }
-    
+
     public void sendlostConnect() {
         play(new SoundModel("lostConnect.wav"));
     }
-    
+
     public void modeInvalid() {
         play(new SoundModel("userModeInvalid.wav"));
     }
-    
+
     public void practice() {
         play(new SoundModel("cheDoOnTap.wav"));
     }
@@ -216,29 +216,40 @@ public class SoundPlayer {
     public void sayChecking() {
         play(new SoundModel("checking.wav"));
     }
-    
+
     public void pleasePrepare() {
         play(new SoundModel("pleasePrepare.wav"));
     }
-    
+
+    public void canNotChange() {
+        play(new SoundModel("warning/canNotChange.wav"));
+    }
+
     class SoundRunner implements Runnable {
-        
+
         private String path;
         private int framePosition;
         private int frameLength;
         private boolean running;
-        
+
         @Override
         public void run() {
             try (Clip audioClip = AudioSystem.getClip()) {
                 if (path == null || path.isBlank()) {
                     return;
                 }
-                var soundFile = getClass().getResource(String.format("/sound/%s", path));
+                String pathString = String.format("/sound/%s", path);
+                var soundFile = getClass().getResource(pathString);
                 if (soundFile == null) {
+                    ErrorLog.addError(this, String.format("sound: %s - not found!", pathString));
                     return;
                 }
-                audioClip.open(AudioSystem.getAudioInputStream(soundFile));
+                var audioStream = AudioSystem.getAudioInputStream(soundFile);
+                if (audioStream == null) {
+                    ErrorLog.addError(this, String.format("sound: %s - error!", pathString));
+                    return;
+                }
+                audioClip.open(audioStream);
                 audioClip.start();
                 frameLength = audioClip.getFrameLength() - 1;
                 this.running = true;
@@ -251,48 +262,48 @@ public class SoundPlayer {
             }
             this.running = false;
         }
-        
+
         private void setPath(String path) {
             this.path = path;
         }
-        
+
     }
-    
+
     class SoundModel {
-        
+
         private boolean playNow = false;
-        
+
         SoundModel(String path) {
             this(path, 0, false);
         }
-        
+
         SoundModel(String path, int num) {
             this(path, num, false);
         }
-        
+
         SoundModel(String path, boolean playNow) {
             this(path, 0, playNow);
         }
-        
+
         SoundModel(String path, int num, boolean playNow) {
             setNum(num);
             setPath(path);
             this.playNow = playNow;
         }
-        
+
         private String path;
         private int num;
-        
+
         private void setPath(String path) {
             this.path = path;
         }
-        
+
         private void setNum(int num) {
             if (num < 0) {
                 num = 0;
             }
             this.num = num;
         }
-        
+
     }
 }

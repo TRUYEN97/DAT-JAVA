@@ -45,7 +45,7 @@ public class ContestDataModel {
     }
     
     public void addErrorCode(ErrorCode errorcode){
-        if (errorcode == null || errorcode.getName() == null) {
+        if (errorcode == null || errorcode.getErrKey() == null) {
             return;
         }
         errorCodes.add(errorcode);

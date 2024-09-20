@@ -45,8 +45,8 @@ public class ListErrorcode<T> extends JList<ErrorcodeWithContestNameModel> {
                 value = new ErrorcodeWithContestNameModel("", 0, "", "");
             }
             if (index >= errorcodeItems.size()) {
-                errorcodeItems.add(new ErrorcodeItem(value.getName(),
-                        value.getScore(), value.getContestName()));
+                errorcodeItems.add(new ErrorcodeItem(value.getErrKey(),
+                        value.getErrPoint(), value.getContestName()));
             }
             ErrorcodeItem item = errorcodeItems.get(index);
             return item;

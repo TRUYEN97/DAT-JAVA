@@ -6,6 +6,7 @@ package com.qt.view.frame;
 
 import com.qt.common.ConstKey;
 import com.qt.common.Util;
+import com.qt.common.timer.WaitTime.Class.TimeS;
 import com.qt.model.config.ChangeIdModel;
 import com.qt.pretreatment.KeyEventManagement;
 import com.qt.pretreatment.KeyEventsPackage;
@@ -14,6 +15,7 @@ import com.qt.view.element.ButtonDesign;
 import com.qt.view.interfaces.MouseClicked;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.Timer;
 
 /**
  *
@@ -25,6 +27,7 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
     private final MouseClicked mouseClick;
     private final KeyEventManagement eventManagement;
     private final KeyEventsPackage eventsPackage;
+    private final Timer timer;
     private int st;
 
     /**
@@ -60,6 +63,9 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
         /* Create and display the form */
         initComponents();
 //        setBackground(new Color(0, 0, 0, 0));
+        this.timer = new Timer(10000, (e) -> {
+            st = -1;
+        });
         this.model = new ChangeIdModel();
         this.eventManagement = KeyEventManagement.getInstance();
         this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName(), true);
@@ -88,10 +94,15 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
             public void windowClosed(WindowEvent e) {
                 KeyBoardFrame.this.eventManagement.remove(eventsPackage);
                 st = -1;
+                timer.stop();
             }
         });
         initKeyPackage();
         initMouseClickEvent();
+    }
+
+    public void setWaitTimeMs(int time) {
+        this.timer.setDelay(time);
     }
 
     private void initMouseClickEvent() {
@@ -120,6 +131,7 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
             keyNumbeClick(val);
         }
         this.stValue.setValue(this.model.getStringValue());
+        this.timer.restart();
     }
 
     private void keyNumbeClick(String val) {
@@ -278,6 +290,7 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
         this.stValue.setValue(this.model.getStringValue());
         setVisible(true);
         this.st = 0;
+        this.timer.start();
         while (this.st == 0) {
             Util.delay(500);
         }

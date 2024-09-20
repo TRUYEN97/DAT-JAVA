@@ -40,7 +40,7 @@ public class ProcessModel extends UserModel{
     }
 
     public void addErrorcode(ErrorCode errorcode) {
-        if (errorcode == null || errorcode.getName() == null) {
+        if (errorcode == null || errorcode.getErrKey() == null) {
             return;
         }
         this.errorCodes.add(errorcode);

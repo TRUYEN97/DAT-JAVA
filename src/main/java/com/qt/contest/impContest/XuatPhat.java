@@ -40,7 +40,7 @@ public class XuatPhat extends AbsContest {
                 this.addErrorCode(ConstKey.ERR.AT);
             }
             if (!this.carModel.isNt()) {
-                this.addErrorCode(ConstKey.ERR.NT);
+                this.addErrorCode(ConstKey.ERR.NO_START_SIGNAL_LEFT);
             }
             if (this.carModel.isPt()) {
                 this.addErrorCode(ConstKey.ERR.NPT);
