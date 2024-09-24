@@ -4,6 +4,7 @@
  */
 package com.qt.contest;
 
+import com.qt.common.ErrorLog;
 import com.qt.common.Util;
 import com.qt.contest.impCondition.timerCondition.TimeOutContest;
 import com.qt.controller.CheckConditionHandle;
@@ -14,6 +15,7 @@ import com.qt.controller.ProcessModelHandle;
 import com.qt.input.serial.MCUSerialHandler;
 import com.qt.model.modelTest.contest.ContestDataModel;
 import com.qt.model.input.CarModel;
+import com.qt.model.modelTest.DataTestTransfer;
 import com.qt.output.SoundPlayer;
 
 public abstract class AbsContest implements IgetTime {
@@ -35,9 +37,14 @@ public abstract class AbsContest implements IgetTime {
     protected int status;
     protected boolean stop;
     protected int timeOut;
+    private final boolean sayContestName;
+    protected DataTestTransfer dataTestTransfer;
 
-    public AbsContest(String name, String nameSound, boolean soundIn, boolean soundOut, int timeout) {
+    public AbsContest(String name, String nameSound,
+            boolean sayContestName, boolean soundIn,
+            boolean soundOut, int timeout) {
         this.timeOut = timeout < 0 ? 0 : timeout;
+        this.sayContestName = sayContestName;
         this.nameSound = nameSound;
         this.processlHandle = ProcessModelHandle.getInstance();
         this.carModel = MCUSerialHandler.getInstance().getModel();
@@ -48,10 +55,14 @@ public abstract class AbsContest implements IgetTime {
         this.contestModel = new ContestDataModel(name);
         this.contestModelHandle = new ContestModelHandle(contestModel);
         this.conditionHandle = new CheckConditionHandle(this.contestModel);
-        this.timeOutContest = new TimeOutContest();
+        this.timeOutContest = new TimeOutContest(this);
         this.conditionHandle.addConditon(timeOutContest);
         this.status = DONE;
         this.stop = false;
+    }
+    
+    protected double getDistance(double oldDistance) {
+        return this.carModel.getDistance() - oldDistance;
     }
 
     public String getNameSound() {
@@ -61,7 +72,7 @@ public abstract class AbsContest implements IgetTime {
     protected void addErrorCode(String errorKey) {
         this.errorcodeHandle.addContestErrorCode(errorKey, contestModel);
     }
-
+    
     public boolean isTestCondisionsFailed() {
         return this.conditionHandle.isTestCondisionsFailed();
     }
@@ -78,6 +89,8 @@ public abstract class AbsContest implements IgetTime {
         return status;
     }
 
+    protected abstract void init();
+
     protected abstract boolean loop();
 
     protected abstract boolean isIntoContest();
@@ -93,45 +106,69 @@ public abstract class AbsContest implements IgetTime {
 
     public Runnable begin() {
         return () -> {
-            this.timeOutContest.setContest(this);
-            this.status = WAIT;
-            this.stop = false;
-            this.processlHandle.setContest(this);
-            this.processlHandle.addContestModel(contestModel);
-            while (!isIntoContest() && !stop) {
-                Util.delay(50);
+            try {
+                this.contestModelHandle.reset();
+                this.timeOutContest.start();
+                this.status = WAIT;
+                this.stop = false;
+                this.processlHandle.setContest(this);
+                this.processlHandle.addContestModel(contestModel);
+                init();
+                this.conditionHandle.start();
+                if (this.sayContestName) {
+                    this.soundPlayer.contestName(nameSound);
+                }
+                while (!isIntoContest() && !stop) {
+                    Util.delay(10);
+                }
+                if (this.playSoundWhenIn) {
+                    this.soundPlayer.startContest();
+                }
+                this.contestModelHandle.start();
+                this.status = RUNNING;
+            } catch (Exception e) {
+                e.printStackTrace();
+                ErrorLog.addError(AbsContest.this, e);
             }
-            this.contestModelHandle.start();
-            this.soundPlayer.contestName(nameSound);
-            if (this.playSoundWhenIn) {
-                this.soundPlayer.startContest();
-            }
-            this.status = RUNNING;
         };
     }
 
     public Runnable test() {
         return () -> {
-            status = RUNNING;
-            while (!stop && !loop()) {
-                Util.delay(50);
+            try {
+                status = RUNNING;
+                while (!stop && !loop()) {
+                    Util.delay(50);
+                }
+                status = DONE;
+            } catch (Exception e) {
+                e.printStackTrace();
+                ErrorLog.addError(AbsContest.this, e);
             }
-            status = DONE;
         };
     }
 
     public void end() {
-        status = DONE;
-        this.contestModelHandle.end();
-        if (this.playSoundWhenOut) {
-            this.soundPlayer.endContest();
+        try {
+            this.conditionHandle.stop();
+            status = DONE;
+            this.contestModelHandle.end();
+            if (this.playSoundWhenOut) {
+                this.soundPlayer.endContest();
+            }
+            this.processlHandle.setContest(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
         }
-        this.processlHandle.setContest(null);
-        this.timeOutContest.setContest(null);
     }
 
     public int getTimeout() {
         return timeOut;
+    }
+
+    public void setDataTestTransfer(DataTestTransfer dataTestTransfer) {
+        this.dataTestTransfer = dataTestTransfer;
     }
 
 }

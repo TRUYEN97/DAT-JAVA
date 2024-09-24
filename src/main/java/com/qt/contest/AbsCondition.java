@@ -19,11 +19,15 @@ public abstract class AbsCondition {
     protected ContestDataModel contestDataModel;
     private final ErrorcodeHandle codeHandle;
     protected boolean important;
+    protected boolean stop;
+    protected boolean hasFail;
 
     public AbsCondition() {
         this.carModel = MCUSerialHandler.getInstance().getModel();
         this.codeHandle = ErrorcodeHandle.getInstance();
         this.important = false;
+        this.stop = false;
+        this.hasFail = false;
     }
 
     public void setContestDataModel(ContestDataModel contestDataModel) {
@@ -34,7 +38,32 @@ public abstract class AbsCondition {
         this.important = st;
     }
 
-    public abstract boolean checkPassed();
+    public void start() {
+        this.stop = false;
+        this.hasFail = false;
+    }
+
+    public void stop() {
+        this.stop = true;
+    }
+
+    public boolean checkPassed() {
+        if (hasFail) {
+            return false;
+        }
+        if (stop) {
+            return true;
+        }
+        if (!checkCondition()) {
+            if (important) {
+                hasFail = true;
+            }
+            return false;
+        }
+        return true;
+    }
+
+    protected abstract boolean checkCondition();
 
     protected void setErrorcode(String errorcode) {
         if (contestDataModel == null) {
@@ -46,5 +75,9 @@ public abstract class AbsCondition {
 
     public boolean isImportant() {
         return important;
+    }
+
+    public boolean isTestCondisionsFailed() {
+        return !checkPassed() && important;
     }
 }

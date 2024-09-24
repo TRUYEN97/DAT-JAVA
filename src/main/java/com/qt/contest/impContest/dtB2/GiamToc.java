@@ -2,10 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.qt.contest.impContest;
+package com.qt.contest.impContest.dtB2;
 
 import com.qt.common.ConstKey;
-import com.qt.common.Util;
 import com.qt.contest.AbsContest;
 
 /**
@@ -20,11 +19,11 @@ public class GiamToc extends AbsContest {
     private boolean hasChaged;
 
     public GiamToc() {
-        this(ConstKey.CT_NAME.GIAM_TOC);
+        this(ConstKey.CONTEST_NAME.GIAM_TOC);
     }
 
     public GiamToc(String name) {
-        super(name, name + "_B2", false, true, 2000);
+        super(name, name + "_B2", true, false, true, 2000);
     }
 
     @Override
@@ -36,7 +35,7 @@ public class GiamToc extends AbsContest {
         }
         if (this.carModel.getDistance() - oldDistance >= 100) {
             if (detaG < 1 || !hasChaged) {
-                addErrorCode(ConstKey.ERR.INCORRECT_GEAR_DOWNSHIFT);
+                addErrorCode(ConstKey.ERR.FAILED_SHIFTDOWN_GEAR_IN_100M);
             } else if (detaV < 5) {
                 addErrorCode(ConstKey.ERR.GT);
             }
@@ -49,12 +48,15 @@ public class GiamToc extends AbsContest {
 
     @Override
     protected boolean isIntoContest() {
-        Util.delay(2000);
         hasChaged = false;
         oldDistance = this.carModel.getDistance();
         oldSo = this.carModel.getGearBoxValue();
         oldV = this.carModel.getSpeed();
         return true;
+    }
+
+    @Override
+    protected void init() {
     }
 
 }

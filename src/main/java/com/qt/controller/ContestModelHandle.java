@@ -13,7 +13,7 @@ import com.qt.model.modelTest.contest.ContestDataModel;
  *
  * @author Admin
  */
-public class ContestModelHandle implements IgetTime{
+public class ContestModelHandle implements IgetTime {
 
     private final ContestDataModel contestModel;
     private final TimeBase timeBase;
@@ -32,19 +32,25 @@ public class ContestModelHandle implements IgetTime{
     public String getName() {
         return this.contestModel.getContestName();
     }
-    
+
     public ContestDataModel getContestModel() {
         return contestModel;
     }
 
-    public void start() {
+    public void reset() {
+        this.contestModel.setStartTime("");
+        this.contestModel.setEndTime("");
         this.contestModel.clear();
-        this.contestModel.setStartTime(timeBase.getSimpleDateTime());
-        this.startMs = System.currentTimeMillis();
+        this.startMs = 0;
         this.endMs = 0;
         this.cysleTime = -1;
     }
-    
+
+    public void start() {
+        this.contestModel.setStartTime(timeBase.getSimpleDateTime());
+        this.startMs = System.currentTimeMillis();
+    }
+
     @Override
     public long getTestTime() {
         if (cysleTime >= 0) {

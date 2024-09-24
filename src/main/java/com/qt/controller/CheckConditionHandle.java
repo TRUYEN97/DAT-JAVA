@@ -36,10 +36,26 @@ public class CheckConditionHandle {
         }
         this.conditions.add(condition);
     }
+    
+    public void start(){
+        for (AbsCondition condition : conditions) {
+            if (condition != null) {
+                condition.start();
+            }
+        }
+    }
+    
+    public void stop(){
+        for (AbsCondition condition : conditions) {
+            if (condition != null) {
+                condition.stop();
+            }
+        }
+    }
 
     public boolean isTestCondisionsFailed() {
         for (AbsCondition condition : conditions) {
-            if (!condition.checkPassed() && condition.isImportant()) {
+            if (condition.isTestCondisionsFailed()) {
                 return true;
             }
         }

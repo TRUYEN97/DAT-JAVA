@@ -7,14 +7,27 @@ package com.qt.main;
 import com.qt.common.ConstKey;
 import com.qt.common.TestStatusLogger;
 import com.qt.controller.ErrorcodeHandle;
+import com.qt.controller.PrintWithKeyBoard;
 import com.qt.controller.api.ApiService;
 import com.qt.controller.modeController.ModeManagement;
+import com.qt.controller.settingElement.imp.ChangeCarId;
+import com.qt.controller.settingElement.imp.ChangePassword;
+import com.qt.controller.settingElement.imp.ChangeUserId;
+import com.qt.controller.settingElement.imp.SettingEncoder;
+import com.qt.controller.settingElement.imp.SettingSignalLinghtDelayTime;
 import com.qt.input.camera.CameraRunner;
 import com.qt.mode.imp.DT_B2_MODE;
 import com.qt.mode.imp.SH_B2_MODE;
-import com.qt.model.modelTest.ErrorCodeInfo;
+import com.qt.model.modelTest.ErrorCode;
+import com.qt.output.SoundPlayer;
+import com.qt.pretreatment.KeyEventManagement;
+import com.qt.pretreatment.KeyEventsPackage;
 import com.qt.view.ViewMain;
 import com.qt.view.frame.ChooseModeFrame;
+import com.qt.view.frame.SettingFrame;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import javax.swing.Timer;
 import lombok.Getter;
 
 /**
@@ -30,7 +43,10 @@ public class Core {
     private final CameraRunner cameraRunner;
     private final ChooseModeFrame chooseModeFrame;
     private final ErrorcodeHandle errorcodeHandle;
-    private final TestStatusLogger statusLogger;
+    private final KeyEventManagement eventManagement;
+    private final KeyEventsPackage eventsPackage;
+    private final ExecutorService threadPool;
+    private Timer timer;
 
     private Core() {
         this.viewMain = ViewMain.getInstance();
@@ -40,9 +56,40 @@ public class Core {
         this.modeManagement = new ModeManagement(viewMain);
         this.chooseModeFrame = new ChooseModeFrame(this.modeManagement);
         this.errorcodeHandle = ErrorcodeHandle.getInstance();
-        this.statusLogger = TestStatusLogger.getInstance();
+        this.eventManagement = KeyEventManagement.getInstance();
+        this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName());
+        this.threadPool = Executors.newSingleThreadExecutor();
+        PrintWithKeyBoard printWithKeyBoard = new PrintWithKeyBoard();
+        ChangeUserId changeUserId = new ChangeUserId();
+        SettingFrame settingFrame = new SettingFrame(3, 3);
+        initElementSetting(settingFrame);
+        this.eventsPackage.putEvent(ConstKey.KEY_BOARD.SETTING, (key) -> {
+            this.threadPool.submit(settingFrame);
+        });
+        this.eventsPackage.putEvent(ConstKey.KEY_BOARD.SBD, (key) -> {
+            this.threadPool.submit(changeUserId);
+        });
+        this.eventsPackage.putEvent(ConstKey.KEY_BOARD.IN, (key) -> {
+            this.threadPool.submit(printWithKeyBoard);
+        });
+        this.timer = new Timer(20000, (e) -> {
+//            moveSettingEvent();
+        });
         addMode();
         initErrorcode();
+    }
+
+    private void initElementSetting(SettingFrame settingFrame) {
+        settingFrame.addElementSetting(new ChangeCarId());
+        settingFrame.addElementSetting(new SettingEncoder());
+        settingFrame.addElementSetting(new SettingSignalLinghtDelayTime());
+        settingFrame.addElementSetting(new ChangePassword());
+    }
+    
+    private void moveSettingEvent() {
+        this.eventsPackage.remove(ConstKey.KEY_BOARD.SETTING);
+        this.timer.stop();
+        this.timer = null;
     }
 
     private void initErrorcode() {
@@ -62,7 +109,9 @@ public class Core {
         putErrorCode(ConstKey.ERR.PARCKED_WRONG_POS, "Ghép xe sai vị trí", 5);
         putErrorCode(ConstKey.ERR.INCORRECT_GEAR_SHIFT, "Tăng số sai", 5);
         putErrorCode(ConstKey.ERR.FAILED_TO_REACH_REQUIRED_SPEED, "Không đạt tốc độ", 5);
+        putErrorCode(ConstKey.ERR.FAILED_SHIFTUP_GEAR_IN_100M, "Không tăng số", 5);
         putErrorCode(ConstKey.ERR.FAILED_TO_SHIFT_HIGH_GEAR, "Không tăng số", 5);
+        putErrorCode(ConstKey.ERR.FAILED_SHIFTDOWN_GEAR_IN_100M, "Không giảm số", 5);
         putErrorCode(ConstKey.ERR.FAILED_TO_SHIFT_LOW_GEAR, "Không giảm số", 5);
         putErrorCode(ConstKey.ERR.INCORRECT_GEAR_DOWNSHIFT, "Giảm số sai", 5);
         putErrorCode(ConstKey.ERR.NO_SIGNAL_RIGHT_END, "Không xi nhan phải", 5);
@@ -85,20 +134,20 @@ public class Core {
         putErrorCode(ConstKey.ERR.IGNORED_PARKING, "Không ghép xe", 25);
         putErrorCode(ConstKey.ERR.FAILED_COMPLETE_PARKING, "Không hoàn thành ghép xe", 25);
         putErrorCode(ConstKey.ERR.DISQUALIFIED, "Bị truất quyền thi", 25);
+        putErrorCode(ConstKey.ERR.SEATBELT_NOT_FASTENED, "Không thắt dây an toàn", 5);
+        putErrorCode(ConstKey.ERR.USED_GEAR_3_UNDER_20KMH, "Tay số không phù hợp", 2);
+        putErrorCode(ConstKey.ERR.FAILED_APPLY_PARKING_BRAKE, "Không kéo phanh tay", 5);
+        putErrorCode(ConstKey.ERR.PARKING_BRAKE_NOT_RELEASED, "Không nhả phanh tay", 5);
+        putErrorCode(ConstKey.ERR.FAILED_SHIFTTO_NEUTRAL, "Không nhả phanh tay", 5);
+        putErrorCode(ConstKey.ERR.HEAVY_SHAKING, "Rung xe", 5);
+        putErrorCode(ConstKey.ERR.FAILED_SHIFTUP_GEAR_IN_15M, "15m Không tăng số", 5);
+        putErrorCode(ConstKey.ERR.VIOLATION_TRAFFIC_RULES, "Quy tắc giao thông", 10);
+        putErrorCode(ConstKey.ERR.IGNORED_INSTRUCTIONS, "Không tuân thu hiệu lệnh", 25);
+        putErrorCode(ConstKey.ERR.CAUSED_AN_ACCIDENT, "Gây tai nạn", 25);
+        putErrorCode(ConstKey.ERR.SWERVED_OUT_OF_LANE, "Gây tai nạn", 25);
         /////////////////////
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.SO3, new ErrorCodeInfo("SO3", 2, "TAY SO KHONG PHU HOP"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.AT, new ErrorCodeInfo("AT", 5, "DAY AN TOAN"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.KPT, new ErrorCodeInfo("KPT", 5, "KHONG KEO PHANH TAY"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.NPT, new ErrorCodeInfo("NPT", 5, "KHONG NHA PHANH TAY"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.GS, new ErrorCodeInfo("GS", 5, "KO GIAM DUOC SO"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TT, new ErrorCodeInfo("TT", 5, "KO TANG TOC DO"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.GT, new ErrorCodeInfo("GT", 5, "KO GIAM TOC DO"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.RG, new ErrorCodeInfo("RG", 5, "RUNG GIAT"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.CM, new ErrorCodeInfo("CM", 5, "CHET MAY"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.QT, new ErrorCodeInfo("QT", 10, "QUY TAC GIAO THONG"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.HL, new ErrorCodeInfo("HL", 25, "HIEU LENH"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TN, new ErrorCodeInfo("TN", 25, "GAY TAI NAN"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.CL, new ErrorCodeInfo("CL", 25, "CHOANG LAI"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TT, new ErrorCode("TT", 5, "KO TANG TOC DO"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.GT, new ErrorCode("GT", 5, "KO GIAM TOC DO"));
     }
 
     private void putErrorCode(String errName, String description, int point) {
@@ -109,7 +158,7 @@ public class Core {
         if (errCode == null || errName == null) {
             return;
         }
-        this.errorcodeHandle.putErrorCode(errCode, new ErrorCodeInfo(errName, point, description));
+        this.errorcodeHandle.putErrorCode(errCode, new ErrorCode(errName, point, description));
     }
 
     public static Core getInstance() {
@@ -127,15 +176,18 @@ public class Core {
 
     private void addMode() {
         this.modeManagement.addMode(new DT_B2_MODE());
-        this.modeManagement.addMode(new SH_B2_MODE());
+        this.modeManagement.addMode(new SH_B2_MODE());  
     }
-
+                                                                     
     public void start() {
+        SoundPlayer.getInstance().sayWelcome();
+        this.eventManagement.start();
         this.chooseModeFrame.display();
         this.cameraRunner.start();
         this.viewMain.display();
-        this.modeManagement.start();
-        this.statusLogger.check();
+        TestStatusLogger.getInstance().check();
+        this.eventManagement.addKeyEventBackAge(eventsPackage);
+        this.timer.start();
     }
 
 }

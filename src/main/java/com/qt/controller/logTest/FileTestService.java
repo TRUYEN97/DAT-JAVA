@@ -4,10 +4,10 @@
  */
 package com.qt.controller.logTest;
 
+import com.qt.common.CarConfig;
 import com.qt.common.ErrorLog;
 import com.qt.common.FileService.FileService;
 import com.qt.common.Setting;
-import com.qt.model.modelTest.process.ProcessModel;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +26,7 @@ public class FileTestService {
     private final BackupLogHandle backupLogHandle;
     private final File backupDir;
     private final File logDir;
-    private ProcessModel processModel;
+    private final CarConfig carConfig;
 
     private FileTestService() {
         this.fileService = new FileService();
@@ -34,6 +34,7 @@ public class FileTestService {
         this.logDir = new File(Setting.getInstance().getLogDir());
         this.backupLogHandle = new BackupLogHandle();
         this.backupLogHandle.setBackupDir(this.backupDir);
+        this.carConfig = CarConfig.getInstance();
         new Thread(backupLogHandle).start();
     }
 
@@ -48,10 +49,6 @@ public class FileTestService {
             }
         }
         return ins;
-    }
-
-    public void setProcessModel(ProcessModel processModel) {
-        this.processModel = processModel;
     }
     
     public boolean saveImg(String id, BufferedImage image) {
@@ -127,7 +124,7 @@ public class FileTestService {
     public String createPathString(File root, String id, String fileName) {
         String filePathString = String.format("%s/logTest/ExamId-%s/%s/%s",
                 root,
-                this.processModel.getExamId(),
+                this.carConfig.getExamId(),
                 id,
                 fileName);
         return filePathString;

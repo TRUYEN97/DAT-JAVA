@@ -16,7 +16,7 @@ public class TestDataViewModel implements IgetTime {
     private final IgetTime igetTime;
     private final ProcessModel processModel;
     private String modeFullName;
-    private AbsContest contest;
+    private AbsContest absContest;
 
     public TestDataViewModel(IgetTime igetTime, ProcessModel processModel) {
             this.igetTime = igetTime;
@@ -31,8 +31,8 @@ public class TestDataViewModel implements IgetTime {
         this.modeFullName = modeFullName;
     }
 
-    public void setContest(AbsContest contest) {
-        this.contest = contest;
+    public void setContest(AbsContest absContest) {
+        this.absContest = absContest;
     }
 
     public String getId() {
@@ -57,8 +57,9 @@ public class TestDataViewModel implements IgetTime {
     }
 
     public AbsContest getContest() {
-        return contest;
+        return absContest;
     }
+
 
     public int getScore() {
         if (processModel == null) {

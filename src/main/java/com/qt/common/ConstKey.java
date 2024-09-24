@@ -41,12 +41,13 @@ public final class ConstKey {
         public static final String SA_HINH = "SH";
     }
 
-    public static final class CT_NAME {
+    public static final class CONTEST_NAME {
 
         public static final String XUAT_PHAT = "XP";
         public static final String KET_THUC = "KT";
         public static final String TANG_TOC = "TS";
         public static final String GIAM_TOC = "GS";
+        public static final String DUNG_XE = "DXCNDB";
     }
 
     public static final class ERR {
@@ -90,31 +91,21 @@ public final class ConstKey {
         public static final String TIME_LIMIT_EXCEEDED = "TIME_LIMIT_EXCEEDED";
         public static final String OVERALL_TIME_EXCEEDED = "OVERALL_TIME_EXCEEDED";
         public static final String SPEED_LIMIT_EXCEEDED = "SPEED_LIMIT_EXCEEDED";
-        ////
-
-        public static final String HL = "Left";//
-        public static final String TN = "Begin";//
-        public static final String RG = "Right";//
-        public static final String QT = "+";//
-        public static final String CL = "End";
-        ////////////
-
-        public static final String AT = "AT";//
-//        public static final String NT = "NT";//
-//        public static final String NP = "NP";//
-        public static final String KPT = "KPT";//
-        public static final String TS = "TS";//
-        public static final String GS = "GS";//
-        public static final String S30 = "S30";//
-        public static final String S20 = "S20";//
-        public static final String CM = "CM";//
+        public static final String IGNORED_INSTRUCTIONS = "IGNORED_INSTRUCTIONS";//
+        public static final String CAUSED_AN_ACCIDENT = "CAUSED_AN_ACCIDENT";//
+        public static final String HEAVY_SHAKING = "HEAVY_SHAKING";//
+        public static final String VIOLATION_TRAFFIC_RULES = "VIOLATION_TRAFFIC_RULES";//
+        public static final String SWERVED_OUT_OF_LANE = "SWERVED_OUT_OF_LANE";
+        public static final String SEATBELT_NOT_FASTENED = "SEATBELT_NOT_FASTENED";//
+        public static final String FAILED_APPLY_PARKING_BRAKE = "FAILED_APPLY_PARKING_BRAKE";//
         public static final String GT = "GT";//
         public static final String TT = "TT";//
-        public static final String RPM = "RPM";//
-        public static final String NPT = "PT";//
-        public static final String SO3 = "SO3";//
-        public static final String VSO = "VSO";//
-        public static final String TIME_OUT = "TIME_LIMIT_EXCEEDED";//
+        public static final String PARKING_BRAKE_NOT_RELEASED = "PARKING_BRAKE_NOT_RELEASED";//
+        public static final String USED_GEAR_3_UNDER_20KMH = "USED_GEAR_3_UNDER_20KMH";//
+        public static final String FAILED_SHIFTTO_NEUTRAL = "FAILED_SHIFTTO_NEUTRAL";//
+        public static final String FAILED_SHIFTUP_GEAR_IN_15M = "FAILED_SHIFTUP_GEAR_IN_15M";//
+        public static final String FAILED_SHIFTUP_GEAR_IN_100M = "FAILED_SHIFTUP_GEAR_IN_100M";//
+        public static final String FAILED_SHIFTDOWN_GEAR_IN_100M = "FAILED_SHIFTDOWN_GEAR_IN_100M";//
     }
 
     public static final class KEY_BOARD {
@@ -125,11 +116,12 @@ public final class ConstKey {
         public static final String RIGHT = "Right";
         public static final String UP = "Up";
         public static final String SHOW_ERROR = "Down";
-        public static final String IN = "Insert";
+        public static final String IN = "Print";
         public static final String SBD = "*";
+        public static final String SETTING = "setting";
         public static final String SO_XE = "/";
         public static final String BACKSPACE = "Backspace";
-        public static final String CANCEL = ".";
+        public static final String CANCEL = "Cancel";
         public static final String OK = "Enter";
         public static final String CTRL = "Ctrl";
         public static final String ALT = "Alt";
@@ -143,22 +135,23 @@ public final class ConstKey {
         public static final String VK_7 = "7";
         public static final String VK_8 = "8";
         public static final String VK_9 = "9";
+        public static final String VK_POINT = ".";
 
         public static final class CONTEST {
 
-            public static final String XP = "Home";
-            public static final String TS = "Up";
-            public static final String GS = "Page Up";
-            public static final String KT = "-";
+            public static final String XP = "Xp";
+            public static final String TS = "Ts";
+            public static final String GS = "Gs";
+            public static final String KT = "Kt";
         }
 
         public static final class ERROR {
 
-            public static final String HL = ConstKey.ERR.HL;//
-            public static final String TN = ConstKey.ERR.TN;//
-            public static final String RG = ConstKey.ERR.RG;//
-            public static final String QT = ConstKey.ERR.QT;//
-            public static final String CL = ConstKey.ERR.CL;
+            public static final String HL = ERR.IGNORED_INSTRUCTIONS;//
+            public static final String TN = ERR.CAUSED_AN_ACCIDENT;//
+            public static final String RG = ERR.HEAVY_SHAKING;//
+            public static final String QT = ERR.VIOLATION_TRAFFIC_RULES;//
+            public static final String CL = ERR.SWERVED_OUT_OF_LANE;
         }
 
         public static final class MODE {

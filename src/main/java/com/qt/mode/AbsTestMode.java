@@ -4,6 +4,7 @@
  */
 package com.qt.mode;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.API.Response;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
@@ -98,7 +99,17 @@ public abstract class AbsTestMode<V extends AbsModeView> {
         this.printer = new Printer();
         this.threadPool = Executors.newSingleThreadExecutor();
         this.pingAPI.setPingAPIReceive((responce) -> {
-            analysisResponce(responce);
+            if (responce == null) {
+                return;
+            }
+            if (!responce.isSuccess() || responce.getData() == null) {
+                return;
+            }
+            String requestString = responce.getData(JSONObject.class).getString("request");
+            if (requestString == null) {
+                return;
+            }
+            analysisResponce(requestString);
         });
     }
 
@@ -122,7 +133,7 @@ public abstract class AbsTestMode<V extends AbsModeView> {
 
     protected abstract void createTestKeyEvents(Map<String, IKeyEvent> events);
 
-    protected abstract void analysisResponce(Response responce);
+    protected abstract void analysisResponce(String requestString);
 
     protected void addContest(AbsContest contest) {
         if (contest == null) {
@@ -151,6 +162,7 @@ public abstract class AbsTestMode<V extends AbsModeView> {
             this.errorcodeHandle.clear();
             this.processlHandle.resetModel();
             MCUSerialHandler.getInstance().sendReset();
+            MCUSerialHandler.getInstance().sendLedOff();
             while (!loopCheck() && !this.cancel) {
                 Util.delay(200);
             }
@@ -159,11 +171,14 @@ public abstract class AbsTestMode<V extends AbsModeView> {
                 TestStatusLogger.getInstance().setTestStatus(
                         this.processModel.getId(),
                         this.processModel.getExamId());
+                this.errorcodeHandle.clear();
+                this.processlHandle.resetModel();
                 MCUSerialHandler.getInstance().sendReset();
-                this.soundPlayer.begin();
                 this.processlHandle.startTest();
-                MCUSerialHandler.getInstance().sendLedYellowOn();
                 KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
+                MCUSerialHandler.getInstance().sendLedGreenOn();
+                this.soundPlayer.begin();
+                this.conditionHandle.start();
                 this.pingAPI.start();
                 updateLog();
                 this.threadPool.execute(() -> {
@@ -215,6 +230,7 @@ public abstract class AbsTestMode<V extends AbsModeView> {
 
     public void end() {
         try {
+            this.conditionHandle.stop();
             this.contests.clear();
             KeyEventManagement.getInstance().remove(prepareEventsPackage);
             KeyEventManagement.getInstance().remove(testEventsPackage);
@@ -224,7 +240,6 @@ public abstract class AbsTestMode<V extends AbsModeView> {
                 MCUSerialHandler.getInstance().sendLedRedOn();
             }
             this.pingAPI.stop();
-            this.printer.printTestResult();
             int score = this.processModel.getScore();
             this.processModel.setContestsResult(score >= scoreSpec ? ProcessModel.PASS : ProcessModel.FAIL);
             updateLog();
@@ -244,6 +259,7 @@ public abstract class AbsTestMode<V extends AbsModeView> {
                 this.soundPlayer.sendResultFailed();
             }
             endTest();
+            this.printer.printTestResult(this.processModel.getId());
             TestStatusLogger.getInstance().remove();
             this.processModel.setId("");
             this.processlHandle.setTesting(false);
@@ -298,6 +314,7 @@ public abstract class AbsTestMode<V extends AbsModeView> {
     private boolean loopCheck() {
         String id = this.processModel.getId();
         if (id == null || id.isBlank()) {
+            Util.delay(3000);
             return false;
         }
         return loopCheckCanTest();

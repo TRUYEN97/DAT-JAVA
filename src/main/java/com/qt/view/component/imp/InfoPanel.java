@@ -39,7 +39,7 @@ public class InfoPanel extends UpdateValuePanel implements IgetImgLabel {
         this.stCarId.setMouseAdapter(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                carModel.setRemoteValue(ConstKey.KEY_BOARD.SO_XE);
+                carModel.setRemoteValue(ConstKey.KEY_BOARD.SETTING);
             }
 
         });
@@ -87,9 +87,9 @@ public class InfoPanel extends UpdateValuePanel implements IgetImgLabel {
         stId = new com.qt.view.element.StatusPanel();
         stCarId = new com.qt.view.element.StatusPanel();
         stModeName = new com.qt.view.element.StatusPanel();
-        btIn = new com.qt.view.element.ButtonDesign();
         lbImg = new javax.swing.JLabel();
         stServer = new com.qt.view.element.StatusPanel();
+        btIn = new com.qt.view.element.ButtonDesign();
 
         setOpaque(false);
 
@@ -99,13 +99,12 @@ public class InfoPanel extends UpdateValuePanel implements IgetImgLabel {
 
         stModeName.setIconName("Phần thi");
 
-        btIn.setFontValue(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        btIn.setText("In phiếu điểm");
-
         lbImg.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         stServer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/server.png"))); // NOI18N
         stServer.setOnColor(new java.awt.Color(102, 255, 204));
+
+        btIn.setText("In phiếu điểm");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -141,8 +140,8 @@ public class InfoPanel extends UpdateValuePanel implements IgetImgLabel {
                 .addComponent(stModeName, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btIn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(stServer, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(stServer, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                    .addComponent(btIn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(8, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents

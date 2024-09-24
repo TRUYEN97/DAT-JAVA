@@ -8,7 +8,6 @@ import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.ErrorLog;
 import com.qt.common.MyObjectMapper;
 import com.qt.controller.logTest.FileTestService;
-import com.qt.controller.ProcessModelHandle;
 import com.qt.model.modelTest.process.ProcessModel;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
@@ -23,11 +22,9 @@ public class Printer {
 
 //    private PrintService printService;
     private final FileTestService fileTestService;
-    private final ProcessModel processModel;
 
     public Printer() {
         this.fileTestService = FileTestService.getInstance();
-        this.processModel = ProcessModelHandle.getInstance().getProcessModel();
     }
 
     public boolean print(Printable printable) {
@@ -49,9 +46,9 @@ public class Printer {
         }
     }
 
-    public boolean printTestResult() {
-        return printTestResult(this.processModel.getId());
-    }
+//    public boolean printTestResult() {
+//        return printTestResult(this.processModel.getId());
+//    }
 
     public boolean printTestResult(String id) {
         try {

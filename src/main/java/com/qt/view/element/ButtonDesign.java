@@ -23,6 +23,7 @@ public class ButtonDesign extends javax.swing.JPanel {
     private Color onColor;
     private Color offColor;
     private boolean status;
+    private boolean highLight;
     private MouseClicked mouseClicked;
 
     /**
@@ -172,7 +173,7 @@ public class ButtonDesign extends javax.swing.JPanel {
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        if (status) {
+        if (status || highLight) {
             g2.setPaint(new GradientPaint(0, 0, Color.white, 0, this.lbValue.getHeight(), onColor == null ? Color.YELLOW : onColor));
         } else {
             g2.setPaint(new GradientPaint(0, 0, Color.white, 0, this.lbValue.getHeight(), offColor == null ? Color.LIGHT_GRAY : offColor));
@@ -190,19 +191,22 @@ public class ButtonDesign extends javax.swing.JPanel {
     }
 
     public void hightLight() {
-        if (!status) {
-            status = true;
+        if (!highLight) {
+            highLight = true;
             repaint();
         }
     }
 
     public void removeHightLight() {
-        buttonOff();
+        if (highLight) {
+            highLight = false;
+            repaint();
+        }
     }
 
     public void blink() {
         hightLight();
         Util.delay(86);
-        buttonOff();
+        removeHightLight();
     }
 }

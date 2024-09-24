@@ -21,10 +21,9 @@ import org.apache.commons.codec.digest.DigestUtils;
  * @author Administrator
  */
 public class Util {
-    
-    
+
     public static long getTestTime(long startMs, long endtMs) {
-        if (startMs <= 0 ) {
+        if (startMs <= 0) {
             return 0;
         }
         if (endtMs >= startMs) {
@@ -32,7 +31,7 @@ public class Util {
         }
         return (System.currentTimeMillis() - startMs);
     }
-    
+
     public static int getGearBoxVal(boolean s1, boolean s2, boolean s3, boolean s4) {
         if (s3) {
             if (s1) {
@@ -62,8 +61,8 @@ public class Util {
     }
 
     public static void deleteFolder(File root) {
-        if(!root.exists()){
-           return;
+        if (!root.exists()) {
+            return;
         }
         File[] files = root.listFiles();
         if (files != null && files.length > 0) {
@@ -93,13 +92,13 @@ public class Util {
     }
 
     public static String md5File(String filePath) {
-        try ( FileInputStream input = new FileInputStream(filePath)) {
+        try (FileInputStream input = new FileInputStream(filePath)) {
             return md5File(input);
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
-    
+
     public static ImageIcon resizeImageIcon(ImageIcon icon, int width, int height) {
         Image img = icon.getImage();
         return resizeImg(img, width, height);
@@ -109,6 +108,7 @@ public class Util {
         Image resizedImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         return new ImageIcon(resizedImg);
     }
+
     public static void delay(int time) {
         try {
             Thread.sleep(time);
@@ -119,5 +119,12 @@ public class Util {
     public static boolean ping(String addr, int cycle) {
         Cmd cmd = new Cmd();
         return cmd.ping(addr, cycle);
+    }
+
+    public static String stringToMd5(String input) {
+        if (input == null) {
+            return null;
+        }
+        return DigestUtils.md5Hex(input);
     }
 }

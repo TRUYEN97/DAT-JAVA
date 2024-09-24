@@ -2,10 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.qt.contest.impContest;
+package com.qt.contest.impContest.dtB2;
 
 import com.qt.common.ConstKey;
-import com.qt.common.Util;
 import com.qt.contest.AbsContest;
 
 /**
@@ -15,16 +14,20 @@ import com.qt.contest.AbsContest;
 public class KetThuc extends AbsContest {
 
     public KetThuc() {
-        this(ConstKey.CT_NAME.KET_THUC);
+        this(ConstKey.CONTEST_NAME.KET_THUC);
     }
 
     public KetThuc(String name) {
-        super(name, name, false, true, 2000);
+        super(name, name, true, false, true, 2000);
     }
     private long oldMill;
     private boolean isStop = false;
     private boolean kpt = true;
     private boolean so = true;
+
+    @Override
+    protected void init() {
+    }
 
     @Override
     public boolean loop() {
@@ -35,11 +38,11 @@ public class KetThuc extends AbsContest {
             }
             long deta = System.currentTimeMillis() - oldMill;
             if (so && deta >= 3000 && this.carModel.getGearBoxValue() != 0) {
-                this.addErrorCode(ConstKey.ERR.VSO);
+                this.addErrorCode(ConstKey.ERR.FAILED_SHIFTTO_NEUTRAL);
                 so = false;
             }
             if (kpt && deta >= 5000 && !this.carModel.isPt()) {
-                this.addErrorCode(ConstKey.ERR.KPT);
+                this.addErrorCode(ConstKey.ERR.FAILED_APPLY_PARKING_BRAKE);
                 kpt = false;
                 return true;
             }
@@ -51,7 +54,6 @@ public class KetThuc extends AbsContest {
 
     @Override
     protected boolean isIntoContest() {
-        Util.delay(3000);
         oldMill = System.currentTimeMillis();
         return true;
     }

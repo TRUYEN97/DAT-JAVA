@@ -58,8 +58,10 @@ public class SoundPlayer {
     }
 
     public void contestName(String name) {
-        this.play(new SoundModel("contest/contest.wav"));
-        this.play(new SoundModel(String.format("contest/%s.wav", name)));
+        new Thread(() -> {
+            this.play(new SoundModel("contest/contest.wav"));
+            this.play(new SoundModel(String.format("contest/%s.wav", name)));
+        }).start();
     }
 
     public void startContest() {
@@ -223,6 +225,26 @@ public class SoundPlayer {
 
     public void canNotChange() {
         play(new SoundModel("warning/canNotChange.wav"));
+    }
+
+    public void inputPassword() {
+        play(new SoundModel("warning/inputPassword.wav"));
+    }
+
+    public void wrongPassword() {
+        play(new SoundModel("warning/wrongPassword.wav"));
+    }
+
+    public void inputNewPassword() {
+        play(new SoundModel("warning/inputNewPassword.wav"));
+    }
+
+    public void changeSucess() {
+        play(new SoundModel("warning/changeSucess.wav"));
+    }
+
+    public void dingDong() {
+        play(new SoundModel("warning/dingdong.wav"));
     }
 
     class SoundRunner implements Runnable {

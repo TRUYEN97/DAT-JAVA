@@ -14,24 +14,12 @@ import com.qt.contest.impCondition.AbsTimerConditon;
  */
 public class TimeOutContest extends AbsTimerConditon {
 
-    private AbsContest contest;
-
-    public TimeOutContest() {
-        this(null);
-    }
+    private final AbsContest contest;
 
     public TimeOutContest(AbsContest contest) {
-        super();
-        setContest(contest);
-    }
-
-    public final void setContest(AbsContest contest) {
+        super(contest.getTimeout(), false);
         this.contest = contest;
-        if (contest != null) {
-            this.setSpec(contest.getTimeout());
-            this.setContestDataModel(contest.getContestModel());
-            this.resetTimer();
-        }
+        this.setContestDataModel(contest.getContestModel());
     }
 
     @Override
@@ -42,7 +30,7 @@ public class TimeOutContest extends AbsTimerConditon {
 
     @Override
     protected void action() {
-        setErrorcode(ConstKey.ERR.TIME_OUT);
+        setErrorcode(ConstKey.ERR.TIME_LIMIT_EXCEEDED);
     }
 
 }

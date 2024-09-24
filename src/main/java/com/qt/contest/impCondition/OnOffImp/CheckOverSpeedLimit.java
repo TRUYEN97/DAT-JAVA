@@ -5,23 +5,29 @@
 package com.qt.contest.impCondition.OnOffImp;
 
 import com.qt.common.ConstKey;
-import com.qt.contest.impCondition.AbsOnOffCondition;
-
+import com.qt.contest.impCondition.AbsTimerConditon;
 
 /**
  *
  * @author Admin
  */
-public class CheckAT extends AbsOnOffCondition{
+public class CheckOverSpeedLimit extends AbsTimerConditon {
+
+    private final int specSpeed;
+
+    public CheckOverSpeedLimit(int specSpeed) {
+        super(3, false);
+        this.specSpeed = specSpeed;
+    }
 
     @Override
     protected boolean signal() {
-        return !this.carModel.isAt();
+        return this.carModel.getSpeed() > specSpeed;
     }
 
     @Override
     protected void action() {
-        this.setErrorcode(ConstKey.ERR.AT);
+        setErrorcode(ConstKey.ERR.SPEED_LIMIT_EXCEEDED);
     }
-    
+
 }

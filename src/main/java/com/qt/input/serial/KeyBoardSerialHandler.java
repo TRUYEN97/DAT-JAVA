@@ -44,7 +44,7 @@ public class KeyBoardSerialHandler {
         this.keyMap.put("D1", ConstKey.KEY_BOARD.CONTEST.KT);
         this.keyMap.put("E1", ConstKey.KEY_BOARD.IN);
         
-        this.keyMap.put("A2", ConstKey.KEY_BOARD.SO_XE);
+        this.keyMap.put("A2", ConstKey.KEY_BOARD.SETTING);
         this.keyMap.put("B2", ConstKey.KEY_BOARD.SBD);
         this.keyMap.put("C2", ConstKey.KEY_BOARD.CANCEL);
         this.keyMap.put("D2", ConstKey.KEY_BOARD.BACKSPACE);
@@ -62,17 +62,19 @@ public class KeyBoardSerialHandler {
         this.keyMap.put("D4", ConstKey.KEY_BOARD.VK_8);
         this.keyMap.put("E4", ConstKey.KEY_BOARD.VK_9);
         
-        this.keyMap.put("A5", ConstKey.KEY_BOARD.ERROR.CL);
-        this.keyMap.put("B5", ConstKey.KEY_BOARD.ERROR.HL);
-        this.keyMap.put("C5", ConstKey.KEY_BOARD.ERROR.QT);
-        this.keyMap.put("D5", ConstKey.KEY_BOARD.ERROR.RG);
-        this.keyMap.put("E5", ConstKey.KEY_BOARD.ERROR.TN);
+        this.keyMap.put("A5", ConstKey.KEY_BOARD.LEFT);
+        this.keyMap.put("B5", ConstKey.KEY_BOARD.RIGHT);
+        this.keyMap.put("C5", ConstKey.KEY_BOARD.UP);
+        this.keyMap.put("D5", ConstKey.KEY_BOARD.DOWN);
+        this.keyMap.put("E5", ConstKey.KEY_BOARD.VK_POINT);
         
-        this.keyMap.put("A6", ConstKey.KEY_BOARD.LEFT);
-        this.keyMap.put("B6", ConstKey.KEY_BOARD.RIGHT);
-        this.keyMap.put("C6", ConstKey.KEY_BOARD.UP);
-        this.keyMap.put("D6", ConstKey.KEY_BOARD.DOWN);
-        this.keyMap.put("E6", ConstKey.KEY_BOARD.POWER);
+        this.keyMap.put("A6", ConstKey.KEY_BOARD.ERROR.CL);
+        this.keyMap.put("B6", ConstKey.KEY_BOARD.ERROR.HL);
+        this.keyMap.put("C6", ConstKey.KEY_BOARD.ERROR.QT);
+        this.keyMap.put("D6", ConstKey.KEY_BOARD.ERROR.RG);
+        this.keyMap.put("E6", ConstKey.KEY_BOARD.ERROR.TN);
+        
+        this.keyMap.put("E4-E5", ConstKey.KEY_BOARD.POWER);
     }
     
 

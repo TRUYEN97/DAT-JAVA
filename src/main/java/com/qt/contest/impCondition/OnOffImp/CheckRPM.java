@@ -20,7 +20,7 @@ public class CheckRPM extends AbsOnOffCondition {
 
     @Override
     protected void action() {
-        this.setErrorcode(ConstKey.ERR.RPM);
+        this.setErrorcode(ConstKey.ERR.ENGINE_SPEED_EXCEEDED_4000_RPM);
     }
 
 }

@@ -14,7 +14,7 @@ import com.qt.contest.impCondition.AbsTimerConditon;
 public class CheckSo3 extends AbsTimerConditon {
 
     public CheckSo3() {
-        super(3);
+        super(3, false);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class CheckSo3 extends AbsTimerConditon {
 
     @Override
     protected void action() {
-        this.setErrorcode(ConstKey.ERR.SO3);
+        this.setErrorcode(ConstKey.ERR.USED_GEAR_3_UNDER_20KMH);
     }
 
 }

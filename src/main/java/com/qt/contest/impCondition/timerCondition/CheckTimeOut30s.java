@@ -16,7 +16,7 @@ public class CheckTimeOut30s extends AbsTimerConditon {
     private double oldDisTance = 0;
 
     public CheckTimeOut30s() {
-        super(30);
+        super(30, true);
         setImporttant(true);
     }
     
@@ -26,12 +26,12 @@ public class CheckTimeOut30s extends AbsTimerConditon {
 
     @Override
     protected boolean signal() {
-        return this.carModel.getDistance() - oldDisTance < 3;
+        return this.carModel.getDistance() - oldDisTance < 1;
     }
 
     @Override
     protected void action() {
-        this.setErrorcode(ConstKey.ERR.S30);
+        this.setErrorcode(ConstKey.ERR.OVER_30S_TO_START);
     }
 
 }

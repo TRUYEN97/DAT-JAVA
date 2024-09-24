@@ -1,0 +1,74 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.qt.contest.impContest.shB2;
+
+import com.qt.common.ConstKey;
+import com.qt.contest.AbsContest;
+import com.qt.contest.impCondition.timerCondition.CheckTimeOut20s;
+import com.qt.contest.impCondition.timerCondition.CheckTimeOut30s;
+import com.qt.input.serial.MCUSerialHandler;
+
+/**
+ *
+ * @author Admin
+ */
+public class XuatPhat extends AbsContest {
+
+    private final CheckTimeOut30s timeOut30s;
+    private final CheckTimeOut20s timeOut20s;
+    private boolean firstCheck = true;
+    private double oldDistance = 0;
+
+    public XuatPhat() {
+        super(ConstKey.CONTEST_NAME.XUAT_PHAT, ConstKey.CONTEST_NAME.XUAT_PHAT,
+                false,
+                true, true, 60);
+        this.timeOut30s = new CheckTimeOut30s();
+        this.timeOut20s = new CheckTimeOut20s();
+        this.conditionHandle.addConditon(this.timeOut30s);
+        this.conditionHandle.addConditon(this.timeOut20s);
+    }
+
+    @Override
+    protected boolean loop() {
+        if (getDistance(oldDistance)> 0.1 && this.firstCheck) {
+            firstCheck = false;
+            this.timeOut20s.stop();
+            this.timeOut30s.stop();
+            if (!this.carModel.isAt()) {
+                this.addErrorCode(ConstKey.ERR.SEATBELT_NOT_FASTENED);
+            }
+            if (!this.carModel.isNt()) {
+                this.addErrorCode(ConstKey.ERR.NO_START_SIGNAL_LEFT);
+            }
+            if (this.carModel.isPt()) {
+                this.addErrorCode(ConstKey.ERR.PARKING_BRAKE_NOT_RELEASED);
+            }
+        }
+        if (getDistance(oldDistance)>= 5.5) {
+            if (this.carModel.isNt()) {
+                this.addErrorCode(ConstKey.ERR.SIGNAL_KEPT_ON_OVER_5M);
+            }
+            MCUSerialHandler.getInstance().sendLedOff();
+        }
+        return getDistance(oldDistance)>= 8;
+    }
+
+    @Override
+    protected boolean isIntoContest() {
+        return this.carModel.isT1();
+    }
+
+    @Override
+    protected void init() {
+        firstCheck = true;
+        oldDistance = this.carModel.getDistance();
+        this.timeOut30s.setOldDisTance(oldDistance);
+        this.timeOut20s.setOldDisTance(oldDistance);
+        this.timeOut30s.start();
+        this.timeOut20s.start();
+    }
+
+}

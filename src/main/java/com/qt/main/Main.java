@@ -4,16 +4,16 @@
  */
 package com.qt.main;
 
+import com.qt.common.ErrorLog;
 import com.qt.input.serial.KeyBoardSerialHandler;
 import com.qt.input.serial.MCUSerialHandler;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author Admin
  */
 public class Main {
-
+    
     public static void main(String[] args) {
         try {
             KeyBoardSerialHandler.getInstance().start();
@@ -21,7 +21,7 @@ public class Main {
             Core.getInstance().start();
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, e.getLocalizedMessage());
+            ErrorLog.addError("main", e);
             System.exit(1);
         }
     }

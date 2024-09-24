@@ -5,6 +5,7 @@
 package com.qt.controller.api;
 
 import com.qt.common.API.Response;
+import com.qt.common.ErrorLog;
 import com.qt.common.Util;
 
 /**
@@ -41,18 +42,23 @@ public class PingAPI {
             return;
         }
         this.thread = new Thread(() -> {
-            this.stop = false;
-            Response response;
-            IPingAPIReceive<Response> aPIReceive;
-            while (!stop) {
-                aPIReceive = this.pingAPIReceive;
-                if (aPIReceive != null) {
-                    response = this.apiService.checkInfo();
-                    if (response != null) {
-                        aPIReceive.receive(response);
+            try {
+                this.stop = false;
+                Response response;
+                IPingAPIReceive<Response> aPIReceive;
+                while (!stop) {
+                    aPIReceive = this.pingAPIReceive;
+                    if (aPIReceive != null) {
+                        response = this.apiService.checkInfo();
+                        if (response != null) {
+                            aPIReceive.receive(response);
+                        }
                     }
+                    Util.delay(5000);
                 }
-                Util.delay(5000);
+            } catch (Exception e) {
+                e.printStackTrace();
+                ErrorLog.addError(PingAPI.this, e);
             }
         });
         this.thread.start();

@@ -14,7 +14,7 @@ public abstract class AbsOnOffCondition extends AbsCondition{
     protected boolean reCheck = true;
 
     @Override
-    public boolean checkPassed() {
+    public boolean checkCondition() {
         if (signal()) {
             if (reCheck) {
                 reCheck = false;

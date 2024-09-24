@@ -6,7 +6,7 @@ package com.qt.controller;
 
 import com.qt.common.ErrorLog;
 import com.qt.controller.api.ApiService;
-import com.qt.model.modelTest.ErrorCodeInfo;
+import com.qt.model.modelTest.ErrorCode;
 import com.qt.model.modelTest.ErrorcodeWithContestNameModel;
 import com.qt.model.modelTest.contest.ContestDataModel;
 import com.qt.model.modelTest.process.ProcessModel;
@@ -28,7 +28,7 @@ public class ErrorcodeHandle {
     private final ProcessModelHandle processModelHandle;
     private final ProcessModel processModel;
     private final SoundPlayer soundPlayer;
-    private final Map<String, ErrorCodeInfo> mapErrorcodes;
+    private final Map<String, ErrorCode> mapErrorcodes;
     private final List<ErrorcodeWithContestNameModel> ewcnms;
     private final ApiService apiService;
     private final ExecutorService threadPool;
@@ -64,7 +64,7 @@ public class ErrorcodeHandle {
         return ewcnms;
     }
 
-    public void putErrorCode(String key, ErrorCodeInfo errorcode) {
+    public void putErrorCode(String key, ErrorCode errorcode) {
         if (errorcode == null) {
             return;
         }
@@ -73,7 +73,7 @@ public class ErrorcodeHandle {
 
     public void addBaseErrorCode(String key) {
         try {
-            ErrorCodeInfo errorcode = this.mapErrorcodes.get(key);
+            ErrorCode errorcode = this.mapErrorcodes.get(key);
             if (errorcode == null || errorcode.getErrKey()== null) {
                 return;
             }
@@ -95,7 +95,7 @@ public class ErrorcodeHandle {
             if (dataModel == null) {
                 return;
             }
-            ErrorCodeInfo errorcode = this.mapErrorcodes.get(key);
+            ErrorCode errorcode = this.mapErrorcodes.get(key);
             if (errorcode == null || errorcode.getErrKey()== null) {
                 return;
             }

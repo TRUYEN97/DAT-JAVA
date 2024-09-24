@@ -12,10 +12,10 @@ import com.qt.contest.impCondition.ContainContestChecker;
 import com.qt.contest.impCondition.OnOffImp.CheckCM;
 import com.qt.contest.impCondition.OnOffImp.CheckRPM;
 import com.qt.contest.impCondition.timerCondition.CheckSo3;
-import com.qt.contest.impContest.GiamToc;
-import com.qt.contest.impContest.KetThuc;
-import com.qt.contest.impContest.TangToc;
-import com.qt.contest.impContest.XuatPhat;
+import com.qt.contest.impContest.dtB2.GiamToc;
+import com.qt.contest.impContest.dtB2.KetThuc;
+import com.qt.contest.impContest.dtB2.TangToc;
+import com.qt.contest.impContest.dtB2.XuatPhat;
 import com.qt.controller.api.ApiService;
 import com.qt.mode.AbsTestMode;
 import com.qt.pretreatment.IKeyEvent;
@@ -42,7 +42,7 @@ public class DT_B2_MODE extends AbsTestMode<DuongTruongView> {
         this.conditionHandle.addConditon(new CheckCM());
         this.conditionHandle.addConditon(new CheckRPM());
         this.conditionHandle.addConditon(new ContainContestChecker(
-                ConstKey.CT_NAME.KET_THUC, false, processlHandle));
+                ConstKey.CONTEST_NAME.KET_THUC, false, processlHandle));
         this.runnable = false;
         this.oldId = "";
     }
@@ -68,7 +68,7 @@ public class DT_B2_MODE extends AbsTestMode<DuongTruongView> {
             }
         }
         return runnable && (!contests.isEmpty() && contests.peek()
-                .getName().equals(ConstKey.CT_NAME.XUAT_PHAT));
+                .getName().equals(ConstKey.CONTEST_NAME.XUAT_PHAT));
     }
 
     @Override
@@ -91,7 +91,7 @@ public class DT_B2_MODE extends AbsTestMode<DuongTruongView> {
             if (hasXp || !runnable || this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
                 return;
             }
-            addContest(new XuatPhat(ConstKey.CT_NAME.XUAT_PHAT));
+            addContest(new XuatPhat(ConstKey.CONTEST_NAME.XUAT_PHAT));
             hasXp = true;
         });
     }
@@ -102,19 +102,19 @@ public class DT_B2_MODE extends AbsTestMode<DuongTruongView> {
 
     @Override
     protected void createTestKeyEvents(Map<String, IKeyEvent> events) {
-        events.put(ConstKey.ERR.CL, (key) -> {
+        events.put(ConstKey.ERR.SWERVED_OUT_OF_LANE, (key) -> {
             this.errorcodeHandle.addBaseErrorCode(key);
         });
-        events.put(ConstKey.ERR.HL, (key) -> {
+        events.put(ConstKey.ERR.IGNORED_INSTRUCTIONS, (key) -> {
             this.errorcodeHandle.addBaseErrorCode(key);
         });
-        events.put(ConstKey.ERR.QT, (key) -> {
+        events.put(ConstKey.ERR.VIOLATION_TRAFFIC_RULES, (key) -> {
             this.errorcodeHandle.addBaseErrorCode(key);
         });
-        events.put(ConstKey.ERR.RG, (key) -> {
+        events.put(ConstKey.ERR.HEAVY_SHAKING, (key) -> {
             this.errorcodeHandle.addBaseErrorCode(key);
         });
-        events.put(ConstKey.ERR.TN, (key) -> {
+        events.put(ConstKey.ERR.CAUSED_AN_ACCIDENT, (key) -> {
             this.errorcodeHandle.addBaseErrorCode(key);
         });
         events.put(ConstKey.KEY_BOARD.CONTEST.TS, (key) -> {
@@ -127,7 +127,7 @@ public class DT_B2_MODE extends AbsTestMode<DuongTruongView> {
             if (!hasXp || hasKt) {
                 return;
             }
-            addContest(new TangToc(ConstKey.CT_NAME.TANG_TOC));
+            addContest(new TangToc(ConstKey.CONTEST_NAME.TANG_TOC));
             hasTs = true;
         });
         events.put(ConstKey.KEY_BOARD.CONTEST.GS, (key) -> {
@@ -140,7 +140,7 @@ public class DT_B2_MODE extends AbsTestMode<DuongTruongView> {
             if (!hasXp || hasKt) {
                 return;
             }
-            addContest(new GiamToc(ConstKey.CT_NAME.GIAM_TOC));
+            addContest(new GiamToc(ConstKey.CONTEST_NAME.GIAM_TOC));
             hasGs = true;
         });
         events.put(ConstKey.KEY_BOARD.CONTEST.KT, (key) -> {
@@ -155,23 +155,13 @@ public class DT_B2_MODE extends AbsTestMode<DuongTruongView> {
             if (!hasXp || !hasTs || !hasGs || hasKt) {
                 return;
             }
-            addContest(new KetThuc(ConstKey.CT_NAME.KET_THUC));
+            addContest(new KetThuc(ConstKey.CONTEST_NAME.KET_THUC));
             hasKt = true;
         });
     }
 
     @Override
-    protected void analysisResponce(Response responce) {
-        if (responce == null) {
-            return;
-        }
-        if (!responce.isSuccess() || responce.getData() == null) {
-            return;
-        }
-        String requestString = responce.getData(JSONObject.class).getString("request");
-        if (requestString == null) {
-            return;
-        }
+    protected void analysisResponce(String requestString) {
         switch (requestString) {
             case "update" -> {
                 updateLog();

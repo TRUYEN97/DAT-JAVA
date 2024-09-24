@@ -25,7 +25,7 @@ public class ContainContestChecker extends AbsCondition {
     }
 
     @Override
-    public boolean checkPassed() {
+    public boolean checkCondition() {
         return modelHandle.containContestClass(name) == checkContain;
     }
 

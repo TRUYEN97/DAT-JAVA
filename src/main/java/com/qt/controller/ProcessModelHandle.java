@@ -4,11 +4,11 @@
  */
 package com.qt.controller;
 
-import com.qt.controller.logTest.FileTestService;
 import com.qt.interfaces.IgetTime;
 import com.qt.contest.AbsContest;
 import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.CarConfig;
+import com.qt.common.ErrorLog;
 import com.qt.common.MyObjectMapper;
 import com.qt.common.Util;
 import com.qt.common.timer.TimeBase;
@@ -32,7 +32,6 @@ public final class ProcessModelHandle implements IgetTime {
     private final TestDataViewModel testDataModel;
     private final TimeBase timeBase;
     private final CarModel carModel;
-    private final FileTestService logTestService;
     private long startMs = 0;
     private long endMs = 0;
     private long cysleTime = -1;
@@ -43,8 +42,6 @@ public final class ProcessModelHandle implements IgetTime {
         this.timeBase = new TimeBase();
         this.testDataModel = new TestDataViewModel(this, processModel);
         this.carModel = MCUSerialHandler.getInstance().getModel();
-        this.logTestService = FileTestService.getInstance();
-        this.logTestService.setProcessModel(processModel);
         this.testing = false;
         setCarID(CarConfig.getInstance().getCarId());
     }
@@ -62,6 +59,9 @@ public final class ProcessModelHandle implements IgetTime {
     }
 
     public void setCarID(String carId) {
+        if (testing) {
+            return;
+        }
         carId = carId == null || carId.isBlank() ? "0" : carId;
         this.processModel.setCarId(carId);
         CarConfig.getInstance().setCarId(carId);
@@ -71,6 +71,7 @@ public final class ProcessModelHandle implements IgetTime {
         if (userModel == null || testing) {
             return;
         }
+        CarConfig.getInstance().setExamId(userModel.getExamId());
         this.processModel.setId(userModel.getId());
         this.processModel.setName(userModel.getName());
         this.processModel.setSex(userModel.getSex());
@@ -140,10 +141,6 @@ public final class ProcessModelHandle implements IgetTime {
         this.processModel.addContestModel(contestModel);
     }
 
-    public void setContest(AbsContest absContest) {
-        this.testDataModel.setContest(absContest);
-    }
-
     public void update() {
         this.processModel.setCycleTime(getTestTime());
         this.processModel.setDistance(carModel.getDistance());
@@ -158,34 +155,48 @@ public final class ProcessModelHandle implements IgetTime {
     }
 
     public boolean containContestClass(String name) {
-        List<ContestDataModel> contestModels = processModel.getContests();
-        if (name == null || contestModels == null || contestModels.isEmpty()) {
+        try {
+            List<ContestDataModel> contestModels = processModel.getContests();
+            if (name == null || contestModels == null || contestModels.isEmpty()) {
+                return false;
+            }
+            String modelName;
+            ContestDataModel contestModel;
+            for (int i = 0; i < contestModels.size(); i++) {
+                contestModel = contestModels.get(i);
+                if (contestModel.getEndTime() == null || contestModel.getEndTime().isBlank()) {
+                    continue;
+                }
+                modelName = contestModel.getContestName();
+                if (modelName != null && modelName.equalsIgnoreCase(name)) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
             return false;
         }
-        String modelName;
-        for (ContestDataModel contestModel : contestModels) {
-            if (contestModel.getEndTime() == null || contestModel.getEndTime().isBlank()) {
-                continue;
-            }
-            modelName = contestModel.getContestName();
-            if (modelName != null && modelName.equalsIgnoreCase(name)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public boolean containContestClass(String name, int index) {
-        List<ContestDataModel> contestModels = processModel.getContests();
-        if (name == null
-                || contestModels == null
-                || contestModels.isEmpty()
-                || index >= contestModels.size()
-                || index < 0) {
+        try {
+            List<ContestDataModel> contestModels = processModel.getContests();
+            if (name == null
+                    || contestModels == null
+                    || contestModels.isEmpty()
+                    || index >= contestModels.size()
+                    || index < 0) {
+                return false;
+            }
+            String modelName = contestModels.get(index).getContestName();
+            return modelName != null && modelName.equals(name);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
             return false;
         }
-        String modelName = contestModels.get(index).getContestName();
-        return modelName != null && modelName.equals(name);
     }
 
     public void setMode(AbsTestMode testMode) {
@@ -202,5 +213,9 @@ public final class ProcessModelHandle implements IgetTime {
 
     public boolean isTesting() {
         return this.testing;
+    }
+
+    public void setContest(AbsContest absContest) {
+        this.testDataModel.setContest(absContest);
     }
 }

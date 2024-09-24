@@ -2,14 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.qt.controller;
+package com.qt.controller.settingElement.imp;
 
+import com.qt.controller.ProcessModelHandle;
 import com.qt.controller.api.ApiService;
 import com.qt.controller.modeController.ModeManagement;
+import com.qt.controller.settingElement.AbsElementSetting;
 import com.qt.main.Core;
 import com.qt.model.input.UserModel;
 import com.qt.model.modelTest.process.ProcessModel;
-import com.qt.output.SoundPlayer;
 import com.qt.view.frame.KeyBoardFrame;
 import com.qt.view.frame.UserInfoFrame;
 
@@ -17,43 +18,36 @@ import com.qt.view.frame.UserInfoFrame;
  *
  * @author Admin
  */
-public class ChangeUserId implements Runnable {
-
-    private final SoundPlayer soundPlayer;
+public class ChangeUserId extends AbsElementSetting {
+    
     private final ApiService apiService;
     private final ProcessModel processModel;
-    private final KeyBoardFrame keyBoardFrame;
     private final UserInfoFrame infoFrame;
-
+    
     public ChangeUserId() {
-        this.soundPlayer = SoundPlayer.getInstance();
         this.apiService = ApiService.getInstance();
         this.processModel = ProcessModelHandle.getInstance().getProcessModel();
-        this.keyBoardFrame = new KeyBoardFrame();
         this.infoFrame = new UserInfoFrame();
     }
-
+    
     @Override
     public void run() {
         this.soundPlayer.inputId();
-        String value = this.keyBoardFrame.getValue(KeyBoardFrame.SBD);
+        String value = getInputValue();
         if (value == null) {
             return;
         }
-        this.soundPlayer.sayChecking();
-        UserModel userModel = this.apiService.checkUserId(value, this.processModel.getCarId());
-        String id;
         if (ProcessModelHandle.getInstance().isTesting()) {
             this.soundPlayer.canNotChange();
         }
-        if (userModel != null && (id = userModel.getId()) != null) {
-            String modeName = userModel.getModeName();
-            String rank = userModel.getRank();
-            ModeManagement modeManagement = Core.getInstance().getModeManagement();
-            if (id.equals("0")) {
-                ProcessModelHandle.getInstance().setUserModel(userModel);
-                this.soundPlayer.practice();
-            } else {
+        if (!value.isBlank() && !value.equals("0")) {
+            this.soundPlayer.sayChecking();
+            UserModel userModel = this.apiService.checkUserId(value, this.processModel.getCarId());
+            String id;
+            if (userModel != null && (id = userModel.getId()) != null) {
+                String modeName = userModel.getModeName();
+                String rank = userModel.getRank();
+                ModeManagement modeManagement = Core.getInstance().getModeManagement();
                 this.infoFrame.setUserModel(userModel);
                 if (!this.infoFrame.isAccept()) {
                     return;
@@ -69,11 +63,21 @@ public class ChangeUserId implements Runnable {
                     ProcessModelHandle.getInstance().setUserModel(new UserModel());
                     this.soundPlayer.modeInvalid();
                 }
+            } else {
+                ProcessModelHandle.getInstance().setUserModel(new UserModel());
+                this.soundPlayer.userIdInvalid();
             }
         } else {
-            ProcessModelHandle.getInstance().setUserModel(new UserModel());
-            this.soundPlayer.userIdInvalid();
+            UserModel model = new UserModel();
+            model.setId("0");
+            ProcessModelHandle.getInstance().setUserModel(model);
+            this.soundPlayer.practice();
         }
     }
 
+    @Override
+    public String getSettingName() {
+        return KeyBoardFrame.SBD;
+    }
+    
 }

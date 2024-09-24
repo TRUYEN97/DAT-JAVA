@@ -4,8 +4,8 @@
  */
 package com.qt.contest.impCondition;
 
-import com.qt.common.timer.WaitTime.Class.TimeS;
 import com.qt.contest.AbsCondition;
+import javax.swing.Timer;
 
 /**
  *
@@ -13,36 +13,54 @@ import com.qt.contest.AbsCondition;
  */
 public abstract class AbsTimerConditon extends AbsCondition {
 
-    protected final TimeS timeS;
+    protected final Timer timer;
+    private boolean timeout;
 
-    public AbsTimerConditon() {
-        this(0);
+    public AbsTimerConditon(int spec, boolean justOneTime) {
+        this.timeout = false;
+        this.timer = new Timer(spec * 1000, (e) -> {
+            if (signal()) {
+                timeout = true;
+                if (justOneTime) {
+                    stop();
+                }
+                if (important) {
+                    hasFail = true;
+                }
+                action();
+            } else {
+                timeout = false;
+                resetTimer();
+            }
+        });
     }
-    
-    public AbsTimerConditon(int spec) {
-        this.timeS = new TimeS(spec);
-    }
-    
-    public void setSpec(int spec){
-        this.timeS.setSpec(spec);
+
+    public void setSpec(int spec) {
+        this.timer.setDelay(spec * 1000);
     }
 
     @Override
-    public boolean checkPassed() {
-        if (signal()) {
-            if (!this.timeS.onTime()) {
-                this.timeS.update();
-                action();
-                return false;
-            }
-        } else {
-            this.timeS.update();
-        }
-        return true;
+    public void start() {
+        super.start();
+        this.timeout = false;
+        this.timer.start();
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        this.timer.stop();
+    }
+
+    @Override
+    protected boolean checkCondition() {
+        return stop || !timeout;
     }
 
     public void resetTimer() {
-        this.timeS.update();
+        if (this.timer.isRunning()) {
+            this.timer.restart();
+        }
     }
 
     protected abstract boolean signal();

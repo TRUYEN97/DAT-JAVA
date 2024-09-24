@@ -56,8 +56,8 @@
               <Component id="stModeName" min="-2" pref="100" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="stServer" pref="82" max="32767" attributes="0"/>
                   <Component id="btIn" max="32767" attributes="0"/>
-                  <Component id="stServer" min="-2" pref="82" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="8" max="32767" attributes="0"/>
           </Group>
@@ -80,14 +80,6 @@
         <Property name="iconName" type="java.lang.String" value="Ph&#x1ea7;n thi"/>
       </Properties>
     </Component>
-    <Component class="com.qt.view.element.ButtonDesign" name="btIn">
-      <Properties>
-        <Property name="fontValue" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Arial" size="18" style="1"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="In phi&#x1ebf;u &#x111;i&#x1ec3;m"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JLabel" name="lbImg">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -105,6 +97,11 @@
         <Property name="onColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="cc" green="ff" red="66" type="rgb"/>
         </Property>
+      </Properties>
+    </Component>
+    <Component class="com.qt.view.element.ButtonDesign" name="btIn">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="In phi&#x1ebf;u &#x111;i&#x1ec3;m"/>
       </Properties>
     </Component>
   </SubComponents>

@@ -4,9 +4,9 @@
  */
 package com.qt.output.printer;
 
+import com.qt.common.CarConfig;
 import com.qt.common.ErrorLog;
 import com.qt.model.modelTest.ErrorCode;
-import com.qt.model.modelTest.ErrorCodeInfo;
 import com.qt.model.modelTest.ErrorcodeWithContestNameModel;
 import com.qt.model.modelTest.contest.ContestDataModel;
 import com.qt.model.modelTest.process.ProcessModel;
@@ -31,6 +31,8 @@ public class BillPrintable implements Printable {
         this.processData = processData;
     }
 
+    private final int yShift = 10;
+
     @Override
     public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
         if (this.processData == null || pageIndex > 0) {
@@ -39,34 +41,34 @@ public class BillPrintable implements Printable {
         Graphics2D g2d = (Graphics2D) graphics;
         g2d.translate((int) pageFormat.getImageableX(), (int) pageFormat.getImageableY());
         try {
-            int y = 10;
-            int yShift = 10;
-            int headerRectHeight = 15;
-            g2d.setFont(new Font("Monospaced", Font.PLAIN, 12));
+            int y = 0;
+            String centerName = CarConfig.getInstance().getCenterName();
+            g2d.setFont(new Font("Monospaced", Font.PLAIN, 10));
 //            g2d.drawImage(icon.getImage(), 40, 0, 40, 40, null);
-            drawString(g2d, y += headerRectHeight, "Sat hach vien: ");
-            drawString(g2d, y += yShift * 3, "******************************");
-            drawString(g2d, y += yShift, "  TRUNG TAM SHLX QUAN KHU 1");
-            drawString(g2d, y += headerRectHeight, "------------------------------");
-            drawString(g2d, y += yShift, "SBD: %s", this.processData.getId());
-            drawString(g2d, y += yShift, "SO XE: %s", this.processData.getCarId());
-            drawString(g2d, y += yShift, "HO TEN: %s", this.processData.getName());
-            drawString(g2d, y += yShift, "NGAY THI: %s", this.processData.getStartTime());
+            drawString(g2d, y += yShift, 27, "Sát hạch viên ký tên: ");
+            drawString(g2d, y += yShift * 4, 27, "***************************");
+            drawString(g2d, y += yShift, 27, centerName);
+            drawString(g2d, y += yShift, 27, "---------------------------");
+            drawString(g2d, y += yShift, 27, "Số báo danh: %s", this.processData.getId());
+            drawString(g2d, y += yShift, 27, "Số xe: %s", this.processData.getCarId());
+            drawString(g2d, y += yShift, 27, "Họ tên: %s", this.processData.getName());
+            drawString(g2d, y += yShift, 27, "Ngày thi: %s", this.processData.getStartTime());
             List<ErrorcodeWithContestNameModel> errorcodes = getErrorCode();
             if (!errorcodes.isEmpty()) {
-                drawString(g2d, y += headerRectHeight, "CAC LOI:");
+                drawString(g2d, y += yShift, 27, "---------------------------");
+                drawString(g2d, y += yShift, 27, "- Các lỗi:");
                 for (ErrorcodeWithContestNameModel errorcode : errorcodes) {
-                    drawString(g2d, y += yShift, "%s, -%s, %s",
+                    drawString(g2d, y += yShift, 27, " + %s, -%s, %s",
                             errorcode.getErrName(),
                             errorcode.getErrPoint(),
                             errorcode.getContestName());
                 }
             }
-            drawString(g2d, y += headerRectHeight, "------------------------------");
-            drawString(g2d, y += yShift, "SO DIEM: %s/100", this.processData.getScore());
-            drawString(g2d, y += yShift, "KET QUA: %s", getContestResult());
-            drawString(g2d, y += yShift, "THI SINH KI TEN:   ");
-            drawString(g2d, y += yShift * 2, "******************************");
+            drawString(g2d, y += yShift, 27, "---------------------------");
+            drawString(g2d, y += yShift, 27, "Điểm: %s/100", this.processData.getScore());
+            drawString(g2d, y += yShift, 27, "Kết quả: %s", getContestResult());
+            drawString(g2d, y += yShift, 27, "Thí sinh ký tên:   ");
+            drawString(g2d, y += yShift * 2, 27, "***************************");
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
@@ -78,13 +80,13 @@ public class BillPrintable implements Printable {
         int rs = this.processData.getContestsResult();
         switch (rs) {
             case ProcessModel.PASS -> {
-                return "DAT";
+                return "Đạt";
             }
             case ProcessModel.FAIL -> {
-                return "KHONG DAT";
+                return "Không đạt";
             }
             case ProcessModel.RUNNING -> {
-                return "DANG THI";
+                return "Đang thi";
             }
         }
         return rs;
@@ -93,30 +95,52 @@ public class BillPrintable implements Printable {
     protected List<ErrorcodeWithContestNameModel> getErrorCode() {
         //        ImageIcon icon = new ImageIcon(getClass().getResource("/bill_icon.png"));
         List<ErrorcodeWithContestNameModel> errorcodes = new ArrayList<>();
-        if (!this.processData.getErrorCodes().isEmpty()) {
-            for (ErrorCode errorCode : this.processData.getErrorCodes()) {
-                if (errorCode instanceof ErrorCodeInfo codeInfo) {
-                    errorcodes.add(new ErrorcodeWithContestNameModel(codeInfo, ""));
+        try {
+            if (!this.processData.getErrorCodes().isEmpty()) {
+                for (ErrorCode errorCode : this.processData.getErrorCodes()) {
+                    errorcodes.add(new ErrorcodeWithContestNameModel(errorCode, ""));
                 }
             }
-        }
-        if (!this.processData.getContests().isEmpty()) {
-            for (ContestDataModel contest : this.processData.getContests()) {
-                if (contest == null || contest.getErrorCodes().isEmpty()) {
-                    continue;
-                }
-                for (ErrorCode errorCode : contest.getErrorCodes()) {
-                    if (errorCode instanceof ErrorCodeInfo codeInfo) {
-                        errorcodes.add(new ErrorcodeWithContestNameModel(codeInfo, contest.getContestName()));
+            List<ContestDataModel> contestModels = this.processData.getContests();
+            if (contestModels != null && !contestModels.isEmpty()) {
+                ContestDataModel contestModel;
+                for (int i = 0; i < contestModels.size(); i++) {
+                    contestModel = contestModels.get(i);
+                    if (contestModel == null || contestModel.getErrorCodes().isEmpty()) {
+                        continue;
+                    }
+                    for (ErrorCode errorCode : contestModel.getErrorCodes()) {
+                        errorcodes.add(new ErrorcodeWithContestNameModel(errorCode, contestModel.getContestName()));
                     }
                 }
             }
+            return errorcodes;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
+            return errorcodes;
         }
-        return errorcodes;
     }
 
-    private void drawString(Graphics2D g2d, int y, String format, Object... params) {
-        g2d.drawString(String.format(format, params), 0, y);
+    private void drawLine(Graphics2D g2d, String line, int y, int lineNum) {
+        if (line.length() > lineNum) {
+            line = line.substring(0, lineNum);
+            g2d.drawString(line.substring(0, lineNum), 0, y);
+            String subLine = line.substring(lineNum);
+            drawLine(g2d, subLine, y + yShift, lineNum);
+        } else {
+            g2d.drawString(line, 0, y);
+        }
+    }
+
+    private void drawString(Graphics2D g2d, int y, int lineNum, String format, Object... params) {
+        try {
+            String line = String.format(format, params);
+            drawLine(g2d, line, y, lineNum);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
+        }
     }
 
 }

@@ -6,7 +6,6 @@ package com.qt.view.frame;
 
 import com.qt.common.ConstKey;
 import com.qt.common.Util;
-import com.qt.common.timer.WaitTime.Class.TimeS;
 import com.qt.model.config.ChangeIdModel;
 import com.qt.pretreatment.KeyEventManagement;
 import com.qt.pretreatment.KeyEventsPackage;
@@ -23,17 +22,34 @@ import javax.swing.Timer;
  */
 public class KeyBoardFrame extends AbsKeylistenerFrame {
 
+    private static int INDEX_INSATNCE = 0;
+    public static final String SO_ENCODER = "Encoder/m";
+    public static final String SBD = "Số báo danh";
+    public static final String SX = "Số xe";
+    public static final String PASSWORD = "Mật khẩu";
+    public static final String DELAY_DIGNEL_LIGHT = "Độ chễ xi Nhan";
+
     private final ChangeIdModel model;
     private final MouseClicked mouseClick;
     private final KeyEventManagement eventManagement;
     private final KeyEventsPackage eventsPackage;
     private final Timer timer;
+    private final boolean passwordMode;
     private int st;
+    private int maxNum;
+    private boolean removeZero;
+    private boolean hasPonit;
+
+    public KeyBoardFrame() {
+        this(false);
+    }
 
     /**
      * Creates new form ChangeCarIdFrame
+     *
+     * @param pwMode
      */
-    public KeyBoardFrame() {
+    public KeyBoardFrame(boolean pwMode) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -61,6 +77,11 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
         //</editor-fold>
 
         /* Create and display the form */
+        INDEX_INSATNCE += 1;
+        this.passwordMode = pwMode;
+        this.maxNum = 3;
+        this.removeZero = true;
+        this.hasPonit = false;
         initComponents();
 //        setBackground(new Color(0, 0, 0, 0));
         this.timer = new Timer(10000, (e) -> {
@@ -68,7 +89,7 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
         });
         this.model = new ChangeIdModel();
         this.eventManagement = KeyEventManagement.getInstance();
-        this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName(), true);
+        this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName() + INDEX_INSATNCE, true);
         this.addButton(bt0);
         this.addButton(bt1);
         this.addButton(bt2);
@@ -79,7 +100,7 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
         this.addButton(bt7);
         this.addButton(bt8);
         this.addButton(bt9);
-        this.addButton(bt0);
+        this.addButton(btPoint);
         this.addButton(ConstKey.KEY_BOARD.BACKSPACE, btBackspace);
         this.addButton(btCancel);
         this.addButton(ConstKey.KEY_BOARD.OK, btOk);
@@ -99,6 +120,23 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
         });
         initKeyPackage();
         initMouseClickEvent();
+    }
+
+    public void setHasPonit(boolean hasPonit) {
+        this.hasPonit = hasPonit;
+    }
+
+    public void setRemoveZero(boolean removeZero) {
+        this.removeZero = removeZero;
+    }
+
+    public void setMaxNum(int maxNum) {
+        if (maxNum < 1) {
+            this.maxNum = 1;
+        } else if (maxNum > 10) {
+            this.maxNum = 10;
+        }
+        this.maxNum = maxNum;
     }
 
     public void setWaitTimeMs(int time) {
@@ -121,7 +159,7 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
         if (val == null || val.isBlank()) {
             return;
         }
-        if (val.equalsIgnoreCase("x") || val.equals(ConstKey.KEY_BOARD.CANCEL)) {
+        if (val.equals(ConstKey.KEY_BOARD.CANCEL)) {
             st = -1;
         } else if (val.equalsIgnoreCase("ok") || val.equals(ConstKey.KEY_BOARD.OK)) {
             st = 1;
@@ -130,19 +168,20 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
         } else {
             keyNumbeClick(val);
         }
-        this.stValue.setValue(this.model.getStringValue());
+        updateValue();
         this.timer.restart();
     }
 
     private void keyNumbeClick(String val) {
         String modelVal = this.model.getStringValue();
-        if (modelVal.length() >= 3
-                || val.length() != 1
-                || val.charAt(0) < '0'
-                || val.charAt(0) > '9') {
+        if (modelVal.length() >= this.maxNum || !val.matches("^[0-9]|\\.$")) {
             return;
         }
-        if (modelVal.equals("0")) {
+        if (val.equals(".")) {
+            if (hasPonit && !modelVal.isBlank() && !modelVal.contains(".")) {
+                this.model.setValue(modelVal.concat(val));
+            }
+        } else if (modelVal.equals("0") && removeZero) {
             this.model.setValue(val);
         } else {
             this.model.setValue(modelVal.concat(val));
@@ -152,16 +191,14 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
     private void keyBackspaceClick() {
         String modelVal = this.model.getStringValue();
         if (!modelVal.isBlank()) {
-            if (modelVal.length() == 1) {
+            int length = modelVal.length();
+            if (length == 1) {
                 this.model.setValue("");
             } else {
                 this.model.setValue(modelVal.substring(0, modelVal.length() - 1));
             }
         }
     }
-
-    public static final String SBD = "Số báo danh";
-    public static final String SX = "Số xe";
 
     public ChangeIdModel getModel() {
         return model;
@@ -188,14 +225,14 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
         bt7 = new com.qt.view.element.ButtonDesign();
         bt8 = new com.qt.view.element.ButtonDesign();
         bt9 = new com.qt.view.element.ButtonDesign();
-        btOk = new com.qt.view.element.ButtonDesign();
+        btPoint = new com.qt.view.element.ButtonDesign();
         bt0 = new com.qt.view.element.ButtonDesign();
         btBackspace = new com.qt.view.element.ButtonDesign();
         btCancel = new com.qt.view.element.ButtonDesign();
+        btOk = new com.qt.view.element.ButtonDesign();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Nhập");
-        setAlwaysOnTop(true);
         setLocation(new java.awt.Point(0, 0));
         setName("ChangeIdFrame"); // NOI18N
         setUndecorated(true);
@@ -234,9 +271,8 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
         bt9.setText("9");
         keybroadPanel.add(bt9);
 
-        btOk.setOnColor(new java.awt.Color(0, 255, 102));
-        btOk.setText("OK");
-        keybroadPanel.add(btOk);
+        btPoint.setText(".");
+        keybroadPanel.add(btPoint);
 
         bt0.setText("0");
         keybroadPanel.add(bt0);
@@ -245,7 +281,10 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
         keybroadPanel.add(btBackspace);
 
         btCancel.setOnColor(new java.awt.Color(255, 102, 102));
-        btCancel.setText("X");
+        btCancel.setText("Cancel");
+
+        btOk.setOnColor(new java.awt.Color(0, 255, 102));
+        btOk.setText("OK");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -257,8 +296,11 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(keybroadPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
-                            .addComponent(btCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(keybroadPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(btCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btOk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -268,8 +310,10 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
                 .addComponent(stValue, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(keybroadPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btOk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(8, 8, 8))
         );
 
@@ -280,14 +324,18 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public String getValue(String name) {
+        return getValue(name, "");
+    }
+
+    public String getValue(String name, String value) {
         if (name == null || (isVisible() && !this.model.getName().equalsIgnoreCase(name))) {
             return null;
         }
         this.eventManagement.addKeyEventBackAge(eventsPackage);
         this.model.setName(name);
-        this.model.setValue("");
+        this.model.setValue(value == null ? "" : value);
         this.stValue.setIconNameTop(this.model.getName());
-        this.stValue.setValue(this.model.getStringValue());
+        updateValue();
         setVisible(true);
         this.st = 0;
         this.timer.start();
@@ -296,7 +344,24 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
         }
         setVisible(false);
         dispose();
+        String result = this.model.getStringValue();
+        if (result != null && !result.isBlank() && result.charAt(result.length() - 1) == '.') {
+            this.model.setValue(result.substring(0, result.length() - 1));
+        }
         return st > 0 ? this.model.getStringValue() : null;
+    }
+
+    private void updateValue() {
+        String val = this.model.getStringValue();
+        if (passwordMode) {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < val.length(); i++) {
+                builder.append("*");
+            }
+            this.stValue.setValue(builder.toString());
+        } else {
+            this.stValue.setValue(val);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -313,6 +378,7 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
     private com.qt.view.element.ButtonDesign btBackspace;
     private com.qt.view.element.ButtonDesign btCancel;
     private com.qt.view.element.ButtonDesign btOk;
+    private com.qt.view.element.ButtonDesign btPoint;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel keybroadPanel;
     private com.qt.view.element.StatusPanel stValue;
@@ -324,5 +390,16 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
 
     private void addButton(String key, ButtonDesign bt) {
         this.eventsPackage.getEventButtonBlink().putButtonBlinkEvent(key, bt);
+    }
+
+    public void cancel() {
+        st = -1;
+    }
+
+    public void setDefaultValue(String value) {
+        if (value == null) {
+            return;
+        }
+        this.model.setValue(value);
     }
 }

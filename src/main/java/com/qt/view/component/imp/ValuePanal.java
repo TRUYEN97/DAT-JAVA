@@ -38,10 +38,24 @@ public class ValuePanal extends UpdateValuePanel {
         this.stV.setValue(String.format("%.1f", this.carModel.getSpeed()));
         this.stRpm.setValue(String.format("%s", this.carModel.getRpm()));
         this.stScore.setValue(String.format("%s", this.testDataModel.getScore()));
-        this.stTotalTime.setValue(String.format("%d", this.testDataModel.getTestTime() / 1000));
+        if (this.testDataModel.getTestTime() == 0) {
+            this.stTotalTime.setValue("0");
+        } else {
+            long t = this.testDataModel.getTestTime() / 1000;
+            long m = t / 60;
+            long s = t - (m * 60);
+            this.stTotalTime.setValue(String.format("%d:%d", m, s));
+        }
         AbsContest contest = this.testDataModel.getContest();
         if (contest != null) {
-            this.stTime.setValue(String.format("%d", contest.getTestTime() / 1000));
+            if (contest.getTestTime() == 0) {
+                this.stTime.setValue("0");
+            } else {
+                long t = contest.getTestTime() / 1000;
+                long m = t / 60;
+                long s = t - (m * 60);
+                this.stTime.setValue(String.format("%d:%d", m, s));
+            }
             this.stCurrContest.setValue(contest.getName());
         } else {
             this.stTime.setValue("0");

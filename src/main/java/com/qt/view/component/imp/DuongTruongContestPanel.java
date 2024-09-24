@@ -15,7 +15,6 @@ import java.awt.Color;
  */
 public class DuongTruongContestPanel extends UpdateValuePanel {
 
-    private KeyEventManagement eventManagement;
 
     /**
      * Creates new form DuongTruongContestPanel
@@ -24,7 +23,7 @@ public class DuongTruongContestPanel extends UpdateValuePanel {
         initComponents();
         setOpaque(false);
         setBackground(new Color(255, 255, 255, 70));
-        eventManagement = KeyEventManagement.getInstance();
+        KeyEventManagement eventManagement = KeyEventManagement.getInstance();
         eventManagement.getEventButtonBlink().putButtonBlinkEvent(ConstKey.KEY_BOARD.ERROR.CL, btCl);
         eventManagement.getEventButtonBlink().putButtonBlinkEvent(ConstKey.KEY_BOARD.ERROR.HL, btHl);
         eventManagement.getEventButtonBlink().putButtonBlinkEvent(ConstKey.KEY_BOARD.ERROR.QT, btQt);
@@ -35,19 +34,19 @@ public class DuongTruongContestPanel extends UpdateValuePanel {
         eventManagement.getEventButtonBlink().putButtonBlinkEvent(ConstKey.KEY_BOARD.CONTEST.TS, btTs);
         eventManagement.getEventButtonBlink().putButtonBlinkEvent(ConstKey.KEY_BOARD.CONTEST.XP, btXp);
         this.btCl.setMouseClicked((design) -> {
-            this.carModel.setRemoteValue(ConstKey.ERR.CL);
+            this.carModel.setRemoteValue(ConstKey.ERR.SWERVED_OUT_OF_LANE);
         });
         this.btHl.setMouseClicked((design) -> {
-            this.carModel.setRemoteValue(ConstKey.ERR.HL);
+            this.carModel.setRemoteValue(ConstKey.ERR.IGNORED_INSTRUCTIONS);
         });
         this.btQt.setMouseClicked((design) -> {
-            this.carModel.setRemoteValue(ConstKey.ERR.QT);
+            this.carModel.setRemoteValue(ConstKey.ERR.VIOLATION_TRAFFIC_RULES);
         });
         this.btRg.setMouseClicked((design) -> {
-            this.carModel.setRemoteValue(ConstKey.ERR.RG);
+            this.carModel.setRemoteValue(ConstKey.ERR.HEAVY_SHAKING);
         });
         this.btTn.setMouseClicked((design) -> {
-            this.carModel.setRemoteValue(ConstKey.ERR.TN);
+            this.carModel.setRemoteValue(ConstKey.ERR.CAUSED_AN_ACCIDENT);
         });
         //////////////////////////
         this.btXp.setMouseClicked((design) -> {
@@ -80,10 +79,10 @@ public class DuongTruongContestPanel extends UpdateValuePanel {
         btKt = new com.qt.view.element.ButtonDesign();
         pnTruDiem = new javax.swing.JPanel();
         btCl = new com.qt.view.element.ButtonDesign();
+        btHl = new com.qt.view.element.ButtonDesign();
         btQt = new com.qt.view.element.ButtonDesign();
         btRg = new com.qt.view.element.ButtonDesign();
         btTn = new com.qt.view.element.ButtonDesign();
-        btHl = new com.qt.view.element.ButtonDesign();
 
         pnBaiThi.setLayout(new java.awt.GridLayout(1, 4));
 
@@ -104,6 +103,9 @@ public class DuongTruongContestPanel extends UpdateValuePanel {
         btCl.setText("CL");
         pnTruDiem.add(btCl);
 
+        btHl.setText("HL");
+        pnTruDiem.add(btHl);
+
         btQt.setText("QT");
         pnTruDiem.add(btQt);
 
@@ -112,9 +114,6 @@ public class DuongTruongContestPanel extends UpdateValuePanel {
 
         btTn.setText("TN");
         pnTruDiem.add(btTn);
-
-        btHl.setText("HL");
-        pnTruDiem.add(btHl);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

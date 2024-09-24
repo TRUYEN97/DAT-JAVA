@@ -4,22 +4,12 @@
  */
 package com.qt.controller.modeController;
 
-import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
-import com.qt.controller.ChangeCarId;
-import com.qt.controller.ChangeUserId;
-import com.qt.controller.PrintWithKeyBoard;
 import com.qt.input.camera.CameraRunner;
 import com.qt.mode.AbsTestMode;
-import com.qt.output.SoundPlayer;
-import com.qt.pretreatment.KeyEventsPackage;
-import com.qt.pretreatment.KeyEventManagement;
 import com.qt.view.ViewMain;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import javax.swing.Timer;
 
 /**
  *
@@ -29,51 +19,18 @@ public class ModeManagement {
 
     public static String DEFAULT_MODE;
     private final ViewMain viewMain;
-    private final KeyEventManagement eventManagement;
     private final List<AbsTestMode> modes;
     private final ModeHandle modeHandle;
-    private final KeyEventsPackage eventsPackage;
-    private final PrintWithKeyBoard printWithKeyBoard;
-    private final CameraRunner cameraRunner;
-    private final ChangeUserId changeUserId;
-    private final ChangeCarId changeCarId;
-    private final ExecutorService threadPool;
-    private Timer timer;
 
     public ModeManagement(ViewMain viewMain) {
         this.viewMain = viewMain;
         this.modes = new ArrayList<>();
-        this.eventManagement = KeyEventManagement.getInstance();
         this.modeHandle = new ModeHandle();
-        this.printWithKeyBoard = new PrintWithKeyBoard();
-        this.cameraRunner = CameraRunner.getInstance();
-        this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName());
-        this.changeUserId = new ChangeUserId();
-        this.changeCarId = new ChangeCarId();
-        this.threadPool = Executors.newSingleThreadExecutor();
-        this.eventsPackage.putEvent(ConstKey.KEY_BOARD.SO_XE, (key) -> {
-            this.threadPool.submit(this.changeCarId);
-        });
-        this.eventsPackage.putEvent(ConstKey.KEY_BOARD.SBD, (key) -> {
-            this.threadPool.submit(this.changeUserId);
-        });
-        this.eventsPackage.putEvent(ConstKey.KEY_BOARD.IN, (key) -> {
-            this.threadPool.submit(this.printWithKeyBoard);
-        });
-        this.timer = new Timer(20000, (e) -> {
-            moveChangeCarIdEvent();
-        });
-        this.eventManagement.start();
+        
     }
 
     public List<AbsTestMode> getModes() {
         return modes;
-    }
-
-    private void moveChangeCarIdEvent() {
-        this.eventsPackage.remove(ConstKey.KEY_BOARD.SO_XE);
-        this.timer.stop();
-        this.timer = null;
     }
 
     public boolean updateMode(String modeName, String rank) {
@@ -88,7 +45,6 @@ public class ModeManagement {
     public boolean updateMode(AbsTestMode testMode) {
         AbsTestMode currMode = this.modeHandle.getTestMode();
         if (currMode != null && currMode.equals(testMode)) {
-            System.out.println(currMode.getFullName());
             return true;
         }
         try {
@@ -102,7 +58,7 @@ public class ModeManagement {
             if (this.modeHandle.setTestMode(testMode)) {
                 this.modeHandle.start();
                 this.viewMain.setView(testMode.getView());
-                this.cameraRunner.setTestModeView(testMode.getView());
+                CameraRunner.getInstance().setTestModeView(testMode.getView());
                 return true;
             }
             return false;
@@ -127,12 +83,6 @@ public class ModeManagement {
             DEFAULT_MODE = absTestMode.getName();
         }
         this.modes.add(absTestMode);
-    }
-
-    public void start() {
-        SoundPlayer.getInstance().sayWelcome();
-        this.eventManagement.addKeyEventBackAge(eventsPackage);
-        this.timer.start();
     }
 
 }

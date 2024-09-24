@@ -73,6 +73,11 @@
             <Property name="text" type="java.lang.String" value="CL"/>
           </Properties>
         </Component>
+        <Component class="com.qt.view.element.ButtonDesign" name="btHl">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="HL"/>
+          </Properties>
+        </Component>
         <Component class="com.qt.view.element.ButtonDesign" name="btQt">
           <Properties>
             <Property name="text" type="java.lang.String" value="QT"/>
@@ -86,11 +91,6 @@
         <Component class="com.qt.view.element.ButtonDesign" name="btTn">
           <Properties>
             <Property name="text" type="java.lang.String" value="TN"/>
-          </Properties>
-        </Component>
-        <Component class="com.qt.view.element.ButtonDesign" name="btHl">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="HL"/>
           </Properties>
         </Component>
       </SubComponents>

@@ -2,11 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.qt.contest.impContest;
+package com.qt.contest.impContest.dtB2;
 
 import com.qt.common.ConstKey;
 import com.qt.contest.AbsContest;
 import com.qt.contest.impCondition.timerCondition.CheckTimeOut30s;
+import com.qt.input.serial.MCUSerialHandler;
 
 /**
  *
@@ -17,11 +18,11 @@ public class XuatPhat extends AbsContest {
     private final CheckTimeOut30s timeOut30s;
 
     public XuatPhat() {
-        this(ConstKey.CT_NAME.XUAT_PHAT);
+        this(ConstKey.CONTEST_NAME.XUAT_PHAT);
     }
 
     public XuatPhat(String name) {
-        super(name, name, false, true, 2000);
+        super(name, name, true, false, true, 2000);
         this.timeOut30s = new CheckTimeOut30s();
         this.conditionHandle.addConditon(this.timeOut30s);
     }
@@ -33,17 +34,25 @@ public class XuatPhat extends AbsContest {
     private boolean hasSo3;
 
     @Override
+    protected void init() {
+        hasSo1 = false;
+        hasSo2 = false;
+        hasSo3 = false;
+    }
+
+    @Override
     public boolean loop() {
         if (getDistance() > 0.1 && this.firstCheck) {
+            this.timeOut30s.stop();
             firstCheck = false;
             if (!this.carModel.isAt()) {
-                this.addErrorCode(ConstKey.ERR.AT);
+                this.addErrorCode(ConstKey.ERR.SEATBELT_NOT_FASTENED);
             }
             if (!this.carModel.isNt()) {
                 this.addErrorCode(ConstKey.ERR.NO_START_SIGNAL_LEFT);
             }
             if (this.carModel.isPt()) {
-                this.addErrorCode(ConstKey.ERR.NPT);
+                this.addErrorCode(ConstKey.ERR.PARKING_BRAKE_NOT_RELEASED);
             }
         }
         int so = this.carModel.getGearBoxValue();
@@ -60,8 +69,9 @@ public class XuatPhat extends AbsContest {
         }
         if (getDistance() >= 15) {
             if (so < 3 || !hasSo1 || !hasSo2 || !hasSo3) {
-                addErrorCode(ConstKey.ERR.TS);
+                addErrorCode(ConstKey.ERR.FAILED_SHIFTUP_GEAR_IN_15M);
             }
+            MCUSerialHandler.getInstance().sendLedOff();
             return true;
         }
         return false;
@@ -73,12 +83,10 @@ public class XuatPhat extends AbsContest {
 
     @Override
     protected boolean isIntoContest() {
-        hasSo1 = false;
-        hasSo2 = false;
-        hasSo3 = false;
         firstCheck = true;
         oldDistance = this.carModel.getDistance();
-        this.timeOut30s.resetTimer();
+        this.timeOut30s.setOldDisTance(oldDistance);
+        this.timeOut30s.start();
         return true;
     }
 

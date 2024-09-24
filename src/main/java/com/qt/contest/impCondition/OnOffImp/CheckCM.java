@@ -20,7 +20,7 @@ public class CheckCM extends AbsOnOffCondition {
 
     @Override
     protected void action() {
-        this.setErrorcode(ConstKey.ERR.CM);
+        this.setErrorcode(ConstKey.ERR.ENGINE_STALLED);
     }
 
 }
