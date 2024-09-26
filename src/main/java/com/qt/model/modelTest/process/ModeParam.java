@@ -5,7 +5,7 @@
 package com.qt.model.modelTest.process;
 
 import com.qt.model.input.CarModel;
-import com.qt.model.input.YardModel;
+import com.qt.model.input.yard.YardModel;
 import com.qt.controller.ProcessModelHandle;
 import com.qt.input.camera.CameraRunner;
 import com.qt.output.SoundPlayer;

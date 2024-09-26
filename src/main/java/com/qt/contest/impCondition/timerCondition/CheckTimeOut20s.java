@@ -14,8 +14,15 @@ import com.qt.contest.impCondition.AbsTimerConditon;
 public class CheckTimeOut20s extends AbsTimerConditon {
 
     private double oldDisTance = 0;
+    private String errName;
+
     public CheckTimeOut20s() {
+        this(ConstKey.ERR.OVER_20S_TO_START);
+    }
+
+    public CheckTimeOut20s(String errName) {
         super(20, true);
+        this.errName = errName;
     }
 
     public void setOldDisTance(double oldDisTance) {
@@ -29,10 +36,7 @@ public class CheckTimeOut20s extends AbsTimerConditon {
 
     @Override
     protected void action() {
-        this.setErrorcode(ConstKey.ERR.OVER_20S_TO_START);
+        this.setErrorcode(this.errName);
     }
-
-
-    
 
 }

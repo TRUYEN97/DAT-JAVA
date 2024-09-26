@@ -309,6 +309,7 @@ public abstract class AbsTestMode<V extends AbsModeView> {
 
     public void cancelTest() {
         this.cancel = true;
+        this.modeEndInit();
     }
 
     private boolean loopCheck() {
@@ -333,5 +334,8 @@ public abstract class AbsTestMode<V extends AbsModeView> {
         }
         return false;
     }
+
+    public abstract void modeInit();
+    public abstract void modeEndInit();
 
 }

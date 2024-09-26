@@ -27,13 +27,13 @@ public class XuatPhat extends AbsContest {
                 true, true, 60);
         this.timeOut30s = new CheckTimeOut30s();
         this.timeOut20s = new CheckTimeOut20s();
-        this.conditionHandle.addConditon(this.timeOut30s);
-        this.conditionHandle.addConditon(this.timeOut20s);
+        this.conditionBeginHandle.addConditon(this.timeOut30s);
+        this.conditionBeginHandle.addConditon(this.timeOut20s);
     }
 
     @Override
     protected boolean loop() {
-        if (getDistance(oldDistance)> 0.1 && this.firstCheck) {
+        if (getDetaDistance(oldDistance)> 0.1 && this.firstCheck) {
             firstCheck = false;
             this.timeOut20s.stop();
             this.timeOut30s.stop();
@@ -47,13 +47,13 @@ public class XuatPhat extends AbsContest {
                 this.addErrorCode(ConstKey.ERR.PARKING_BRAKE_NOT_RELEASED);
             }
         }
-        if (getDistance(oldDistance)>= 5.5) {
+        if (getDetaDistance(oldDistance)>= 5.5) {
             if (this.carModel.isNt()) {
                 this.addErrorCode(ConstKey.ERR.SIGNAL_KEPT_ON_OVER_5M);
             }
             MCUSerialHandler.getInstance().sendLedOff();
         }
-        return getDistance(oldDistance)>= 8;
+        return getDetaDistance(oldDistance)>= 8;
     }
 
     @Override

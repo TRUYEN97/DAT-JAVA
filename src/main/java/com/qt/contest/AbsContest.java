@@ -31,7 +31,8 @@ public abstract class AbsContest implements IgetTime {
     protected final ErrorcodeHandle errorcodeHandle;
     protected final boolean playSoundWhenIn;
     protected final boolean playSoundWhenOut;
-    protected final CheckConditionHandle conditionHandle;
+    protected final CheckConditionHandle conditionBeginHandle;
+    protected final CheckConditionHandle conditionIntoHandle;
     private final TimeOutContest timeOutContest;
     protected final String nameSound;
     protected int status;
@@ -54,14 +55,15 @@ public abstract class AbsContest implements IgetTime {
         this.playSoundWhenOut = soundOut;
         this.contestModel = new ContestDataModel(name);
         this.contestModelHandle = new ContestModelHandle(contestModel);
-        this.conditionHandle = new CheckConditionHandle(this.contestModel);
+        this.conditionBeginHandle = new CheckConditionHandle(this.contestModel);
+        this.conditionIntoHandle = new CheckConditionHandle(this.contestModel);
         this.timeOutContest = new TimeOutContest(this);
-        this.conditionHandle.addConditon(timeOutContest);
+        this.conditionIntoHandle.addConditon(timeOutContest);
         this.status = DONE;
         this.stop = false;
     }
-    
-    protected double getDistance(double oldDistance) {
+
+    protected double getDetaDistance(double oldDistance) {
         return this.carModel.getDistance() - oldDistance;
     }
 
@@ -72,9 +74,16 @@ public abstract class AbsContest implements IgetTime {
     protected void addErrorCode(String errorKey) {
         this.errorcodeHandle.addContestErrorCode(errorKey, contestModel);
     }
-    
+
     public boolean isTestCondisionsFailed() {
-        return this.conditionHandle.isTestCondisionsFailed();
+        boolean st = false;
+        if (this.conditionBeginHandle.isTestCondisionsFailed()) {
+            st = true;
+        }
+        if (this.conditionIntoHandle.isTestCondisionsFailed()) {
+            st = true;
+        }
+        return st;
     }
 
     public ContestDataModel getContestModel() {
@@ -108,19 +117,19 @@ public abstract class AbsContest implements IgetTime {
         return () -> {
             try {
                 this.contestModelHandle.reset();
-                this.timeOutContest.start();
                 this.status = WAIT;
                 this.stop = false;
                 this.processlHandle.setContest(this);
                 this.processlHandle.addContestModel(contestModel);
                 init();
-                this.conditionHandle.start();
+                this.conditionBeginHandle.start();
                 if (this.sayContestName) {
                     this.soundPlayer.contestName(nameSound);
                 }
                 while (!isIntoContest() && !stop) {
                     Util.delay(10);
                 }
+                this.conditionIntoHandle.start();
                 if (this.playSoundWhenIn) {
                     this.soundPlayer.startContest();
                 }
@@ -150,7 +159,8 @@ public abstract class AbsContest implements IgetTime {
 
     public void end() {
         try {
-            this.conditionHandle.stop();
+            this.conditionBeginHandle.stop();
+            this.conditionIntoHandle.stop();
             status = DONE;
             this.contestModelHandle.end();
             if (this.playSoundWhenOut) {

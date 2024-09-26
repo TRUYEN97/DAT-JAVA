@@ -15,6 +15,7 @@ import com.qt.contest.impCondition.timerCondition.TatalTimeOut;
 import com.qt.contest.impContest.shB2.DungXeChoNguoiDiBo;
 import com.qt.contest.impContest.shB2.XuatPhat;
 import com.qt.controller.api.ApiService;
+import com.qt.input.socket.YardModelHandle;
 import com.qt.mode.AbsTestMode;
 import com.qt.pretreatment.IKeyEvent;
 import com.qt.view.modeView.SaHinhView;
@@ -30,6 +31,7 @@ public class SH_B2_MODE extends AbsTestMode<SaHinhView> {
 
     private boolean runnable;
     private String oldId;
+    private final YardModelHandle yardModelHandle;
 
     public SH_B2_MODE() {
         super(new SaHinhView(), ConstKey.MODE_NAME.SA_HINH, List.of("B2"));
@@ -41,6 +43,7 @@ public class SH_B2_MODE extends AbsTestMode<SaHinhView> {
                 ConstKey.CONTEST_NAME.KET_THUC, false, processlHandle));
         this.runnable = false;
         this.oldId = "";
+        this.yardModelHandle = YardModelHandle.getInstance();
     }
 
     @Override
@@ -66,14 +69,15 @@ public class SH_B2_MODE extends AbsTestMode<SaHinhView> {
         }
         return runnable && (!contests.isEmpty());
     }
-    private void creadContestList(){
+
+    private void creadContestList() {
         contests.clear();
         int yardRank = CarConfig.getInstance().getYardRank();
         int rd = new Random().nextInt(5 - yardRank);
         System.out.println(rd);
         contests.add(new XuatPhat());
-        contests.add(new DungXeChoNguoiDiBo());
-        
+        contests.add(new DungXeChoNguoiDiBo(5, 2));
+
     }
 
     @Override
@@ -107,6 +111,16 @@ public class SH_B2_MODE extends AbsTestMode<SaHinhView> {
 //                }
 //            }
         }
+    }
+
+    @Override
+    public void modeInit() {
+        this.yardModelHandle.start();
+    }
+
+    @Override
+    public void modeEndInit() {
+        this.yardModelHandle.stop();
     }
 
 }

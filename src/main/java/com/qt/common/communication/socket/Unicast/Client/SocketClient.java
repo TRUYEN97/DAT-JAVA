@@ -45,6 +45,10 @@ public class SocketClient implements Runnable, Idisconnect, IIsConnect, Closeabl
         this.clientReceiver = objectAnalysis;
         this.debug = false;
     }
+    
+    public void setLogEnable(boolean enable){
+        this.logger.setLogEnable(enable);
+    }
 
     public String getHostName() {
         return hostName;

@@ -20,6 +20,9 @@ public class CarConfig {
     private static final String TEST_STATUS_KEY = "testStatus";
     private static final String PASSWORD = "password";
     private static final String YARD_RANK = "yardRank";
+    private static final String YARD_IP = "yardIp";
+    private static final String EXAM_ID = "examId";
+    private static final String YARD_PORT = "yardPort";
     private static volatile CarConfig instance;
     private final JSONObject jsono;
     private final Setting setting;
@@ -48,6 +51,14 @@ public class CarConfig {
         }
     }
 
+    public String getYardIp() {
+        return getString(YARD_IP);
+    }
+    
+    public int getYardPort() {
+        return this.jsono.getIntValue(YARD_PORT, 68);
+    }
+
     private void setDefaultConfig() {
         this.jsono.put(MCU_KEY, new MCU_CONFIG_MODEL());
         this.jsono.put(CAR_ID_KEY, "0");
@@ -55,6 +66,8 @@ public class CarConfig {
         this.jsono.put(EXAM_ID, "0");
         this.jsono.put(PASSWORD, "e10adc3949ba59abbe56e057f20f883e");
         this.jsono.put(YARD_RANK, "1");
+        this.jsono.put(YARD_IP, "192.168.1.1");
+        this.jsono.put(YARD_PORT, 68);
         update();
     }
 
@@ -77,10 +90,8 @@ public class CarConfig {
     }
 
     public String getExamId() {
-        String val = this.jsono.getString(EXAM_ID);
-        return val == null || val.isBlank() ? "0" : val;
+        return getString(EXAM_ID, "0");
     }
-    private static final String EXAM_ID = "examId";
 
     public String getTestStatusValue() {
         return this.jsono.getString(TEST_STATUS_KEY);
@@ -146,8 +157,7 @@ public class CarConfig {
     }
 
     public String getPassword() {
-        String pw = this.jsono.getString(PASSWORD);
-        return pw == null || pw.isBlank() ? "e10adc3949ba59abbe56e057f20f883e" : pw;
+        return getString(PASSWORD, "e10adc3949ba59abbe56e057f20f883e");
     }
 
     public String getCenterName() {
@@ -161,6 +171,15 @@ public class CarConfig {
 
     public int getYardRank() {
         return this.jsono.getIntValue(YARD_RANK, 1);
+    }
+
+    public String getString(String key) {
+        return this.jsono.getString(key);
+    }
+
+    public String getString(String key, String defaultVal) {
+        String val = this.jsono.getString(key);
+        return val == null || val.isBlank() ? defaultVal : val;
     }
 
 }

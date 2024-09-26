@@ -174,4 +174,12 @@ public class DT_B2_MODE extends AbsTestMode<DuongTruongView> {
 //            }
         }
     }
+
+    @Override
+    public void modeInit() {
+    }
+
+    @Override
+    public void modeEndInit() {
+    }
 }

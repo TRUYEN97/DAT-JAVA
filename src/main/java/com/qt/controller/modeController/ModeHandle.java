@@ -119,6 +119,9 @@ public class ModeHandle implements IStarter, Runnable {
         if (isStarted()) {
             return;
         }
+        if (this.testMode != null) {
+            this.testMode.modeInit();
+        }
         this.testFuture = this.threadPool.submit(this);
     }
 

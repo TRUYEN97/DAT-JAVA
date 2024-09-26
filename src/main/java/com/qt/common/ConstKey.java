@@ -30,6 +30,9 @@ public final class ConstKey {
 
     public static final String VEHICLE_TIME = "vehicleTime";
 
+     public static final class DATA_TRANSFER {
+         public static final String OLD_DISTANCE = "oldDistance";
+     }
     public static final class CAR_CONFIG {
 
         public static final String MCU_CONFIG = "mcuConfig";
@@ -47,7 +50,15 @@ public final class ConstKey {
         public static final String KET_THUC = "KT";
         public static final String TANG_TOC = "TS";
         public static final String GIAM_TOC = "GS";
-        public static final String DUNG_XE = "DXCNDB";
+        public static final String DUNG_XE_CNDB = "DXCNDB";
+        public static final String DUNG_XE_ND = "DXND";
+        public static final String VET_BANH_XE = "QVBX";
+        public static final String KHAN_CAP = "KC";
+        public static final String NGAT_TU = "QNT";
+        public static final String CHU_S = "DVQC";
+        public static final String GHET_XE_DOC = "GXD";
+        public static final String GHET_XE_NGANG = "GXN";
+        public static final String DUONG_TAU = "QDT";
     }
 
     public static final class ERR {
