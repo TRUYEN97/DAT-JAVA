@@ -8,7 +8,9 @@ import com.qt.common.ConstKey;
 import com.qt.contest.AbsContest;
 import com.qt.contest.impCondition.CheckWheelCrossedLine;
 import com.qt.contest.impCondition.OnOffImp.CheckDistanceIntoContest;
+import com.qt.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
 import com.qt.model.input.yard.YardRankModel;
+import com.qt.model.yardConfigMode.ContestConfig;
 
 /**
  *
@@ -18,15 +20,16 @@ public class DuongS extends AbsContest {
 
     private final CheckDistanceIntoContest distanceIntoContest;
     private final CheckWheelCrossedLine crossedLine;
-    private double oldDistnce;
+    private double oldDistance;
 
-    public DuongS(YardRankModel yardRankModel, double lowerLimit,
-            double upperLimit) {
+    public DuongS(YardRankModel yardRankModel, ContestConfig contestConfig, int speedLimit) {
         super(ConstKey.CONTEST_NAME.CHU_S, ConstKey.CONTEST_NAME.CHU_S, true, true, true, 120);
-        this.distanceIntoContest = new CheckDistanceIntoContest(true, 10, 12);
+        this.distanceIntoContest = new CheckDistanceIntoContest(true, 
+                contestConfig.getDistanceLowerLimit(), contestConfig.getDistanceUpperLimit());
         this.crossedLine = new CheckWheelCrossedLine(5, () -> {
             return yardRankModel.isRoadS();
         });
+        this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
         this.conditionIntoHandle.addConditon(crossedLine);
     }
 
@@ -36,13 +39,13 @@ public class DuongS extends AbsContest {
 
     @Override
     protected boolean loop() {
-        return getDetaDistance(oldDistnce) > 2 && this.carModel.isT1();
+        return getDetaDistance(oldDistance) > 2 && this.carModel.isT1();
     }
 
     @Override
     protected boolean isIntoContest() {
         if (this.carModel.isT1()) {
-            this.oldDistnce = this.carModel.getDistance();
+            this.oldDistance = this.carModel.getDistance();
             this.distanceIntoContest.setOldDistance(
                     this.dataTestTransfer.getData(ConstKey.DATA_TRANSFER.OLD_DISTANCE, -1));
         }

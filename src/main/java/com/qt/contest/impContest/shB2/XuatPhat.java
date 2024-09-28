@@ -6,6 +6,7 @@ package com.qt.contest.impContest.shB2;
 
 import com.qt.common.ConstKey;
 import com.qt.contest.AbsContest;
+import com.qt.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
 import com.qt.contest.impCondition.timerCondition.CheckTimeOut20s;
 import com.qt.contest.impCondition.timerCondition.CheckTimeOut30s;
 import com.qt.input.serial.MCUSerialHandler;
@@ -21,12 +22,13 @@ public class XuatPhat extends AbsContest {
     private boolean firstCheck = true;
     private double oldDistance = 0;
 
-    public XuatPhat() {
+    public XuatPhat(int speedLimit) {
         super(ConstKey.CONTEST_NAME.XUAT_PHAT, ConstKey.CONTEST_NAME.XUAT_PHAT,
                 false,
                 true, true, 60);
         this.timeOut30s = new CheckTimeOut30s();
         this.timeOut20s = new CheckTimeOut20s();
+        this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
         this.conditionBeginHandle.addConditon(this.timeOut30s);
         this.conditionBeginHandle.addConditon(this.timeOut20s);
     }

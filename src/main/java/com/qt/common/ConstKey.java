@@ -25,6 +25,7 @@ public final class ConstKey {
 
         public static final String DIR_LOG = "dirLog";
         public static final String CONFIG_PATH = "configPath";
+        public static final String YARD_CONFIG_PATH = "yardConfigPath";
         public static final String DIR_BACKUP_LOG = "dirBackupLog";
     }
 
@@ -56,9 +57,10 @@ public final class ConstKey {
         public static final String KHAN_CAP = "KC";
         public static final String NGAT_TU = "QNT";
         public static final String CHU_S = "DVQC";
-        public static final String GHET_XE_DOC = "GXD";
-        public static final String GHET_XE_NGANG = "GXN";
+        public static final String GHEP_XE_DOC = "GXD";
+        public static final String GHEP_XE_NGANG = "GXN";
         public static final String DUONG_TAU = "QDT";
+        public static final String THAY_DOI_SO = "TDSTDB";
     }
 
     public static final class ERR {

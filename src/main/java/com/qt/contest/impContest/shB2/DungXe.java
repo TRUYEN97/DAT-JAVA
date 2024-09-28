@@ -6,22 +6,28 @@ package com.qt.contest.impContest.shB2;
 
 import com.qt.common.ConstKey;
 import com.qt.contest.AbsContest;
+import com.qt.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
+import com.qt.model.yardConfigMode.ContestConfig;
 
 /**
  *
  * @author Admin
  */
-public class DungXeChoNguoiDiBo extends AbsContest {
+public class DungXe extends AbsContest {
 
     private double oldDistance = 0;
     private final double distanceOut;
     private final double distanceLine;
 
-    public DungXeChoNguoiDiBo(double distanceOut, double distanceLine) {
-        super(ConstKey.CONTEST_NAME.GIAM_TOC, ConstKey.CONTEST_NAME.GIAM_TOC,
-                true, true, true, 200);
-        this.distanceOut = distanceOut;
-        this.distanceLine = distanceLine;
+    public DungXe(ContestConfig contestConfig, int speedLimit) {
+        this(ConstKey.CONTEST_NAME.DUNG_XE_CNDB, contestConfig, speedLimit);
+    }
+
+    public DungXe(String name, ContestConfig contestConfig, int speedLimit) {
+        super(name, name, true, true, true, 200);
+        this.distanceOut = contestConfig.getDistanceOut();
+        this.distanceLine = contestConfig.getDistanceLine();
+        this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
     }
 
     @Override
@@ -41,7 +47,7 @@ public class DungXeChoNguoiDiBo extends AbsContest {
             } else if (d < distanceLine - 0.5) {
                 addErrorCode(ConstKey.ERR.STOP_BEFORE_DES);
             } else {
-                soundPlayer.dingDong();
+                soundPlayer.successSound();
             }
         } else if (d > distanceOut) {
             if (!hasStop) {

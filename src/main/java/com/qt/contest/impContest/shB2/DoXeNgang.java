@@ -16,18 +16,18 @@ import com.qt.model.yardConfigMode.ContestConfig;
  *
  * @author Admin
  */
-public class DoXeDoc extends AbsContest {
+public class DoXeNgang extends AbsContest {
 
     private final CheckDistanceIntoContest distanceIntoContest;
     private final CheckWheelCrossedLine crossedLine;
     private double oldDistance;
     private final double distanceOut;
 
-    public DoXeDoc(YardRankModel yardRankModel, ContestConfig contestConfig, int speedLimit) {
+    public DoXeNgang(YardRankModel yardRankModel, ContestConfig contestConfig, int speedLimit) {
         super(ConstKey.CONTEST_NAME.GHEP_XE_DOC,
                 ConstKey.CONTEST_NAME.GHEP_XE_DOC, true, true, true, 120);
         this.distanceOut = contestConfig.getDistanceOut();
-        this.distanceIntoContest = new CheckDistanceIntoContest(true, 
+        this.distanceIntoContest = new CheckDistanceIntoContest(true,
                 contestConfig.getDistanceLowerLimit(), contestConfig.getDistanceUpperLimit());
         this.crossedLine = new CheckWheelCrossedLine(5, () -> {
             return yardRankModel.isRoadS();
@@ -50,7 +50,7 @@ public class DoXeDoc extends AbsContest {
             soundPlayer.successSound();
             this.oldDistance = this.carModel.getDistance();
         }
-        if (getDetaDistance(oldDistance) > distanceOut && this.carModel.isT1()) {
+        if (getDetaDistance(oldDistance) > distanceOut) {
             if (!success) {
                 addErrorCode(ConstKey.ERR.IGNORED_PARKING);
             }
@@ -61,7 +61,7 @@ public class DoXeDoc extends AbsContest {
 
     @Override
     protected boolean isIntoContest() {
-        if (this.carModel.isT1()) {
+        if (this.carModel.isT2()) {
             this.distanceIntoContest.setOldDistance(
                     this.dataTestTransfer.getData(ConstKey.DATA_TRANSFER.OLD_DISTANCE, -1));
         }

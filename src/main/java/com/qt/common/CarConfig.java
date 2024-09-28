@@ -25,15 +25,16 @@ public class CarConfig {
     private static final String YARD_PORT = "yardPort";
     private static volatile CarConfig instance;
     private final JSONObject jsono;
-    private final Setting setting;
+    private final String path;
     private final FileService fileService;
 
     private CarConfig() {
-        this.setting = Setting.getInstance();
+        Setting setting = Setting.getInstance();
         this.jsono = new JSONObject();
         this.fileService = new FileService();
+        this.path = Setting.getInstance().getConfigPath();
         try {
-            File f = new File(this.setting.getConfigPath());
+            File f = new File(this.path );
             if (!f.exists()) {
                 setDefaultConfig();
                 return;
@@ -54,7 +55,7 @@ public class CarConfig {
     public String getYardIp() {
         return getString(YARD_IP);
     }
-    
+
     public int getYardPort() {
         return this.jsono.getIntValue(YARD_PORT, 68);
     }
@@ -119,7 +120,7 @@ public class CarConfig {
 
     public synchronized final void update() {
         try {
-            this.fileService.writeFile(this.setting.getConfigPath(), this.jsono.toString(), false);
+            this.fileService.writeFile(this.path , this.jsono.toString(), false);
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
@@ -136,14 +137,20 @@ public class CarConfig {
     }
 
     public MCU_CONFIG_MODEL getMcuConfig() {
-        if (jsono.containsKey(MCU_KEY)) {
-            JSONObject ob = jsono.getJSONObject(MCU_KEY);
-            if (ob != null) {
-                MCU_CONFIG_MODEL mcu_config_model = MyObjectMapper.map(ob, MCU_CONFIG_MODEL.class);
-                if (mcu_config_model != null) {
-                    return mcu_config_model;
+        try {
+            if (jsono.containsKey(MCU_KEY)) {
+                JSONObject ob = jsono.getJSONObject(MCU_KEY);
+                if (ob != null) {
+                    MCU_CONFIG_MODEL mcu_config_model = MyObjectMapper.map(ob, MCU_CONFIG_MODEL.class);
+                    if (mcu_config_model != null) {
+                        return mcu_config_model;
+                    }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
+            setDefaultConfig();
         }
         return new MCU_CONFIG_MODEL();
     }

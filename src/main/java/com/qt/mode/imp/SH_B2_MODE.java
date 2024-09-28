@@ -4,21 +4,20 @@
  */
 package com.qt.mode.imp;
 
-import com.qt.common.CarConfig;
-import com.qt.common.ConstKey;
-import com.qt.common.Util;
-import com.qt.contest.impCondition.ContainContestChecker;
-import com.qt.contest.impCondition.OnOffImp.CheckCM;
-import com.qt.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
-import com.qt.contest.impCondition.OnOffImp.CheckRPM;
-import com.qt.contest.impCondition.timerCondition.TatalTimeOut;
-import com.qt.contest.impContest.shB2.DungXeChoNguoiDiBo;
+import com.qt.contest.impContest.shB2.DoXeDoc;
+import com.qt.contest.impContest.shB2.DoXeNgang;
+import com.qt.contest.impContest.shB2.DungXe;
+import com.qt.contest.impContest.shB2.DungXeNgangDoc;
+import com.qt.contest.impContest.shB2.DuongS;
+import com.qt.contest.impContest.shB2.DuongTau;
+import com.qt.contest.impContest.shB2.KetThuc;
+import com.qt.contest.impContest.shB2.KhanCap;
+import com.qt.contest.impContest.shB2.NgaTu;
+import com.qt.contest.impContest.shB2.TangTocDuongThang;
+import com.qt.contest.impContest.shB2.VetBanhXe;
 import com.qt.contest.impContest.shB2.XuatPhat;
-import com.qt.controller.api.ApiService;
-import com.qt.input.socket.YardModelHandle;
-import com.qt.mode.AbsTestMode;
+import com.qt.mode.AbsSaHinhMode;
 import com.qt.pretreatment.IKeyEvent;
-import com.qt.view.modeView.SaHinhView;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -27,67 +26,50 @@ import java.util.Random;
  *
  * @author Admin
  */
-public class SH_B2_MODE extends AbsTestMode<SaHinhView> {
-
-    private boolean runnable;
-    private String oldId;
-    private final YardModelHandle yardModelHandle;
+public class SH_B2_MODE extends AbsSaHinhMode {
 
     public SH_B2_MODE() {
-        super(new SaHinhView(), ConstKey.MODE_NAME.SA_HINH, List.of("B2"));
-        this.conditionHandle.addConditon(new CheckOverSpeedLimit(24));
-        this.conditionHandle.addConditon(new TatalTimeOut(1080, processModel));
-        this.conditionHandle.addConditon(new CheckCM());
-        this.conditionHandle.addConditon(new CheckRPM());
-        this.conditionHandle.addConditon(new ContainContestChecker(
-                ConstKey.CONTEST_NAME.KET_THUC, false, processlHandle));
-        this.runnable = false;
-        this.oldId = "";
-        this.yardModelHandle = YardModelHandle.getInstance();
+        super(24, 1080, MODEL_RANK_NAME.RANK_B, List.of("B2"));
     }
 
     @Override
-    protected boolean loopCheckCanTest() {
-        String id = this.processModel.getId();
-        if (!runnable || !oldId.equals(id)) {
-            oldId = id;
-            switch (this.apiService.checkRunnable(id)) {
-                case ApiService.START -> {
-                    creadContestList();
-                    runnable = true;
-                }
-                case ApiService.ID_INVALID -> {
-                    soundPlayer.userIdHasTest();
-                    runnable = false;
-                    Util.delay(10000);
-                }
-                default -> {
-                    runnable = false;
-                    Util.delay(1000);
-                }
-            }
-        }
-        return runnable && (!contests.isEmpty());
-    }
-
-    private void creadContestList() {
+    protected void creadContestList() {
         contests.clear();
-        int yardRank = CarConfig.getInstance().getYardRank();
-        int rd = new Random().nextInt(5 - yardRank);
+        int rd = new Random().nextInt(5);
         System.out.println(rd);
-        contests.add(new XuatPhat());
-        contests.add(new DungXeChoNguoiDiBo(5, 2));
-
+        contests.add(new XuatPhat(speedLimit));
+        contests.add(new DungXe(yardRankConfig.getDungXeChoNg(), speedLimit));
+        contests.add(new DungXeNgangDoc(yardRankConfig.getDungXeNgangDoc(), speedLimit));
+        if (rd == 0) {
+            contests.add(new KhanCap(3));
+        }
+        contests.add(new VetBanhXe(yardRankModel.getRoadZ(), yardRankConfig.getVetBanhXe(), speedLimit));
+        if (rd == 1) {
+            contests.add(new KhanCap(2));
+        }
+        contests.add(new NgaTu(1, yardRankModel, yardRankConfig.getNgaTu1(), speedLimit));
+        contests.add(new DuongS(yardRankModel, yardRankConfig.getDuongS(), speedLimit));
+        contests.add(new NgaTu(2, yardRankModel, yardRankConfig.getNgaTu2(), speedLimit));
+        contests.add(new DoXeDoc(yardRankModel, yardRankConfig.getDoXeDoc(), speedLimit));
+        contests.add(new NgaTu(3, yardRankModel, yardRankConfig.getNgaTu3(), speedLimit));
+        if (rd == 2) {
+            contests.add(new KhanCap(6));
+        }
+        contests.add(new DuongTau(yardRankConfig.getDuongTau(), speedLimit));
+        contests.add(new TangTocDuongThang(1, speedLimit));
+        if (rd == 3) {
+            contests.add(new KhanCap(6));
+        }
+        contests.add(new DoXeNgang(yardRankModel, yardRankConfig.getDoXeNgang(), speedLimit));
+        contests.add(new NgaTu(4, yardRankModel, yardRankConfig.getNgaTu4(), speedLimit));
+        if (rd == 4) {
+            contests.add(new KhanCap(3));
+        }
+        contests.add(new KetThuc(speedLimit));
     }
 
     @Override
     protected void contestDone() {
-    }
-
-    @Override
-    protected void endTest() {
-        runnable = false;
-        System.out.println(processlHandle.toProcessModelJson());
     }
 
     @Override
@@ -96,31 +78,6 @@ public class SH_B2_MODE extends AbsTestMode<SaHinhView> {
 
     @Override
     protected void createTestKeyEvents(Map<String, IKeyEvent> events) {
-    }
-
-    @Override
-    protected void analysisResponce(String requestString) {
-        switch (requestString) {
-            case "update" -> {
-                updateLog();
-                upTestDataToServer();
-            }
-//            case "huyThi" -> {
-//                if (getModeHandle() != null) {
-//                    getModeHandle().stop();
-//                }
-//            }
-        }
-    }
-
-    @Override
-    public void modeInit() {
-        this.yardModelHandle.start();
-    }
-
-    @Override
-    public void modeEndInit() {
-        this.yardModelHandle.stop();
     }
 
 }

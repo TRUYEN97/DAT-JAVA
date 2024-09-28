@@ -6,7 +6,9 @@ package com.qt.contest.impContest.shB2;
 
 import com.qt.common.ConstKey;
 import com.qt.contest.AbsContest;
+import com.qt.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
 import com.qt.contest.impCondition.timerCondition.CheckTimeOut30s;
+import com.qt.model.yardConfigMode.ContestConfig;
 
 /**
  *
@@ -21,12 +23,13 @@ public class DungXeNgangDoc extends AbsContest {
     private final double distanceOut;
     private final double distanceLine;
 
-    public DungXeNgangDoc(double distanceOut, double distanceLine) {
+    public DungXeNgangDoc(ContestConfig contestConfig, int speedLimit) {
         super(ConstKey.CONTEST_NAME.DUNG_XE_ND, ConstKey.CONTEST_NAME.DUNG_XE_ND,
                 true, true, true, 120);
         this.checkTimeOut30s = new CheckTimeOut30s();
-        this.distanceOut = distanceOut;
-        this.distanceLine = distanceLine;
+        this.distanceOut = contestConfig.getDistanceOut();
+        this.distanceLine = contestConfig.getDistanceLine();
+        this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
     }
 
     @Override
@@ -53,7 +56,7 @@ public class DungXeNgangDoc extends AbsContest {
             } else if (d < distanceLine - 0.5) {
                 addErrorCode(ConstKey.ERR.STOP_BEFORE_DES);
             } else {
-                soundPlayer.dingDong();
+                soundPlayer.successSound();
             }
             this.checkTimeOut30s.setOldDisTance(distanceWhenStop);
             this.checkTimeOut30s.start();

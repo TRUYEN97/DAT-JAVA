@@ -4,7 +4,6 @@
  */
 package com.qt.common;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -50,6 +49,10 @@ public class Setting {
 
     public String getConfigPath() {
         return properties.getProperty(ConstKey.PATH.CONFIG_PATH, "config/carConfig.json");
+    }
+    
+    public String getYardConfigPath() {
+        return properties.getProperty(ConstKey.PATH.YARD_CONFIG_PATH, "config/yardConfig.json");
     }
 
     public String getProperty(String key) {

@@ -1,0 +1,274 @@
+{
+    "B": {
+        "doXeDoc": {
+            "distanceLine": 0.0,
+            "distanceLowerLimit": 10.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 12.0
+        },
+        "doXeNgang": {
+            "distanceLine": 0.0,
+            "distanceLowerLimit": 10.0,
+            "distanceOut": 2.0,
+            "distanceUpperLimit": 12.0
+        },
+        "dungXeChoNg": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "dungXeNgangDoc": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "duongS": {
+            "distanceLine": 0.0,
+            "distanceLowerLimit": 10.0,
+            "distanceOut": 0.0,
+            "distanceUpperLimit": 12.0
+        },
+        "duongTau": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "ngaTu1": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "ngaTu2": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "ngaTu3": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "ngaTu4": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "vetBanhXe": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 10.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 12.0
+        }
+    },
+    "C": {
+        "doXeDoc": {
+            "distanceLine": 0.0,
+            "distanceLowerLimit": 10.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 12.0
+        },
+        "doXeNgang": {
+            "distanceLine": 0.0,
+            "distanceLowerLimit": 10.0,
+            "distanceOut": 2.0,
+            "distanceUpperLimit": 12.0
+        },
+        "dungXeChoNg": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "dungXeNgangDoc": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "duongS": {
+            "distanceLine": 0.0,
+            "distanceLowerLimit": 10.0,
+            "distanceOut": 0.0,
+            "distanceUpperLimit": 12.0
+        },
+        "duongTau": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "ngaTu1": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "ngaTu2": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "ngaTu3": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "ngaTu4": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "vetBanhXe": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 10.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 12.0
+        }
+    },
+    "D": {
+        "doXeDoc": {
+            "distanceLine": 0.0,
+            "distanceLowerLimit": 10.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 12.0
+        },
+        "doXeNgang": {
+            "distanceLine": 0.0,
+            "distanceLowerLimit": 10.0,
+            "distanceOut": 2.0,
+            "distanceUpperLimit": 12.0
+        },
+        "dungXeChoNg": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "dungXeNgangDoc": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "duongS": {
+            "distanceLine": 0.0,
+            "distanceLowerLimit": 10.0,
+            "distanceOut": 0.0,
+            "distanceUpperLimit": 12.0
+        },
+        "duongTau": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "ngaTu1": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "ngaTu2": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "ngaTu3": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "ngaTu4": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "vetBanhXe": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 10.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 12.0
+        }
+    },
+    "E": {
+        "doXeDoc": {
+            "distanceLine": 0.0,
+            "distanceLowerLimit": 10.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 12.0
+        },
+        "doXeNgang": {
+            "distanceLine": 0.0,
+            "distanceLowerLimit": 10.0,
+            "distanceOut": 2.0,
+            "distanceUpperLimit": 12.0
+        },
+        "dungXeChoNg": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "dungXeNgangDoc": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "duongS": {
+            "distanceLine": 0.0,
+            "distanceLowerLimit": 10.0,
+            "distanceOut": 0.0,
+            "distanceUpperLimit": 12.0
+        },
+        "duongTau": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "ngaTu1": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "ngaTu2": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "ngaTu3": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "ngaTu4": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 0.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 0.0
+        },
+        "vetBanhXe": {
+            "distanceLine": 2.0,
+            "distanceLowerLimit": 10.0,
+            "distanceOut": 5.0,
+            "distanceUpperLimit": 12.0
+        }
+    }
+}

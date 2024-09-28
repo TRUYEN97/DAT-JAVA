@@ -243,8 +243,12 @@ public class SoundPlayer {
         play(new SoundModel("warning/changeSucess.wav"));
     }
 
-    public void dingDong() {
+    public void successSound() {
         play(new SoundModel("warning/dingdong.wav"));
+    }
+
+    public void alarm() {
+        play(new SoundModel("warning/warning.wav"));
     }
 
     class SoundRunner implements Runnable {
