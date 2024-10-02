@@ -4,24 +4,37 @@
  */
 package com.qt.model.input.yard;
 
-
 /**
  *
  * @author Admin
  */
 public class YardModel {
 
+    private final YardRankModel rankB;
+    private final YardRankModel rankC;
+    private final YardRankModel rankD;
+    private final YardRankModel rankE;
+    private final TrafficLightModel trafficLightModel;
+    private final TrafficLightModel trafficLightModel1;
+
     public YardModel() {
         this.rankB = new YardRankModel();
         this.rankC = new YardRankModel();
         this.rankD = new YardRankModel();
         this.rankE = new YardRankModel();
+        this.trafficLightModel = new TrafficLightModel();
+        this.trafficLightModel1 = new TrafficLightModel();
+    }
+
+    public TrafficLightModel getTrafficLightModel1() {
+        return trafficLightModel1;
     }
     
-    private final YardRankModel rankB; 
-    private final YardRankModel rankC; 
-    private final YardRankModel rankD; 
-    private final YardRankModel rankE; 
+
+    public TrafficLightModel getTrafficLightModel() {
+        return trafficLightModel;
+    }
+    
 
     public YardRankModel getRankB() {
         return rankB;
@@ -39,6 +52,4 @@ public class YardModel {
         return rankE;
     }
 
-    
-    
 }

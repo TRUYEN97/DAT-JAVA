@@ -47,11 +47,14 @@ public class SH_B2_MODE extends AbsSaHinhMode {
         if (rd == 1) {
             contests.add(new KhanCap(2));
         }
-        contests.add(new NgaTu(1, yardRankModel, yardRankConfig.getNgaTu1(), speedLimit));
+        contests.add(new NgaTu(1, yardModelHandle.getYardModel(),
+                yardRankConfig.getNgaTu1(), speedLimit));
         contests.add(new DuongS(yardRankModel, yardRankConfig.getDuongS(), speedLimit));
-        contests.add(new NgaTu(2, yardRankModel, yardRankConfig.getNgaTu2(), speedLimit));
+        contests.add(new NgaTu(2, yardModelHandle.getYardModel(),
+                yardRankConfig.getNgaTu2(), speedLimit));
         contests.add(new DoXeDoc(yardRankModel, yardRankConfig.getDoXeDoc(), speedLimit));
-        contests.add(new NgaTu(3, yardRankModel, yardRankConfig.getNgaTu3(), speedLimit));
+        contests.add(new NgaTu(3, yardModelHandle.getYardModel(),
+                yardRankConfig.getNgaTu3(), speedLimit));
         if (rd == 2) {
             contests.add(new KhanCap(6));
         }
@@ -61,7 +64,8 @@ public class SH_B2_MODE extends AbsSaHinhMode {
             contests.add(new KhanCap(6));
         }
         contests.add(new DoXeNgang(yardRankModel, yardRankConfig.getDoXeNgang(), speedLimit));
-        contests.add(new NgaTu(4, yardRankModel, yardRankConfig.getNgaTu4(), speedLimit));
+        contests.add(new NgaTu(4, yardModelHandle.getYardModel(),
+                yardRankConfig.getNgaTu4(), speedLimit));
         if (rd == 4) {
             contests.add(new KhanCap(3));
         }

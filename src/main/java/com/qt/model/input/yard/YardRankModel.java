@@ -10,41 +10,18 @@ package com.qt.model.input.yard;
  */
 public class YardRankModel {
 
-    public static final int GREEN = 0;
-    public static final int YELLOW = 1;
-    public static final int RED = 2;
 
     public YardRankModel() {
         this.roadZ = new RoadZ();
         this.roadS = false;
         this.packing = false;
         this.packing1 = false;
-        this.trafficLight = GREEN;
-        this.trafficLight1 = GREEN;
     }
 
     private final RoadZ roadZ;
     private boolean roadS;
     private boolean packing;
     private boolean packing1;
-    private int trafficLight;
-    private int trafficLight1;
-
-    public int getTrafficLight() {
-        return trafficLight;
-    }
-
-    public void setTrafficLight(int trafficLight) {
-        this.trafficLight = trafficLight;
-    }
-
-    public int getTrafficLight1() {
-        return trafficLight1;
-    }
-
-    public void setTrafficLight1(int trafficLight1) {
-        this.trafficLight1 = trafficLight1;
-    }
 
     public RoadZ getRoadZ() {
         return roadZ;

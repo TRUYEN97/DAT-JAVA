@@ -21,9 +21,9 @@ import com.qt.model.input.yard.YardRankModel;
 public class YardModelHandle {
 
     private static volatile YardModelHandle instance;
-    private static final String RANK_B = "a";
-    private static final String RANK_C = "b";
-    private static final String RANK_D = "c";
+    private static final String RANK_B = "b";
+    private static final String RANK_C = "c";
+    private static final String RANK_D = "d";
     private static final String RANK_E = "e";
     private static final String ROAD_Z = "roadZ";
     private static final String WHEEL_PATH = "wheelPath";
@@ -31,6 +31,10 @@ public class YardModelHandle {
     private static final String PACKING1 = "packing1";
     private static final String PACKING = "packing";
     private static final String ROAD_S = "roadS";
+    private static final String TRAFFIC_LIGHT_MODEL = "trafficLightModel";
+    private static final String TRAFFIC_LIGHT_MODEL1 = "trafficLightModel1";
+    private static final String TRAFFIC_LIGHT = "trafficLight";
+    private static final String TIME = "time";
     private final SocketClient socketClient;
     private final CarConfig carConfig;
     private final YardModel yardModel;
@@ -49,7 +53,6 @@ public class YardModelHandle {
     public YardModel getYardModel() {
         return yardModel;
     }
-    
 
     public static YardModelHandle getInstance() {
         YardModelHandle ins = instance;
@@ -81,6 +84,24 @@ public class YardModelHandle {
             }
             if (ob.containsKey(RANK_E)) {
                 update(ob.getJSONObject(RANK_E), this.yardModel.getRankE());
+            }
+            if (ob.containsKey(TRAFFIC_LIGHT_MODEL)) {
+                JSONObject tl = ob.getJSONObject(TRAFFIC_LIGHT_MODEL);
+                if (tl != null && this.yardModel.getTrafficLightModel() != null) {
+                    this.yardModel.getTrafficLightModel()
+                            .setTrafficLight(tl.getIntValue(TRAFFIC_LIGHT, 0));
+                    this.yardModel.getTrafficLightModel()
+                            .setTime(tl.getIntValue(TIME, 0));
+                }
+            }
+            if (ob.containsKey(TRAFFIC_LIGHT_MODEL1)) {
+                JSONObject tl = ob.getJSONObject(TRAFFIC_LIGHT_MODEL1);
+                if (tl != null && this.yardModel.getTrafficLightModel() != null) {
+                    this.yardModel.getTrafficLightModel1()
+                            .setTrafficLight(tl.getIntValue(TRAFFIC_LIGHT, 0));
+                    this.yardModel.getTrafficLightModel1()
+                            .setTime(tl.getIntValue(TIME, 0));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
