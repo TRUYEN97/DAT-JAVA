@@ -61,9 +61,12 @@ public class DungXe extends AbsContest {
 
     @Override
     protected boolean isIntoContest() {
-        hasStop = false;
-        oldDistance = this.carModel.getDistance();
-        return this.carModel.isT1();
+        if (this.carModel.isT1() && this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD) {
+            hasStop = false;
+            oldDistance = this.carModel.getDistance();
+            return true;
+        }
+        return false;
     }
 
 }

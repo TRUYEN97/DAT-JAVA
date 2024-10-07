@@ -5,7 +5,6 @@
 package com.qt.mode;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.qt.common.API.Response;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.TestStatusLogger;
@@ -16,7 +15,6 @@ import com.qt.controller.CheckConditionHandle;
 import com.qt.controller.ErrorcodeHandle;
 import com.qt.controller.logTest.FileTestService;
 import com.qt.controller.ProcessModelHandle;
-import com.qt.controller.api.PingAPI;
 import com.qt.controller.modeController.ModeHandle;
 import com.qt.input.camera.CameraRunner;
 import com.qt.input.serial.MCUSerialHandler;
@@ -65,7 +63,6 @@ public abstract class AbsTestMode<V extends AbsModeView> {
     protected final FileTestService fileTestService;
     protected final ApiService apiService;
     protected final CheckConditionHandle conditionHandle;
-    protected final PingAPI pingAPI;
     protected final ShowErrorcode showErrorcode;
     protected final Printer printer;
     private final ExecutorService threadPool;
@@ -95,22 +92,8 @@ public abstract class AbsTestMode<V extends AbsModeView> {
         this.fileTestService = FileTestService.getInstance();
         this.apiService = ApiService.getInstance();
         this.conditionHandle = new CheckConditionHandle();
-        this.pingAPI = new PingAPI();
         this.printer = new Printer();
         this.threadPool = Executors.newSingleThreadExecutor();
-        this.pingAPI.setPingAPIReceive((responce) -> {
-            if (responce == null) {
-                return;
-            }
-            if (!responce.isSuccess() || responce.getData() == null) {
-                return;
-            }
-            String requestString = responce.getData(JSONObject.class).getString("request");
-            if (requestString == null) {
-                return;
-            }
-            analysisResponce(requestString);
-        });
     }
 
     private String creareFullName(List<String> ranks) {
@@ -133,7 +116,7 @@ public abstract class AbsTestMode<V extends AbsModeView> {
 
     protected abstract void createTestKeyEvents(Map<String, IKeyEvent> events);
 
-    protected abstract void analysisResponce(String requestString);
+    public abstract void analysisResponce(JSONObject requestString);
 
     protected void addContest(AbsContest contest) {
         if (contest == null) {
@@ -179,7 +162,6 @@ public abstract class AbsTestMode<V extends AbsModeView> {
                 MCUSerialHandler.getInstance().sendLedGreenOn();
                 this.soundPlayer.begin();
                 this.conditionHandle.start();
-                this.pingAPI.start();
                 updateLog();
                 this.threadPool.execute(() -> {
                     upTestDataToServer();
@@ -239,7 +221,6 @@ public abstract class AbsTestMode<V extends AbsModeView> {
             } else {
                 MCUSerialHandler.getInstance().sendLedRedOn();
             }
-            this.pingAPI.stop();
             int score = this.processModel.getScore();
             this.processModel.setContestsResult(score >= scoreSpec ? ProcessModel.PASS : ProcessModel.FAIL);
             updateLog();

@@ -80,7 +80,7 @@ public class Setting {
     }
 
     public String getCheckCommandUrl() {
-        return properties.getProperty(ConstKey.URL.CHECK_UPDATE_URL);
+        return properties.getProperty(ConstKey.URL.CHECK_COMMAND_URL);
     }
 
     public String getCancelRequestUrl() {

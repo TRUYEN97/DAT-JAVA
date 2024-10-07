@@ -4,44 +4,48 @@
  */
 package com.qt.contest.impCondition.OnOffImp;
 
-import com.qt.common.ConstKey;
-import com.qt.contest.impCondition.AbsOnOffCondition;
+import com.qt.input.serial.MCUSerialHandler;
+import com.qt.model.input.CarModel;
+import com.qt.model.yardConfigMode.ContestConfig;
+import java.util.List;
 
 /**
  *
  * @author Admin
  */
-public class CheckDistanceIntoContest extends AbsOnOffCondition{
+public class CheckDistanceIntoContest {
 
-    private double oldDistance;
-    private final double lowerLimit;
-    private final double upperLimit;
+    private final List<ContestConfig> contestConfigs;
+    private final CarModel carModel;
+    private ContestConfig contestConfig;
 
-    public CheckDistanceIntoContest(boolean important, double lowerLimit, double upperLimit) {
-        this.oldDistance = -1;
-        this.important = important;
-        this.lowerLimit = lowerLimit;
-        this.upperLimit = upperLimit;
+    public CheckDistanceIntoContest(List<ContestConfig> contestConfigs) {
+        this.contestConfigs = contestConfigs;
+        this.carModel = MCUSerialHandler.getInstance().getModel();
     }
 
-    public void setOldDistance(double oldDistance) {
-        this.oldDistance = oldDistance;
+    public List<ContestConfig> getContestConfigs() {
+        return contestConfigs;
     }
-    
-    
-    @Override
-    protected boolean signal() {
-        if (oldDistance < 0) {
-            return true;
-        }
+
+    public ContestConfig getContestConfig() {
+        return contestConfig == null ? new ContestConfig() : contestConfig;
+    }
+
+    public int check(double oldDistance) {
         double deta = this.carModel.getDistance() - oldDistance;
-        oldDistance = -1;
-        return deta <= upperLimit && deta >= lowerLimit;
+        ContestConfig config;
+        for (int i = 0; i < contestConfigs.size(); i++) {
+            if ((config = contestConfigs.get(i)) == null) {
+                continue;
+            }
+            if (deta <= config.getDistanceUpperLimit()
+                    && deta >= config.getDistanceLowerLimit()) {
+                this.contestConfig = config;
+                return i;
+            }
+        }
+        return -1;
     }
 
-    @Override
-    protected void action() {
-        this.setErrorcode(ConstKey.ERR.WRONG_LANE);
-    }
-    
 }

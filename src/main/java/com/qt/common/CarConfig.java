@@ -68,7 +68,7 @@ public class CarConfig {
         this.jsono.put(PASSWORD, "e10adc3949ba59abbe56e057f20f883e");
         this.jsono.put(YARD_RANK, "1");
         this.jsono.put(YARD_IP, "192.168.1.1");
-        this.jsono.put(YARD_PORT, 68);
+        this.jsono.put(YARD_PORT, 6868);
         update();
     }
 

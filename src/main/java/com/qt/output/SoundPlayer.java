@@ -41,14 +41,14 @@ public class SoundPlayer {
 
     public void sayResultTest(int score, boolean isPass) {
         new Thread(() -> {
-            if (isPass) {
-                this.play(new SoundModel("congratulations.wav"));
-            } else {
-                this.play(new SoundModel("congratulations1.wav"));
-            }
-            this.play(new SoundModel("theScore.wav"));
-            sayNumber(score);
-            this.play(new SoundModel("diem.wav", 8000));
+//            if (isPass) {
+//                this.play(new SoundModel("congratulations.wav"));
+//            } else {
+//                this.play(new SoundModel("congratulations1.wav"));
+//            }
+//            this.play(new SoundModel("theScore.wav"));
+//            sayNumber(score);
+//            this.play(new SoundModel("diem.wav", 8000));
             if (isPass) {
                 this.play(new SoundModel("success.wav"));
             } else {
@@ -147,14 +147,14 @@ public class SoundPlayer {
             if (ch < 10) {
                 arr[1] = new SoundModel("number/linh.wav", 15000);
             } else {
-                arr[2] = new SoundModel(String.format("number/%d.wav", num), 17000);
+                arr[2] = new SoundModel(String.format("number/%d.wav", num), 15000);
                 if (num == 5) {
-                    arr[2] = new SoundModel(String.format("number/lam.wav"), 17000);
+                    arr[2] = new SoundModel(String.format("number/lam.wav"), 15000);
                 } else if (ch >= 20) {
                     if (num == 4) {
-                        arr[2] = new SoundModel("number/tu.wav", 17000);
+                        arr[2] = new SoundModel("number/tu.wav", 15000);
                     } else if (num == 1) {
-                        arr[2] = new SoundModel("number/mot.wav", 17000);
+                        arr[2] = new SoundModel("number/mot.wav", 15000);
                     }
                 }
             }

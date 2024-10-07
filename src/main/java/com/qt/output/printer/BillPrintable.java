@@ -31,7 +31,7 @@ public class BillPrintable implements Printable {
         this.processData = processData;
     }
 
-    private final int yShift = 10;
+    private int y = 0;
 
     @Override
     public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
@@ -41,34 +41,35 @@ public class BillPrintable implements Printable {
         Graphics2D g2d = (Graphics2D) graphics;
         g2d.translate((int) pageFormat.getImageableX(), (int) pageFormat.getImageableY());
         try {
-            int y = 0;
+            y = 0;
+            int yShift = 8;
             String centerName = CarConfig.getInstance().getCenterName();
             g2d.setFont(new Font("Monospaced", Font.PLAIN, 10));
 //            g2d.drawImage(icon.getImage(), 40, 0, 40, 40, null);
-            drawString(g2d, y += yShift, 27, "Sát hạch viên ký tên: ");
-            drawString(g2d, y += yShift * 4, 27, "***************************");
-            drawString(g2d, y += yShift, 27, centerName);
-            drawString(g2d, y += yShift, 27, "---------------------------");
-            drawString(g2d, y += yShift, 27, "Số báo danh: %s", this.processData.getId());
-            drawString(g2d, y += yShift, 27, "Số xe: %s", this.processData.getCarId());
-            drawString(g2d, y += yShift, 27, "Họ tên: %s", this.processData.getName());
-            drawString(g2d, y += yShift, 27, "Ngày thi: %s", this.processData.getStartTime());
+            drawString(g2d, yShift, 27, "Sát hạch viên ký tên: ");
+            drawString(g2d, yShift * 4, 27, "***************************");
+            drawString(g2d, yShift, 27, centerName);
+            drawString(g2d, yShift, 27, "---------------------------");
+            drawString(g2d, yShift, 27, "Số báo danh: %s", this.processData.getId());
+            drawString(g2d, yShift, 27, "Số xe: %s", this.processData.getCarId());
+            drawString(g2d, yShift, 27, "Họ tên: %s", this.processData.getName());
+            drawString(g2d, yShift, 27, "Ngày thi: %s", this.processData.getStartTime());
             List<ErrorcodeWithContestNameModel> errorcodes = getErrorCode();
             if (!errorcodes.isEmpty()) {
-                drawString(g2d, y += yShift, 27, "---------------------------");
-                drawString(g2d, y += yShift, 27, "- Các lỗi:");
+                drawString(g2d, yShift, 27, "---------------------------");
+                drawString(g2d, yShift, 27, "Các lỗi:");
                 for (ErrorcodeWithContestNameModel errorcode : errorcodes) {
-                    drawString(g2d, y += yShift, 27, " + %s, -%s, %s",
+                    drawString(g2d, yShift, 27, " - %s, %s, %s",
                             errorcode.getErrName(),
                             errorcode.getErrPoint(),
                             errorcode.getContestName());
                 }
             }
-            drawString(g2d, y += yShift, 27, "---------------------------");
-            drawString(g2d, y += yShift, 27, "Điểm: %s/100", this.processData.getScore());
-            drawString(g2d, y += yShift, 27, "Kết quả: %s", getContestResult());
-            drawString(g2d, y += yShift, 27, "Thí sinh ký tên:   ");
-            drawString(g2d, y += yShift * 2, 27, "***************************");
+            drawString(g2d, yShift, 27, "---------------------------");
+            drawString(g2d, yShift, 27, "Điểm: %s/100", this.processData.getScore());
+            drawString(g2d, yShift, 27, "Kết quả: %s", getContestResult());
+            drawString(g2d, yShift, 27, "Thí sinh ký tên:   ");
+            drawString(g2d, yShift * 4, 27, "***************************");
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
@@ -122,21 +123,20 @@ public class BillPrintable implements Printable {
         }
     }
 
-    private void drawLine(Graphics2D g2d, String line, int y, int lineNum) {
+    private void drawLine(Graphics2D g2d, String line, int dis, int lineNum) {
+        y += dis;
         if (line.length() > lineNum) {
-            line = line.substring(0, lineNum);
             g2d.drawString(line.substring(0, lineNum), 0, y);
-            String subLine = line.substring(lineNum);
-            drawLine(g2d, subLine, y + yShift, lineNum);
+            drawLine(g2d, line.substring(lineNum), dis, lineNum);
         } else {
             g2d.drawString(line, 0, y);
         }
     }
 
-    private void drawString(Graphics2D g2d, int y, int lineNum, String format, Object... params) {
+    private void drawString(Graphics2D g2d, int dis, int lineNum, String format, Object... params) {
         try {
             String line = String.format(format, params);
-            drawLine(g2d, line, y, lineNum);
+            drawLine(g2d, line, dis, lineNum);
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);

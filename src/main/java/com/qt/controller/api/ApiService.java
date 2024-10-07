@@ -38,6 +38,7 @@ public class ApiService {
     public static final int DISCONNECT = -1;
     private static final String CAN_START = "canStart";
     private static final String ID = "id";
+    private static final String EXAM_ID = "examId";
     private static volatile ApiService insatnce;
     private final Setting setting;
     private final RestAPI restAPI;
@@ -217,17 +218,17 @@ public class ApiService {
         }
     }
 
-    public Response checkInfo() {
+    public Response checkCommad(String carId) {
         try {
-            if (pingToServer()) {
+            if (pingToServer() || carId == null || carId.isBlank()) {
                 return null;
             }
             String url = this.setting.getCheckCommandUrl();
             if (url == null) {
-                ErrorLog.addError(this, "không tìm thấy: checkInfo url");
+                ErrorLog.addError(this, "không tìm thấy: checkCommand url");
                 return null;
             }
-            return restAPI.sendPost(url, JsonBodyAPI.builder(), false);
+            return restAPI.sendPost(url, JsonBodyAPI.builder().put(CAR_ID, carId), true);
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
@@ -249,7 +250,7 @@ public class ApiService {
             return;
         }
         restAPI.sendPost(url, JsonBodyAPI.builder()
-                .put("id", id)
-                .put("examId", examId), true);
+                .put(ID, id)
+                .put(EXAM_ID, examId), true);
     }
 }

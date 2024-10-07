@@ -124,11 +124,11 @@ public class RestAPI {
         return sendPost(url, body.toJSONString(), true);
     }
 
-    public Response sendPost(String url, JsonBodyAPI body, boolean saveLog) {
+    public synchronized Response sendPost(String url, JsonBodyAPI body, boolean saveLog) {
         return sendPost(url, body.toJSONString(), saveLog);
     }
 
-    public Response sendPost(String url, String body, boolean saveLog) {
+    public synchronized Response sendPost(String url, String body, boolean saveLog) {
         if (saveLog) {
             this.logger.addLog("POST", String.format("%s: %s", url, body));
         }

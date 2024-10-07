@@ -63,30 +63,10 @@ public class NgaTu extends AbsContest {
     protected boolean loop() {
         double d = getDetaDistance(oldDistance);
         if (d >= distanceLine) {
-            if (lightStatus != 1) {
-                if (this.trafficLightModel.getTrafficLight() == TrafficLightModel.GREEN) {
-                    this.checkTimeOut20s.setOldDisTance(this.carModel.getDistance());
-                    this.checkTimeOut30s.setOldDisTance(this.carModel.getDistance());
-                    this.checkTimeOut20s.start();
-                    this.checkTimeOut30s.start();
-                    lightStatus = 1;
-                } else {
-                    lightStatus = 0;
-                }
-            }
-            if (!ranRedLight && lightStatus == 0) {
-                addErrorCode(ConstKey.ERR.RAN_A_RED_LIGHT);
-                ranRedLight = true;
-            }
-            if (!this.dontTurnOnNt && times == 3 && !this.carModel.isNt()) {
-                addErrorCode(ConstKey.ERR.NO_SIGNAL_TURN_LEFT);
-                this.dontTurnOnNt = true;
-            }
-            if (!this.dontTurnOnNp && times == 4 && !this.carModel.isNp()) {
-                addErrorCode(ConstKey.ERR.NO_SIGNAL_TURN_RIGHT);
-                this.dontTurnOnNp = true;
-            }
-            if (d >= distanceOut) {
+            checkCondition();
+            if (checkEndTest()) {
+                this.checkTimeOut20s.setPass();
+                this.checkTimeOut30s.setPass();
                 return true;
             }
         }
@@ -102,6 +82,52 @@ public class NgaTu extends AbsContest {
             }
         }
         return false;
+    }
+
+    private boolean checkEndTest() {
+        double d = getDetaDistance(oldDistance);
+        if (times == 0 || times == 3) {
+            if (this.carModel.isT1() && this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD) {
+                return true;
+            }
+            if (d >= distanceOut) {
+                addErrorCode(ConstKey.ERR.WRONG_WAY);
+                return true;
+            }
+        } else {
+            if (this.carModel.isT1()) {
+                addErrorCode(ConstKey.ERR.WRONG_WAY);
+                return true;
+            }
+            if (d >= distanceOut) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void checkCondition() {
+        if (lightStatus != 1) {
+            if (this.trafficLightModel.getTrafficLight() == TrafficLightModel.GREEN) {
+                this.checkTimeOut20s.start();
+                this.checkTimeOut30s.start();
+                lightStatus = 1;
+            } else {
+                lightStatus = 0;
+            }
+        }
+        if (!ranRedLight && lightStatus == 0) {
+            addErrorCode(ConstKey.ERR.RAN_A_RED_LIGHT);
+            ranRedLight = true;
+        }
+        if (!this.dontTurnOnNt && times == 3 && !this.carModel.isNt()) {
+            addErrorCode(ConstKey.ERR.NO_SIGNAL_TURN_LEFT);
+            this.dontTurnOnNt = true;
+        }
+        if (!this.dontTurnOnNp && times == 4 && !this.carModel.isNp()) {
+            addErrorCode(ConstKey.ERR.NO_SIGNAL_TURN_RIGHT);
+            this.dontTurnOnNp = true;
+        }
     }
 
     @Override

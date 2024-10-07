@@ -4,6 +4,9 @@
  */
 package com.qt.model.input.yard;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Admin
@@ -12,43 +15,34 @@ public class YardRankModel {
 
 
     public YardRankModel() {
-        this.roadZ = new RoadZ();
-        this.roadS = false;
-        this.packing = false;
-        this.packing1 = false;
+        this.roadZs = new ArrayList<>();
+        this.roadSs = new ArrayList<>();
+        this.packings = new ArrayList<>();
+        this.packing1s = new ArrayList<>();
     }
 
-    private final RoadZ roadZ;
-    private boolean roadS;
-    private boolean packing;
-    private boolean packing1;
+    private final List<Boolean> roadZs;
+    private final List<Boolean> roadSs;
+    private final List<Boolean> packings;
+    private final List<Boolean> packing1s;
 
-    public RoadZ getRoadZ() {
-        return roadZ;
+    public List<Boolean> getRoadZs() {
+        return roadZs;
     }
 
-    public boolean isRoadS() {
-        return roadS;
+    public List<Boolean> getRoadSs() {
+        return roadSs;
     }
 
-    public void setRoadS(boolean roadS) {
-        this.roadS = roadS;
+    public List<Boolean> getPackings() {
+        return packings;
     }
 
-    public boolean isPacking() {
-        return packing;
+    public List<Boolean> getPacking1s() {
+        return packing1s;
     }
-
-    public void setPacking(boolean packing) {
-        this.packing = packing;
-    }
-
-    public boolean isPacking1() {
-        return packing1;
-    }
-
-    public void setPacking1(boolean packing1) {
-        this.packing1 = packing1;
-    }
+    
+    
+    
 
 }

@@ -4,10 +4,12 @@
  */
 package com.qt.controller.modeController;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.ErrorLog;
 import com.qt.common.Util;
 import com.qt.interfaces.IStarter;
 import com.qt.controller.ProcessModelHandle;
+import com.qt.controller.api.PingAPI;
 import com.qt.mode.AbsTestMode;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,6 +25,7 @@ public class ModeHandle implements IStarter, Runnable {
     private final ProcessModelHandle processModelHandle;
     private final ContestRunner contestRunner;
     private final ExecutorService threadPool;
+    private final PingAPI pingAPI;
     private AbsTestMode testMode;
     private boolean running = false;
     private boolean stop = false;
@@ -33,17 +36,41 @@ public class ModeHandle implements IStarter, Runnable {
         this.processModelHandle = ProcessModelHandle.getInstance();
         this.contestRunner = new ContestRunner();
         this.threadPool = Executors.newSingleThreadExecutor();
+        this.pingAPI = new PingAPI();
+        this.pingAPI.start();
     }
 
     public boolean setTestMode(AbsTestMode testMode) {
-        if (testMode == null) {
+        try {
+            if (testMode == null) {
+                return false;
+            }
+            this.pingAPI.setPingAPIReceive((responce) -> {
+                try {
+                    if (responce == null) {
+                        return;
+                    }
+                    if (!responce.isSuccess() || responce.getData() == null) {
+                        return;
+                    }
+                    testMode.analysisResponce(responce.getData(JSONObject.class));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ErrorLog.addError(this, e);
+                    JOptionPane.showMessageDialog(null, e.getLocalizedMessage());
+                }
+            });
+            this.testMode = testMode;
+            this.testMode.setModeHandle(this);
+            this.processModelHandle.setMode(testMode);
+            this.contestRunner.setTestMode(testMode);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
+            JOptionPane.showMessageDialog(null, e.getLocalizedMessage());
             return false;
         }
-        this.testMode = testMode;
-        this.testMode.setModeHandle(this);
-        this.processModelHandle.setMode(testMode);
-        this.contestRunner.setTestMode(testMode);
-        return true;
     }
 
     public AbsTestMode getTestMode() {

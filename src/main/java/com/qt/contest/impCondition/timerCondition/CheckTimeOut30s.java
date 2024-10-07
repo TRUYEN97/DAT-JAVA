@@ -13,8 +13,8 @@ import com.qt.contest.impCondition.AbsTimerConditon;
  */
 public class CheckTimeOut30s extends AbsTimerConditon {
 
-    private double oldDisTance = 0;
     private String errName;
+    private boolean pass = false;
 
     public CheckTimeOut30s() {
         this(ConstKey.ERR.OVER_30S_TO_START);
@@ -26,13 +26,13 @@ public class CheckTimeOut30s extends AbsTimerConditon {
         this.errName = errName;
     }
 
-    public void setOldDisTance(double oldDisTance) {
-        this.oldDisTance = oldDisTance;
+    public void setPass() {
+        this.pass = true;
     }
 
     @Override
     protected boolean signal() {
-        return this.carModel.getDistance() - oldDisTance < 1;
+        return !pass;
     }
 
     @Override

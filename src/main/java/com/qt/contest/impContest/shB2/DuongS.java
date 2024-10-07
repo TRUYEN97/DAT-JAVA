@@ -5,29 +5,26 @@
 package com.qt.contest.impContest.shB2;
 
 import com.qt.common.ConstKey;
-import com.qt.contest.AbsContest;
 import com.qt.contest.impCondition.CheckWheelCrossedLine;
-import com.qt.contest.impCondition.OnOffImp.CheckDistanceIntoContest;
 import com.qt.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
 import com.qt.model.input.yard.YardRankModel;
 import com.qt.model.yardConfigMode.ContestConfig;
+import java.util.List;
 
 /**
  *
  * @author Admin
  */
-public class DuongS extends AbsContest {
+public class DuongS extends ContestHasMutiLine {
 
-    private final CheckDistanceIntoContest distanceIntoContest;
     private final CheckWheelCrossedLine crossedLine;
     private double oldDistance;
+    private double distanceOut = 1;
 
-    public DuongS(YardRankModel yardRankModel, ContestConfig contestConfig, int speedLimit) {
-        super(ConstKey.CONTEST_NAME.CHU_S, ConstKey.CONTEST_NAME.CHU_S, true, true, true, 120);
-        this.distanceIntoContest = new CheckDistanceIntoContest(true, 
-                contestConfig.getDistanceLowerLimit(), contestConfig.getDistanceUpperLimit());
+    public DuongS(YardRankModel contestConfig, List<ContestConfig> contestConfigs, int speedLimit) {
+        super(ConstKey.CONTEST_NAME.CHU_S, ConstKey.CONTEST_NAME.CHU_S, true, true, true, 120, contestConfigs);
         this.crossedLine = new CheckWheelCrossedLine(5, () -> {
-            return yardRankModel.isRoadS();
+            return getWheelCrosserLineStatus(contestConfig.getRoadSs());
         });
         this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
         this.conditionIntoHandle.addConditon(crossedLine);
@@ -39,15 +36,20 @@ public class DuongS extends AbsContest {
 
     @Override
     protected boolean loop() {
-        return getDetaDistance(oldDistance) > 2 && this.carModel.isT1();
+        return getDetaDistance(oldDistance) > distanceOut && this.carModel.isT1() 
+                && this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD;
     }
 
     @Override
     protected boolean isIntoContest() {
-        if (this.carModel.isT1()) {
+        if (this.carModel.isT1() && this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD ) {
             this.oldDistance = this.carModel.getDistance();
-            this.distanceIntoContest.setOldDistance(
-                    this.dataTestTransfer.getData(ConstKey.DATA_TRANSFER.OLD_DISTANCE, -1));
+            if (checkIntoContest(this.dataTestTransfer.getData(ConstKey.DATA_TRANSFER.OLD_DISTANCE, 0))) {
+                this.distanceOut = this.distanceIntoContest.getContestConfig().getDistanceOut();
+            }else{
+                stop();
+            }
+            return true;
         }
         return false;
     }

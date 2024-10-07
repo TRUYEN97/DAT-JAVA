@@ -37,7 +37,7 @@ public class GiamToc extends AbsContest {
             if (detaG < 1 || !hasChaged) {
                 addErrorCode(ConstKey.ERR.FAILED_SHIFTDOWN_GEAR_IN_100M);
             } else if (detaV < 5) {
-                addErrorCode(ConstKey.ERR.GT);
+               addErrorCode(ConstKey.ERR.FAILED_SHIFTDOWN_GEAR_IN_100M);
             }
             return true;
         } else if (hasChaged && detaG >= 1 && detaV >= 5) {

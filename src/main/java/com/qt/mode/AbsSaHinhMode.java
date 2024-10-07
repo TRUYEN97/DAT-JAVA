@@ -4,6 +4,7 @@
  */
 package com.qt.mode;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.ConstKey;
 import com.qt.common.Util;
 import com.qt.common.YardConfig;
@@ -99,18 +100,19 @@ public abstract class AbsSaHinhMode extends AbsTestMode<SaHinhView> {
     }
 
     @Override
-    protected void analysisResponce(String requestString) {
-        switch (requestString) {
-            case "update" -> {
-                updateLog();
-                upTestDataToServer();
-            }
+    public void analysisResponce(JSONObject requestString) {
+//        switch (requestString) {
+//
+//            case "update" -> {
+//                updateLog();
+//                upTestDataToServer();
+//            }
 //            case "huyThi" -> {
 //                if (getModeHandle() != null) {
 //                    getModeHandle().stop();
 //                }
 //            }
-        }
+//        }
     }
 
     @Override

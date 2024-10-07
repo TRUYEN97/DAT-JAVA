@@ -5,32 +5,27 @@
 package com.qt.contest.impContest.shB2;
 
 import com.qt.common.ConstKey;
-import com.qt.contest.AbsContest;
 import com.qt.contest.impCondition.CheckWheelCrossedLine;
-import com.qt.contest.impCondition.OnOffImp.CheckDistanceIntoContest;
 import com.qt.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
 import com.qt.model.input.yard.YardRankModel;
 import com.qt.model.yardConfigMode.ContestConfig;
+import java.util.List;
 
 /**
  *
  * @author Admin
  */
-public class DoXeNgang extends AbsContest {
+public class DoXeNgang extends ContestHasMutiLine {
 
-    private final CheckDistanceIntoContest distanceIntoContest;
     private final CheckWheelCrossedLine crossedLine;
     private double oldDistance;
-    private final double distanceOut;
+    private double distanceOut = 1;
 
-    public DoXeNgang(YardRankModel yardRankModel, ContestConfig contestConfig, int speedLimit) {
+    public DoXeNgang(YardRankModel yardRankModel, List<ContestConfig> contestConfigs, int speedLimit) {
         super(ConstKey.CONTEST_NAME.GHEP_XE_DOC,
-                ConstKey.CONTEST_NAME.GHEP_XE_DOC, true, true, true, 120);
-        this.distanceOut = contestConfig.getDistanceOut();
-        this.distanceIntoContest = new CheckDistanceIntoContest(true,
-                contestConfig.getDistanceLowerLimit(), contestConfig.getDistanceUpperLimit());
+                ConstKey.CONTEST_NAME.GHEP_XE_DOC, true, true, true, 120, contestConfigs);
         this.crossedLine = new CheckWheelCrossedLine(5, () -> {
-            return yardRankModel.isRoadS();
+            return getWheelCrosserLineStatus(yardRankModel.getPacking1s());
         });
         this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
         this.conditionIntoHandle.addConditon(crossedLine);
@@ -41,18 +36,28 @@ public class DoXeNgang extends AbsContest {
     }
 
     private boolean success = false;
+    private boolean hasIntoPaking = false;
 
     @Override
     protected boolean loop() {
-        if (!success && this.carModel.isT1() && this.carModel.isT2()
-                && this.carModel.isT3()) {
-            success = true;
-            soundPlayer.successSound();
-            this.oldDistance = this.carModel.getDistance();
+        if (this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD) {
+            if (!hasIntoPaking && this.carModel.isT3() 
+                    && getDetaDistance(oldDistance) < 0.3) {
+                hasIntoPaking = true;
+            }
+            if (!success && this.carModel.isT1() && this.carModel.isT2()
+                    && this.carModel.isT3()) {
+                success = true;
+                soundPlayer.successSound();
+            }
         }
         if (getDetaDistance(oldDistance) > distanceOut) {
             if (!success) {
-                addErrorCode(ConstKey.ERR.IGNORED_PARKING);
+                if (hasIntoPaking) {
+                    addErrorCode(ConstKey.ERR.PARCKED_WRONG_POS);
+                } else {
+                    addErrorCode(ConstKey.ERR.IGNORED_PARKING);
+                }
             }
             return true;
         }
@@ -61,9 +66,16 @@ public class DoXeNgang extends AbsContest {
 
     @Override
     protected boolean isIntoContest() {
-        if (this.carModel.isT2()) {
-            this.distanceIntoContest.setOldDistance(
-                    this.dataTestTransfer.getData(ConstKey.DATA_TRANSFER.OLD_DISTANCE, -1));
+        if (this.carModel.isT2() && this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD) {
+            hasIntoPaking = false;
+            success = false;
+            this.oldDistance = this.carModel.getDistance();
+            if (this.checkIntoContest(this.dataTestTransfer.getData(ConstKey.DATA_TRANSFER.OLD_DISTANCE, -1))) {
+                this.distanceOut = this.distanceIntoContest.getContestConfig().getDistanceOut();
+            }else{
+                stop();
+            }
+            return true;
         }
         return false;
     }

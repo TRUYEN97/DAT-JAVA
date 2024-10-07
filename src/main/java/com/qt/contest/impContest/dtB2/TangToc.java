@@ -42,7 +42,7 @@ public class TangToc extends AbsContest {
             if (detaS < 1 || !hasChaged) {
                 addErrorCode(ConstKey.ERR.FAILED_SHIFTUP_GEAR_IN_100M);
             } else if (detaV < 5) {
-                addErrorCode(ConstKey.ERR.TT);
+                addErrorCode(ConstKey.ERR.FAILED_SHIFTUP_GEAR_IN_100M);
             }
             return true;
         } else if (hasChaged && detaS >= 1 && detaV >= 5) {

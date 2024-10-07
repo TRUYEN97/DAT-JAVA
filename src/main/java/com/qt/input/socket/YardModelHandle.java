@@ -4,15 +4,19 @@
  */
 package com.qt.input.socket;
 
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.CarConfig;
 import com.qt.common.ErrorLog;
 import com.qt.common.Util;
+import com.qt.common.YardConfig;
 import com.qt.common.communication.socket.Unicast.Client.SocketClient;
 import com.qt.common.communication.socket.Unicast.commons.Interface.IReceiver;
-import com.qt.model.input.yard.RoadZ;
 import com.qt.model.input.yard.YardModel;
 import com.qt.model.input.yard.YardRankModel;
+import com.qt.model.yardConfigMode.ContestConfig;
+import com.qt.model.yardConfigMode.YardRankConfig;
+import java.util.List;
 
 /**
  *
@@ -21,27 +25,20 @@ import com.qt.model.input.yard.YardRankModel;
 public class YardModelHandle {
 
     private static volatile YardModelHandle instance;
-    private static final String RANK_B = "b";
-    private static final String RANK_C = "c";
-    private static final String RANK_D = "d";
-    private static final String RANK_E = "e";
-    private static final String ROAD_Z = "roadZ";
-    private static final String WHEEL_PATH = "wheelPath";
-    private static final String WHEEL_CROSSIDE_LINE = "WheelCrossideLine";
-    private static final String PACKING1 = "packing1";
-    private static final String PACKING = "packing";
-    private static final String ROAD_S = "roadS";
+    private static final String INPUTS = "inputs";
     private static final String TRAFFIC_LIGHT_MODEL = "trafficLightModel";
     private static final String TRAFFIC_LIGHT_MODEL1 = "trafficLightModel1";
     private static final String TRAFFIC_LIGHT = "trafficLight";
     private static final String TIME = "time";
     private final SocketClient socketClient;
     private final CarConfig carConfig;
+    private final YardConfig yardConfig;
     private final YardModel yardModel;
     private Thread thread;
 
     private YardModelHandle() {
         this.carConfig = CarConfig.getInstance();
+        this.yardConfig = YardConfig.getInstance();
         IReceiver<SocketClient> receiver = (SocketClient commnunication, String data) -> {
             createReciver(data);
         };
@@ -72,18 +69,14 @@ public class YardModelHandle {
             return;
         }
         try {
+            System.out.println(data);
             JSONObject ob = JSONObject.parseObject(data);
-            if (ob.containsKey(RANK_B)) {
-                update(ob.getJSONObject(RANK_B), this.yardModel.getRankB());
-            }
-            if (ob.containsKey(RANK_C)) {
-                update(ob.getJSONObject(RANK_C), this.yardModel.getRankC());
-            }
-            if (ob.containsKey(RANK_D)) {
-                update(ob.getJSONObject(RANK_D), this.yardModel.getRankD());
-            }
-            if (ob.containsKey(RANK_E)) {
-                update(ob.getJSONObject(RANK_E), this.yardModel.getRankE());
+            if (ob.containsKey(INPUTS)) {
+                JSONArray inputs = ob.getJSONArray(INPUTS);
+                updateRank(this.yardConfig.getRankBConfig(), inputs, this.yardModel.getRankB());
+                updateRank(this.yardConfig.getRankCConfig(), inputs, this.yardModel.getRankC());
+                updateRank(this.yardConfig.getRankDConfig(), inputs, this.yardModel.getRankD());
+                updateRank(this.yardConfig.getRankEConfig(), inputs, this.yardModel.getRankE());
             }
             if (ob.containsKey(TRAFFIC_LIGHT_MODEL)) {
                 JSONObject tl = ob.getJSONObject(TRAFFIC_LIGHT_MODEL);
@@ -109,20 +102,45 @@ public class YardModelHandle {
         }
     }
 
-    private void update(JSONObject jsonObject, YardRankModel yardRankModel) {
-        if (jsonObject == null || yardRankModel == null) {
-            return;
-        }
-        RoadZ roadZModel = yardRankModel.getRoadZ();
-        if (roadZModel != null && jsonObject.containsKey(ROAD_Z)) {
-            JSONObject roadZJson = jsonObject.getJSONObject(ROAD_Z);
-            roadZModel.setWheelPath(roadZJson.getBooleanValue(WHEEL_PATH, false));
-            roadZModel.setWheelCrossideLine(roadZJson.getBooleanValue(WHEEL_CROSSIDE_LINE, false));
-        }
-        yardRankModel.setRoadS(jsonObject.getBooleanValue(ROAD_S, false));
-        yardRankModel.setPacking(jsonObject.getBooleanValue(PACKING, false));
-        yardRankModel.setPacking1(jsonObject.getBooleanValue(PACKING1, false));
+    private void updateRank(YardRankConfig rankConfig, JSONArray inputs, YardRankModel rankModel) {
+        updateContest(rankConfig.getDoXeDoc(), inputs, rankModel.getPackings());
+
+        updateContest(rankConfig.getDoXeNgang(), inputs, rankModel.getPacking1s());
+
+        updateContest(rankConfig.getDuongS(), inputs, rankModel.getRoadSs());
+
+        updateContest(rankConfig.getVetBanhXe(), inputs, rankModel.getRoadZs());
     }
+
+    private void updateContest(List<ContestConfig> contestConfigs, JSONArray inputs, List<Boolean> contestInputs) {
+        try {
+            if (contestConfigs == null || inputs == null || contestInputs == null) {
+                return;
+            }
+            Integer indexOfYardInput;
+            ContestConfig contestConfig;
+            boolean val;
+            for (int i = 0; i < contestConfigs.size(); i++) {
+                val = false;
+                if ((contestConfig = contestConfigs.get(i)) != null
+                        && (indexOfYardInput = contestConfig.getIndexOfYardInput()) != null) {
+                    if (indexOfYardInput < inputs.size()) {
+                        Boolean t = inputs.getBoolean(indexOfYardInput);
+                        val = t == null ? false : t;
+                    }
+                    if (contestInputs.size() <= i) {
+                        contestInputs.add(val);
+                    } else {
+                        contestInputs.set(i, val);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
+        }
+    }
+
     private boolean stop = false;
 
     public void start() {

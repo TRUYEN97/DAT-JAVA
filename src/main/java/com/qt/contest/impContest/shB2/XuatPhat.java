@@ -37,6 +37,8 @@ public class XuatPhat extends AbsContest {
     protected boolean loop() {
         if (getDetaDistance(oldDistance)> 0.1 && this.firstCheck) {
             firstCheck = false;
+            this.timeOut20s.setPass();
+            this.timeOut30s.setPass();
             this.timeOut20s.stop();
             this.timeOut30s.stop();
             if (!this.carModel.isAt()) {
@@ -67,8 +69,6 @@ public class XuatPhat extends AbsContest {
     protected void init() {
         firstCheck = true;
         oldDistance = this.carModel.getDistance();
-        this.timeOut30s.setOldDisTance(oldDistance);
-        this.timeOut20s.setOldDisTance(oldDistance);
         this.timeOut30s.start();
         this.timeOut20s.start();
     }

@@ -5,7 +5,6 @@
 package com.qt.mode.imp;
 
 import com.qt.contest.impContest.shB2.DoXeDoc;
-import com.qt.contest.impContest.shB2.DoXeNgang;
 import com.qt.contest.impContest.shB2.DungXe;
 import com.qt.contest.impContest.shB2.DungXeNgangDoc;
 import com.qt.contest.impContest.shB2.DuongS;
@@ -17,20 +16,20 @@ import com.qt.contest.impContest.shB2.TangTocDuongThang;
 import com.qt.contest.impContest.shB2.VetBanhXe;
 import com.qt.contest.impContest.shB2.XuatPhat;
 import com.qt.mode.AbsSaHinhMode;
-import com.qt.pretreatment.IKeyEvent;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
  *
  * @author Admin
  */
-public class SH_B2_MODE extends AbsSaHinhMode {
+public abstract class AbsCDE_Mode extends AbsSaHinhMode {
 
-    public SH_B2_MODE() {
-        super(24, 1080, MODEL_RANK_NAME.RANK_B, List.of("B2"));
+    public AbsCDE_Mode(int speedLimit, int timeOut, MODEL_RANK_NAME modelRank, List<String> ranks) {
+        super(speedLimit, timeOut, modelRank, ranks);
     }
+
+   
 
     @Override
     protected void creadContestList() {
@@ -63,22 +62,9 @@ public class SH_B2_MODE extends AbsSaHinhMode {
         if (rd == 3) {
             contests.add(new KhanCap(6));
         }
-        contests.add(new DoXeNgang(yardRankModel, yardRankConfig.getDoXeNgang(), speedLimit));
         contests.add(new NgaTu(4, yardModelHandle.getYardModel(),
                 yardRankConfig.getNgaTu4(), speedLimit));
         contests.add(new KetThuc(speedLimit));
-    }
-
-    @Override
-    protected void contestDone() {
-    }
-
-    @Override
-    protected void createPrepareKeyEvents(Map<String, IKeyEvent> events) {
-    }
-
-    @Override
-    protected void createTestKeyEvents(Map<String, IKeyEvent> events) {
     }
 
 }

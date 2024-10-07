@@ -5,7 +5,6 @@
 package com.qt.mode.imp;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.qt.common.API.Response;
 import com.qt.common.ConstKey;
 import com.qt.common.Util;
 import com.qt.contest.impCondition.ContainContestChecker;
@@ -161,18 +160,19 @@ public class DT_B2_MODE extends AbsTestMode<DuongTruongView> {
     }
 
     @Override
-    protected void analysisResponce(String requestString) {
-        switch (requestString) {
-            case "update" -> {
-                updateLog();
-                upTestDataToServer();
-            }
+    public void analysisResponce(JSONObject requestString) {
+//        switch (requestString) {
+//
+//            case "update" -> {
+//                updateLog();
+//                upTestDataToServer();
+//            }
 //            case "huyThi" -> {
 //                if (getModeHandle() != null) {
 //                    getModeHandle().stop();
 //                }
 //            }
-        }
+//        }
     }
 
     @Override

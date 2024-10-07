@@ -26,7 +26,7 @@ public class ModeManagement {
         this.viewMain = viewMain;
         this.modes = new ArrayList<>();
         this.modeHandle = new ModeHandle();
-        
+
     }
 
     public List<AbsTestMode> getModes() {
@@ -34,6 +34,10 @@ public class ModeManagement {
     }
 
     public boolean updateMode(String modeName, String rank) {
+        AbsTestMode currMode = this.modeHandle.getTestMode();
+        if (currMode != null && currMode.isMode(modeName, rank)) {
+            return true;
+        }
         for (AbsTestMode mode : modes) {
             if (mode != null && mode.isMode(modeName, rank)) {
                 return updateMode(mode);
@@ -51,9 +55,6 @@ public class ModeManagement {
             this.modeHandle.setWait(true);
             if (this.modeHandle.isRunning()) {
                 return false;
-            }
-            if (this.modeHandle.isStarted()) {
-                this.modeHandle.stop();
             }
             if (this.modeHandle.setTestMode(testMode)) {
                 this.modeHandle.start();

@@ -22,7 +22,7 @@ public class XuatPhat extends AbsContest {
     }
 
     public XuatPhat(String name) {
-        super(name, name, true, false, true, 2000);
+        super(name, name, false, false, true, 2000);
         this.timeOut30s = new CheckTimeOut30s();
         this.conditionBeginHandle.addConditon(this.timeOut30s);
     }
@@ -43,6 +43,7 @@ public class XuatPhat extends AbsContest {
     @Override
     public boolean loop() {
         if (getDistance() > 0.1 && this.firstCheck) {
+            this.timeOut30s.setPass();
             this.timeOut30s.stop();
             firstCheck = false;
             if (!this.carModel.isAt()) {
@@ -85,7 +86,6 @@ public class XuatPhat extends AbsContest {
     protected boolean isIntoContest() {
         firstCheck = true;
         oldDistance = this.carModel.getDistance();
-        this.timeOut30s.setOldDisTance(oldDistance);
         this.timeOut30s.start();
         return true;
     }

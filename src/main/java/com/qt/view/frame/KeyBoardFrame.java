@@ -233,6 +233,7 @@ public class KeyBoardFrame extends AbsKeylistenerFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Nhập");
+        setAlwaysOnTop(true);
         setLocation(new java.awt.Point(0, 0));
         setName("ChangeIdFrame"); // NOI18N
         setUndecorated(true);

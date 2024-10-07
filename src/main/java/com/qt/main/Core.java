@@ -18,6 +18,9 @@ import com.qt.controller.settingElement.imp.SettingSignalLinghtDelayTime;
 import com.qt.input.camera.CameraRunner;
 import com.qt.mode.imp.DT_B2_MODE;
 import com.qt.mode.imp.SH_B2_MODE;
+import com.qt.mode.imp.imp.SH_C_MODE;
+import com.qt.mode.imp.imp.SH_D_MODE;
+import com.qt.mode.imp.imp.SH_E_MODE;
 import com.qt.model.modelTest.ErrorCode;
 import com.qt.output.SoundPlayer;
 import com.qt.pretreatment.KeyEventManagement;
@@ -177,6 +180,9 @@ public class Core {
     private void addMode() {
         this.modeManagement.addMode(new DT_B2_MODE());
         this.modeManagement.addMode(new SH_B2_MODE());  
+        this.modeManagement.addMode(new SH_C_MODE());  
+        this.modeManagement.addMode(new SH_D_MODE());  
+        this.modeManagement.addMode(new SH_E_MODE());  
     }
                                                                      
     public void start() {

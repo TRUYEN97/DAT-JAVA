@@ -58,12 +58,12 @@ public class DungXeNgangDoc extends AbsContest {
             } else {
                 soundPlayer.successSound();
             }
-            this.checkTimeOut30s.setOldDisTance(distanceWhenStop);
             this.checkTimeOut30s.start();
         } else if (d > distanceOut) {
             if (!hasStop) {
                 addErrorCode(ConstKey.ERR.DONT_STOP_AS_REQUIRED);
             }
+            this.checkTimeOut30s.setPass();
             return true;
         }
         return false;

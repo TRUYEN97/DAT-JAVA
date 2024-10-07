@@ -10,20 +10,30 @@ package com.qt.model.yardConfigMode;
  */
 public class ContestConfig {
 
-    private double distanceOut;
-    private double distanceLine;
-    private double distanceLowerLimit;
-    private double distanceUpperLimit;
+    private double distanceOut = 0;
+    private double distanceLine = 0;
+    private double distanceLowerLimit = 0;
+    private double distanceUpperLimit = 0;
+    private Integer indexOfYardInput = 0;
     public ContestConfig() {
     }
 
     public ContestConfig(double distanceOut, double distanceLine, double distanceLowerLimit, double distanceUpperLimit) {
+        this();
         this.distanceOut = distanceOut;
         this.distanceLine = distanceLine;
         this.distanceLowerLimit = distanceLowerLimit;
         this.distanceUpperLimit = distanceUpperLimit;
     }
 
+    public void setIndexOfYardInput(Integer indexOfYardInput) {
+        this.indexOfYardInput = indexOfYardInput;
+    }
+
+    public Integer getIndexOfYardInput() {
+        return indexOfYardInput;
+    }
+    
     public double getDistanceOut() {
         return distanceOut;
     }

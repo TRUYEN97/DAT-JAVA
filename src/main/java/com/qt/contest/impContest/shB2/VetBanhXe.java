@@ -5,42 +5,37 @@
 package com.qt.contest.impContest.shB2;
 
 import com.qt.common.ConstKey;
-import com.qt.contest.AbsContest;
 import com.qt.contest.impCondition.CheckWheelCrossedLine;
-import com.qt.contest.impCondition.OnOffImp.CheckDistanceIntoContest;
 import com.qt.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
-import com.qt.model.input.yard.RoadZ;
+import com.qt.model.input.yard.YardRankModel;
 import com.qt.model.yardConfigMode.ContestConfig;
+import java.util.List;
 
 /**
  *
  * @author Admin
  */
-public class VetBanhXe extends AbsContest {
+public class VetBanhXe extends ContestHasMutiLine {
 
-    private final CheckDistanceIntoContest distanceIntoContest;
     private final CheckWheelCrossedLine crossedPath;
     private final CheckWheelCrossedLine crossedLine;
-    private final double distanceOut;
-    private final double distanceOutPath;
+    private double distanceOut;
+    private double distanceOutPath;
     private double oldDistance;
 
-    public VetBanhXe(RoadZ roadZ, ContestConfig contestConfig, int speedLimit) {
+    public VetBanhXe(YardRankModel yardModel, List<ContestConfig> contestConfigs, int speedLimit) {
         super(ConstKey.CONTEST_NAME.VET_BANH_XE,
                 ConstKey.CONTEST_NAME.VET_BANH_XE,
-                true, true, true, 120);
-        this.distanceOut = contestConfig.getDistanceOut();
-        this.distanceOutPath = contestConfig.getDistanceLine();
-        this.distanceIntoContest = new CheckDistanceIntoContest(true, 
-                contestConfig.getDistanceLowerLimit(), contestConfig.getDistanceUpperLimit());
+                true, true, true, 120, contestConfigs);
+        this.distanceOut = 7;
+        this.distanceOutPath = 3;
         this.crossedPath = new CheckWheelCrossedLine(5, () -> {
-            return roadZ.isWheelPath();
+            return getWheelCrosserLineStatus(yardModel.getRoadZs());
         });
         this.crossedLine = new CheckWheelCrossedLine(5, () -> {
-            return roadZ.isWheelCrossideLine();
+            return getWheelCrosserLineStatus(yardModel.getRoadZs());
         });
         this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
-        this.conditionIntoHandle.addConditon(distanceIntoContest);
         this.conditionIntoHandle.addConditon(crossedPath);
         this.conditionIntoHandle.addConditon(crossedLine);
     }
@@ -49,19 +44,20 @@ public class VetBanhXe extends AbsContest {
     protected void init() {
     }
 
-    private int count = 0;
+    private boolean into = false;
+    private boolean into1 = false;
     private boolean checkPathLineDone = false;
 
     @Override
     protected boolean loop() {
         if (this.carModel.isT2()) {
-            count++;
+            into = true;
         }
         if (this.carModel.isT3()) {
-            count++;
+            into1 = true;
         }
         if (!checkPathLineDone && getDetaDistance(this.oldDistance) > distanceOutPath) {
-            if (count == 2) {
+            if (!into || !into1) {
                 addErrorCode(ConstKey.ERR.WHEEL_OUT_OF_PATH);
             }
             crossedPath.stop();
@@ -73,11 +69,15 @@ public class VetBanhXe extends AbsContest {
     @Override
     protected boolean isIntoContest() {
         if (this.carModel.isT1()) {
-            count = 0;
+            into = false;
+            into1 = false;
             checkPathLineDone = false;
             this.oldDistance = this.carModel.getDistance();
-            this.distanceIntoContest.setOldDistance(
-                    this.dataTestTransfer.getData(ConstKey.DATA_TRANSFER.OLD_DISTANCE, -1));
+            if (checkIntoContest(this.dataTestTransfer.getData(ConstKey.DATA_TRANSFER.OLD_DISTANCE, 0))) {
+                this.distanceOut = this.distanceIntoContest.getContestConfig().getDistanceOut();
+                this.distanceOutPath = this.distanceIntoContest.getContestConfig().getDistanceLine();
+            }
+            return true;
         }
         return false;
     }

@@ -12,7 +12,7 @@ public final class ConstKey {
 
     public static final class URL {
 
-        public static final String CHECK_UPDATE_URL = "checkUpdateUrl";
+        public static final String CHECK_COMMAND_URL = "checkCommandUrl";
         public static final String CHECK_CAR_ID_URL = "checkCarIdUrl";
         public static final String CHECK_USER_ID_URL = "checkUserIdUrl";
         public static final String SEND_DATA_URL = "sendDataUrl";

@@ -5,6 +5,7 @@
 package com.qt.controller.api;
 
 import com.qt.common.API.Response;
+import com.qt.common.CarConfig;
 import com.qt.common.ErrorLog;
 import com.qt.common.Util;
 
@@ -46,10 +47,11 @@ public class PingAPI {
                 this.stop = false;
                 Response response;
                 IPingAPIReceive<Response> aPIReceive;
+                CarConfig carConfig = CarConfig.getInstance();
                 while (!stop) {
                     aPIReceive = this.pingAPIReceive;
                     if (aPIReceive != null) {
-                        response = this.apiService.checkInfo();
+                        response = this.apiService.checkCommad(carConfig.getCarId());
                         if (response != null) {
                             aPIReceive.receive(response);
                         }

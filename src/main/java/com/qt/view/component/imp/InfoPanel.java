@@ -95,7 +95,7 @@ public class InfoPanel extends UpdateValuePanel implements IgetImgLabel {
 
         stId.setIconName("SBD");
 
-        stCarId.setIconName("Số xe");
+        stCarId.setIconName("Số Xe");
 
         stModeName.setIconName("Phần thi");
 
