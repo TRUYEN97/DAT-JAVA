@@ -87,7 +87,7 @@ public class NgaTu extends AbsContest {
     private boolean checkEndTest() {
         double d = getDetaDistance(oldDistance);
         if (times == 0 || times == 3) {
-            if (this.carModel.isT1() && this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD) {
+            if (this.carModel.isT1() && this.carModel.getStatus() == ConstKey.CAR_ST.FORWARD) {
                 return true;
             }
             if (d >= distanceOut) {

@@ -35,7 +35,7 @@ public class XuatPhat extends AbsContest {
 
     @Override
     protected boolean loop() {
-        if (getDetaDistance(oldDistance)> 0.1 && this.firstCheck) {
+        if (getDetaDistance(oldDistance) > 0.1 && this.firstCheck) {
             firstCheck = false;
             this.timeOut20s.setPass();
             this.timeOut30s.setPass();
@@ -51,24 +51,28 @@ public class XuatPhat extends AbsContest {
                 this.addErrorCode(ConstKey.ERR.PARKING_BRAKE_NOT_RELEASED);
             }
         }
-        if (getDetaDistance(oldDistance)>= 5.5) {
+        if (getDetaDistance(oldDistance) >= 5.5) {
             if (this.carModel.isNt()) {
                 this.addErrorCode(ConstKey.ERR.SIGNAL_KEPT_ON_OVER_5M);
             }
             MCUSerialHandler.getInstance().sendLedOff();
         }
-        return getDetaDistance(oldDistance)>= 8;
+        return getDetaDistance(oldDistance) >= 8;
     }
 
     @Override
     protected boolean isIntoContest() {
-        return this.carModel.isT1();
+        if (this.carModel.isT1()) {
+            firstCheck = true;
+            oldDistance = this.carModel.getDistance();
+            return true;
+        }
+        return false;
     }
 
     @Override
     protected void init() {
         firstCheck = true;
-        oldDistance = this.carModel.getDistance();
         this.timeOut30s.start();
         this.timeOut20s.start();
     }
