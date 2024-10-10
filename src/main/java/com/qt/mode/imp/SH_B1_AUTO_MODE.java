@@ -4,6 +4,7 @@
  */
 package com.qt.mode.imp;
 
+import com.qt.contest.impContest.shB1.TangTocDuongThangB1;
 import com.qt.contest.impContest.shB2.DoXeDoc;
 import com.qt.contest.impContest.shB2.DoXeNgang;
 import com.qt.contest.impContest.shB2.DungXe;
@@ -13,7 +14,6 @@ import com.qt.contest.impContest.shB2.DuongTau;
 import com.qt.contest.impContest.shB2.KetThuc;
 import com.qt.contest.impContest.shB2.KhanCap;
 import com.qt.contest.impContest.shB2.NgaTu;
-import com.qt.contest.impContest.shB2.TangTocDuongThang;
 import com.qt.contest.impContest.shB2.VetBanhXe;
 import com.qt.contest.impContest.shB2.XuatPhat;
 import com.qt.mode.AbsSaHinhMode;
@@ -26,10 +26,10 @@ import java.util.Random;
  *
  * @author Admin
  */
-public class SH_B2_MODE extends AbsSaHinhMode {
+public class SH_B1_AUTO_MODE extends AbsSaHinhMode {
 
-    public SH_B2_MODE() {
-        super(24, 1080, MODEL_RANK_NAME.RANK_B, List.of("B2"));
+    public SH_B1_AUTO_MODE() {
+        super(24, 1080, MODEL_RANK_NAME.RANK_B, List.of("B1"));
     }
 
     @Override
@@ -59,7 +59,7 @@ public class SH_B2_MODE extends AbsSaHinhMode {
             contests.add(new KhanCap(6));
         }
         contests.add(new DuongTau(yardRankConfig.getDuongTau(), speedLimit));
-        contests.add(new TangTocDuongThang(1, speedLimit));
+        contests.add(new TangTocDuongThangB1(speedLimit));
         if (rd == 3) {
             contests.add(new KhanCap(6));
         }

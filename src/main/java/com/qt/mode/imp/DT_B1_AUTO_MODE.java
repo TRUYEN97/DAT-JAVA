@@ -4,17 +4,15 @@
  */
 package com.qt.mode.imp;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.ConstKey;
 import com.qt.common.Util;
 import com.qt.contest.impCondition.ContainContestChecker;
 import com.qt.contest.impCondition.OnOffImp.CheckCM;
 import com.qt.contest.impCondition.OnOffImp.CheckRPM;
-import com.qt.contest.impCondition.timerCondition.CheckSo3;
-import com.qt.contest.impContest.dtB2.GiamToc;
-import com.qt.contest.impContest.dtB2.KetThuc;
-import com.qt.contest.impContest.dtB2.TangToc;
-import com.qt.contest.impContest.dtB2.XuatPhat;
+import com.qt.contest.impContest.dtB1.GiamTocB1;
+import com.qt.contest.impContest.dtB1.KetThucB1;
+import com.qt.contest.impContest.dtB1.TangTocB1;
+import com.qt.contest.impContest.dtB1.XuatPhatB1;
 import com.qt.controller.api.ApiService;
 import com.qt.mode.AbsTestMode;
 import com.qt.pretreatment.IKeyEvent;
@@ -26,18 +24,17 @@ import java.util.Map;
  *
  * @author Admin
  */
-public class DT_B2_MODE extends AbsTestMode<DuongTruongView> {
+public class DT_B1_AUTO_MODE extends AbsTestMode<DuongTruongView> {
 
     private boolean runnable;
     private String oldId;
 
-    public DT_B2_MODE() {
-        this(ConstKey.MODE_NAME.DUONG_TRUONG, List.of("B2", "C"));
+    public DT_B1_AUTO_MODE() {
+        this(ConstKey.MODE_NAME.DUONG_TRUONG, List.of("B1"));
     }
 
-    public DT_B2_MODE(String name, List<String> ranks) {
+    public DT_B1_AUTO_MODE(String name, List<String> ranks) {
         super(new DuongTruongView(), name, ranks);
-        this.conditionHandle.addConditon(new CheckSo3());
         this.conditionHandle.addConditon(new CheckCM());
         this.conditionHandle.addConditon(new CheckRPM());
         this.conditionHandle.addConditon(new ContainContestChecker(
@@ -90,7 +87,7 @@ public class DT_B2_MODE extends AbsTestMode<DuongTruongView> {
             if (hasXp || !runnable || this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
                 return;
             }
-            addContest(new XuatPhat(ConstKey.CONTEST_NAME.XUAT_PHAT));
+            addContest(new XuatPhatB1(ConstKey.CONTEST_NAME.XUAT_PHAT));
             hasXp = true;
         });
     }
@@ -117,29 +114,23 @@ public class DT_B2_MODE extends AbsTestMode<DuongTruongView> {
             this.errorcodeHandle.addBaseErrorCode(key);
         });
         events.put(ConstKey.KEY_BOARD.CONTEST.TS, (key) -> {
-            if (this.carModel.getGearBoxValue() >= 5) {
-                return;
-            }
             if (!contests.isEmpty()) {
                 return;
             }
             if (!hasXp || hasKt) {
                 return;
             }
-            addContest(new TangToc(ConstKey.CONTEST_NAME.TANG_TOC));
+            addContest(new TangTocB1(ConstKey.CONTEST_NAME.TANG_TOC));
             hasTs = true;
         });
         events.put(ConstKey.KEY_BOARD.CONTEST.GS, (key) -> {
-            if (this.carModel.getGearBoxValue() <= 1) {
-                return;
-            }
             if (!contests.isEmpty()) {
                 return;
             }
             if (!hasXp || hasKt) {
                 return;
             }
-            addContest(new GiamToc(ConstKey.CONTEST_NAME.GIAM_TOC));
+            addContest(new GiamTocB1(ConstKey.CONTEST_NAME.GIAM_TOC));
             hasGs = true;
         });
         events.put(ConstKey.KEY_BOARD.CONTEST.KT, (key) -> {
@@ -154,7 +145,7 @@ public class DT_B2_MODE extends AbsTestMode<DuongTruongView> {
             if (!hasXp || !hasTs || !hasGs || hasKt) {
                 return;
             }
-            addContest(new KetThuc(ConstKey.CONTEST_NAME.KET_THUC));
+            addContest(new KetThucB1(ConstKey.CONTEST_NAME.KET_THUC));
             hasKt = true;
         });
     }
