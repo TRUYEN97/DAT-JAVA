@@ -175,7 +175,7 @@ public class CameraRunner implements IStarter {
             while (!stop) {
                 try {
                     while (!openCamera(camera)) {
-                        Util.delay(2000);
+                        Util.delay(5000);
                     }
                     Mat frameMat = new Mat();
                     while (!stop) {

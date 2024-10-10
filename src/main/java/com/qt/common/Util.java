@@ -6,6 +6,8 @@ package com.qt.common;
 
 import com.qt.common.communication.Communicate.Impl.Cmd.Cmd;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.io.InputStream;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -51,6 +54,15 @@ public class Util {
             return 2;
         }
         return 0;
+    }
+
+    public static byte[] convertBufferImageToBytes(BufferedImage bufferedImage) throws IOException {
+        if (bufferedImage == null) {
+            return null;
+        }
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
     }
 
     public static void copyFile(Path source, Path target, CopyOption... options) throws IOException {

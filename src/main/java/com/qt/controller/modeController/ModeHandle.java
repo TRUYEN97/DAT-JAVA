@@ -4,7 +4,6 @@
  */
 package com.qt.controller.modeController;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.ErrorLog;
 import com.qt.common.Util;
 import com.qt.interfaces.IStarter;
@@ -14,7 +13,6 @@ import com.qt.mode.AbsTestMode;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -45,21 +43,7 @@ public class ModeHandle implements IStarter, Runnable {
             if (testMode == null) {
                 return false;
             }
-            this.pingAPI.setPingAPIReceive((responce) -> {
-                try {
-                    if (responce == null) {
-                        return;
-                    }
-                    if (!responce.isSuccess() || responce.getData() == null) {
-                        return;
-                    }
-                    testMode.analysisResponce(responce.getData(JSONObject.class));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    ErrorLog.addError(this, e);
-                    JOptionPane.showMessageDialog(null, e.getLocalizedMessage());
-                }
-            });
+            this.pingAPI.setPingAPIReceive(testMode.getCommandApiReceive());
             this.testMode = testMode;
             this.testMode.setModeHandle(this);
             this.processModelHandle.setMode(testMode);
@@ -68,7 +52,6 @@ public class ModeHandle implements IStarter, Runnable {
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
-            JOptionPane.showMessageDialog(null, e.getLocalizedMessage());
             return false;
         }
     }
@@ -97,7 +80,6 @@ public class ModeHandle implements IStarter, Runnable {
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
-            JOptionPane.showMessageDialog(null, e.getLocalizedMessage());
             this.running = false;
         }
     }

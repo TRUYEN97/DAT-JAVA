@@ -4,8 +4,11 @@
  */
 package com.qt.controller;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.ErrorLog;
+import com.qt.common.MyObjectMapper;
 import com.qt.controller.api.ApiService;
+import com.qt.input.camera.CameraRunner;
 import com.qt.model.modelTest.ErrorCode;
 import com.qt.model.modelTest.ErrorcodeWithContestNameModel;
 import com.qt.model.modelTest.contest.ContestDataModel;
@@ -72,9 +75,13 @@ public class ErrorcodeHandle {
     }
 
     public void addBaseErrorCode(String key) {
+        addBaseErrorCode(key, null);
+    }
+
+    public void addBaseErrorCode(String key, JSONObject jsono) {
         try {
             ErrorCode errorcode = this.mapErrorcodes.get(key);
-            if (errorcode == null || errorcode.getErrKey()== null) {
+            if (errorcode == null || errorcode.getErrKey() == null) {
                 return;
             }
             this.processModel.addErrorcode(errorcode);
@@ -82,7 +89,11 @@ public class ErrorcodeHandle {
             this.soundPlayer.sayErrorCode(errorcode.getErrKey());
             this.processModel.subtract(errorcode.getErrPoint());
             this.threadPool.execute(() -> {
-                this.apiService.sendData(this.processModel, null);
+                JSONObject testData = MyObjectMapper.convertValue(this.processModel, JSONObject.class);
+                if (jsono != null) {
+                    testData.putAll(jsono);
+                }
+                this.apiService.sendData(CameraRunner.getInstance().getImage(), testData);
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,7 +107,7 @@ public class ErrorcodeHandle {
                 return;
             }
             ErrorCode errorcode = this.mapErrorcodes.get(key);
-            if (errorcode == null || errorcode.getErrKey()== null) {
+            if (errorcode == null || errorcode.getErrKey() == null) {
                 return;
             }
             this.ewcnms.add(new ErrorcodeWithContestNameModel(errorcode, dataModel.getContestName()));

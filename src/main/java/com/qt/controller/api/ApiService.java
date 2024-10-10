@@ -19,6 +19,7 @@ import com.qt.model.input.UserModel;
 import com.qt.model.modelTest.process.ProcessModel;
 import com.qt.view.component.ShowMessagePanel;
 import java.awt.Component;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Files;
 
@@ -36,9 +37,8 @@ public class ApiService {
     public static final int PASS = 1;
     public static final int FAIL = 0;
     public static final int DISCONNECT = -1;
-    private static final String CAN_START = "canStart";
-    private static final String ID = "id";
-    private static final String EXAM_ID = "examId";
+    public static final String ID = "id";
+    public static final String EXAM_ID = "examId";
     private static volatile ApiService insatnce;
     private final Setting setting;
     private final RestAPI restAPI;
@@ -110,6 +110,38 @@ public class ApiService {
     }
     protected static final String CAR_ID = "carId";
 
+    public synchronized int sendData(BufferedImage image, JSONObject jSONObject) {
+        try {
+            if (checkPingToServer()) {
+                return DISCONNECT;
+            }
+            String url = this.setting.getSendDataUrl();
+            if (url == null) {
+                ErrorLog.addError(this, "không tìm thấy: sendData url");
+                return FAIL;
+            }
+            if (jSONObject == null || jSONObject.isEmpty()) {
+                return FAIL;
+            }
+            jSONObject.put(ConstKey.VEHICLE_TIME, new TimeBase().getSimpleDateTime());
+            FileInfo jsonF = new FileInfo(FileInfo.type.BYTE);
+            jsonF.setFile(jSONObject.toString().getBytes());
+            jsonF.setPartName("data");
+            jsonF.setName("data.json");
+            //////////////////
+            FileInfo imgF = new FileInfo(FileInfo.type.BYTE);
+            imgF.setFile(Util.convertBufferImageToBytes(image));
+            imgF.setPartName("image");
+            imgF.setName("image.png");
+            Response response = restAPI.uploadFile(url, null, jsonF, imgF);
+            return response != null && response.isSuccess() ? PASS : FAIL;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
+            return FAIL;
+        }
+    }
+
     public synchronized int sendData(JSONObject jSONObject, File imgFile) {
         try {
             if (checkPingToServer()) {
@@ -134,7 +166,13 @@ public class ApiService {
             imgF.setPartName("image");
             imgF.setName("image.png");
             Response response = restAPI.uploadFile(url, null, jsonF, imgF);
-            return response != null && response.isSuccess() ? PASS : FAIL;
+            if (response == null) {
+                return FAIL;
+            } else if (!response.isSuccess()) {
+                String mess = response.getMessage();
+                return mess != null && mess.contains("The contestant has completed") ? PASS : FAIL;
+            }
+            return PASS;
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
@@ -166,6 +204,19 @@ public class ApiService {
                 return FAIL;
             }
             return sendData(JSONObject.parseObject(Files.readString(jsonFile.toPath())), imgFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
+            return FAIL;
+        }
+    }
+
+    public synchronized int sendData(File jsonFile, BufferedImage image) {
+        try {
+            if (jsonFile == null || !jsonFile.exists()) {
+                return FAIL;
+            }
+            return sendData(image, JSONObject.parseObject(Files.readString(jsonFile.toPath())));
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);

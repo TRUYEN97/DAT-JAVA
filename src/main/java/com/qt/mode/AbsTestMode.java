@@ -4,7 +4,9 @@
  */
 package com.qt.mode;
 
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.qt.common.API.Response;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.TestStatusLogger;
@@ -15,6 +17,7 @@ import com.qt.controller.CheckConditionHandle;
 import com.qt.controller.ErrorcodeHandle;
 import com.qt.controller.logTest.FileTestService;
 import com.qt.controller.ProcessModelHandle;
+import com.qt.controller.api.AnalysisApiCommand;
 import com.qt.controller.modeController.ModeHandle;
 import com.qt.input.camera.CameraRunner;
 import com.qt.input.serial.MCUSerialHandler;
@@ -37,6 +40,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.Getter;
 import lombok.Setter;
+import com.qt.controller.api.ICommandAPIReceive;
 
 /**
  *
@@ -66,6 +70,7 @@ public abstract class AbsTestMode<V extends AbsModeView> {
     protected final ShowErrorcode showErrorcode;
     protected final Printer printer;
     private final ExecutorService threadPool;
+    private ICommandAPIReceive<Response> commandApiReceive;
     private ModeHandle modeHandle;
     private boolean cancel;
 
@@ -94,7 +99,9 @@ public abstract class AbsTestMode<V extends AbsModeView> {
         this.conditionHandle = new CheckConditionHandle();
         this.printer = new Printer();
         this.threadPool = Executors.newSingleThreadExecutor();
+        this.commandApiReceive = new AnalysisApiCommand();
     }
+    
 
     private String creareFullName(List<String> ranks) {
         StringBuilder builder = new StringBuilder(name);
@@ -115,8 +122,6 @@ public abstract class AbsTestMode<V extends AbsModeView> {
     protected abstract void createPrepareKeyEvents(Map<String, IKeyEvent> events);
 
     protected abstract void createTestKeyEvents(Map<String, IKeyEvent> events);
-
-    public abstract void analysisResponce(JSONObject requestString);
 
     protected void addContest(AbsContest contest) {
         if (contest == null) {
@@ -317,6 +322,7 @@ public abstract class AbsTestMode<V extends AbsModeView> {
     }
 
     public abstract void modeInit();
+
     public abstract void modeEndInit();
 
 }

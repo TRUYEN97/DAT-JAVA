@@ -100,22 +100,6 @@ public abstract class AbsSaHinhMode extends AbsTestMode<SaHinhView> {
     }
 
     @Override
-    public void analysisResponce(JSONObject requestString) {
-//        switch (requestString) {
-//
-//            case "update" -> {
-//                updateLog();
-//                upTestDataToServer();
-//            }
-//            case "huyThi" -> {
-//                if (getModeHandle() != null) {
-//                    getModeHandle().stop();
-//                }
-//            }
-//        }
-    }
-
-    @Override
     public void modeInit() {
         this.yardModelHandle.start();
     }

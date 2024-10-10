@@ -8,7 +8,7 @@ package com.qt.controller.api;
  *
  * @author Admin
  */
-public interface IPingAPIReceive<T> {
+public interface ICommandAPIReceive<T> {
 
     void receive(T t);
 }

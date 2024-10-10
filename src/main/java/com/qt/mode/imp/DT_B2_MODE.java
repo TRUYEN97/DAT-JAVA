@@ -160,22 +160,6 @@ public class DT_B2_MODE extends AbsTestMode<DuongTruongView> {
     }
 
     @Override
-    public void analysisResponce(JSONObject requestString) {
-//        switch (requestString) {
-//
-//            case "update" -> {
-//                updateLog();
-//                upTestDataToServer();
-//            }
-//            case "huyThi" -> {
-//                if (getModeHandle() != null) {
-//                    getModeHandle().stop();
-//                }
-//            }
-//        }
-    }
-
-    @Override
     public void modeInit() {
     }
 

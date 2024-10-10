@@ -32,7 +32,7 @@ public class CarConfig {
         Setting setting = Setting.getInstance();
         this.jsono = new JSONObject();
         this.fileService = new FileService();
-        this.path = Setting.getInstance().getConfigPath();
+        this.path = setting.getConfigPath();
         try {
             File f = new File(this.path );
             if (!f.exists()) {

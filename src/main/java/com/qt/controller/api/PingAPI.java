@@ -16,7 +16,7 @@ import com.qt.common.Util;
 public class PingAPI {
 
     private final ApiService apiService;
-    private IPingAPIReceive<Response> pingAPIReceive;
+    private ICommandAPIReceive<Response> pingAPIReceive;
     private Thread thread;
     private boolean stop;
 
@@ -25,7 +25,7 @@ public class PingAPI {
         this.stop = false;
     }
 
-    public void setPingAPIReceive(IPingAPIReceive<Response> pingAPIReceive) {
+    public void setPingAPIReceive(ICommandAPIReceive<Response> pingAPIReceive) {
         this.pingAPIReceive = pingAPIReceive;
     }
 
@@ -46,7 +46,7 @@ public class PingAPI {
             try {
                 this.stop = false;
                 Response response;
-                IPingAPIReceive<Response> aPIReceive;
+                ICommandAPIReceive<Response> aPIReceive;
                 CarConfig carConfig = CarConfig.getInstance();
                 while (!stop) {
                     aPIReceive = this.pingAPIReceive;

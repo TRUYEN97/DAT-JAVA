@@ -50,10 +50,10 @@ public class FileTestService {
         }
         return ins;
     }
-    
+
     public boolean saveImg(String id, BufferedImage image) {
         try {
-            return saveImg(image, createLogPathString(id, IMAGEPNG));
+            return saveImg(image, createLogPathString(this.carConfig.getExamId(), id, IMAGEPNG));
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
@@ -63,7 +63,7 @@ public class FileTestService {
 
     public boolean saveLogJson(String id, String jsonString) {
         try {
-            String filePathString = createLogPathString(id, JSON_LOGJSON);
+            String filePathString = createLogPathString(this.carConfig.getExamId(), id, JSON_LOGJSON);
             return this.fileService.writeFile(filePathString, jsonString,
                     false);
         } catch (Exception e) {
@@ -72,7 +72,7 @@ public class FileTestService {
             return false;
         }
     }
-    
+
     public void saveBackupLog(String id, String jsonString, BufferedImage image) {
         try {
             this.fileService.writeFile(createBackupLogPathString(id, JSON_LOGJSON),
@@ -85,8 +85,8 @@ public class FileTestService {
         }
     }
 
-    public File getFileJsonPath(String id) {
-        String pathString = createLogPathString(id, JSON_LOGJSON);
+    public File getFileJsonPath(String examID, String id) {
+        String pathString = createLogPathString(examID, id, JSON_LOGJSON);
         if (pathString == null || pathString.isBlank()) {
             return null;
         }
@@ -98,7 +98,7 @@ public class FileTestService {
     }
 
     public File getFileImagePath(String id) {
-        String pathString = createLogPathString(id, IMAGEPNG);
+        String pathString = createLogPathString(this.carConfig.getExamId(), id, IMAGEPNG);
         if (pathString == null || pathString.isBlank()) {
             return null;
         }
@@ -109,10 +109,10 @@ public class FileTestService {
         return file;
     }
 
-    private String createLogPathString(String id, String fileName) {
-        return createPathString(logDir, id, fileName);
+    private String createLogPathString(String examId, String id, String fileName) {
+        return createPathString(logDir, examId, id, fileName);
     }
-    
+
     private String createBackupLogPathString(String id, String fileName) {
         String filePathString = String.format("%s/%s/%s",
                 backupDir,
@@ -121,10 +121,10 @@ public class FileTestService {
         return filePathString;
     }
 
-    public String createPathString(File root, String id, String fileName) {
+    public String createPathString(File root, String examId, String id, String fileName) {
         String filePathString = String.format("%s/logTest/ExamId-%s/%s/%s",
                 root,
-                this.carConfig.getExamId(),
+                examId,
                 id,
                 fileName);
         return filePathString;
@@ -142,6 +142,10 @@ public class FileTestService {
     }
 
     public String getDataOf(String id) {
-        return this.fileService.readFile(getFileJsonPath(id));
+        return getDataOf(this.carConfig.getExamId(), id);
+    }
+
+    public String getDataOf(String examId, String id) {
+        return this.fileService.readFile(getFileJsonPath(examId, id));
     }
 }
