@@ -125,6 +125,10 @@ public class CameraRunner implements IStarter {
         }
         this.camera.imageLabel = imgLabel.getImgLabel();
     }
+
+    public void resetImage() {
+        this.camera.image = null;
+    }
     
     class Camera implements Runnable {
         

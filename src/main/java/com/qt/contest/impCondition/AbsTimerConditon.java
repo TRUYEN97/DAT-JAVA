@@ -21,11 +21,11 @@ public abstract class AbsTimerConditon extends AbsCondition {
         this.timer = new Timer(spec * 1000, (e) -> {
             if (signal()) {
                 timeout = true;
-                if (justOneTime) {
-                    stop();
-                }
                 if (important) {
                     hasFail = true;
+                }
+                if (justOneTime) {
+                    stop();
                 }
                 action();
             } else {

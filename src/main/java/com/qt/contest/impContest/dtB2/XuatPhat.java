@@ -24,6 +24,7 @@ public class XuatPhat extends AbsContest {
     public XuatPhat(String name) {
         super(name, name, false, false, true, 2000);
         this.timeOut30s = new CheckTimeOut30s();
+        this.conditionIntoHandle.addConditon(timeOut30s);
     }
 
     private boolean firstCheck = true;

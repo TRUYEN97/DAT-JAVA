@@ -28,7 +28,6 @@ import com.qt.pretreatment.KeyEventManagement;
 import com.qt.pretreatment.KeyEventsPackage;
 import com.qt.view.frame.ShowErrorcode;
 import com.qt.view.modeView.AbsModeView;
-import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -93,13 +92,12 @@ public abstract class AbsTestMode<V extends AbsModeView> {
         this.prepareEventsPackage = initPrepareKeyEventPackage();
         this.testEventsPackage = initTestKeyEventPackage(prepareEventsPackage);
         this.fileTestService = FileTestService.getInstance();
-        this.apiService = ApiService.getInstance();
+        this.apiService = new ApiService();
         this.conditionHandle = new CheckConditionHandle();
         this.printer = new Printer();
         this.threadPool = Executors.newSingleThreadExecutor();
         this.commandApiReceive = new AnalysisApiCommand();
     }
-    
 
     private String creareFullName(List<String> ranks) {
         StringBuilder builder = new StringBuilder(name);
@@ -144,6 +142,7 @@ public abstract class AbsTestMode<V extends AbsModeView> {
         try {
             this.cancel = false;
             this.processlHandle.setTesting(false);
+            CameraRunner.getInstance().resetImage();
             KeyEventManagement.getInstance().addKeyEventBackAge(prepareEventsPackage);
             this.errorcodeHandle.clear();
             this.processlHandle.resetModel();
@@ -180,9 +179,9 @@ public abstract class AbsTestMode<V extends AbsModeView> {
         try {
             this.processlHandle.update();
             updateLog();
-            this.threadPool.execute(() -> {
+//            this.threadPool.execute(() -> {
                 upTestDataToServer();
-            });
+//            });
             contestDone();
         } catch (Exception e) {
             e.printStackTrace();
@@ -205,12 +204,8 @@ public abstract class AbsTestMode<V extends AbsModeView> {
         if (id == null || id.equals("0")) {
             return ApiService.PASS;
         }
-        File imgFile = this.fileTestService.getFileImagePath(id);
-        if (imgFile == null) {
-            ErrorLog.addError(this, "Không tìm thấy file png của id: " + id);
-        }
-        return this.apiService.sendData(processlHandle.toProcessModelJson(),
-                imgFile);
+        return this.apiService.sendData(CameraRunner.getInstance().getImage(), 
+                processlHandle.toProcessModelJson());
     }
 
     public void end() {
@@ -283,12 +278,11 @@ public abstract class AbsTestMode<V extends AbsModeView> {
             return true;
         }
         String id = this.processModel.getId();
-        if (id != null && !id.isBlank() && !id.equals("0")) {
-            if (this.processlHandle.getProcessModel().getScore() < getScoreSpec()) {
-                return true;
-            }
+        int score = getScoreSpec();
+        if (id != null && id.equals("0")) {
+            score = 20;
         }
-        return false;
+        return this.processlHandle.getProcessModel().getScore() < score;
     }
 
     public void cancelTest() {

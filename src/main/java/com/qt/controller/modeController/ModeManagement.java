@@ -33,11 +33,12 @@ public class ModeManagement {
         return modes;
     }
 
-    public boolean updateMode(String modeName, String rank) {
+    public boolean isMode(String modeName, String rank) {
         AbsTestMode currMode = this.modeHandle.getTestMode();
-        if (currMode != null && currMode.isMode(modeName, rank)) {
-            return true;
-        }
+        return currMode != null && currMode.isMode(modeName, rank);
+    }
+
+    public boolean updateMode(String modeName, String rank) {
         for (AbsTestMode mode : modes) {
             if (mode != null && mode.isMode(modeName, rank)) {
                 return updateMode(mode);

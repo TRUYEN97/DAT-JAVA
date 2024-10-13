@@ -20,7 +20,7 @@ public class ChangeCarId extends AbsElementSetting implements IElementSetting {
     private final ProcessModel processModel;
 
     public ChangeCarId() {
-        this.apiService = ApiService.getInstance();
+        this.apiService = new ApiService();
         this.processModel = ProcessModelHandle.getInstance().getProcessModel();
     }
 

@@ -73,6 +73,12 @@ public class DT_B_MODE extends AbsTestMode<DuongTruongView> {
         return runnable && (!contests.isEmpty() && contests.peek()
                 .getName().equals(ConstKey.CONTEST_NAME.XUAT_PHAT));
     }
+    
+    @Override
+    public void end() {
+        super.end();
+        this.soundPlayer.nextId();
+    }
 
     @Override
     protected void contestDone() {
@@ -91,7 +97,7 @@ public class DT_B_MODE extends AbsTestMode<DuongTruongView> {
     @Override
     protected void createPrepareKeyEvents(Map<String, IKeyEvent> maps) {
         maps.put(ConstKey.KEY_BOARD.SBD, (key) -> {
-            if (!runnable) {
+            if (!hasXp) {
                 ChangeUserId changeUserId = new ChangeUserId();
                 changeUserId.run();
             }

@@ -89,7 +89,7 @@ public class DT_B1_AUTO_MODE extends AbsTestMode<DuongTruongView> {
     @Override
     protected void createPrepareKeyEvents(Map<String, IKeyEvent> maps) {
         maps.put(ConstKey.KEY_BOARD.SBD, (key) -> {
-            if (!runnable) {
+            if (!hasXp) {
                 ChangeUserId changeUserId = new ChangeUserId();
                 changeUserId.run();
             }
@@ -160,6 +160,14 @@ public class DT_B1_AUTO_MODE extends AbsTestMode<DuongTruongView> {
             hasKt = true;
         });
     }
+
+    @Override
+    public void end() {
+        super.end();
+        this.soundPlayer.nextId();
+    }
+    
+    
 
     @Override
     public void modeInit() {

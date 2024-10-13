@@ -42,7 +42,7 @@ public class AnalysisApiCommand implements ICommandAPIReceive<Response> {
         this.modelHandle = ProcessModelHandle.getInstance();
         this.processModel = this.modelHandle.getProcessModel();
         this.errorcodeHandle = ErrorcodeHandle.getInstance();
-        this.apiService = ApiService.getInstance();
+        this.apiService = new ApiService();
     }
 
     @Override

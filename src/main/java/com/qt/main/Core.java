@@ -54,7 +54,6 @@ public class Core {
 
     private Core() {
         this.viewMain = ViewMain.getInstance();
-        ApiService.getInstance().setRootFrame(this.viewMain);
         this.cameraRunner = CameraRunner.getInstance();
         this.cameraRunner.setCamera(0);
         this.modeManagement = new ModeManagement(viewMain);

@@ -25,7 +25,7 @@ public class ChangeUserId extends AbsElementSetting {
     private final UserInfoFrame infoFrame;
     
     public ChangeUserId() {
-        this.apiService = ApiService.getInstance();
+        this.apiService = new ApiService();
         this.processModel = ProcessModelHandle.getInstance().getProcessModel();
         this.infoFrame = new UserInfoFrame();
     }
@@ -55,9 +55,9 @@ public class ChangeUserId extends AbsElementSetting {
                 if (ProcessModelHandle.getInstance().isTesting()) {
                     this.soundPlayer.canNotChange();
                 } else if (modeName != null && rank != null
-                        && modeManagement.updateMode(modeName, rank)) {
+                        && modeManagement.isMode(modeName, rank)) {
                     ProcessModelHandle.getInstance().setUserModel(userModel);
-                    this.soundPlayer.welcomeId(id);
+//                    this.soundPlayer.welcomeId(id);
                     this.soundPlayer.pleasePrepare();
                 } else {
                     ProcessModelHandle.getInstance().setUserModel(new UserModel());

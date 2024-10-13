@@ -18,7 +18,7 @@ public class TestStatusLogger {
 
     private TestStatusLogger() {
         this.carConfig = CarConfig.getInstance();
-        this.apiService = ApiService.getInstance();
+        this.apiService = new ApiService();
     }
 
     public static TestStatusLogger getInstance() {

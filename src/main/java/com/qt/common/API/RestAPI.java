@@ -53,6 +53,10 @@ public class RestAPI {
         this.logger.setDailyLog(true);
         this.logger.setSaveMemory(true);
     }
+
+    public MyLogger getLogger() {
+        return logger;
+    }
     
     public void setTextComponent(ShowMessagePanel messagePanel) {
         this.showMessagePanel = messagePanel;

@@ -42,7 +42,7 @@ public class ErrorcodeHandle {
         this.soundPlayer = SoundPlayer.getInstance();
         this.mapErrorcodes = new HashMap<>();
         this.ewcnms = new ArrayList<>();
-        this.apiService = ApiService.getInstance();
+        this.apiService = new ApiService();
         this.threadPool = Executors.newSingleThreadExecutor();
     }
 
@@ -88,13 +88,15 @@ public class ErrorcodeHandle {
             this.ewcnms.add(new ErrorcodeWithContestNameModel(errorcode, ""));
             this.soundPlayer.sayErrorCode(errorcode.getErrKey());
             this.processModel.subtract(errorcode.getErrPoint());
-            this.threadPool.execute(() -> {
+            if (jsono != null) {
+//                this.threadPool.execute(() -> {
                 JSONObject testData = MyObjectMapper.convertValue(this.processModel, JSONObject.class);
                 if (jsono != null) {
                     testData.putAll(jsono);
                 }
-                this.apiService.sendData(CameraRunner.getInstance().getImage(), testData);
-            });
+                this.apiService.sendData(testData, null);
+//                });
+            }
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
@@ -114,9 +116,9 @@ public class ErrorcodeHandle {
             this.soundPlayer.sayErrorCode(errorcode.getErrKey());
             dataModel.addErrorCode(errorcode);
             this.processModel.subtract(errorcode.getErrPoint());
-            this.threadPool.execute(() -> {
-                this.apiService.sendData(this.processModel, null);
-            });
+//            this.threadPool.execute(() -> {
+//                this.apiService.sendData(this.processModel, null);
+//            });
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);

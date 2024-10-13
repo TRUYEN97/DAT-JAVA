@@ -21,7 +21,7 @@ public class PingAPI {
     private boolean stop;
 
     public PingAPI() {
-        this.apiService = ApiService.getInstance();
+        this.apiService = new ApiService();
         this.stop = false;
     }
 

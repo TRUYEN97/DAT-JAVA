@@ -40,12 +40,12 @@ public class SoundPlayer {
     }
 
     public void sayResultTest(int score, boolean isPass) {
-        new Thread(() -> {
-//            if (isPass) {
-//                this.play(new SoundModel("congratulations.wav"));
-//            } else {
-//                this.play(new SoundModel("congratulations1.wav"));
-//            }
+//        new Thread(() -> {
+            if (isPass) {
+                this.play(new SoundModel("congratulations.wav"));
+            } else {
+                this.play(new SoundModel("congratulations1.wav"));
+            }
 //            this.play(new SoundModel("theScore.wav"));
 //            sayNumber(score);
 //            this.play(new SoundModel("diem.wav", 8000));
@@ -54,7 +54,7 @@ public class SoundPlayer {
             } else {
                 this.play(new SoundModel("failure.wav"));
             }
-        }).start();
+//        }).start();
     }
 
     public void contestName(String name) {
@@ -248,6 +248,10 @@ public class SoundPlayer {
 
     public void alarm() {
         play(new SoundModel("warning/warning.wav"));
+    }
+
+    public void nextId() {
+        play(new SoundModel("user/nextId.wav"));
     }
 
     class SoundRunner implements Runnable {

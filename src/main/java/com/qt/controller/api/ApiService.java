@@ -39,28 +39,28 @@ public class ApiService {
     public static final int DISCONNECT = -1;
     public static final String ID = "id";
     public static final String EXAM_ID = "examId";
-    private static volatile ApiService insatnce;
+//    private static volatile ApiService insatnce;
     private final Setting setting;
     private final RestAPI restAPI;
 
-    private ApiService() {
+    public ApiService() {
         this.setting = Setting.getInstance();
         this.restAPI = new RestAPI();
         this.restAPI.setTextComponent(ShowMessagePanel.getInstance());
     }
 
-    public static ApiService getInstance() {
-        ApiService ins = insatnce;
-        if (ins == null) {
-            synchronized (ApiService.class) {
-                ins = insatnce;
-                if (ins == null) {
-                    insatnce = ins = new ApiService();
-                }
-            }
-        }
-        return ins;
-    }
+//    public static ApiService getInstance() {
+//        ApiService ins = insatnce;
+//        if (ins == null) {
+//            synchronized (ApiService.class) {
+//                ins = insatnce;
+//                if (ins == null) {
+//                    insatnce = ins = new ApiService();
+//                }
+//            }
+//        }
+//        return ins;
+//    }
 
     public boolean checkCarId(String id) {
         try {
@@ -133,6 +133,7 @@ public class ApiService {
             imgF.setFile(Util.convertBufferImageToBytes(image));
             imgF.setPartName("image");
             imgF.setName("image.png");
+            restAPI.getLogger().addLog("jsonData", jSONObject);
             Response response = restAPI.uploadFile(url, null, jsonF, imgF);
             return response != null && response.isSuccess() ? PASS : FAIL;
         } catch (Exception e) {
@@ -165,6 +166,7 @@ public class ApiService {
             imgF.setFile(imgFile);
             imgF.setPartName("image");
             imgF.setName("image.png");
+            restAPI.getLogger().addLog("jsonData", jSONObject);
             Response response = restAPI.uploadFile(url, null, jsonF, imgF);
             if (response == null) {
                 return FAIL;
@@ -271,7 +273,7 @@ public class ApiService {
 
     public Response checkCommad(String carId) {
         try {
-            if (pingToServer() || carId == null || carId.isBlank()) {
+            if (!pingToServer() || carId == null || carId.isBlank()) {
                 return null;
             }
             String url = this.setting.getCheckCommandUrl();

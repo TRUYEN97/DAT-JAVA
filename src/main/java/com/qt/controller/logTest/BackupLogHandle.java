@@ -19,7 +19,7 @@ public class BackupLogHandle implements Runnable {
     private final ApiService apiService;
 
     public BackupLogHandle() {
-        this.apiService = ApiService.getInstance();
+        this.apiService = new ApiService();
     }
 
     public void setBackupDir(File backupDir) {
