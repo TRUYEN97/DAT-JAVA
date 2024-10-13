@@ -70,7 +70,7 @@ public class DoXeNgang extends ContestHasMutiLine {
             hasIntoPaking = false;
             success = false;
             this.oldDistance = this.carModel.getDistance();
-            if (this.checkIntoContest(this.dataTestTransfer.getData(ConstKey.DATA_TRANSFER.OLD_DISTANCE, -1))) {
+            if (this.checkIntoContest(this.oldDistance)) {
                 this.distanceOut = this.distanceIntoContest.getContestConfig().getDistanceOut();
             }else{
                 stop();

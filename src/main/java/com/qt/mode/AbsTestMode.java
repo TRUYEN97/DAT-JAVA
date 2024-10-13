@@ -149,8 +149,8 @@ public abstract class AbsTestMode<V extends AbsModeView> {
             this.processlHandle.resetModel();
             MCUSerialHandler.getInstance().sendReset();
             MCUSerialHandler.getInstance().sendLedOff();
-            while (!loopCheck() && !this.cancel) {
-                Util.delay(200);
+            while (!loopCheckCanTest() && !this.cancel) {
+                Util.delay(1000);
             }
             KeyEventManagement.getInstance().remove(prepareEventsPackage);
             if (!cancel) {
@@ -294,15 +294,6 @@ public abstract class AbsTestMode<V extends AbsModeView> {
     public void cancelTest() {
         this.cancel = true;
         this.modeEndInit();
-    }
-
-    private boolean loopCheck() {
-        String id = this.processModel.getId();
-        if (id == null || id.isBlank()) {
-            Util.delay(3000);
-            return false;
-        }
-        return loopCheckCanTest();
     }
 
     public boolean isMode(String modeName, String rank) {

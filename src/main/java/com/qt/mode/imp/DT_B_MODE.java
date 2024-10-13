@@ -4,7 +4,6 @@
  */
 package com.qt.mode.imp;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.ConstKey;
 import com.qt.common.Util;
 import com.qt.contest.impCondition.ContainContestChecker;
@@ -16,6 +15,7 @@ import com.qt.contest.impContest.dtB2.KetThuc;
 import com.qt.contest.impContest.dtB2.TangToc;
 import com.qt.contest.impContest.dtB2.XuatPhat;
 import com.qt.controller.api.ApiService;
+import com.qt.controller.settingElement.imp.ChangeUserId;
 import com.qt.mode.AbsTestMode;
 import com.qt.pretreatment.IKeyEvent;
 import com.qt.view.modeView.DuongTruongView;
@@ -49,6 +49,10 @@ public class DT_B_MODE extends AbsTestMode<DuongTruongView> {
     @Override
     protected boolean loopCheckCanTest() {
         String id = this.processModel.getId();
+        if (id == null || id.isBlank()) {
+            Util.delay(3000);
+            return false;
+        }
         if (!runnable || !oldId.equals(id)) {
             oldId = id;
             switch (this.apiService.checkRunnable(id)) {
@@ -86,6 +90,12 @@ public class DT_B_MODE extends AbsTestMode<DuongTruongView> {
 
     @Override
     protected void createPrepareKeyEvents(Map<String, IKeyEvent> maps) {
+        maps.put(ConstKey.KEY_BOARD.SBD, (key) -> {
+            if (!runnable) {
+                ChangeUserId changeUserId = new ChangeUserId();
+                changeUserId.run();
+            }
+        });
         maps.put(ConstKey.KEY_BOARD.CONTEST.XP, (key) -> {
             if (hasXp || !runnable || this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
                 return;

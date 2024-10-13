@@ -49,11 +49,10 @@ public class DungXe extends AbsContest {
             } else {
                 soundPlayer.successSound();
             }
-        } else if (d > distanceOut) {
+        } else if (d > distanceLine && (this.carModel.isT1() || this.carModel.isT2() || this.carModel.isT3())) {
             if (!hasStop) {
                 addErrorCode(ConstKey.ERR.DONT_STOP_AS_REQUIRED);
             }
-            this.dataTestTransfer.put(ConstKey.CAR_CONFIG.MCU_CONFIG, this.carModel.getDistance());
             return true;
         }
         return false;
@@ -61,7 +60,7 @@ public class DungXe extends AbsContest {
 
     @Override
     protected boolean isIntoContest() {
-        if (this.carModel.isT1() && this.carModel.getStatus() == ConstKey.CAR_ST.FORWARD) {
+        if (this.carModel.isT1()) {
             hasStop = false;
             oldDistance = this.carModel.getDistance();
             return true;

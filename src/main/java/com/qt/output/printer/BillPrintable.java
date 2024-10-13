@@ -42,7 +42,7 @@ public class BillPrintable implements Printable {
         g2d.translate((int) pageFormat.getImageableX(), (int) pageFormat.getImageableY());
         try {
             y = 0;
-            int yShift = 8;
+            int yShift = 10;
             String centerName = CarConfig.getInstance().getCenterName();
             g2d.setFont(new Font("Monospaced", Font.PLAIN, 10));
 //            g2d.drawImage(icon.getImage(), 40, 0, 40, 40, null);

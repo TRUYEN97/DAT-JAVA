@@ -4,7 +4,6 @@
  */
 package com.qt.mode;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.ConstKey;
 import com.qt.common.Util;
 import com.qt.common.YardConfig;
@@ -13,6 +12,7 @@ import com.qt.contest.impCondition.OnOffImp.CheckCM;
 import com.qt.contest.impCondition.OnOffImp.CheckRPM;
 import com.qt.contest.impCondition.timerCondition.TatalTimeOut;
 import com.qt.controller.api.ApiService;
+import com.qt.input.serial.MCUSerialHandler;
 import com.qt.input.socket.YardModelHandle;
 import com.qt.model.input.yard.YardRankModel;
 import com.qt.model.yardConfigMode.YardRankConfig;
@@ -69,26 +69,11 @@ public abstract class AbsSaHinhMode extends AbsTestMode<SaHinhView> {
 
     @Override
     protected boolean loopCheckCanTest() {
-        String id = this.processModel.getId();
-        if (!runnable || !oldId.equals(id)) {
-            oldId = id;
-            switch (this.apiService.checkRunnable(id)) {
-                case ApiService.START -> {
-                    creadContestList();
-                    runnable = true;
-                }
-                case ApiService.ID_INVALID -> {
-                    soundPlayer.userIdHasTest();
-                    runnable = false;
-                    Util.delay(10000);
-                }
-                default -> {
-                    runnable = false;
-                    Util.delay(1000);
-                }
-            }
+        if (this.carModel.isNt() && this.carModel.getStatus() == ConstKey.CAR_ST.STOP) {
+            creadContestList();
+            return true;
         }
-        return runnable && (!contests.isEmpty());
+        return false;
     }
 
     protected abstract void creadContestList();
@@ -96,7 +81,6 @@ public abstract class AbsSaHinhMode extends AbsTestMode<SaHinhView> {
     @Override
     protected void endTest() {
         runnable = false;
-        System.out.println(processlHandle.toProcessModelJson());
     }
 
     @Override
@@ -108,4 +92,10 @@ public abstract class AbsSaHinhMode extends AbsTestMode<SaHinhView> {
     public void modeEndInit() {
         this.yardModelHandle.stop();
     }
+
+    @Override
+    protected void contestDone() {
+        MCUSerialHandler.getInstance().sendReset();
+    }
+
 }

@@ -146,16 +146,15 @@ public class SoundPlayer {
         if (num > 0) {
             if (ch < 10) {
                 arr[1] = new SoundModel("number/linh.wav", 15000);
-            } else {
-                arr[2] = new SoundModel(String.format("number/%d.wav", num), 15000);
-                if (num == 5) {
-                    arr[2] = new SoundModel(String.format("number/lam.wav"), 15000);
-                } else if (ch >= 20) {
-                    if (num == 4) {
-                        arr[2] = new SoundModel("number/tu.wav", 15000);
-                    } else if (num == 1) {
-                        arr[2] = new SoundModel("number/mot.wav", 15000);
-                    }
+            }
+            arr[2] = new SoundModel(String.format("number/%d.wav", num), 15000);
+            if (num == 5) {
+                arr[2] = new SoundModel(String.format("number/lam.wav"), 15000);
+            } else if (ch >= 20) {
+                if (num == 4) {
+                    arr[2] = new SoundModel("number/tu.wav", 15000);
+                } else if (num == 1) {
+                    arr[2] = new SoundModel("number/mot.wav", 15000);
                 }
             }
         }

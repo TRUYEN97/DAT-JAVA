@@ -138,7 +138,7 @@ public class ChooseModeFrame extends AbsKeylistenerFrame {
         pnHome.setLayout(pnHomeLayout);
         pnHomeLayout.setHorizontalGroup(
             pnHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 949, Short.MAX_VALUE)
+            .addGap(0, 946, Short.MAX_VALUE)
         );
         pnHomeLayout.setVerticalGroup(
             pnHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

@@ -87,7 +87,8 @@ public class NgaTu extends AbsContest {
     private boolean checkEndTest() {
         double d = getDetaDistance(oldDistance);
         if (times == 0 || times == 3) {
-            if (this.carModel.isT1() && this.carModel.getStatus() == ConstKey.CAR_ST.FORWARD) {
+            if (this.carModel.isT1() || this.carModel.isT2() || this.carModel.isT3()
+                    && this.carModel.getStatus() == ConstKey.CAR_ST.FORWARD) {
                 return true;
             }
             if (d >= distanceOut) {
@@ -95,7 +96,7 @@ public class NgaTu extends AbsContest {
                 return true;
             }
         } else {
-            if (this.carModel.isT1()) {
+            if (this.carModel.isT1() || this.carModel.isT2() || this.carModel.isT3()) {
                 addErrorCode(ConstKey.ERR.WRONG_WAY);
                 return true;
             }
@@ -138,7 +139,6 @@ public class NgaTu extends AbsContest {
             this.ranRedLight = false;
             this.lightStatus = -1;
             this.oldDistance = this.carModel.getDistance();
-            this.dataTestTransfer.put(ConstKey.DATA_TRANSFER.OLD_DISTANCE, this.oldDistance);
             return true;
         }
         return false;

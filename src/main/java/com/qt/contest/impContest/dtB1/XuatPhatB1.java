@@ -24,7 +24,6 @@ public class XuatPhatB1 extends AbsContest {
     public XuatPhatB1(String name) {
         super(name, name, false, false, true, 2000);
         this.timeOut30s = new CheckTimeOut30s();
-        this.conditionBeginHandle.addConditon(this.timeOut30s);
     }
 
     private boolean firstCheck = true;
@@ -38,7 +37,7 @@ public class XuatPhatB1 extends AbsContest {
 
     @Override
     public boolean loop() {
-        if (getDistance() > 0.1 && this.firstCheck) {
+        if (getDistance() > 0.5 && this.firstCheck) {
             this.timeOut30s.setPass();
             this.timeOut30s.stop();
             firstCheck = false;
@@ -63,6 +62,7 @@ public class XuatPhatB1 extends AbsContest {
                 addErrorCode(ConstKey.ERR.FAILED_SHIFTUP_GEAR_IN_15M);
             }
             MCUSerialHandler.getInstance().sendLedOff();
+            this.timeOut30s.stop();
             return true;
         }
         return false;

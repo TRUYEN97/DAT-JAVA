@@ -44,7 +44,7 @@ public class DoXeDoc extends ContestHasMutiLine {
             if (!hasIntoPaking && this.carModel.isT3()) {
                 hasIntoPaking = true;
             }
-            if (!success && this.carModel.isT1() && this.carModel.isT2()
+            if (!success && this.carModel.isT2()
                     && this.carModel.isT3()) {
                 success = true;
                 soundPlayer.successSound();
@@ -72,7 +72,7 @@ public class DoXeDoc extends ContestHasMutiLine {
             hasIntoPaking = false;
             success = false;
             this.oldDistance = this.carModel.getDistance();
-            if (this.checkIntoContest(this.dataTestTransfer.getData(ConstKey.DATA_TRANSFER.OLD_DISTANCE, -1))) {
+            if (this.checkIntoContest(this.oldDistance)) {
                 this.distanceOut = this.distanceIntoContest.getContestConfig().getDistanceOut();
             } else {
                 stop();

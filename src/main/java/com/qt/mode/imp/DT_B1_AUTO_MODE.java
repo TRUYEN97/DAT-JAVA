@@ -14,6 +14,7 @@ import com.qt.contest.impContest.dtB1.KetThucB1;
 import com.qt.contest.impContest.dtB1.TangTocB1;
 import com.qt.contest.impContest.dtB1.XuatPhatB1;
 import com.qt.controller.api.ApiService;
+import com.qt.controller.settingElement.imp.ChangeUserId;
 import com.qt.mode.AbsTestMode;
 import com.qt.pretreatment.IKeyEvent;
 import com.qt.view.modeView.DuongTruongView;
@@ -46,6 +47,10 @@ public class DT_B1_AUTO_MODE extends AbsTestMode<DuongTruongView> {
     @Override
     protected boolean loopCheckCanTest() {
         String id = this.processModel.getId();
+        if (id == null || id.isBlank()) {
+            Util.delay(3000);
+            return false;
+        }
         if (!runnable || !oldId.equals(id)) {
             oldId = id;
             switch (this.apiService.checkRunnable(id)) {
@@ -83,6 +88,12 @@ public class DT_B1_AUTO_MODE extends AbsTestMode<DuongTruongView> {
 
     @Override
     protected void createPrepareKeyEvents(Map<String, IKeyEvent> maps) {
+        maps.put(ConstKey.KEY_BOARD.SBD, (key) -> {
+            if (!runnable) {
+                ChangeUserId changeUserId = new ChangeUserId();
+                changeUserId.run();
+            }
+        });
         maps.put(ConstKey.KEY_BOARD.CONTEST.XP, (key) -> {
             if (hasXp || !runnable || this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
                 return;

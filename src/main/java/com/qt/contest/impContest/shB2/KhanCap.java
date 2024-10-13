@@ -36,7 +36,7 @@ public class KhanCap extends AbsContest {
 
     @Override
     protected boolean loop() {
-        if (getDetaTime() < 5000) {
+        if (getDetaTime() < 10000) {
             this.uSerialHandler.sendLedRedOn();
             this.soundPlayer.alarm();
             this.uSerialHandler.sendLedOff();
@@ -48,11 +48,11 @@ public class KhanCap extends AbsContest {
                     this.hasStop = true;
                 }
             }
-            if (getDetaTime() > 3000 && !hasStop) {
+            if (getDetaTime() > 5000 && !hasStop) {
                 addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
                 return true;
             }
-        } else if (this.hasStop && getDetaTime() < 3000) {
+        } else if (this.hasStop) {
             this.uSerialHandler.sendLedOff();
             if (!this.firstDone) {
                 Util.delay(200);
@@ -81,6 +81,7 @@ public class KhanCap extends AbsContest {
         if (getDetaDistance(oldDistance) >= distanceBegin) {
             hasStop = false;
             firstDone = false;
+            this.soundPlayer.alarm();
             oldTime = System.currentTimeMillis();
             return true;
         }

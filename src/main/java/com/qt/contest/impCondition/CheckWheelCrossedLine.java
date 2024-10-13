@@ -25,6 +25,19 @@ public class CheckWheelCrossedLine extends AbsCondition {
             setErrorcode(ConstKey.ERR.WHEEL_CROSSED_LINE);
         });
     }
+
+    @Override
+    public void start() {
+        this.timer.start();
+        super.start(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+    
+
+    @Override
+    public void stop() {
+        this.timer.stop();
+        super.stop(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
     
     @Override
     protected boolean checkCondition() {

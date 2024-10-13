@@ -56,14 +56,17 @@ public class VetBanhXe extends ContestHasMutiLine {
         if (this.carModel.isT3()) {
             into1 = true;
         }
-        if (!checkPathLineDone && getDetaDistance(this.oldDistance) > distanceOutPath) {
+        if (!checkPathLineDone
+                && getDetaDistance(this.oldDistance) >= distanceOutPath
+                && this.carModel.isT1()) {
             if (!into || !into1) {
                 addErrorCode(ConstKey.ERR.WHEEL_OUT_OF_PATH);
             }
             crossedPath.stop();
             checkPathLineDone = true;
         }
-        return getDetaDistance(this.oldDistance) > distanceOut;
+        return getDetaDistance(this.oldDistance) > distanceOut 
+                && (this.carModel.isT1() || this.carModel.isT2() || this.carModel.isT3());
     }
 
     @Override
@@ -73,7 +76,7 @@ public class VetBanhXe extends ContestHasMutiLine {
             into1 = false;
             checkPathLineDone = false;
             this.oldDistance = this.carModel.getDistance();
-            if (checkIntoContest(this.dataTestTransfer.getData(ConstKey.DATA_TRANSFER.OLD_DISTANCE, 0))) {
+            if (checkIntoContest(this.oldDistance)) {
                 this.distanceOut = this.distanceIntoContest.getContestConfig().getDistanceOut();
                 this.distanceOutPath = this.distanceIntoContest.getContestConfig().getDistanceLine();
             }

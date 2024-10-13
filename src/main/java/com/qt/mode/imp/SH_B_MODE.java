@@ -35,33 +35,29 @@ public class SH_B_MODE extends AbsSaHinhMode {
     @Override
     protected void creadContestList() {
         contests.clear();
-        int rd = new Random().nextInt(4);
-        System.out.println(rd);
+        int rd = new Random().nextInt(3);
         contests.add(new XuatPhat(speedLimit));
         contests.add(new DungXe(yardRankConfig.getDungXeChoNg(), speedLimit));
         contests.add(new DungXeNgangDoc(yardRankConfig.getDungXeNgangDoc(), speedLimit));
-        if (rd == 0) {
-            contests.add(new KhanCap(3));
-        }
         contests.add(new VetBanhXe(yardRankModel, yardRankConfig.getVetBanhXe(), speedLimit));
-        if (rd == 1) {
-            contests.add(new KhanCap(2));
-        }
         contests.add(new NgaTu(1, yardModelHandle.getYardModel(),
                 yardRankConfig.getNgaTu1(), speedLimit));
         contests.add(new DuongS(yardRankModel, yardRankConfig.getDuongS(), speedLimit));
         contests.add(new NgaTu(2, yardModelHandle.getYardModel(),
                 yardRankConfig.getNgaTu2(), speedLimit));
         contests.add(new DoXeDoc(yardRankModel, yardRankConfig.getDoXeDoc(), speedLimit));
+        if (rd == 0) {
+            contests.add(new KhanCap(20));
+        }
         contests.add(new NgaTu(3, yardModelHandle.getYardModel(),
                 yardRankConfig.getNgaTu3(), speedLimit));
-        if (rd == 2) {
-            contests.add(new KhanCap(6));
+        if (rd == 1) {
+            contests.add(new KhanCap(30));
         }
         contests.add(new DuongTau(yardRankConfig.getDuongTau(), speedLimit));
         contests.add(new TangTocDuongThang(1, speedLimit));
-        if (rd == 3) {
-            contests.add(new KhanCap(6));
+        if (rd == 2) {
+            contests.add(new KhanCap(20));
         }
         contests.add(new DoXeNgang(yardRankModel, yardRankConfig.getDoXeNgang(), speedLimit));
         contests.add(new NgaTu(4, yardModelHandle.getYardModel(),

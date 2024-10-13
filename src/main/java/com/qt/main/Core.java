@@ -12,7 +12,6 @@ import com.qt.controller.api.ApiService;
 import com.qt.controller.modeController.ModeManagement;
 import com.qt.controller.settingElement.imp.ChangeCarId;
 import com.qt.controller.settingElement.imp.ChangePassword;
-import com.qt.controller.settingElement.imp.ChangeUserId;
 import com.qt.controller.settingElement.imp.SettingEncoder;
 import com.qt.controller.settingElement.imp.SettingSignalLinghtDelayTime;
 import com.qt.input.camera.CameraRunner;
@@ -65,14 +64,10 @@ public class Core {
         this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName());
         this.threadPool = Executors.newSingleThreadExecutor();
         PrintWithKeyBoard printWithKeyBoard = new PrintWithKeyBoard();
-        ChangeUserId changeUserId = new ChangeUserId();
         SettingFrame settingFrame = new SettingFrame(3, 3);
         initElementSetting(settingFrame);
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.SETTING, (key) -> {
             this.threadPool.submit(settingFrame);
-        });
-        this.eventsPackage.putEvent(ConstKey.KEY_BOARD.SBD, (key) -> {
-            this.threadPool.submit(changeUserId);
         });
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.IN, (key) -> {
             this.threadPool.submit(printWithKeyBoard);
