@@ -30,7 +30,6 @@ public class SettingFrame extends AbsKeylistenerFrame implements Runnable {
     private final MouseClicked mouseClick;
     private final KeyEventManagement eventManagement;
     private final KeyEventsPackage eventsPackage;
-    private final ExecutorService threadPool;
     private final int row, col;
     private final VerifyPassword verifyPassword;
     private int index = 0;
@@ -70,7 +69,6 @@ public class SettingFrame extends AbsKeylistenerFrame implements Runnable {
         this.row = row <= 0 ? 1 : row;
         this.col = col <= 0 ? 1 : col;
         int tt = col * row;
-        this.threadPool = Executors.newSingleThreadExecutor();
         this.buttonDesigns = new ButtonDesign[tt];
         this.elementSettings = new IElementSetting[tt];
         this.pnHome.setLayout(new GridLayout(row, col));
@@ -258,7 +256,7 @@ public class SettingFrame extends AbsKeylistenerFrame implements Runnable {
         if (elementSetting == null) {
             return;
         }
-        this.threadPool.execute(elementSetting);
+        elementSetting.run();
     }
 
     private boolean highLight(boolean st) {

@@ -22,8 +22,10 @@ public class KetThucB1 extends AbsContest {
     }
     private long oldMill;
     private boolean isStop = false;
+    private boolean checkNp = false;
     private boolean kpt = true;
     private boolean so = true;
+    private long oldTime = 0;
 
     @Override
     protected void init() {
@@ -31,10 +33,19 @@ public class KetThucB1 extends AbsContest {
 
     @Override
     public boolean loop() {
+        if (!checkNp && System.currentTimeMillis() - oldTime >= 5000
+                && !this.carModel.isNp()) {
+            this.addErrorCode(ConstKey.ERR.NO_SIGNAL_RIGHT_END);
+            checkNp = true;
+        }
         if (this.carModel.getStatus() == ConstKey.CAR_ST.STOP || isStop) {
             this.isStop = true;
-            if (!this.carModel.isNp()) {
+            if (!checkNp && !this.carModel.isNp()) {
                 this.addErrorCode(ConstKey.ERR.NO_SIGNAL_RIGHT_END);
+                checkNp = true;
+            }
+            if (this.carModel.getGearBoxValue() == 0 && this.carModel.isPt()) {
+                return true;
             }
             long deta = System.currentTimeMillis() - oldMill;
             if (so && deta >= 3000 && this.carModel.getGearBoxValue() != 0) {
@@ -44,7 +55,6 @@ public class KetThucB1 extends AbsContest {
             if (kpt && deta >= 5000 && !this.carModel.isPt()) {
                 this.addErrorCode(ConstKey.ERR.FAILED_APPLY_PARKING_BRAKE);
                 kpt = false;
-                return true;
             }
         } else {
             oldMill = System.currentTimeMillis();
@@ -55,6 +65,10 @@ public class KetThucB1 extends AbsContest {
     @Override
     protected boolean isIntoContest() {
         oldMill = System.currentTimeMillis();
+        oldTime = System.currentTimeMillis();
+        kpt = true;
+        so = true;
+        checkNp = false;
         return true;
     }
 

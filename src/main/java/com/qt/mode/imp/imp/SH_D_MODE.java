@@ -19,9 +19,6 @@ public class SH_D_MODE extends AbsCDE_Mode {
         super(24, 900, MODEL_RANK_NAME.RANK_D, List.of("D"));
     }
 
-    @Override
-    protected void contestDone() {
-    }
 
     @Override
     protected void createPrepareKeyEvents(Map<String, IKeyEvent> events) {

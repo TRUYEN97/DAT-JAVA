@@ -61,13 +61,9 @@ public class ApiService {
 //        }
 //        return ins;
 //    }
-
     public boolean checkCarId(String id) {
         try {
             String url = this.setting.getCheckCarIdUrl();
-            if (checkPingToServer()) {
-                return false;
-            }
             if (url == null) {
                 ErrorLog.addError(this, "không tìm thấy: checkCarId url");
                 return false;
@@ -88,9 +84,6 @@ public class ApiService {
                 userModel.setId("0");
                 return userModel;
             }
-            if (checkPingToServer()) {
-                return null;
-            }
             String url = this.setting.getCheckUserIdUrl();
             if (url == null) {
                 ErrorLog.addError(this, "không tìm thấy: checkUserId url");
@@ -98,7 +91,7 @@ public class ApiService {
             }
             Response response = restAPI.sendPost(url, JsonBodyAPI.builder()
                     .put(ID, id).put(CAR_ID, carID));
-            if (!response.isSuccess()) {
+            if (response == null || !response.isSuccess()) {
                 return null;
             }
             return response.getData(UserModel.class);
@@ -110,11 +103,8 @@ public class ApiService {
     }
     protected static final String CAR_ID = "carId";
 
-    public synchronized int sendData(BufferedImage image, JSONObject jSONObject) {
+    public int sendData(BufferedImage image, JSONObject jSONObject) {
         try {
-            if (checkPingToServer()) {
-                return DISCONNECT;
-            }
             String url = this.setting.getSendDataUrl();
             if (url == null) {
                 ErrorLog.addError(this, "không tìm thấy: sendData url");
@@ -135,7 +125,14 @@ public class ApiService {
             imgF.setName("image.png");
             restAPI.getLogger().addLog("jsonData", jSONObject);
             Response response = restAPI.uploadFile(url, null, jsonF, imgF);
-            return response != null && response.isSuccess() ? PASS : FAIL;
+            if (response == null || response.getCode() == -1) {
+                return DISCONNECT;
+            } else if (response.isSuccess()) {
+                return PASS;
+            } else {
+                String mess = response.getMessage();
+                return mess != null && mess.contains("The contestant has completed") ? PASS : FAIL;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
@@ -143,11 +140,8 @@ public class ApiService {
         }
     }
 
-    public synchronized int sendData(JSONObject jSONObject, File imgFile) {
+    public int sendData(JSONObject jSONObject, File imgFile) {
         try {
-            if (checkPingToServer()) {
-                return DISCONNECT;
-            }
             String url = this.setting.getSendDataUrl();
             if (url == null) {
                 ErrorLog.addError(this, "không tìm thấy: sendData url");
@@ -168,13 +162,14 @@ public class ApiService {
             imgF.setName("image.png");
             restAPI.getLogger().addLog("jsonData", jSONObject);
             Response response = restAPI.uploadFile(url, null, jsonF, imgF);
-            if (response == null) {
-                return FAIL;
-            } else if (!response.isSuccess()) {
+            if (response == null || response.getCode() == -1) {
+                return DISCONNECT;
+            } else if (response.isSuccess()) {
+                return PASS;
+            } else {
                 String mess = response.getMessage();
                 return mess != null && mess.contains("The contestant has completed") ? PASS : FAIL;
             }
-            return PASS;
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
@@ -182,7 +177,7 @@ public class ApiService {
         }
     }
 
-    public synchronized int sendData(ProcessModel processModel, File imgFile) {
+    public int sendData(ProcessModel processModel, File imgFile) {
         try {
             if (processModel == null) {
                 return FAIL;
@@ -200,7 +195,7 @@ public class ApiService {
         }
     }
 
-    public synchronized int sendData(File jsonFile, File imgFile) {
+    public int sendData(File jsonFile, File imgFile) {
         try {
             if (jsonFile == null || !jsonFile.exists()) {
                 return FAIL;
@@ -213,7 +208,7 @@ public class ApiService {
         }
     }
 
-    public synchronized int sendData(File jsonFile, BufferedImage image) {
+    public int sendData(File jsonFile, BufferedImage image) {
         try {
             if (jsonFile == null || !jsonFile.exists()) {
                 return FAIL;
@@ -226,20 +221,19 @@ public class ApiService {
         }
     }
 
-    public boolean pingToServer() {
-        String addr = this.setting.getServerPingIp();
-        return Util.ping(addr, 2);
-    }
-
-    private boolean checkPingToServer() {
-        if (!pingToServer()) {
-            ErrorLog.addError(this, "không thể ping đến server");
-//            this.soundPlayer.pingServerFailed();
-            return true;
-        }
-        return false;
-    }
-
+//    public boolean pingToServer() {
+//        String addr = this.setting.getServerPingIp();
+//        return Util.ping(addr, 2);
+//    }
+//
+//    private boolean checkPingToServer() {
+//        if (!pingToServer()) {
+//            ErrorLog.addError(this, "không thể ping đến server");
+////            this.soundPlayer.pingServerFailed();
+//            return true;
+//        }
+//        return false;
+//    }
     public int checkRunnable(String id) {
         try {
             if (id == null || id.isBlank()) {
@@ -247,9 +241,6 @@ public class ApiService {
             }
             if (id.equals("0")) {
                 return START;
-            }
-            if (checkPingToServer()) {
-                return WAIT;
             }
             String url = this.setting.getCheckRunnableUrl();
             if (url == null) {
@@ -273,7 +264,7 @@ public class ApiService {
 
     public Response checkCommad(String carId) {
         try {
-            if (!pingToServer() || carId == null || carId.isBlank()) {
+            if (carId == null || carId.isBlank()) {
                 return null;
             }
             String url = this.setting.getCheckCommandUrl();

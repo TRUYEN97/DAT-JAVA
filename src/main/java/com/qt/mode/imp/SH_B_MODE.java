@@ -66,10 +66,6 @@ public class SH_B_MODE extends AbsSaHinhMode {
     }
 
     @Override
-    protected void contestDone() {
-    }
-
-    @Override
     protected void createPrepareKeyEvents(Map<String, IKeyEvent> events) {
     }
 

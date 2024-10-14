@@ -14,6 +14,7 @@ import com.qt.contest.impCondition.timerCondition.TatalTimeOut;
 import com.qt.controller.api.ApiService;
 import com.qt.input.serial.MCUSerialHandler;
 import com.qt.input.socket.YardModelHandle;
+import com.qt.model.input.UserModel;
 import com.qt.model.input.yard.YardRankModel;
 import com.qt.model.yardConfigMode.YardRankConfig;
 import com.qt.view.modeView.SaHinhView;
@@ -70,6 +71,10 @@ public abstract class AbsSaHinhMode extends AbsTestMode<SaHinhView> {
     @Override
     protected boolean loopCheckCanTest() {
         if (this.carModel.isNt() && this.carModel.getStatus() == ConstKey.CAR_ST.STOP) {
+            UserModel userModel = new UserModel();
+            userModel.setId("0");
+            userModel.setExamId("0");
+            this.processlHandle.setUserModel(userModel);
             creadContestList();
             return true;
         }

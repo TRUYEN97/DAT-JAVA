@@ -27,7 +27,7 @@ public class SocketLogger {
 
     public synchronized boolean addlog(String key, String str, Object... params) {
         String logPath = String.format("%s/%s.txt", this.path, this.timeBase.getDate());
-        this.loger.setFile(new File(logPath));
+        this.loger.setFolder(new File(logPath));
         try {
             this.loger.addLog(key, str, params);
             return true;

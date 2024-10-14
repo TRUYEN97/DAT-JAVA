@@ -17,6 +17,7 @@ import com.qt.model.yardConfigMode.ContestConfig;
 public class DungXeNgangDoc extends AbsContest {
 
     private boolean hasStop = false;
+    private boolean rollBack = false;
     private double oldDistance = 0;
     private double distanceWhenStop = 0;
     private final CheckTimeOut30s checkTimeOut30s;
@@ -45,8 +46,9 @@ public class DungXeNgangDoc extends AbsContest {
     @Override
     protected boolean loop() {
         double d = getDetaDistance(oldDistance);
-        if (hasStop && getDetaDistance(distanceWhenStop) < -0.5) {
+        if (!rollBack && hasStop && getDetaDistance(distanceWhenStop) < -0.5) {
             addErrorCode(ConstKey.ERR.ROLLED_BACK_OVER_50M);
+            rollBack = true;
         }
         if (!hasStop && this.carModel.getStatus() == ConstKey.CAR_ST.STOP) {
             hasStop = true;
@@ -73,6 +75,7 @@ public class DungXeNgangDoc extends AbsContest {
     protected boolean isIntoContest() {
         if (this.carModel.isT1()) {
             this.hasStop = false;
+            this.rollBack = false;
             this.oldDistance = this.carModel.getDistance();
             this.dataTestTransfer.put(ConstKey.DATA_TRANSFER.OLD_DISTANCE, this.oldDistance);
             return true;

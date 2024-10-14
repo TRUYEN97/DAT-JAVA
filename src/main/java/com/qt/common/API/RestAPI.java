@@ -5,6 +5,7 @@
 package com.qt.common.API;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.qt.common.ErrorLog;
 import com.qt.common.Setting;
 import com.qt.common.mylogger.MyLogger;
 import com.qt.view.component.ShowMessagePanel;
@@ -49,7 +50,7 @@ public class RestAPI {
         this.jwtUtil = new JwtUtil();
         this.logger = new MyLogger();
         String dir = Setting.getInstance().getLogDir();
-        this.logger.setFile(new File(dir, "API"));
+        this.logger.setFolder(new File(dir, "API"));
         this.logger.setDailyLog(true);
         this.logger.setSaveMemory(true);
     }
@@ -297,6 +298,7 @@ public class RestAPI {
                 return response;
             }
         } catch (Exception e) {
+            ErrorLog.addError(this, e);
             response = new Response(-1, JsonBodyAPI.builder()
                     .put(Response.STATUS, false)
                     .put(Response.MESSAGE, e.getLocalizedMessage()).toJSONString(),

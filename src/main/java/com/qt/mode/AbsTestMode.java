@@ -180,7 +180,7 @@ public abstract class AbsTestMode<V extends AbsModeView> {
             this.processlHandle.update();
             updateLog();
 //            this.threadPool.execute(() -> {
-                upTestDataToServer();
+            upTestDataToServer();
 //            });
             contestDone();
         } catch (Exception e) {
@@ -204,7 +204,7 @@ public abstract class AbsTestMode<V extends AbsModeView> {
         if (id == null || id.equals("0")) {
             return ApiService.PASS;
         }
-        return this.apiService.sendData(CameraRunner.getInstance().getImage(), 
+        return this.apiService.sendData(CameraRunner.getInstance().getImage(),
                 processlHandle.toProcessModelJson());
     }
 
@@ -222,6 +222,8 @@ public abstract class AbsTestMode<V extends AbsModeView> {
             int score = this.processModel.getScore();
             this.processModel.setContestsResult(score >= scoreSpec ? ProcessModel.PASS : ProcessModel.FAIL);
             updateLog();
+            this.printer.printTestResult(this.processModel.getId());
+            this.soundPlayer.sayResultTest(score, this.processlHandle.isPass());
             int rs = ApiService.FAIL;
             for (int i = 0; i < 3; i++) {
                 rs = upTestDataToServer();
@@ -238,11 +240,9 @@ public abstract class AbsTestMode<V extends AbsModeView> {
                 this.soundPlayer.sendResultFailed();
             }
             endTest();
-            this.printer.printTestResult(this.processModel.getId());
             TestStatusLogger.getInstance().remove();
             this.processModel.setId("");
             this.processlHandle.setTesting(false);
-            this.soundPlayer.sayResultTest(score, this.processlHandle.isPass());
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);

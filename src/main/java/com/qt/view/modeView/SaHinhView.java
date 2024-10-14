@@ -32,6 +32,7 @@ public class SaHinhView extends AbsModeView {
         infoPanel = new com.qt.view.component.imp.InfoPanel();
         valuePanal = new com.qt.view.component.imp.ValuePanal();
         carStatusPanal = new com.qt.view.component.imp.CarStatusPanal();
+        senserView1 = new com.qt.view.component.imp.SenserView();
 
         infoPanel.setBackground(new java.awt.Color(102, 102, 255));
 
@@ -43,7 +44,11 @@ public class SaHinhView extends AbsModeView {
                 .addContainerGap()
                 .addComponent(infoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(valuePanal, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(valuePanal, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(senserView1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(carStatusPanal, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -54,7 +59,10 @@ public class SaHinhView extends AbsModeView {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(carStatusPanal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(valuePanal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(valuePanal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(senserView1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(infoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -64,6 +72,7 @@ public class SaHinhView extends AbsModeView {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.qt.view.component.imp.CarStatusPanal carStatusPanal;
     private com.qt.view.component.imp.InfoPanel infoPanel;
+    private com.qt.view.component.imp.SenserView senserView1;
     private com.qt.view.component.imp.ValuePanal valuePanal;
     // End of variables declaration//GEN-END:variables
 

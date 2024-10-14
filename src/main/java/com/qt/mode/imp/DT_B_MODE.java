@@ -73,7 +73,7 @@ public class DT_B_MODE extends AbsTestMode<DuongTruongView> {
         return runnable && (!contests.isEmpty() && contests.peek()
                 .getName().equals(ConstKey.CONTEST_NAME.XUAT_PHAT));
     }
-    
+
     @Override
     public void end() {
         super.end();

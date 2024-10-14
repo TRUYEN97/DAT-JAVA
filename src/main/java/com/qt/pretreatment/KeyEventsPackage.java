@@ -24,7 +24,7 @@ public class KeyEventsPackage {
     public KeyEventsPackage(String name) {
         this(name, false);
     }
-    
+
     public KeyEventsPackage(String name, boolean justMe) {
         this.keyEvents = new HashMap<>();
         this.anyKeyEvents = new ArrayList<>();
@@ -36,20 +36,20 @@ public class KeyEventsPackage {
     public KeyEventButtonBlink getEventButtonBlink() {
         return eventButtonBlink;
     }
-    
-    public void merge(KeyEventsPackage keyEventsPackage){
+
+    public void merge(KeyEventsPackage keyEventsPackage) {
         putEvents(keyEventsPackage.keyEvents);
         addAllAnyKeyEvent(keyEventsPackage.anyKeyEvents);
         eventButtonBlink.addAllButtonBlinkEvent(keyEventsPackage.eventButtonBlink.getButtonDesigns());
     }
-    
+
     public void addAnyKeyEvent(IKeyEvent event) {
         if (event == null || this.anyKeyEvents.contains(event)) {
             return;
         }
         this.anyKeyEvents.add(event);
     }
-    
+
     public void addAllAnyKeyEvent(List<IKeyEvent> events) {
         if (events == null) {
             return;
@@ -91,18 +91,20 @@ public class KeyEventsPackage {
     }
 
     public void attack(String key) {
-        this.eventButtonBlink.attack(key);
-        IKeyEvent event = keyEvents.get(key);
-        if (event != null) {
-            event.action(key);
-        } else {
-            for (IKeyEvent anyKeyEvent : anyKeyEvents) {
-                if (anyKeyEvent == null) {
-                    continue;
+        new Thread(() -> {
+            this.eventButtonBlink.attack(key);
+            IKeyEvent event = keyEvents.get(key);
+            if (event != null) {
+                event.action(key);
+            } else {
+                for (IKeyEvent anyKeyEvent : anyKeyEvents) {
+                    if (anyKeyEvent == null) {
+                        continue;
+                    }
+                    anyKeyEvent.action(key);
                 }
-                anyKeyEvent.action(key);
             }
-        }
+        }).start();
     }
 
     boolean isName(String name) {

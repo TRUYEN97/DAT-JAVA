@@ -23,34 +23,52 @@ import java.util.TimeZone;
 public class MyLogger {
 
     private File file;
+    private File folder;
     private TimeBase timeBase;
     private StringBuilder log;
     private boolean saveMemory;
-    private List<Queue<String>> queueLogs;
     private boolean dailyLog = false;
     private String oldDay = "";
 
     public MyLogger() {
         this(TimeBase.UTC);
+        this.folder = new File("log");
     }
 
-    public File getFile() {
-        if (file == null) {
-            return null;
+    public void setFolder(File folder) {
+        if (folder == null) {
+            return;
         }
+        this.folder = folder;
+    }
+
+    public File getFolder() {
+        return folder;
+    }
+    
+    public File getFile() {
         String nowDay = this.timeBase.getDateTime(TimeBase.YYYY_MM_DD);
-        if (dailyLog && !oldDay.equalsIgnoreCase(nowDay)) {
-            setFile(new File(file, nowDay.concat(".txt")));
+        if (file == null || (dailyLog && !oldDay.equalsIgnoreCase(nowDay))) {
+            setFile(new File(folder, nowDay.concat(".txt")));
             oldDay = nowDay;
         }
         return file;
+    }
+
+    private void setFile(File file) {
+        if (file == null) {
+            return;
+        }
+        if (file.getParentFile() != null && !file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+        this.file = file;
     }
 
     public MyLogger(TimeZone timeZone) {
         this.timeBase = new TimeBase(timeZone);
         this.log = new StringBuilder();
         this.saveMemory = false;
-        this.queueLogs = new ArrayList<>();
     }
 
     public void setSaveMemory(boolean saveMemory) {
@@ -66,16 +84,6 @@ public class MyLogger {
 
     public void setFile(String fileStr) {
         setFile(new File(fileStr));
-    }
-
-    public void setFile(File file) {
-        if (file == null) {
-            return;
-        }
-        if (file.getParentFile() != null && !file.getParentFile().exists()) {
-            file.getParentFile().mkdirs();
-        }
-        this.file = file;
     }
 
     public synchronized void addLog(Object txt) throws IOException {
@@ -119,7 +127,6 @@ public class MyLogger {
         if (!saveMemory) {
             this.log.append(log);
         }
-        addToQueue(log);
         File f = getFile();
         if (f != null) {
             try (FileWriter writer = new FileWriter(f, true)) {
@@ -171,26 +178,5 @@ public class MyLogger {
         } else {
             return log.toString();
         }
-    }
-
-    public Queue<String> getQueueLog() {
-        try {
-            return addQueueToList(new ArrayDeque<>());
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-    private void addToQueue(String log) {
-        for (Queue<String> queueLog : queueLogs) {
-            queueLog.add(log);
-        }
-    }
-
-    private Queue<String> addQueueToList(Queue<String> queue) throws IOException {
-        queue.add(getLog());
-        this.queueLogs.add(queue);
-        return queue;
     }
 }

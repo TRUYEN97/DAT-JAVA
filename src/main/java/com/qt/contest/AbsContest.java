@@ -6,6 +6,7 @@ package com.qt.contest;
 
 import com.qt.common.ErrorLog;
 import com.qt.common.Util;
+import com.qt.contest.impCondition.ImportantError;
 import com.qt.contest.impCondition.timerCondition.TimeOutContest;
 import com.qt.controller.CheckConditionHandle;
 import com.qt.controller.ContestModelHandle;
@@ -35,6 +36,7 @@ public abstract class AbsContest implements IgetTime {
     protected final CheckConditionHandle conditionIntoHandle;
     private final TimeOutContest timeOutContest;
     protected final String nameSound;
+    protected final ImportantError importantError;
     protected int status;
     protected boolean stop;
     protected int timeOut;
@@ -58,6 +60,9 @@ public abstract class AbsContest implements IgetTime {
         this.conditionBeginHandle = new CheckConditionHandle(this.contestModel);
         this.conditionIntoHandle = new CheckConditionHandle(this.contestModel);
         this.timeOutContest = new TimeOutContest(this);
+        this.importantError = new ImportantError();
+        this.conditionBeginHandle.addConditon(importantError);
+        this.conditionIntoHandle.addConditon(importantError);
         this.conditionIntoHandle.addConditon(timeOutContest);
         this.status = DONE;
         this.stop = false;

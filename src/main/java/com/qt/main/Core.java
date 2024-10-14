@@ -29,8 +29,6 @@ import com.qt.pretreatment.KeyEventsPackage;
 import com.qt.view.ViewMain;
 import com.qt.view.frame.ChooseModeFrame;
 import com.qt.view.frame.SettingFrame;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import javax.swing.Timer;
 import lombok.Getter;
 
@@ -49,7 +47,6 @@ public class Core {
     private final ErrorcodeHandle errorcodeHandle;
     private final KeyEventManagement eventManagement;
     private final KeyEventsPackage eventsPackage;
-    private final ExecutorService threadPool;
     private Timer timer;
 
     private Core() {
@@ -61,15 +58,14 @@ public class Core {
         this.errorcodeHandle = ErrorcodeHandle.getInstance();
         this.eventManagement = KeyEventManagement.getInstance();
         this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName());
-        this.threadPool = Executors.newSingleThreadExecutor();
         PrintWithKeyBoard printWithKeyBoard = new PrintWithKeyBoard();
         SettingFrame settingFrame = new SettingFrame(3, 3);
         initElementSetting(settingFrame);
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.SETTING, (key) -> {
-            this.threadPool.submit(settingFrame);
+            settingFrame.run();
         });
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.IN, (key) -> {
-            this.threadPool.submit(printWithKeyBoard);
+            printWithKeyBoard.run();
         });
         this.timer = new Timer(20000, (e) -> {
 //            moveSettingEvent();
@@ -84,7 +80,7 @@ public class Core {
         settingFrame.addElementSetting(new SettingSignalLinghtDelayTime());
         settingFrame.addElementSetting(new ChangePassword());
     }
-    
+
     private void moveSettingEvent() {
         this.eventsPackage.remove(ConstKey.KEY_BOARD.SETTING);
         this.timer.stop();
@@ -123,7 +119,7 @@ public class Core {
         putErrorCode(ConstKey.ERR.SEATBELT_NOT_FASTENED, "Không thắt dây an toàn", 5);
         putErrorCode(ConstKey.ERR.FAILED_APPLY_PARKING_BRAKE, "Không kéo phanh tay", 5);
         putErrorCode(ConstKey.ERR.PARKING_BRAKE_NOT_RELEASED, "Không nhả phanh tay", 5);
-        putErrorCode(ConstKey.ERR.FAILED_SHIFTTO_NEUTRAL, "Không nhả phanh tay", 5);
+        putErrorCode(ConstKey.ERR.FAILED_SHIFTTO_NEUTRAL, "Không về hết số", 5);
         putErrorCode(ConstKey.ERR.HEAVY_SHAKING, "Rung xe", 5);
         putErrorCode(ConstKey.ERR.FAILED_SHIFTUP_GEAR_IN_15M, "15m Không tăng số", 5);
         putErrorCode(ConstKey.ERR.RAN_A_RED_LIGHT, "Vượt đèn đỏ", 10);
@@ -176,13 +172,13 @@ public class Core {
     private void addMode() {
         this.modeManagement.addMode(new DT_B1_AUTO_MODE());
         this.modeManagement.addMode(new DT_B_MODE());
-        this.modeManagement.addMode(new SH_B1_AUTO_MODE());  
-        this.modeManagement.addMode(new SH_B_MODE());  
-        this.modeManagement.addMode(new SH_C_MODE());  
-        this.modeManagement.addMode(new SH_D_MODE());  
-        this.modeManagement.addMode(new SH_E_MODE());  
+        this.modeManagement.addMode(new SH_B1_AUTO_MODE());
+        this.modeManagement.addMode(new SH_B_MODE());
+        this.modeManagement.addMode(new SH_C_MODE());
+        this.modeManagement.addMode(new SH_D_MODE());
+        this.modeManagement.addMode(new SH_E_MODE());
     }
-                                                                     
+
     public void start() {
         SoundPlayer.getInstance().sayWelcome();
         this.eventManagement.start();

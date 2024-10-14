@@ -36,7 +36,7 @@ public abstract class ContestHasMutiLine extends AbsContest {
         this.index = this.distanceIntoContest.check(oldDistance);
         if (this.index == -1) {
             addErrorCode(ConstKey.ERR.WRONG_LANE);
-            stop();
+            this.importantError.setIsImportantError();
             return false;
         } else {
             return true;

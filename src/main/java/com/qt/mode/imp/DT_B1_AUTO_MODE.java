@@ -166,8 +166,6 @@ public class DT_B1_AUTO_MODE extends AbsTestMode<DuongTruongView> {
         super.end();
         this.soundPlayer.nextId();
     }
-    
-    
 
     @Override
     public void modeInit() {

@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Properties;
 
 /**
  *
@@ -22,7 +21,7 @@ public class ErrorLog {
     private static final MyLogger logger = new MyLogger();
 
     static {
-        ErrorLog.logger.setFile(new File(Setting.getInstance().getLogDir(), "error"));
+        ErrorLog.logger.setFolder(new File(Setting.getInstance().getLogDir(), "error"));
         ErrorLog.logger.setDailyLog(true);
         ErrorLog.logger.setSaveMemory(true);
     }
