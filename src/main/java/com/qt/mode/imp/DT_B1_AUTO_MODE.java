@@ -30,12 +30,12 @@ public class DT_B1_AUTO_MODE extends AbsTestMode<DuongTruongView> {
     private boolean runnable;
     private String oldId;
 
-    public DT_B1_AUTO_MODE() {
-        this(ConstKey.MODE_NAME.DUONG_TRUONG, List.of("B1"));
+    public DT_B1_AUTO_MODE(DuongTruongView truongView) {
+        this(truongView, ConstKey.MODE_NAME.DUONG_TRUONG, List.of("B1"));
     }
 
-    public DT_B1_AUTO_MODE(String name, List<String> ranks) {
-        super(new DuongTruongView(), name, ranks);
+    public DT_B1_AUTO_MODE(DuongTruongView truongView, String name, List<String> ranks) {
+        super(truongView, name, ranks);
         this.conditionHandle.addConditon(new CheckCM());
         this.conditionHandle.addConditon(new CheckRPM());
         this.conditionHandle.addConditon(new ContainContestChecker(
@@ -165,13 +165,5 @@ public class DT_B1_AUTO_MODE extends AbsTestMode<DuongTruongView> {
     public void end() {
         super.end();
         this.soundPlayer.nextId();
-    }
-
-    @Override
-    public void modeInit() {
-    }
-
-    @Override
-    public void modeEndInit() {
     }
 }

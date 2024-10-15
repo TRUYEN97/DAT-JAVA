@@ -6,6 +6,7 @@ package com.qt.view.component;
 
 import com.qt.controller.ProcessModelHandle;
 import com.qt.input.serial.MCUSerialHandler;
+import com.qt.interfaces.IStarter;
 import com.qt.model.input.CarModel;
 import com.qt.model.modelTest.process.TestDataViewModel;
 import javax.swing.JPanel;
@@ -15,7 +16,7 @@ import javax.swing.Timer;
  *
  * @author Admin
  */
-public class UpdateValuePanel extends JPanel {
+public class UpdateValuePanel extends JPanel implements IStarter {
 
     protected final Timer timer;
     protected final CarModel carModel;
@@ -31,14 +32,28 @@ public class UpdateValuePanel extends JPanel {
         this.timer = new Timer(updateTime, (e) -> {
             updateValues();
         });
-        this.timer.start();
     }
 
     protected void updateValues() {
-        
+
     }
 
     public TestDataViewModel getTestDataModel() {
         return testDataModel;
+    }
+
+    @Override
+    public void start() {
+        this.timer.start();
+    }
+
+    @Override
+    public void stop() {
+        this.timer.stop();
+    }
+
+    @Override
+    public boolean isStarted() {
+        return this.timer.isRunning();
     }
 }

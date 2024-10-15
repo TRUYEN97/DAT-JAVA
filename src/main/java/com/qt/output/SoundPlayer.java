@@ -19,11 +19,12 @@ import javax.sound.sampled.Clip;
 public class SoundPlayer {
 
     private static volatile SoundPlayer instance;
-    private final ExecutorService threadPool = Executors.newCachedThreadPool();
+    private final ExecutorService threadPool;
     private SoundRunner soundRunner;
 
     private SoundPlayer() {
         this.soundRunner = new SoundRunner();
+        this.threadPool = Executors.newCachedThreadPool();
     }
 
     public static SoundPlayer getInstance() {
@@ -41,19 +42,19 @@ public class SoundPlayer {
 
     public void sayResultTest(int score, boolean isPass) {
 //        new Thread(() -> {
-            if (isPass) {
-                this.play(new SoundModel("congratulations.wav"));
-            } else {
-                this.play(new SoundModel("congratulations1.wav"));
-            }
+        if (isPass) {
+            this.play(new SoundModel("congratulations.wav"));
+        } else {
+            this.play(new SoundModel("congratulations1.wav"));
+        }
 //            this.play(new SoundModel("theScore.wav"));
 //            sayNumber(score);
 //            this.play(new SoundModel("diem.wav", 8000));
-            if (isPass) {
-                this.play(new SoundModel("success.wav"));
-            } else {
-                this.play(new SoundModel("failure.wav"));
-            }
+        if (isPass) {
+            this.play(new SoundModel("success.wav"));
+        } else {
+            this.play(new SoundModel("failure.wav"));
+        }
 //        }).start();
     }
 

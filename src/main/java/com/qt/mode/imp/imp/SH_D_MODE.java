@@ -6,6 +6,7 @@ package com.qt.mode.imp.imp;
 
 import com.qt.mode.imp.AbsCDE_Mode;
 import com.qt.pretreatment.IKeyEvent;
+import com.qt.view.modeView.SaHinhView;
 import java.util.List;
 import java.util.Map;
 
@@ -15,10 +16,9 @@ import java.util.Map;
  */
 public class SH_D_MODE extends AbsCDE_Mode {
 
-    public SH_D_MODE() {
-        super(24, 900, MODEL_RANK_NAME.RANK_D, List.of("D"));
+    public SH_D_MODE(SaHinhView hinhView) {
+        super(hinhView, 24, 900, MODEL_RANK_NAME.RANK_D, List.of("D"));
     }
-
 
     @Override
     protected void createPrepareKeyEvents(Map<String, IKeyEvent> events) {

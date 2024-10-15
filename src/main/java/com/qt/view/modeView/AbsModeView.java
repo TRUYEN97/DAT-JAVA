@@ -4,12 +4,13 @@
  */
 package com.qt.view.modeView;
 
+import com.qt.interfaces.IStarter;
 import javax.swing.JPanel;
 
 /**
  *
  * @author Admin
  */
-public abstract class AbsModeView extends JPanel implements IgetImgLabel{
+public abstract class AbsModeView extends JPanel implements IgetImgLabel, IStarter{
     
 }

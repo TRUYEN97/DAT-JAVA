@@ -33,8 +33,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import lombok.Getter;
 import lombok.Setter;
 import com.qt.controller.api.ICommandAPIReceive;
@@ -66,7 +64,6 @@ public abstract class AbsTestMode<V extends AbsModeView> {
     protected final CheckConditionHandle conditionHandle;
     protected final ShowErrorcode showErrorcode;
     protected final Printer printer;
-    private final ExecutorService threadPool;
     private ICommandAPIReceive<Response> commandApiReceive;
     private ModeHandle modeHandle;
     private boolean cancel;
@@ -95,7 +92,6 @@ public abstract class AbsTestMode<V extends AbsModeView> {
         this.apiService = new ApiService();
         this.conditionHandle = new CheckConditionHandle();
         this.printer = new Printer();
-        this.threadPool = Executors.newSingleThreadExecutor();
         this.commandApiReceive = new AnalysisApiCommand();
     }
 
@@ -165,9 +161,9 @@ public abstract class AbsTestMode<V extends AbsModeView> {
                 this.soundPlayer.begin();
                 this.conditionHandle.start();
                 updateLog();
-                this.threadPool.execute(() -> {
+                new Thread(() -> {
                     upTestDataToServer();
-                });
+                }).start();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -179,9 +175,9 @@ public abstract class AbsTestMode<V extends AbsModeView> {
         try {
             this.processlHandle.update();
             updateLog();
-//            this.threadPool.execute(() -> {
-            upTestDataToServer();
-//            });
+            new Thread(() -> {
+                upTestDataToServer();
+            }).start();
             contestDone();
         } catch (Exception e) {
             e.printStackTrace();
@@ -219,11 +215,13 @@ public abstract class AbsTestMode<V extends AbsModeView> {
             } else {
                 MCUSerialHandler.getInstance().sendLedRedOn();
             }
+            Util.delay(2000);
             int score = this.processModel.getScore();
             this.processModel.setContestsResult(score >= scoreSpec ? ProcessModel.PASS : ProcessModel.FAIL);
             updateLog();
             this.printer.printTestResult(this.processModel.getId());
             this.soundPlayer.sayResultTest(score, this.processlHandle.isPass());
+            TestStatusLogger.getInstance().remove();
             int rs = ApiService.FAIL;
             for (int i = 0; i < 3; i++) {
                 rs = upTestDataToServer();
@@ -240,7 +238,6 @@ public abstract class AbsTestMode<V extends AbsModeView> {
                 this.soundPlayer.sendResultFailed();
             }
             endTest();
-            TestStatusLogger.getInstance().remove();
             this.processModel.setId("");
             this.processlHandle.setTesting(false);
         } catch (Exception e) {
@@ -304,8 +301,16 @@ public abstract class AbsTestMode<V extends AbsModeView> {
         return false;
     }
 
-    public abstract void modeInit();
+    public void modeInit() {
+        if (this.view != null) {
+            this.view.start();
+        }
+    }
 
-    public abstract void modeEndInit();
+    public void modeEndInit() {
+        if (this.view != null) {
+            this.view.stop();
+        }
+    }
 
 }

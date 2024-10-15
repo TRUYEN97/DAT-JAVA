@@ -18,6 +18,7 @@ import com.qt.contest.impContest.shB2.VetBanhXe;
 import com.qt.contest.impContest.shB2.XuatPhat;
 import com.qt.mode.AbsSaHinhMode;
 import com.qt.pretreatment.IKeyEvent;
+import com.qt.view.modeView.SaHinhView;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -28,8 +29,8 @@ import java.util.Random;
  */
 public class SH_B_MODE extends AbsSaHinhMode {
 
-    public SH_B_MODE() {
-        super(24, 1080, MODEL_RANK_NAME.RANK_B, List.of("B1", "B2"));
+    public SH_B_MODE(SaHinhView hinhView) {
+        super(hinhView, 24, 1080, MODEL_RANK_NAME.RANK_B, List.of("B1", "B2"));
     }
 
     @Override

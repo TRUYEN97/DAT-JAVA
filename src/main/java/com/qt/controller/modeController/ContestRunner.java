@@ -19,7 +19,7 @@ import java.util.concurrent.Future;
 public class ContestRunner implements Runnable {
 
     private final ExecutorService threadPool;
-    private DataTestTransfer dataTestTransfer;
+    private final DataTestTransfer dataTestTransfer;
     private AbsTestMode testMode;
     private boolean testDone = false;
 

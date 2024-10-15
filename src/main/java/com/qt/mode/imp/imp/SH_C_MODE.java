@@ -6,6 +6,7 @@ package com.qt.mode.imp.imp;
 
 import com.qt.mode.imp.AbsCDE_Mode;
 import com.qt.pretreatment.IKeyEvent;
+import com.qt.view.modeView.SaHinhView;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +16,8 @@ import java.util.Map;
  */
 public class SH_C_MODE extends AbsCDE_Mode {
 
-    public SH_C_MODE() {
-        super(20, 1200, MODEL_RANK_NAME.RANK_C, List.of("C"));
+    public SH_C_MODE(SaHinhView hinhView) {
+        super(hinhView, 20, 1200, MODEL_RANK_NAME.RANK_C, List.of("C"));
     }
 
 

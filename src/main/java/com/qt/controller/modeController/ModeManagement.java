@@ -55,7 +55,7 @@ public class ModeManagement {
         try {
             this.modeHandle.setWait(true);
             if (this.modeHandle.isRunning()) {
-                return false;
+                this.modeHandle.stop();
             }
             if (this.modeHandle.setTestMode(testMode)) {
                 this.modeHandle.start();

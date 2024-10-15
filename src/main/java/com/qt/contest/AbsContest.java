@@ -152,7 +152,7 @@ public abstract class AbsContest implements IgetTime {
             try {
                 status = RUNNING;
                 while (!stop && !loop()) {
-                    Util.delay(50);
+                    Util.delay(10);
                 }
                 status = DONE;
             } catch (Exception e) {

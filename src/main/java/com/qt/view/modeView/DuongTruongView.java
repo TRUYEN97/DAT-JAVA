@@ -6,12 +6,11 @@ package com.qt.view.modeView;
 
 import javax.swing.JLabel;
 
-
 /**
  *
  * @author Admin
  */
-public class DuongTruongView extends AbsModeView{
+public class DuongTruongView extends AbsModeView {
 
     /**
      * Creates new form PanelHome
@@ -20,6 +19,7 @@ public class DuongTruongView extends AbsModeView{
         initComponents();
 //        setOpaque(false);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -77,6 +77,27 @@ public class DuongTruongView extends AbsModeView{
     @Override
     public JLabel getImgLabel() {
         return this.infoPanel.getImgLabel();
+    }
+
+    @Override
+    public void start() {
+        this.carStatusPanal.start();
+        this.duongTruongContestPanel.start();
+        this.infoPanel.start();
+        this.valuePanal.start();
+    }
+
+    @Override
+    public void stop() {
+        this.carStatusPanal.stop();
+        this.duongTruongContestPanel.stop();
+        this.infoPanel.stop();
+        this.valuePanal.stop();
+    }
+
+    @Override
+    public boolean isStarted() {
+        return this.carStatusPanal.isStarted();
     }
 
 }

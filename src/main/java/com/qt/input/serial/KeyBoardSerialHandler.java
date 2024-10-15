@@ -26,7 +26,7 @@ public class KeyBoardSerialHandler {
     private KeyBoardSerialHandler() {
         this.model = MCUSerialHandler.getInstance().getModel();
         this.keyMap = new HashMap<>();
-        this.serialHandler = new SerialHandler("ttyACM0", 115200); //ttyACM0
+        this.serialHandler = new SerialHandler("com11", 115200); //ttyACM0
         this.serialHandler.setReceiver((serial, data) -> {
             try {
                 if (data == null || !this.keyMap.containsKey(data)) {

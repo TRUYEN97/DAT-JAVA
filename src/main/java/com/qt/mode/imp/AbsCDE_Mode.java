@@ -16,6 +16,7 @@ import com.qt.contest.impContest.shB2.TangTocDuongThang;
 import com.qt.contest.impContest.shB2.VetBanhXe;
 import com.qt.contest.impContest.shB2.XuatPhat;
 import com.qt.mode.AbsSaHinhMode;
+import com.qt.view.modeView.SaHinhView;
 import java.util.List;
 import java.util.Random;
 
@@ -25,8 +26,8 @@ import java.util.Random;
  */
 public abstract class AbsCDE_Mode extends AbsSaHinhMode {
 
-    public AbsCDE_Mode(int speedLimit, int timeOut, MODEL_RANK_NAME modelRank, List<String> ranks) {
-        super(speedLimit, timeOut, modelRank, ranks);
+    public AbsCDE_Mode(SaHinhView hinhView, int speedLimit, int timeOut, MODEL_RANK_NAME modelRank, List<String> ranks) {
+        super(hinhView, speedLimit, timeOut, modelRank, ranks);
     }
 
    

@@ -5,13 +5,11 @@
 package com.qt.mode;
 
 import com.qt.common.ConstKey;
-import com.qt.common.Util;
 import com.qt.common.YardConfig;
 import com.qt.contest.impCondition.ContainContestChecker;
 import com.qt.contest.impCondition.OnOffImp.CheckCM;
 import com.qt.contest.impCondition.OnOffImp.CheckRPM;
 import com.qt.contest.impCondition.timerCondition.TatalTimeOut;
-import com.qt.controller.api.ApiService;
 import com.qt.input.serial.MCUSerialHandler;
 import com.qt.input.socket.YardModelHandle;
 import com.qt.model.input.UserModel;
@@ -36,8 +34,8 @@ public abstract class AbsSaHinhMode extends AbsTestMode<SaHinhView> {
     protected final YardModelHandle yardModelHandle;
     protected final YardRankConfig yardRankConfig;
 
-    public AbsSaHinhMode(int speedLimit, int timeOut, MODEL_RANK_NAME modelRank, List<String> ranks) {
-        super(new SaHinhView(), ConstKey.MODE_NAME.SA_HINH, ranks);
+    public AbsSaHinhMode(SaHinhView hinhView, int speedLimit, int timeOut, MODEL_RANK_NAME modelRank, List<String> ranks) {
+        super(hinhView, ConstKey.MODE_NAME.SA_HINH, ranks);
         this.speedLimit = speedLimit;
         this.conditionHandle.addConditon(new TatalTimeOut(timeOut, processModel));
         this.conditionHandle.addConditon(new CheckCM());
@@ -90,11 +88,13 @@ public abstract class AbsSaHinhMode extends AbsTestMode<SaHinhView> {
 
     @Override
     public void modeInit() {
+        super.modeInit();
         this.yardModelHandle.start();
     }
 
     @Override
     public void modeEndInit() {
+        super.modeEndInit();
         this.yardModelHandle.stop();
     }
 

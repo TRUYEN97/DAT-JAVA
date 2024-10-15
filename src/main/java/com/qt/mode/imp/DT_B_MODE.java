@@ -31,12 +31,12 @@ public class DT_B_MODE extends AbsTestMode<DuongTruongView> {
     private boolean runnable;
     private String oldId;
 
-    public DT_B_MODE() {
-        this(ConstKey.MODE_NAME.DUONG_TRUONG, List.of("B1", "B2", "C", "D", "E"));
+    public DT_B_MODE(DuongTruongView truongView) {
+        this(truongView, ConstKey.MODE_NAME.DUONG_TRUONG, List.of("B1", "B2", "C", "D", "E"));
     }
 
-    public DT_B_MODE(String name, List<String> ranks) {
-        super(new DuongTruongView(), name, ranks);
+    public DT_B_MODE(DuongTruongView truongView, String name, List<String> ranks) {
+        super(truongView, name, ranks);
         this.conditionHandle.addConditon(new CheckSo3());
         this.conditionHandle.addConditon(new CheckCM());
         this.conditionHandle.addConditon(new CheckRPM());
@@ -173,13 +173,5 @@ public class DT_B_MODE extends AbsTestMode<DuongTruongView> {
             addContest(new KetThuc(ConstKey.CONTEST_NAME.KET_THUC));
             hasKt = true;
         });
-    }
-
-    @Override
-    public void modeInit() {
-    }
-
-    @Override
-    public void modeEndInit() {
     }
 }

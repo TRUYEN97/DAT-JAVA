@@ -8,7 +8,6 @@ import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.ErrorLog;
 import com.qt.common.MyObjectMapper;
 import com.qt.controller.api.ApiService;
-import com.qt.input.camera.CameraRunner;
 import com.qt.model.modelTest.ErrorCode;
 import com.qt.model.modelTest.ErrorcodeWithContestNameModel;
 import com.qt.model.modelTest.contest.ContestDataModel;
@@ -18,8 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  *
@@ -34,7 +31,6 @@ public class ErrorcodeHandle {
     private final Map<String, ErrorCode> mapErrorcodes;
     private final List<ErrorcodeWithContestNameModel> ewcnms;
     private final ApiService apiService;
-    private final ExecutorService threadPool;
 
     private ErrorcodeHandle() {
         this.processModelHandle = ProcessModelHandle.getInstance();
@@ -43,7 +39,6 @@ public class ErrorcodeHandle {
         this.mapErrorcodes = new HashMap<>();
         this.ewcnms = new ArrayList<>();
         this.apiService = new ApiService();
-        this.threadPool = Executors.newSingleThreadExecutor();
     }
 
     public static ErrorcodeHandle getInstance() {
@@ -88,15 +83,13 @@ public class ErrorcodeHandle {
             this.ewcnms.add(new ErrorcodeWithContestNameModel(errorcode, ""));
             this.soundPlayer.sayErrorCode(errorcode.getErrKey());
             this.processModel.subtract(errorcode.getErrPoint());
-            if (jsono != null) {
-//                this.threadPool.execute(() -> {
+            new Thread(() -> {
                 JSONObject testData = MyObjectMapper.convertValue(this.processModel, JSONObject.class);
                 if (jsono != null) {
                     testData.putAll(jsono);
                 }
                 this.apiService.sendData(testData, null);
-//                });
-            }
+            }).start();
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
@@ -116,9 +109,9 @@ public class ErrorcodeHandle {
             this.soundPlayer.sayErrorCode(errorcode.getErrKey());
             dataModel.addErrorCode(errorcode);
             this.processModel.subtract(errorcode.getErrPoint());
-//            this.threadPool.execute(() -> {
-//                this.apiService.sendData(this.processModel, null);
-//            });
+            new Thread(() -> {
+                this.apiService.sendData(this.processModelHandle.toProcessModelJson(), null);
+            }).start();
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);

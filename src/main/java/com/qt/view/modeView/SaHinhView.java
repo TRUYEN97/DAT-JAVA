@@ -81,4 +81,25 @@ public class SaHinhView extends AbsModeView {
         return this.infoPanel.getImgLabel();
     }
 
+    @Override
+    public void start() {
+        this.carStatusPanal.start();
+        this.infoPanel.start();
+        this.senserView1.start();
+        this.valuePanal.start();
+    }
+
+    @Override
+    public void stop() {
+        this.carStatusPanal.stop();
+        this.infoPanel.stop();
+        this.senserView1.stop();
+        this.valuePanal.stop();
+    }
+
+    @Override
+    public boolean isStarted() {
+        return this.carStatusPanal.isStarted();
+    }
+
 }
