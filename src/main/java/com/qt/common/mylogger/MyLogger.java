@@ -31,7 +31,7 @@ public class MyLogger {
     private String oldDay = "";
 
     public MyLogger() {
-        this(TimeBase.UTC);
+        this(TimeBase.UTC7);
         this.folder = new File("log");
     }
 
