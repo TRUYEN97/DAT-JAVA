@@ -4,43 +4,54 @@
  */
 package com.qt.view.frame;
 
-import com.qt.common.CarConfig;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
+import com.qt.common.communication.Communicate.IgetName;
 import com.qt.view.AbsKeylistenerFrame;
 import com.qt.view.element.ButtonDesign;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
 import com.qt.controller.settingElement.IElementSetting;
-import com.qt.controller.settingElement.VerifyPassword;
 import com.qt.pretreatment.KeyEventManagement;
 import com.qt.pretreatment.KeyEventsPackage;
+import com.qt.view.interfaces.IActionCallback;
 import com.qt.view.interfaces.MouseClicked;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.lang.reflect.Array;
+import javax.swing.Timer;
 
 /**
  *
  * @author Admin
+ * @param <T>
  */
-public class SettingFrame extends AbsKeylistenerFrame implements Runnable {
+public class ShowRoomBroad<T extends IgetName> extends AbsKeylistenerFrame implements Runnable {
 
-    private final IElementSetting[] elementSettings;
+    private final T[] elements;
     private final ButtonDesign[] buttonDesigns;
     private final MouseClicked mouseClick;
     private final KeyEventManagement eventManagement;
     private final KeyEventsPackage eventsPackage;
     private final int row, col;
-    private final VerifyPassword verifyPassword;
+    private IActionCallback<T> okAction;
+    private IActionCallback<T> closeAction;
+    private IActionCallback<T> timeOutAction;
     private int index = 0;
+    private int timeOut = 10;
+    private final Timer timer;
 
     /**
      * Creates new form SettingFrame
      *
+     * @param clazz
+     * @param okACtion
+     * @param closeActon
      * @param row
      * @param col
      */
-    public SettingFrame(int row, int col) {
+    public ShowRoomBroad(Class<T> clazz,
+            IActionCallback<T> okACtion,
+            IActionCallback<T> closeActon,
+            int row, int col) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -53,44 +64,54 @@ public class SettingFrame extends AbsKeylistenerFrame implements Runnable {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SettingFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SettingFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SettingFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SettingFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ShowRoomBroad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         initComponents();
         this.row = row <= 0 ? 1 : row;
         this.col = col <= 0 ? 1 : col;
+        this.okAction = okACtion;
+        this.closeAction = closeActon;
         int tt = col * row;
         this.buttonDesigns = new ButtonDesign[tt];
-        this.elementSettings = new IElementSetting[tt];
+        this.elements = (T[]) Array.newInstance(clazz, tt);
         this.pnHome.setLayout(new GridLayout(row, col));
         this.eventManagement = KeyEventManagement.getInstance();
         this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName(), true);
         this.eventsPackage.getEventButtonBlink().putButtonBlinkEvent(btCancel.getValue(), btCancel);
-        this.verifyPassword = new VerifyPassword();
+        this.timer = new Timer(timeOut * 1000, (e) -> {
+            if (this.timeOutAction != null) {
+                this.timeOutAction.action(this.elements[index]);
+            }
+        });
         btCancel.setMouseClicked((design) -> {
             close();
+            if (this.timeOutAction != null) {
+                this.timeOutAction.action(this.elements[index]);
+            }
         });
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.CANCEL, (key) -> {
             close();
         });
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.LEFT, (key) -> {
+            this.timer.restart();
             index -= 1;
             highLight(false);
         });
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.RIGHT, (key) -> {
+            this.timer.restart();
             index += 1;
             highLight(true);
         });
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.UP, (key) -> {
+            this.timer.restart();
             if (index >= col) {
                 index -= col;
             } else {
@@ -99,6 +120,7 @@ public class SettingFrame extends AbsKeylistenerFrame implements Runnable {
             highLight(false);
         });
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.DOWN, (key) -> {
+            this.timer.restart();
             if (index <= tt - col) {
                 index += col;
             } else {
@@ -107,16 +129,21 @@ public class SettingFrame extends AbsKeylistenerFrame implements Runnable {
             highLight(true);
         });
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.OK, (key) -> {
-            check(this.elementSettings[index]);
+            this.timer.restart();
+            if (this.okAction == null) {
+                return;
+            }
+            this.okAction.action(this.elements[index]);
         });
         this.mouseClick = (bt) -> {
-            if (bt != null) {
-                for (int i = 0; i < this.elementSettings.length; i++) {
-                    if (this.elementSettings[i] != null
+            this.timer.restart();
+            if (bt != null && this.okAction != null) {
+                for (int i = 0; i < this.elements.length; i++) {
+                    if (this.elements[i] != null
                             && this.buttonDesigns[i].equals(bt)) {
                         index = i;
                         highLight(true);
-                        check(this.elementSettings[i]);
+                        this.okAction.action(this.elements[index]);
                         break;
                     }
                 }
@@ -133,35 +160,58 @@ public class SettingFrame extends AbsKeylistenerFrame implements Runnable {
         }
     }
 
-    public boolean removeElementSetting(int index) {
-        if (index >= 0 && index < this.elementSettings.length && this.elementSettings[index] == null) {
+    public void stopTimer() {
+        this.timer.stop();
+    }
+
+    public void setTimeOutAction(IActionCallback<T> timeOutAction) {
+        this.timeOutAction = timeOutAction;
+    }
+
+    public void setTimeOut(int timeOut) {
+        if (timeOut < 5) {
+            timeOut = 5;
+        }
+        this.timer.setDelay(timeOut * 1000);
+    }
+
+    public void setOkAction(IActionCallback<T> okAction) {
+        this.okAction = okAction;
+    }
+
+    public void setCloseAction(IActionCallback<T> closeAction) {
+        this.closeAction = closeAction;
+    }
+
+    public boolean removeElement(int index) {
+        if (index >= 0 && index < this.elements.length && this.elements[index] == null) {
             setElem(index, null);
             return true;
         }
         return false;
     }
 
-    public void removeElementSetting(IElementSetting element) {
+    public void removeElement(IElementSetting element) {
         if (element == null) {
             return;
         }
-        for (int i = 0; i < this.elementSettings.length; i++) {
-            if (this.elementSettings[i] == null) {
+        for (int i = 0; i < this.elements.length; i++) {
+            if (this.elements[i] == null) {
                 continue;
             }
-            if (this.elementSettings[i].equals(element)) {
+            if (this.elements[i].equals(element)) {
                 setElem(i, null);
             }
         }
     }
 
-    public boolean addElementSetting(IElementSetting element) {
+    public boolean addElement(T element) {
         if (element == null) {
             return false;
         }
         try {
-            for (int i = 0; i < this.elementSettings.length; i++) {
-                if (this.elementSettings[i] == null) {
+            for (int i = 0; i < this.elements.length; i++) {
+                if (this.elements[i] == null) {
                     setElem(i, element);
                     return true;
                 }
@@ -174,9 +224,9 @@ public class SettingFrame extends AbsKeylistenerFrame implements Runnable {
         }
     }
 
-    private void setElem(int i, IElementSetting element) {
-        this.elementSettings[i] = element;
-        this.buttonDesigns[i].setText(element != null ? element.getSettingName() : "");
+    private void setElem(int i, T element) {
+        this.elements[i] = element;
+        this.buttonDesigns[i].setText(element != null ? element.getName() : "");
         this.buttonDesigns[i].setVisible(element != null);
         this.buttonDesigns[i].setMouseClicked(element != null ? mouseClick : null);
     }
@@ -212,15 +262,15 @@ public class SettingFrame extends AbsKeylistenerFrame implements Runnable {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(pnHome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btCancel, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE))
+                    .addComponent(btCancel, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(pnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addComponent(pnHome, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -229,12 +279,11 @@ public class SettingFrame extends AbsKeylistenerFrame implements Runnable {
     }// </editor-fold>//GEN-END:initComponents
 
     public void display() {
-        if (this.verifyPassword.check()) {
-            index = -1;
-            highLight(true);
-            this.eventManagement.addKeyEventBackAge(eventsPackage);
-            setVisible(true);
-        }
+        index = -1;
+        highLight(true);
+        this.eventManagement.addKeyEventBackAge(eventsPackage);
+        setVisible(true);
+        this.timer.start();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -242,21 +291,17 @@ public class SettingFrame extends AbsKeylistenerFrame implements Runnable {
     private javax.swing.JPanel pnHome;
     // End of variables declaration//GEN-END:variables
 
-    private void close() {
+    public void close() {
         this.setVisible(false);
         this.eventManagement.remove(eventsPackage);
-        for (IElementSetting elementSetting : elementSettings) {
-            if (elementSetting != null) {
-                elementSetting.close();
+        this.timer.stop();
+        if (this.closeAction != null) {
+            for (T element : elements) {
+                if (element != null) {
+                    this.closeAction.action(element);
+                }
             }
         }
-    }
-
-    private void check(IElementSetting elementSetting) {
-        if (elementSetting == null) {
-            return;
-        }
-        elementSetting.run();
     }
 
     private boolean highLight(boolean st) {
@@ -268,7 +313,7 @@ public class SettingFrame extends AbsKeylistenerFrame implements Runnable {
         }
         int temp = index;
         while (true) {
-            if (this.elementSettings[temp] != null) {
+            if (this.elements[temp] != null) {
                 for (int i = 0; i < this.buttonDesigns.length; i++) {
                     if (i == temp) {
                         this.buttonDesigns[i].hightLight();
@@ -298,5 +343,11 @@ public class SettingFrame extends AbsKeylistenerFrame implements Runnable {
     @Override
     public void run() {
         display();
+    }
+
+    public void removeAllElement() {
+        for (int i = 0; i < this.elements.length; i++) {
+            removeElement(i);
+        }
     }
 }

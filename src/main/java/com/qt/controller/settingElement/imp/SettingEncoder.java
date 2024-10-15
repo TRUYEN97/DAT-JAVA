@@ -17,14 +17,10 @@ import com.qt.view.frame.KeyBoardFrame;
 public class SettingEncoder extends AbsElementSetting {
 
     public SettingEncoder() {
+        super(KeyBoardFrame.SO_ENCODER);
         this.keyBoardFrame.setMaxNum(10);
         this.keyBoardFrame.setHasPonit(true);
         this.keyBoardFrame.setRemoveZero(true);
-    }
-
-    @Override
-    public String getSettingName() {
-        return KeyBoardFrame.SO_ENCODER;
     }
 
     @Override
@@ -33,7 +29,7 @@ public class SettingEncoder extends AbsElementSetting {
         if (mcu_config_model == null) {
             mcu_config_model = new MCU_CONFIG_MODEL();
         }
-        String value = getInputValue(getSettingName(), String.valueOf(mcu_config_model.getEncoder()));
+        String value = getInputValue(getName(), String.valueOf(mcu_config_model.getEncoder()));
         if (value == null) {
             return;
         }

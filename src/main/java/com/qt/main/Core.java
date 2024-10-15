@@ -6,10 +6,12 @@ package com.qt.main;
 
 import com.qt.common.ConstKey;
 import com.qt.common.TestStatusLogger;
+import com.qt.common.Util;
 import com.qt.controller.ErrorcodeHandle;
 import com.qt.controller.PrintWithKeyBoard;
-import com.qt.controller.api.ApiService;
 import com.qt.controller.modeController.ModeManagement;
+import com.qt.controller.modeController.ModeShowRoom;
+import com.qt.controller.settingElement.SettingShowRoom;
 import com.qt.controller.settingElement.imp.ChangeCarId;
 import com.qt.controller.settingElement.imp.ChangePassword;
 import com.qt.controller.settingElement.imp.SettingEncoder;
@@ -27,8 +29,6 @@ import com.qt.output.SoundPlayer;
 import com.qt.pretreatment.KeyEventManagement;
 import com.qt.pretreatment.KeyEventsPackage;
 import com.qt.view.ViewMain;
-import com.qt.view.frame.ChooseModeFrame;
-import com.qt.view.frame.SettingFrame;
 import com.qt.view.modeView.DuongTruongView;
 import com.qt.view.modeView.SaHinhView;
 import javax.swing.Timer;
@@ -45,7 +45,7 @@ public class Core {
     private final ModeManagement modeManagement;
     private final ViewMain viewMain;
     private final CameraRunner cameraRunner;
-    private final ChooseModeFrame chooseModeFrame;
+    private final ModeShowRoom chooseModeFrame;
     private final ErrorcodeHandle errorcodeHandle;
     private final KeyEventManagement eventManagement;
     private final KeyEventsPackage eventsPackage;
@@ -56,12 +56,12 @@ public class Core {
         this.cameraRunner = CameraRunner.getInstance();
         this.cameraRunner.setCamera(0);
         this.modeManagement = new ModeManagement(viewMain);
-        this.chooseModeFrame = new ChooseModeFrame(this.modeManagement);
+        this.chooseModeFrame = new ModeShowRoom(this.modeManagement);
         this.errorcodeHandle = ErrorcodeHandle.getInstance();
         this.eventManagement = KeyEventManagement.getInstance();
         this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName());
         PrintWithKeyBoard printWithKeyBoard = new PrintWithKeyBoard();
-        SettingFrame settingFrame = new SettingFrame(3, 3);
+        SettingShowRoom settingFrame = new SettingShowRoom(3, 3);
         initElementSetting(settingFrame);
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.SETTING, (key) -> {
             settingFrame.run();
@@ -76,7 +76,7 @@ public class Core {
         initErrorcode();
     }
 
-    private void initElementSetting(SettingFrame settingFrame) {
+    private void initElementSetting(SettingShowRoom settingFrame) {
         settingFrame.addElementSetting(new ChangeCarId());
         settingFrame.addElementSetting(new SettingEncoder());
         settingFrame.addElementSetting(new SettingSignalLinghtDelayTime());
@@ -188,6 +188,9 @@ public class Core {
         this.eventManagement.start();
         this.chooseModeFrame.display();
         this.cameraRunner.start();
+        while (this.chooseModeFrame.isShowing()) {            
+            Util.delay(1000);
+        }
         this.viewMain.display();
         TestStatusLogger.getInstance().check();
         this.eventManagement.addKeyEventBackAge(eventsPackage);

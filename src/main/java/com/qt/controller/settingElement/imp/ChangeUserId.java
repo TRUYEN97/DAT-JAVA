@@ -4,7 +4,6 @@
  */
 package com.qt.controller.settingElement.imp;
 
-import com.qt.common.Util;
 import com.qt.controller.ProcessModelHandle;
 import com.qt.controller.api.ApiService;
 import com.qt.controller.modeController.ModeManagement;
@@ -26,6 +25,7 @@ public class ChangeUserId extends AbsElementSetting {
     private final UserInfoFrame infoFrame;
     
     public ChangeUserId() {
+        super(KeyBoardFrame.SBD);
         this.apiService = new ApiService();
         this.processModel = ProcessModelHandle.getInstance().getProcessModel();
         this.infoFrame = new UserInfoFrame();
@@ -76,9 +76,4 @@ public class ChangeUserId extends AbsElementSetting {
         }
     }
 
-    @Override
-    public String getSettingName() {
-        return KeyBoardFrame.SBD;
-    }
-    
 }

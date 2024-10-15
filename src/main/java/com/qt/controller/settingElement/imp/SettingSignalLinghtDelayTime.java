@@ -18,14 +18,10 @@ import com.qt.view.frame.KeyBoardFrame;
 public class SettingSignalLinghtDelayTime extends AbsElementSetting implements IElementSetting {
 
     public SettingSignalLinghtDelayTime() {
+        super(KeyBoardFrame.DELAY_DIGNEL_LIGHT);
         this.keyBoardFrame.setMaxNum(10);
         this.keyBoardFrame.setHasPonit(false);
         this.keyBoardFrame.setRemoveZero(true);
-    }
-
-    @Override
-    public String getSettingName() {
-        return KeyBoardFrame.DELAY_DIGNEL_LIGHT;
     }
 
     @Override
@@ -34,7 +30,7 @@ public class SettingSignalLinghtDelayTime extends AbsElementSetting implements I
         if (mcu_config_model == null) {
             mcu_config_model = new MCU_CONFIG_MODEL();
         }
-        String value = getInputValue(getSettingName(), String.valueOf(mcu_config_model.getNp_time()));
+        String value = getInputValue(getName(), String.valueOf(mcu_config_model.getNp_time()));
         if (value == null) {
             return;
         }

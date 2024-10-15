@@ -14,17 +14,12 @@ import com.qt.controller.settingElement.AbsElementSetting;
 public class ChangePassword extends AbsElementSetting{
 
     public ChangePassword() {
-        super(true);
+        super("Đôi mật khẩu", true);
         this.keyBoardFrame.setMaxNum(10);
         this.keyBoardFrame.setRemoveZero(false);
     }
 
     
-    @Override
-    public String getSettingName() {
-        return "Đôi mật khẩu";
-    }
-
     @Override
     public void run() {
         if (this.verifyPassword.check()) {

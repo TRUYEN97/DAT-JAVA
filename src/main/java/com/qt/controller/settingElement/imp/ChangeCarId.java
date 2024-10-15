@@ -20,6 +20,7 @@ public class ChangeCarId extends AbsElementSetting implements IElementSetting {
     private final ProcessModel processModel;
 
     public ChangeCarId() {
+        super("Số Xe");
         this.apiService = new ApiService();
         this.processModel = ProcessModelHandle.getInstance().getProcessModel();
     }
@@ -43,11 +44,5 @@ public class ChangeCarId extends AbsElementSetting implements IElementSetting {
             this.soundPlayer.carIdInvalid();
         }
     }
-
-    @Override
-    public String getSettingName() {
-        return "Số Xe";
-    }
-
 
 }

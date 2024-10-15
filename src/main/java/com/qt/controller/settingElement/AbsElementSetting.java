@@ -17,20 +17,33 @@ public abstract class AbsElementSetting implements IElementSetting{
     protected final KeyBoardFrame keyBoardFrame;
     protected final CarConfig carConfig;
     protected final VerifyPassword verifyPassword;
+    protected String name;
     
-    protected AbsElementSetting() {
-        this(false);
+    protected AbsElementSetting(String name) {
+        this(name, false);
     }
 
-    protected AbsElementSetting(boolean pwMode) {
+    protected AbsElementSetting(String name, boolean pwMode) {
         this.soundPlayer = SoundPlayer.getInstance();
         this.keyBoardFrame = new KeyBoardFrame(pwMode);
         this.carConfig = CarConfig.getInstance();
         this.verifyPassword = new VerifyPassword();
+        this.name = name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
+    
+    
+
     protected String getInputValue() {
-        return this.keyBoardFrame.getValue(getSettingName());
+        return this.keyBoardFrame.getValue(getName());
     }
     
     protected String getInputValue(String name, String value) {

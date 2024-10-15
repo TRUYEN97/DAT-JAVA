@@ -9,6 +9,7 @@ import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.TestStatusLogger;
 import com.qt.common.Util;
+import com.qt.common.communication.Communicate.IgetName;
 import com.qt.contest.AbsContest;
 import com.qt.controller.api.ApiService;
 import com.qt.controller.CheckConditionHandle;
@@ -44,7 +45,7 @@ import com.qt.controller.api.ICommandAPIReceive;
  */
 @Getter
 @Setter
-public abstract class AbsTestMode<V extends AbsModeView> {
+public abstract class AbsTestMode<V extends AbsModeView> implements IgetName{
 
     protected final V view;
     protected final String name;
@@ -70,6 +71,10 @@ public abstract class AbsTestMode<V extends AbsModeView> {
 
     protected AbsTestMode(V view, String name, List<String> ranks) {
         this(view, name, 80, ranks);
+    }
+    
+    public String getName(){
+        return fullName;
     }
 
     protected AbsTestMode(V view, String name, int scoreSpec, List<String> ranks) {

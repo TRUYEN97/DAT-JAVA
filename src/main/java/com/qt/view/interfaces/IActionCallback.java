@@ -2,16 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package com.qt.controller.settingElement;
-
-import com.qt.common.communication.Communicate.IgetName;
+package com.qt.view.interfaces;
 
 /**
  *
  * @author Admin
  */
-public interface IElementSetting extends Runnable, IgetName{
+public interface IActionCallback<T> {
 
-    void close();
-    
+    void action(T t);
 }
