@@ -15,24 +15,30 @@ import java.awt.Color;
 public class SenserView extends UpdateValuePanel {
 
     private final YardModelHandle modelHandle;
+    private final Color defaultColor;
 
     /**
      * Creates new form SenserView
      */
     public SenserView() {
         initComponents();
-        setOpaque(false);
-        setBackground(new Color(240, 240, 240, 86));
+        setOpaque(true);
+        this.defaultColor = getBackground();
         this.modelHandle = YardModelHandle.getInstance();
     }
 
     private boolean st = false;
+
     @Override
     protected void updateValues() {
         boolean conn = this.modelHandle.isConnect();
         if (conn != st) {
             st = conn;
-            setBackground(st ? new Color(140, 240, 140, 86) : new Color(240, 240, 240, 86));
+            if (conn) {
+                setBackground(new Color(140, 240, 140, 86));
+            } else {
+                setBackground(defaultColor);
+            }
         }
         this.stT1.setStatus(this.carModel.isT1());
         this.stT2.setStatus(this.carModel.isT2());
@@ -67,11 +73,11 @@ public class SenserView extends UpdateValuePanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(stT1, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                .addComponent(stT1, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(stT2, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+                .addComponent(stT2, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(stT3, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
+                .addComponent(stT3, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(

@@ -1,22 +1,21 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package com.qt.view.frame;
 
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.communication.Communicate.IgetName;
-import com.qt.view.AbsKeylistenerFrame;
-import com.qt.view.element.ButtonDesign;
-import java.awt.GridLayout;
-import javax.swing.JPanel;
 import com.qt.controller.settingElement.IElementSetting;
 import com.qt.pretreatment.KeyEventManagement;
 import com.qt.pretreatment.KeyEventsPackage;
+import com.qt.view.element.ButtonDesign;
 import com.qt.view.interfaces.IActionCallback;
 import com.qt.view.interfaces.MouseClicked;
+import java.awt.GridLayout;
 import java.lang.reflect.Array;
+import javax.swing.JPanel;
 import javax.swing.Timer;
 
 /**
@@ -24,7 +23,7 @@ import javax.swing.Timer;
  * @author Admin
  * @param <T>
  */
-public class ShowRoomBroad<T extends IgetName> extends AbsKeylistenerFrame implements Runnable {
+public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implements Runnable{
 
     private final T[] elements;
     private final ButtonDesign[] buttonDesigns;
@@ -39,7 +38,7 @@ public class ShowRoomBroad<T extends IgetName> extends AbsKeylistenerFrame imple
     private int timeOut = 10;
     private final Timer timer;
 
-    /**
+     /**
      * Creates new form SettingFrame
      *
      * @param clazz
@@ -52,28 +51,6 @@ public class ShowRoomBroad<T extends IgetName> extends AbsKeylistenerFrame imple
             IActionCallback<T> okACtion,
             IActionCallback<T> closeActon,
             int row, int col) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ShowRoomBroad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
         initComponents();
         this.row = row <= 0 ? 1 : row;
         this.col = col <= 0 ? 1 : col;
@@ -82,23 +59,13 @@ public class ShowRoomBroad<T extends IgetName> extends AbsKeylistenerFrame imple
         int tt = col * row;
         this.buttonDesigns = new ButtonDesign[tt];
         this.elements = (T[]) Array.newInstance(clazz, tt);
-        this.pnHome.setLayout(new GridLayout(row, col));
+        this.setLayout(new GridLayout(row, col));
         this.eventManagement = KeyEventManagement.getInstance();
         this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName(), true);
-        this.eventsPackage.getEventButtonBlink().putButtonBlinkEvent(btCancel.getValue(), btCancel);
         this.timer = new Timer(timeOut * 1000, (e) -> {
             if (this.timeOutAction != null) {
                 this.timeOutAction.action(this.elements[index]);
             }
-        });
-        btCancel.setMouseClicked((design) -> {
-            close();
-            if (this.timeOutAction != null) {
-                this.timeOutAction.action(this.elements[index]);
-            }
-        });
-        this.eventsPackage.putEvent(ConstKey.KEY_BOARD.CANCEL, (key) -> {
-            close();
         });
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.LEFT, (key) -> {
             this.timer.restart();
@@ -156,10 +123,34 @@ public class ShowRoomBroad<T extends IgetName> extends AbsKeylistenerFrame imple
             this.buttonDesigns[i].setVisible(false);
             this.buttonDesigns[i].setMouseClicked(mouseClick);
             panel.add(this.buttonDesigns[i]);
-            this.pnHome.add(panel);
+            this.add(panel);
         }
     }
 
+    public int getIndex() {
+        return index;
+    }
+    
+    public T getCurrentElement(){
+        return this.elements[index];
+    }
+
+    public IActionCallback<T> getOkAction() {
+        return okAction;
+    }
+
+    public IActionCallback<T> getCloseAction() {
+        return closeAction;
+    }
+
+    public IActionCallback<T> getTimeOutAction() {
+        return timeOutAction;
+    }
+
+    public KeyEventsPackage getEventsPackage() {
+        return eventsPackage;
+    }
+    
     public void stopTimer() {
         this.timer.stop();
     }
@@ -231,68 +222,14 @@ public class ShowRoomBroad<T extends IgetName> extends AbsKeylistenerFrame imple
         this.buttonDesigns[i].setMouseClicked(element != null ? mouseClick : null);
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-
-        pnHome = new javax.swing.JPanel();
-        btCancel = new com.qt.view.element.ButtonDesign();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Setting");
-        setUndecorated(true);
-        setType(java.awt.Window.Type.UTILITY);
-
-        pnHome.setBackground(new java.awt.Color(204, 204, 204));
-        pnHome.setLayout(new java.awt.GridLayout(1, 0));
-
-        btCancel.setOnColor(new java.awt.Color(255, 102, 102));
-        btCancel.setText("Cancel");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(pnHome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btCancel, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pnHome, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        pack();
-        setLocationRelativeTo(null);
-    }// </editor-fold>//GEN-END:initComponents
-
     public void display() {
         index = -1;
         highLight(true);
         this.eventManagement.addKeyEventBackAge(eventsPackage);
-        setVisible(true);
         this.timer.start();
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.qt.view.element.ButtonDesign btCancel;
-    private javax.swing.JPanel pnHome;
-    // End of variables declaration//GEN-END:variables
-
     public void close() {
-        this.setVisible(false);
         this.eventManagement.remove(eventsPackage);
         this.timer.stop();
         if (this.closeAction != null) {
@@ -350,4 +287,20 @@ public class ShowRoomBroad<T extends IgetName> extends AbsKeylistenerFrame imple
             removeElement(i);
         }
     }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        setLayout(new java.awt.GridLayout());
+    }// </editor-fold>//GEN-END:initComponents
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // End of variables declaration//GEN-END:variables
 }

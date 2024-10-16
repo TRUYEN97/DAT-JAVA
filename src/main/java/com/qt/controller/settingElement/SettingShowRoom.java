@@ -4,7 +4,7 @@
  */
 package com.qt.controller.settingElement;
 
-import com.qt.view.frame.ShowRoomBroad;
+import com.qt.view.frame.MenuShowRoom;
 
 /**
  *
@@ -12,12 +12,12 @@ import com.qt.view.frame.ShowRoomBroad;
  */
 public class SettingShowRoom implements Runnable {
 
-    private final ShowRoomBroad<IElementSetting> ShowRoomBroad;
+    private final MenuShowRoom<IElementSetting> ShowRoomBroad;
     private final VerifyPassword verifyPassword;
 
     public SettingShowRoom(int row, int col) {
         this.verifyPassword = new VerifyPassword();
-        this.ShowRoomBroad = new ShowRoomBroad<>(IElementSetting.class,
+        this.ShowRoomBroad = new MenuShowRoom<>(IElementSetting.class,
                 (t) -> {
                     if (t == null) {
                         return;

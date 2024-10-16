@@ -18,10 +18,12 @@ public class CarStatusPanal extends UpdateValuePanel {
      * Creates new form CarStatusPanal
      */
     private final MCUSerialHandler serialHandler;
+    private final Color defaultColor;
+
     public CarStatusPanal() {
         initComponents();
-        setOpaque(false);
-        setBackground(new Color(240, 240, 240, 86));
+        setOpaque(true);
+        this.defaultColor = getBackground();
         this.stValue.setValue("0");
         this.serialHandler = MCUSerialHandler.getInstance();
 //        this.stNt.setBlink(true);
@@ -30,12 +32,17 @@ public class CarStatusPanal extends UpdateValuePanel {
     }
 
     private boolean st = false;
+
     @Override
     protected void updateValues() {
         boolean conn = this.serialHandler.isConnect();
         if (conn != st) {
             st = conn;
-            setBackground(st? new Color(140, 240, 140, 86) : new Color(240, 240, 240, 86));
+            if (conn) {
+                setBackground(new Color(140, 240, 140, 86));
+            } else {
+                setBackground(defaultColor);
+            }
         }
         this.stAt.setStatus(this.carModel.isAt());
         this.stNt.setStatus(this.carModel.isNt());
