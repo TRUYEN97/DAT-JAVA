@@ -65,7 +65,7 @@ public class SocketClient implements Runnable, Idisconnect, IIsConnect, Closeabl
     public String readLine() throws IOException {
         String line = this.inputStream.readLine();
         if (line != null) {
-            return line.replaceAll("<newline>", "\r\n");
+            return line;
         }
         return null;
     }
@@ -85,7 +85,7 @@ public class SocketClient implements Runnable, Idisconnect, IIsConnect, Closeabl
         } catch (Exception ex) {
             if (debug) {
                 ex.printStackTrace();
-                this.logger.addlog(Keywords.ERROR, ex.getLocalizedMessage());
+                this.logger.addLog(Keywords.ERROR, ex.getLocalizedMessage());
             }
             return false;
         }
@@ -96,14 +96,13 @@ public class SocketClient implements Runnable, Idisconnect, IIsConnect, Closeabl
             if (!isConnect()) {
                 return false;
             }
-            data = data.replaceAll("\r\n", "<newline>");
             this.outputStream.println(data);
             this.logger.logSend(data);
             return true;
         } catch (Exception e) {
             if (debug) {
                 e.printStackTrace();
-                this.logger.addlog(Keywords.ERROR, e.getLocalizedMessage());
+                this.logger.addLog(Keywords.ERROR, e.getLocalizedMessage());
             }
             return false;
         }
@@ -126,7 +125,7 @@ public class SocketClient implements Runnable, Idisconnect, IIsConnect, Closeabl
         } catch (Exception ex) {
             if (debug) {
                 ex.printStackTrace();
-                this.logger.addlog("ERROR", ex.getLocalizedMessage());
+                this.logger.addLog("ERROR", ex.getLocalizedMessage());
             }
         } finally {
             disconnect();
@@ -162,7 +161,7 @@ public class SocketClient implements Runnable, Idisconnect, IIsConnect, Closeabl
         } catch (Exception e) {
             if (debug) {
                 e.printStackTrace();
-                this.logger.addlog("ERROR", e.getLocalizedMessage());
+                this.logger.addLog("ERROR", e.getLocalizedMessage());
             }
             return false;
         }

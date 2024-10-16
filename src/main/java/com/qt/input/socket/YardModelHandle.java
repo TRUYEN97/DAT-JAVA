@@ -151,10 +151,11 @@ public class YardModelHandle {
             stop = false;
             this.thread = new Thread(() -> {
                 while (!stop) {
-                    System.out.println("YartStart");
+                    System.out.println("YardStart");
                     while (!this.socketClient.connect() && !stop) {
                         Util.delay(1000);
                     }
+                    System.out.println("Yard connected");
                     if (!stop) {
                         this.socketClient.run();
                     }
@@ -185,6 +186,10 @@ public class YardModelHandle {
             e.printStackTrace();
             ErrorLog.addError(this, e);
         }
+    }
+
+    public boolean isConnect() {
+        return this.socketClient.isConnect();
     }
 
 }

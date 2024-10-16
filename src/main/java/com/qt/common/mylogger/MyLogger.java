@@ -10,10 +10,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
 import java.util.TimeZone;
 
 /**
@@ -45,10 +41,10 @@ public class MyLogger {
     public File getFolder() {
         return folder;
     }
-    
+
     public File getFile() {
         String nowDay = this.timeBase.getDateTime(TimeBase.YYYY_MM_DD);
-        if (file == null || (dailyLog && !oldDay.equalsIgnoreCase(nowDay))) {
+        if (file == null || !file.exists() || (dailyLog && !oldDay.equalsIgnoreCase(nowDay))) {
             setFile(new File(folder, nowDay.concat(".txt")));
             oldDay = nowDay;
         }
@@ -146,8 +142,9 @@ public class MyLogger {
             this.log.delete(0, this.log.length());
             this.log.append(log);
         }
-        if (file != null) {
-            try (FileWriter writer = new FileWriter(file)) {
+        File f = getFile();
+        if (f != null) {
+            try (FileWriter writer = new FileWriter(f)) {
                 writer.write(log);
                 writer.flush();
             }

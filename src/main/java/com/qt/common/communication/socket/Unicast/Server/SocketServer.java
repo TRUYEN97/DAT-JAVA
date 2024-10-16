@@ -40,7 +40,7 @@ public class SocketServer extends Thread {
         this.threadpool = Executors.newCachedThreadPool();
         this.poolLimit = Integer.MAX_VALUE;
         this.logger = new ServerLogger("log/socket/server", Keywords.SERVER, port);
-        this.logger.addlog(Keywords.SERVER, "Listen on port: %s", port);
+        this.logger.addLog(Keywords.SERVER, "Listen on port: %s", port);
         this.debug = false;
     }
 
@@ -90,7 +90,7 @@ public class SocketServer extends Thread {
         } catch (Exception ex) {
             if (debug) {
                 ex.printStackTrace();
-                this.logger.addlog("ERROR", ex.getLocalizedMessage());
+                this.logger.addLog("ERROR", ex.getLocalizedMessage());
             }
         } finally {
             try (this.threadpool) {
@@ -105,7 +105,7 @@ public class SocketServer extends Thread {
         } catch (Exception e) {
             if (debug) {
                 e.printStackTrace();
-                this.logger.addlog("ERROR", e.getLocalizedMessage());
+                this.logger.addLog("ERROR", e.getLocalizedMessage());
             }
             return null;
         }

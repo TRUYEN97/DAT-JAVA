@@ -4,33 +4,38 @@
  */
 package com.qt.common.communication.socket.Unicast.commons;
 
+import com.qt.common.mylogger.MyLogger;
+import java.io.File;
+
 /**
  *
  * @author Administrator
  */
-public class ServerLogger extends SocketLogger {
+public class ServerLogger extends MyLogger {
 
     private final String from;
 
     public ServerLogger(String path, String thisName, int port) {
-        super(path);
+        this.setSaveMemory(true);
+        this.setDailyLog(true);
+        this.setFolder(new File(path));
         from = String.format("%s(%s)", thisName, port);
     }
 
     public synchronized void logSend(String clientName, String data, Object... params) {
-        addlog(String.format("%s -> %s", from, clientName), data, params);
+        addLog(String.format("%s -> %s", from, clientName), data, params);
     }
 
     public synchronized void logReceived(String clientName, String data, Object... params) {
-        addlog(String.format("%s -> %s", clientName, from), data, params);
+        addLog(String.format("%s -> %s", clientName, from), data, params);
     }
 
     public synchronized void logConnected(String clientName) {
-        addlog(Keywords.SERVER, "--------------------- %s connected! -----------------", clientName);
+        addLog(Keywords.SERVER, "--------------------- %s connected! -----------------", clientName);
     }
 
     public synchronized void logDisconnect(String clientName) {
-        addlog(Keywords.SERVER, "--------------------- %s disconnected! -----------------", clientName);
+        addLog(Keywords.SERVER, "--------------------- %s disconnected! -----------------", clientName);
     }
 
 }

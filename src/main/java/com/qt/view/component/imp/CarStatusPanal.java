@@ -4,6 +4,7 @@
  */
 package com.qt.view.component.imp;
 
+import com.qt.input.serial.MCUSerialHandler;
 import com.qt.view.component.UpdateValuePanel;
 import java.awt.Color;
 
@@ -16,11 +17,13 @@ public class CarStatusPanal extends UpdateValuePanel {
     /**
      * Creates new form CarStatusPanal
      */
+    private final MCUSerialHandler serialHandler;
     public CarStatusPanal() {
         initComponents();
         setOpaque(false);
         setBackground(new Color(240, 240, 240, 86));
         this.stValue.setValue("0");
+        this.serialHandler = MCUSerialHandler.getInstance();
 //        this.stNt.setBlink(true);
 //        this.stNp.setBlink(true);
 //        this.stPt.setBlink(true);
@@ -29,11 +32,11 @@ public class CarStatusPanal extends UpdateValuePanel {
     private boolean st = false;
     @Override
     protected void updateValues() {
-//        boolean conn = MCUSerialHandler.getInstance().isConnect();
-//        if (conn != st) {
-//            st = conn;
-//            setBackground(st? new Color(140, 240, 140, 86) : new Color(240, 240, 240, 86));
-//        }
+        boolean conn = this.serialHandler.isConnect();
+        if (conn != st) {
+            st = conn;
+            setBackground(st? new Color(140, 240, 140, 86) : new Color(240, 240, 240, 86));
+        }
         this.stAt.setStatus(this.carModel.isAt());
         this.stNt.setStatus(this.carModel.isNt());
         this.stNp.setStatus(this.carModel.isNp());
@@ -46,12 +49,12 @@ public class CarStatusPanal extends UpdateValuePanel {
         this.stS4.setStatus(this.carModel.isS4());
         int n = this.carModel.getGearBoxValue();
         this.stValue.setValue(String.format("%s", n == 0 ? "N" : n));
-        int st = this.carModel.getStatus();
-        if (st == 0) {
+        int carSt = this.carModel.getStatus();
+        if (carSt == 0) {
             this.stValue.setIconName("Dừng");
-        } else if (st > 0) {
+        } else if (carSt > 0) {
             this.stValue.setIconName("Tiến");
-        } else if (st < 0) {
+        } else if (carSt < 0) {
             this.stValue.setIconName("Lùi");
         }
     }

@@ -96,7 +96,6 @@ public class ClientHandler implements Runnable, Idisconnect, IIsConnect, Closeab
                     if (data.trim().isBlank()) {
                         continue;
                     }
-                    data = data.replaceAll("<newline>", "\r\n");
                     this.logger.logReceived(name, data);
                     if (this.objectAnalysis != null) {
                         this.objectAnalysis.receiver(this, data);
@@ -107,7 +106,7 @@ public class ClientHandler implements Runnable, Idisconnect, IIsConnect, Closeab
             if (debug) {
                 e.printStackTrace();
             }
-            this.logger.addlog("ERROR", e.getLocalizedMessage());
+            this.logger.addLog("ERROR", e.getLocalizedMessage());
         } finally {
             disconnect();
         }
@@ -126,12 +125,12 @@ public class ClientHandler implements Runnable, Idisconnect, IIsConnect, Closeab
         try (socket; outputStream; inputStream) {
             this.handlerManager.disconnect(this);
             this.connect = false;
-            this.logger.addlog(Keywords.SERVER, "%s disconnected! - ip: %s", this.name, socket.getLocalSocketAddress());
+            this.logger.addLog(Keywords.SERVER, "%s disconnected! - ip: %s", this.name, socket.getLocalSocketAddress());
             return true;
         } catch (Exception e) {
             if (debug) {
                 e.printStackTrace();
-                this.logger.addlog("ERROR", e.getLocalizedMessage());
+                this.logger.addLog("ERROR", e.getLocalizedMessage());
             }
             return false;
         }
@@ -149,7 +148,7 @@ public class ClientHandler implements Runnable, Idisconnect, IIsConnect, Closeab
         } catch (Exception e) {
             if (debug) {
                 e.printStackTrace();
-                this.logger.addlog("ERROR", e.getLocalizedMessage());
+                this.logger.addLog("ERROR", e.getLocalizedMessage());
             }
             return false;
         }

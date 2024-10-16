@@ -4,6 +4,7 @@
  */
 package com.qt.view.component.imp;
 
+import com.qt.input.socket.YardModelHandle;
 import com.qt.view.component.UpdateValuePanel;
 import java.awt.Color;
 
@@ -13,6 +14,8 @@ import java.awt.Color;
  */
 public class SenserView extends UpdateValuePanel {
 
+    private final YardModelHandle modelHandle;
+
     /**
      * Creates new form SenserView
      */
@@ -20,12 +23,20 @@ public class SenserView extends UpdateValuePanel {
         initComponents();
         setOpaque(false);
         setBackground(new Color(240, 240, 240, 86));
+        this.modelHandle = YardModelHandle.getInstance();
     }
-     @Override
+
+    private boolean st = false;
+    @Override
     protected void updateValues() {
-       this.stT1.setStatus(this.carModel.isT1());
-       this.stT2.setStatus(this.carModel.isT2());
-       this.stT3.setStatus(this.carModel.isT3());
+        boolean conn = this.modelHandle.isConnect();
+        if (conn != st) {
+            st = conn;
+            setBackground(st ? new Color(140, 240, 140, 86) : new Color(240, 240, 240, 86));
+        }
+        this.stT1.setStatus(this.carModel.isT1());
+        this.stT2.setStatus(this.carModel.isT2());
+        this.stT3.setStatus(this.carModel.isT3());
     }
 
     /**
@@ -68,9 +79,10 @@ public class SenserView extends UpdateValuePanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(stT1, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
-                    .addComponent(stT2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(stT3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                    .addComponent(stT3, javax.swing.GroupLayout.PREFERRED_SIZE, 98, Short.MAX_VALUE)
+                    .addComponent(stT2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(stT1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
