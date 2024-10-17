@@ -7,7 +7,6 @@ package com.qt.view.frame;
 import com.qt.common.ConstKey;
 import com.qt.common.communication.Communicate.IgetName;
 import com.qt.view.AbsKeylistenerFrame;
-import com.qt.controller.settingElement.IElementSetting;
 import com.qt.pretreatment.KeyEventsPackage;
 import com.qt.view.interfaces.IActionCallback;
 
@@ -70,6 +69,10 @@ public class MenuShowRoom<T extends IgetName> extends AbsKeylistenerFrame implem
             close();
         });
     }
+    
+    public void setShowRoomName(String name){
+        this.jLabel1.setText(name);
+    }
 
     public void stopTimer() {
         this.showRoomBroad.stopTimer();
@@ -95,7 +98,7 @@ public class MenuShowRoom<T extends IgetName> extends AbsKeylistenerFrame implem
        return this.showRoomBroad.removeElement(index);
     }
 
-    public void removeElement(IElementSetting element) {
+    public void removeElement(T element) {
         this.showRoomBroad.removeElement(element);
     }
 
@@ -114,8 +117,10 @@ public class MenuShowRoom<T extends IgetName> extends AbsKeylistenerFrame implem
 
         pnHome = new javax.swing.JPanel();
         btCancel = new com.qt.view.element.ButtonDesign();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setAlwaysOnTop(true);
         setUndecorated(true);
         setType(java.awt.Window.Type.UTILITY);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -130,23 +135,28 @@ public class MenuShowRoom<T extends IgetName> extends AbsKeylistenerFrame implem
         btCancel.setOnColor(new java.awt.Color(255, 102, 102));
         btCancel.setText("Cancel");
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(pnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 563, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnHome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 563, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btCancel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnHome, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -166,6 +176,7 @@ public class MenuShowRoom<T extends IgetName> extends AbsKeylistenerFrame implem
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.qt.view.element.ButtonDesign btCancel;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel pnHome;
     // End of variables declaration//GEN-END:variables
 

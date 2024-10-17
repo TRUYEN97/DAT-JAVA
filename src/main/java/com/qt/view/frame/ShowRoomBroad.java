@@ -7,7 +7,6 @@ package com.qt.view.frame;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.communication.Communicate.IgetName;
-import com.qt.controller.settingElement.IElementSetting;
 import com.qt.pretreatment.KeyEventManagement;
 import com.qt.pretreatment.KeyEventsPackage;
 import com.qt.view.element.ButtonDesign;
@@ -23,8 +22,9 @@ import javax.swing.Timer;
  * @author Admin
  * @param <T>
  */
-public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implements Runnable{
+public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implements Runnable {
 
+    private static int count = 0;
     private final T[] elements;
     private final ButtonDesign[] buttonDesigns;
     private final MouseClicked mouseClick;
@@ -38,7 +38,7 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
     private int timeOut = 10;
     private final Timer timer;
 
-     /**
+    /**
      * Creates new form SettingFrame
      *
      * @param clazz
@@ -61,7 +61,7 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
         this.elements = (T[]) Array.newInstance(clazz, tt);
         this.setLayout(new GridLayout(row, col));
         this.eventManagement = KeyEventManagement.getInstance();
-        this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName(), true);
+        this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName() + count++, true);
         this.timer = new Timer(timeOut * 1000, (e) -> {
             if (this.timeOutAction != null) {
                 this.timeOutAction.action(this.elements[index]);
@@ -104,13 +104,15 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
         });
         this.mouseClick = (bt) -> {
             this.timer.restart();
-            if (bt != null && this.okAction != null) {
+            if (bt != null) {
                 for (int i = 0; i < this.elements.length; i++) {
                     if (this.elements[i] != null
                             && this.buttonDesigns[i].equals(bt)) {
                         index = i;
                         highLight(true);
-                        this.okAction.action(this.elements[index]);
+                        if (this.okAction != null) {
+                            this.okAction.action(this.elements[index]);
+                        }
                         break;
                     }
                 }
@@ -130,8 +132,8 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
     public int getIndex() {
         return index;
     }
-    
-    public T getCurrentElement(){
+
+    public T getCurrentElement() {
         return this.elements[index];
     }
 
@@ -150,7 +152,7 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
     public KeyEventsPackage getEventsPackage() {
         return eventsPackage;
     }
-    
+
     public void stopTimer() {
         this.timer.stop();
     }
@@ -177,12 +179,13 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
     public boolean removeElement(int index) {
         if (index >= 0 && index < this.elements.length && this.elements[index] == null) {
             setElem(index, null);
+            highLight(false);
             return true;
         }
         return false;
     }
 
-    public void removeElement(IElementSetting element) {
+    public void removeElement(T element) {
         if (element == null) {
             return;
         }
@@ -194,6 +197,7 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
                 setElem(i, null);
             }
         }
+        highLight(false);
     }
 
     public boolean addElement(T element) {
@@ -223,7 +227,7 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
     }
 
     public void display() {
-        index = -1;
+        index = 0;
         highLight(true);
         this.eventManagement.addKeyEventBackAge(eventsPackage);
         this.timer.start();

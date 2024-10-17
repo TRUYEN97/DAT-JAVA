@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.qt.view.interfaces;
 
@@ -9,8 +9,6 @@ package com.qt.view.interfaces;
  * @author Admin
  * @param <T>
  */
-public interface IActionCallback<T> {
-
-    boolean action(T t);
-    
+public interface ICreater<T> {
+    T create();
 }

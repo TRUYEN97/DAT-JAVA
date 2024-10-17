@@ -15,6 +15,7 @@ import com.qt.controller.settingElement.imp.ChangeCarId;
 import com.qt.controller.settingElement.imp.ChangePassword;
 import com.qt.controller.settingElement.imp.SettingEncoder;
 import com.qt.controller.settingElement.imp.SettingSignalLinghtDelayTime;
+import com.qt.controller.settingElement.imp.yardSetting.YardConfigSetting;
 import com.qt.input.camera.CameraRunner;
 import com.qt.mode.imp.DT_B1_AUTO_MODE;
 import com.qt.mode.imp.DT_B_MODE;
@@ -81,6 +82,7 @@ public class Core {
         settingFrame.addElementSetting(new SettingEncoder());
         settingFrame.addElementSetting(new SettingSignalLinghtDelayTime());
         settingFrame.addElementSetting(new ChangePassword());
+        settingFrame.addElementSetting(new YardConfigSetting());
     }
 
     private void moveSettingEvent() {

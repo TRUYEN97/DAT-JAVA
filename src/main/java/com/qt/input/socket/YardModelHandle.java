@@ -15,6 +15,7 @@ import com.qt.common.communication.socket.Unicast.commons.Interface.IReceiver;
 import com.qt.model.input.yard.YardModel;
 import com.qt.model.input.yard.YardRankModel;
 import com.qt.model.yardConfigMode.ContestConfig;
+import com.qt.model.yardConfigMode.YardConfigModel;
 import com.qt.model.yardConfigMode.YardRankConfig;
 import java.util.List;
 
@@ -32,13 +33,13 @@ public class YardModelHandle {
     private static final String TIME = "time";
     private final SocketClient socketClient;
     private final CarConfig carConfig;
-    private final YardConfig yardConfig;
+    private final YardConfigModel yardConfig;
     private final YardModel yardModel;
     private Thread thread;
 
     private YardModelHandle() {
         this.carConfig = CarConfig.getInstance();
-        this.yardConfig = YardConfig.getInstance();
+        this.yardConfig = YardConfig.getInstance().getYardConfigModel();
         IReceiver<SocketClient> receiver = (SocketClient commnunication, String data) -> {
             createReciver(data);
         };
@@ -73,10 +74,10 @@ public class YardModelHandle {
             JSONObject ob = JSONObject.parseObject(data);
             if (ob.containsKey(INPUTS)) {
                 JSONArray inputs = ob.getJSONArray(INPUTS);
-                updateRank(this.yardConfig.getRankBConfig(), inputs, this.yardModel.getRankB());
-                updateRank(this.yardConfig.getRankCConfig(), inputs, this.yardModel.getRankC());
-                updateRank(this.yardConfig.getRankDConfig(), inputs, this.yardModel.getRankD());
-                updateRank(this.yardConfig.getRankEConfig(), inputs, this.yardModel.getRankE());
+                updateRank(this.yardConfig.getB(), inputs, this.yardModel.getRankB());
+                updateRank(this.yardConfig.getC(), inputs, this.yardModel.getRankC());
+                updateRank(this.yardConfig.getD(), inputs, this.yardModel.getRankD());
+                updateRank(this.yardConfig.getE(), inputs, this.yardModel.getRankE());
             }
             if (ob.containsKey(TRAFFIC_LIGHT_MODEL)) {
                 JSONObject tl = ob.getJSONObject(TRAFFIC_LIGHT_MODEL);

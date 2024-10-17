@@ -20,15 +20,17 @@ public class SettingShowRoom implements Runnable {
         this.ShowRoomBroad = new MenuShowRoom<>(IElementSetting.class,
                 (t) -> {
                     if (t == null) {
-                        return;
+                        return false;
                     }
                     t.run();
+                    return true;
                 },
                 (t) -> {
                     if (t == null) {
-                        return;
+                        return false;
                     }
                     t.close();
+                    return true;
                 }, row, col);
     }
 

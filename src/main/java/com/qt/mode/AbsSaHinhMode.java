@@ -14,6 +14,7 @@ import com.qt.input.serial.MCUSerialHandler;
 import com.qt.input.socket.YardModelHandle;
 import com.qt.model.input.UserModel;
 import com.qt.model.input.yard.YardRankModel;
+import com.qt.model.yardConfigMode.YardConfigModel;
 import com.qt.model.yardConfigMode.YardRankConfig;
 import com.qt.view.modeView.SaHinhView;
 import java.util.List;
@@ -45,22 +46,22 @@ public abstract class AbsSaHinhMode extends AbsTestMode<SaHinhView> {
         this.runnable = false;
         this.oldId = "";
         this.yardModelHandle = YardModelHandle.getInstance();
-        YardConfig yardConfig = YardConfig.getInstance();
+        YardConfigModel yardConfig = YardConfig.getInstance().getYardConfigModel();
         switch (modelRank) {
             case RANK_C -> {
-                this.yardRankConfig = yardConfig.getRankCConfig();
+                this.yardRankConfig = yardConfig.getC();
                 this.yardRankModel = this.yardModelHandle.getYardModel().getRankC();
             }
             case RANK_D -> {
-                this.yardRankConfig = yardConfig.getRankDConfig();
+                this.yardRankConfig = yardConfig.getD();
                 this.yardRankModel = this.yardModelHandle.getYardModel().getRankD();
             }
             case RANK_E -> {
-                this.yardRankConfig = yardConfig.getRankEConfig();
+                this.yardRankConfig = yardConfig.getE();
                 this.yardRankModel = this.yardModelHandle.getYardModel().getRankE();
             }
             default -> {
-                this.yardRankConfig = yardConfig.getRankBConfig();
+                this.yardRankConfig = yardConfig.getB();
                 this.yardRankModel = this.yardModelHandle.getYardModel().getRankB();
             }
         }

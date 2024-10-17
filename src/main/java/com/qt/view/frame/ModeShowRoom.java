@@ -54,11 +54,13 @@ public class ModeShowRoom extends javax.swing.JFrame {
         this.showRoomBroad.setOkAction((t) -> {
             modeManagement.updateMode(t);
             close();
+            return true;
         });
         this.showRoomBroad.setTimeOut(10);
         this.showRoomBroad.setTimeOutAction((t) -> {
             modeManagement.updateMode(t);
             close();
+            return true;
         });
         this.jPanel1.add(this.showRoomBroad);
     }
