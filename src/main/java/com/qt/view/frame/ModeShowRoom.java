@@ -6,12 +6,13 @@ package com.qt.view.frame;
 
 import com.qt.controller.modeController.ModeManagement;
 import com.qt.mode.AbsTestMode;
+import com.qt.view.AbsKeylistenerFrame;
 
 /**
  *
  * @author Admin
  */
-public class ModeShowRoom extends javax.swing.JFrame {
+public class ModeShowRoom extends AbsKeylistenerFrame {
 
     private final ShowRoomBroad<AbsTestMode> showRoomBroad;
     private final ModeManagement modeManagement;
@@ -106,6 +107,7 @@ public class ModeShowRoom extends javax.swing.JFrame {
         setTitle("Choose mode");
         setAlwaysOnTop(true);
         setUndecorated(true);
+        setType(java.awt.Window.Type.UTILITY);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);

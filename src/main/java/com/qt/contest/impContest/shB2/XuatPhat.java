@@ -7,8 +7,7 @@ package com.qt.contest.impContest.shB2;
 import com.qt.common.ConstKey;
 import com.qt.contest.AbsContest;
 import com.qt.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
-import com.qt.contest.impCondition.timerCondition.CheckTimeOut20s;
-import com.qt.contest.impCondition.timerCondition.CheckTimeOut30s;
+import com.qt.contest.impCondition.timerCondition.CheckTimeOut;
 import com.qt.input.serial.MCUSerialHandler;
 
 /**
@@ -17,8 +16,8 @@ import com.qt.input.serial.MCUSerialHandler;
  */
 public class XuatPhat extends AbsContest {
 
-    private final CheckTimeOut30s timeOut30s;
-    private final CheckTimeOut20s timeOut20s;
+    private final CheckTimeOut timeOut30s;
+    private final CheckTimeOut timeOut20s;
     private boolean firstCheck = true;
     private double oldDistance = 0;
 
@@ -26,9 +25,11 @@ public class XuatPhat extends AbsContest {
         super(ConstKey.CONTEST_NAME.XUAT_PHAT, ConstKey.CONTEST_NAME.XUAT_PHAT,
                 false,
                 true, true, 60);
-        this.timeOut30s = new CheckTimeOut30s();
-        this.timeOut20s = new CheckTimeOut20s();
+        this.timeOut30s = new CheckTimeOut(importantError, 30, ConstKey.ERR.OVER_30S_TO_START);
+        this.timeOut20s = new CheckTimeOut(null, 20, ConstKey.ERR.OVER_20S_TO_START, false);
         this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
+        this.conditionBeginHandle.addConditon(this.timeOut30s);
+        this.conditionBeginHandle.addConditon(this.timeOut20s);
     }
 
     @Override

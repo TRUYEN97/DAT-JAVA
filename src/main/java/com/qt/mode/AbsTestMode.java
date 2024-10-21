@@ -37,6 +37,7 @@ import java.util.Queue;
 import lombok.Getter;
 import lombok.Setter;
 import com.qt.controller.api.ICommandAPIReceive;
+import javax.swing.Timer;
 
 /**
  *
@@ -45,7 +46,7 @@ import com.qt.controller.api.ICommandAPIReceive;
  */
 @Getter
 @Setter
-public abstract class AbsTestMode<V extends AbsModeView> implements IgetName{
+public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
 
     protected final V view;
     protected final String name;
@@ -65,6 +66,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName{
     protected final CheckConditionHandle conditionHandle;
     protected final ShowErrorcode showErrorcode;
     protected final Printer printer;
+    protected final Timer timer;
     private ICommandAPIReceive<Response> commandApiReceive;
     private ModeHandle modeHandle;
     private boolean cancel;
@@ -72,8 +74,8 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName{
     protected AbsTestMode(V view, String name, List<String> ranks) {
         this(view, name, 80, ranks);
     }
-    
-    public String getName(){
+
+    public String getName() {
         return fullName;
     }
 
@@ -98,6 +100,11 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName{
         this.conditionHandle = new CheckConditionHandle();
         this.printer = new Printer();
         this.commandApiReceive = new AnalysisApiCommand();
+        this.timer = new Timer(20000, (e) -> {
+            new Thread(() -> {
+                upTestDataToServer();
+            }).start();
+        });
     }
 
     private String creareFullName(List<String> ranks) {
@@ -141,6 +148,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName{
 
     public void begin() {
         try {
+            this.timer.stop();
             this.cancel = false;
             this.processlHandle.setTesting(false);
             CameraRunner.getInstance().resetImage();
@@ -165,6 +173,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName{
                 MCUSerialHandler.getInstance().sendLedGreenOn();
                 this.soundPlayer.begin();
                 this.conditionHandle.start();
+                this.timer.start();
                 updateLog();
                 new Thread(() -> {
                     upTestDataToServer();
@@ -181,6 +190,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName{
             this.processlHandle.update();
             updateLog();
             new Thread(() -> {
+                this.timer.restart();
                 upTestDataToServer();
             }).start();
             contestDone();
@@ -211,21 +221,22 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName{
 
     public void end() {
         try {
+            this.timer.stop();
             this.conditionHandle.stop();
             this.contests.clear();
             KeyEventManagement.getInstance().remove(prepareEventsPackage);
             KeyEventManagement.getInstance().remove(testEventsPackage);
-            if (this.processlHandle.isPass()) {
-                MCUSerialHandler.getInstance().sendLedGreenOn();
-            } else {
-                MCUSerialHandler.getInstance().sendLedRedOn();
-            }
             Util.delay(2000);
             int score = this.processModel.getScore();
             this.processModel.setContestsResult(score >= scoreSpec ? ProcessModel.PASS : ProcessModel.FAIL);
             updateLog();
             this.printer.printTestResult(this.processModel.getId());
             this.soundPlayer.sayResultTest(score, this.processlHandle.isPass());
+            if (this.processlHandle.isPass()) {
+                MCUSerialHandler.getInstance().sendLedGreenOn();
+            } else {
+                MCUSerialHandler.getInstance().sendLedRedOn();
+            }
             TestStatusLogger.getInstance().remove();
             int rs = ApiService.FAIL;
             for (int i = 0; i < 3; i++) {

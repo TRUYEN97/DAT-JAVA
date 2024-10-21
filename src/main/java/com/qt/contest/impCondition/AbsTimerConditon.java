@@ -15,14 +15,22 @@ public abstract class AbsTimerConditon extends AbsCondition {
 
     protected final Timer timer;
     private boolean timeout;
-
+    protected final ImportantError importantError;
     public AbsTimerConditon(int spec, boolean justOneTime) {
+        this(null, spec, justOneTime);
+    }
+
+    public AbsTimerConditon(ImportantError importantError, int spec, boolean justOneTime) {
         this.timeout = false;
+        this.importantError = importantError;
         this.timer = new Timer(spec * 1000, (e) -> {
             if (signal()) {
                 timeout = true;
                 if (important) {
                     hasFail = true;
+                    if (importantError != null) {
+                        importantError.setIsImportantError();
+                    }
                 }
                 if (justOneTime) {
                     stop();

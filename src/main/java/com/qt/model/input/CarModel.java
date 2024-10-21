@@ -5,6 +5,7 @@
 package com.qt.model.input;
 
 import com.qt.common.Util;
+import com.qt.model.modelTest.process.LocationModel;
 import java.util.ArrayDeque;
 import java.util.Queue;
 import lombok.Getter;
@@ -38,11 +39,13 @@ public class CarModel {
     private boolean s4;
     private boolean s5;
     private int gearBoxValue = 0;
+    private final LocationModel location;
 
     public CarModel() {
+        this.location = new LocationModel();
     }
-    
-    public void mathGearBoxValue(){
+
+    public void mathGearBoxValue() {
         gearBoxValue = Util.getGearBoxVal(s1, s2, s3, s4);
     }
     private final Queue<String> remoteValues = new ArrayDeque<>();

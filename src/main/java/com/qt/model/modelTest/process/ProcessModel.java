@@ -32,11 +32,13 @@ public class ProcessModel extends UserModel{
     private double distance;
     private final List<ErrorCode> errorCodes;
     private final List<ContestDataModel> contests;
+    private final LocationModel location;
     private int contestsResult = RUNNING;
 
     public ProcessModel() {
         this.contests = new ArrayList<>();
         this.errorCodes = new ArrayList<>();
+        this.location = new LocationModel();
     }
 
     public void addErrorcode(ErrorCode errorcode) {

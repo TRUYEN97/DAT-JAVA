@@ -176,6 +176,8 @@ public final class ConstKey {
 
     public static final class CAR_MODEL_KEY {
 
+        public static final String LONGITUDE = "longitude";
+        public static final String LATITUDE = "latitude";
         public static final String STATUS = "status";
         public static final String DISTANCE = "distance";
         public static final String SPEED = "speed";

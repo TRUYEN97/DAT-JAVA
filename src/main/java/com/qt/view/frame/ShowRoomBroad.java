@@ -64,7 +64,9 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
         this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName() + count++, true);
         this.timer = new Timer(timeOut * 1000, (e) -> {
             if (this.timeOutAction != null) {
-                this.timeOutAction.action(this.elements[index]);
+                new Thread(() -> {
+                    timeOutAction.action(this.elements[index]);
+                }).run();
             }
         });
         this.eventsPackage.putEvent(ConstKey.KEY_BOARD.LEFT, (key) -> {
@@ -111,7 +113,9 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
                         index = i;
                         highLight(true);
                         if (this.okAction != null) {
-                            this.okAction.action(this.elements[index]);
+                            new Thread(() -> {
+                                this.okAction.action(this.elements[index]);
+                            }).start();
                         }
                         break;
                     }

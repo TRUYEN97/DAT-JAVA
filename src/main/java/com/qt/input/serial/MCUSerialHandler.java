@@ -12,8 +12,10 @@ import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.MyObjectMapper;
 import com.qt.common.Util;
+import com.qt.controller.ProcessModelHandle;
 import com.qt.model.config.MCU_CONFIG_MODEL;
 import com.qt.model.input.CarModel;
+import com.qt.model.modelTest.process.ProcessModel;
 
 /**
  *
@@ -58,6 +60,9 @@ public class MCUSerialHandler {
                 this.model.setDistance(json.getDoubleValue(ConstKey.CAR_MODEL_KEY.DISTANCE));
                 this.model.setSpeed(json.getFloatValue(ConstKey.CAR_MODEL_KEY.SPEED));
                 this.model.setRpm(json.getIntValue(ConstKey.CAR_MODEL_KEY.RPM, 0));
+                ProcessModel processModel = ProcessModelHandle.getInstance().getProcessModel();
+                processModel.getLocation().setLatitude(json.getDoubleValue(ConstKey.CAR_MODEL_KEY.LATITUDE));
+                processModel.getLocation().setLongitude(json.getDoubleValue(ConstKey.CAR_MODEL_KEY.LONGITUDE));
                 this.model.mathGearBoxValue();
             } catch (Exception e) {
                 e.printStackTrace();

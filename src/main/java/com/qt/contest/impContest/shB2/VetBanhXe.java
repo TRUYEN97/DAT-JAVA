@@ -50,6 +50,9 @@ public class VetBanhXe extends ContestHasMutiLine {
 
     @Override
     protected boolean loop() {
+        if (getDetaDistance(this.oldDistance) < 1.5 ) {
+            return false;
+        }
         if (this.carModel.isT2()) {
             into = true;
         }
@@ -71,7 +74,7 @@ public class VetBanhXe extends ContestHasMutiLine {
 
     @Override
     protected boolean isIntoContest() {
-        if (this.carModel.isT1()) {
+        if (this.carModel.isT3()) {
             into = false;
             into1 = false;
             checkPathLineDone = false;

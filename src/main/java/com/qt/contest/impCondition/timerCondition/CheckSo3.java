@@ -14,7 +14,7 @@ import com.qt.contest.impCondition.AbsTimerConditon;
 public class CheckSo3 extends AbsTimerConditon {
 
     public CheckSo3() {
-        super(3, false);
+        super(null, 3, false);
     }
 
     @Override

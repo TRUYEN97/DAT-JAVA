@@ -16,7 +16,7 @@ public class CheckOverSpeedLimit extends AbsTimerConditon {
     private final int specSpeed;
 
     public CheckOverSpeedLimit(int specSpeed) {
-        super(3, false);
+        super(null , 3, false);
         this.specSpeed = specSpeed;
     }
 

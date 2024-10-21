@@ -4,25 +4,25 @@
  */
 package com.qt.contest.impCondition.timerCondition;
 
-import com.qt.common.ConstKey;
 import com.qt.contest.impCondition.AbsTimerConditon;
+import com.qt.contest.impCondition.ImportantError;
 
 /**
  *
  * @author Admin
  */
-public class CheckTimeOut30s extends AbsTimerConditon {
+public class CheckTimeOut extends AbsTimerConditon {
 
-    private String errName;
+    private final String errName;
     private boolean pass = false;
 
-    public CheckTimeOut30s() {
-        this(ConstKey.ERR.OVER_30S_TO_START);
+    public CheckTimeOut(ImportantError importantError, int time, String errName) {
+        this(importantError, time, errName, true);
     }
 
-    public CheckTimeOut30s(String errName) {
-        super(30, true);
-        setImporttant(true);
+    public CheckTimeOut(ImportantError importantError, int time, String errName, boolean isImporttant) {
+        super(importantError, time, true);
+        setImporttant(isImporttant);
         this.errName = errName;
     }
 
@@ -37,6 +37,9 @@ public class CheckTimeOut30s extends AbsTimerConditon {
 
     @Override
     protected void action() {
+        if (errName == null) {
+            return;
+        }
         this.setErrorcode(errName);
     }
 

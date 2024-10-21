@@ -5,17 +5,24 @@
 package com.qt.mode;
 
 import com.qt.common.ConstKey;
+import com.qt.common.ErrorLog;
+import com.qt.common.TestStatusLogger;
+import com.qt.common.Util;
 import com.qt.common.YardConfig;
 import com.qt.contest.impCondition.ContainContestChecker;
 import com.qt.contest.impCondition.OnOffImp.CheckCM;
 import com.qt.contest.impCondition.OnOffImp.CheckRPM;
 import com.qt.contest.impCondition.timerCondition.TatalTimeOut;
+import com.qt.controller.api.ApiService;
+import com.qt.input.camera.CameraRunner;
 import com.qt.input.serial.MCUSerialHandler;
 import com.qt.input.socket.YardModelHandle;
 import com.qt.model.input.UserModel;
 import com.qt.model.input.yard.YardRankModel;
+import com.qt.model.modelTest.process.ProcessModel;
 import com.qt.model.yardConfigMode.YardConfigModel;
 import com.qt.model.yardConfigMode.YardRankConfig;
+import com.qt.pretreatment.KeyEventManagement;
 import com.qt.view.modeView.SaHinhView;
 import java.util.List;
 
@@ -81,6 +88,49 @@ public abstract class AbsSaHinhMode extends AbsTestMode<SaHinhView> {
     }
 
     protected abstract void creadContestList();
+
+    @Override
+    public void end() {
+        try {
+            this.timer.stop();
+            this.conditionHandle.stop();
+            this.contests.clear();
+            KeyEventManagement.getInstance().remove(prepareEventsPackage);
+            KeyEventManagement.getInstance().remove(testEventsPackage);
+            Util.delay(2000);
+            int score = this.processModel.getScore();
+            this.processModel.setContestsResult(score >= scoreSpec ? ProcessModel.PASS : ProcessModel.FAIL);
+            updateLog();
+            this.soundPlayer.sayResultTest(score, this.processlHandle.isPass());
+            if (this.processlHandle.isPass()) {
+                MCUSerialHandler.getInstance().sendLedGreenOn();
+            } else {
+                MCUSerialHandler.getInstance().sendLedRedOn();
+            }
+            TestStatusLogger.getInstance().remove();
+            int rs = ApiService.FAIL;
+            for (int i = 0; i < 3; i++) {
+                rs = upTestDataToServer();
+                if (rs == ApiService.PASS) {
+                    break;
+                }
+            }
+            if (rs == ApiService.DISCONNECT) {
+                String id = processModel.getId();
+                this.soundPlayer.sendlostConnect();
+                this.fileTestService.saveBackupLog(id, processlHandle.toProcessModelJson().toString(),
+                        CameraRunner.getInstance().getImage());
+            } else if (rs == ApiService.FAIL) {
+                this.soundPlayer.sendResultFailed();
+            }
+            endTest();
+            this.processModel.setId("");
+            this.processlHandle.setTesting(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
+        }
+    }
 
     @Override
     protected void endTest() {

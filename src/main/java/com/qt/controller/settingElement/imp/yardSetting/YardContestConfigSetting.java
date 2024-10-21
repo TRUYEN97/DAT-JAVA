@@ -63,7 +63,7 @@ public class YardContestConfigSetting implements IElementSetting {
                         }
                         t.close();
                         return true;
-                    }, 2, 2);
+                    }, 2, 3);
             this.showRoom.setShowRoomName(getName());
             this.showRoom.removeAllElement();
             this.showRoom.addElement(new LineConfigSetting<>("Vạch kẻ",

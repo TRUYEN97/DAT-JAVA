@@ -7,7 +7,7 @@ package com.qt.contest.impContest.shB2;
 import com.qt.common.ConstKey;
 import com.qt.contest.AbsContest;
 import com.qt.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
-import com.qt.contest.impCondition.timerCondition.CheckTimeOut30s;
+import com.qt.contest.impCondition.timerCondition.CheckTimeOut;
 import com.qt.model.yardConfigMode.ContestConfig;
 
 /**
@@ -20,14 +20,14 @@ public class DungXeNgangDoc extends AbsContest {
     private boolean rollBack = false;
     private double oldDistance = 0;
     private double distanceWhenStop = 0;
-    private final CheckTimeOut30s checkTimeOut30s;
+    private final CheckTimeOut checkTimeOut30s;
     private final double distanceOut;
     private final double distanceLine;
 
     public DungXeNgangDoc(ContestConfig contestConfig, int speedLimit) {
         super(ConstKey.CONTEST_NAME.DUNG_XE_ND, ConstKey.CONTEST_NAME.DUNG_XE_ND,
                 true, true, true, 120);
-        this.checkTimeOut30s = new CheckTimeOut30s();
+        this.checkTimeOut30s = new CheckTimeOut(importantError, 30, ConstKey.ERR.OVER_30S_TO_START);
         this.distanceOut = contestConfig.getDistanceOut();
         this.distanceLine = contestConfig.getDistanceLine();
         this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
@@ -73,11 +73,10 @@ public class DungXeNgangDoc extends AbsContest {
 
     @Override
     protected boolean isIntoContest() {
-        if (this.carModel.isT1()) {
+        if (this.carModel.isT1() || this.carModel.isT2()) {
             this.hasStop = false;
             this.rollBack = false;
             this.oldDistance = this.carModel.getDistance();
-            this.dataTestTransfer.put(ConstKey.DATA_TRANSFER.OLD_DISTANCE, this.oldDistance);
             return true;
         }
         return false;

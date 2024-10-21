@@ -6,7 +6,7 @@ package com.qt.contest.impContest.dtB1;
 
 import com.qt.common.ConstKey;
 import com.qt.contest.AbsContest;
-import com.qt.contest.impCondition.timerCondition.CheckTimeOut30s;
+import com.qt.contest.impCondition.timerCondition.CheckTimeOut;
 import com.qt.input.serial.MCUSerialHandler;
 
 /**
@@ -15,7 +15,7 @@ import com.qt.input.serial.MCUSerialHandler;
  */
 public class XuatPhatB1 extends AbsContest {
 
-    private final CheckTimeOut30s timeOut30s;
+    private final CheckTimeOut timeOut30s;
 
     public XuatPhatB1() {
         this(ConstKey.CONTEST_NAME.XUAT_PHAT);
@@ -23,7 +23,7 @@ public class XuatPhatB1 extends AbsContest {
 
     public XuatPhatB1(String name) {
         super(name, name, false, false, true, 2000);
-        this.timeOut30s = new CheckTimeOut30s();
+        this.timeOut30s = new CheckTimeOut(importantError, 30, ConstKey.ERR.OVER_30S_TO_START);
         this.conditionIntoHandle.addConditon(timeOut30s);
     }
 
