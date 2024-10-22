@@ -84,6 +84,10 @@ public class ErrorcodeHandle {
             this.soundPlayer.sayErrorCode(errorcode.getErrKey());
             this.processModel.subtract(errorcode.getErrPoint());
             new Thread(() -> {
+                String id = this.processModel.getId();
+                if (id == null || id.isBlank() || id.equals("0")) {
+                    return;
+                }
                 JSONObject testData = MyObjectMapper.convertValue(this.processModel, JSONObject.class);
                 if (jsono != null) {
                     testData.putAll(jsono);
@@ -110,6 +114,10 @@ public class ErrorcodeHandle {
             dataModel.addErrorCode(errorcode);
             this.processModel.subtract(errorcode.getErrPoint());
             new Thread(() -> {
+                String id = this.processModel.getId();
+                if (id == null || id.isBlank() || id.equals("0")) {
+                    return;
+                }
                 this.apiService.sendData(this.processModelHandle.toProcessModelJson(), null);
             }).start();
         } catch (Exception e) {

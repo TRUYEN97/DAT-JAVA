@@ -23,14 +23,14 @@ import com.qt.model.modelTest.process.ProcessModel;
 import com.qt.model.yardConfigMode.YardConfigModel;
 import com.qt.model.yardConfigMode.YardRankConfig;
 import com.qt.pretreatment.KeyEventManagement;
-import com.qt.view.modeView.SaHinhView;
+import com.qt.view.modeView.AbsModeView;
 import java.util.List;
 
 /**
  *
  * @author Admin
  */
-public abstract class AbsSaHinhMode extends AbsTestMode<SaHinhView> {
+public abstract class AbsSaHinhMode extends AbsTestMode<AbsModeView> {
 
     protected static enum MODEL_RANK_NAME {
         RANK_B, RANK_C, RANK_D, RANK_E
@@ -42,7 +42,7 @@ public abstract class AbsSaHinhMode extends AbsTestMode<SaHinhView> {
     protected final YardModelHandle yardModelHandle;
     protected final YardRankConfig yardRankConfig;
 
-    public AbsSaHinhMode(SaHinhView hinhView, int speedLimit, int timeOut, MODEL_RANK_NAME modelRank, List<String> ranks) {
+    public AbsSaHinhMode(AbsModeView hinhView, int speedLimit, int timeOut, MODEL_RANK_NAME modelRank, List<String> ranks) {
         super(hinhView, ConstKey.MODE_NAME.SA_HINH, ranks);
         this.speedLimit = speedLimit;
         this.conditionHandle.addConditon(new TatalTimeOut(timeOut, processModel));

@@ -21,6 +21,7 @@ import com.qt.mode.imp.DT_B1_AUTO_MODE;
 import com.qt.mode.imp.DT_B_MODE;
 import com.qt.mode.imp.SH_B1_AUTO_MODE;
 import com.qt.mode.imp.SH_B_MODE;
+import com.qt.mode.imp.SH_OFF;
 import com.qt.mode.imp.imp.SH_C_MODE;
 import com.qt.mode.imp.imp.SH_D_MODE;
 import com.qt.mode.imp.imp.SH_E_MODE;
@@ -31,6 +32,7 @@ import com.qt.pretreatment.KeyEventsPackage;
 import com.qt.view.ViewMain;
 import com.qt.view.frame.ModeShowRoom;
 import com.qt.view.modeView.DuongTruongView;
+import com.qt.view.modeView.SaHinhDebug;
 import com.qt.view.modeView.SaHinhView;
 import javax.swing.Timer;
 import lombok.Getter;
@@ -176,13 +178,14 @@ public class Core {
     private void addMode() {
         DuongTruongView truongView = new DuongTruongView();
         SaHinhView hinhView = new SaHinhView();
+        this.modeManagement.addMode(new SH_OFF(new SaHinhDebug()));
         this.modeManagement.addMode(new DT_B1_AUTO_MODE(truongView));
         this.modeManagement.addMode(new DT_B_MODE(truongView));
-        this.modeManagement.addMode(new SH_B1_AUTO_MODE(hinhView));
         this.modeManagement.addMode(new SH_B_MODE(hinhView));
-        this.modeManagement.addMode(new SH_C_MODE(hinhView));
-        this.modeManagement.addMode(new SH_D_MODE(hinhView));
-        this.modeManagement.addMode(new SH_E_MODE(hinhView));
+//        this.modeManagement.addMode(new SH_B1_AUTO_MODE(hinhView));
+//        this.modeManagement.addMode(new SH_C_MODE(hinhView));
+//        this.modeManagement.addMode(new SH_D_MODE(hinhView));
+//        this.modeManagement.addMode(new SH_E_MODE(hinhView));
     }
 
     public void start() {
