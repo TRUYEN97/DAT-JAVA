@@ -12,6 +12,7 @@ import com.qt.contest.impContest.shB2.DungXeNgangDoc;
 import com.qt.contest.impContest.shB2.DuongS;
 import com.qt.contest.impContest.shB2.DuongTau;
 import com.qt.contest.impContest.shB2.KetThuc;
+import com.qt.contest.impContest.shB2.KhanCap;
 import com.qt.contest.impContest.shB2.NgaTu;
 import com.qt.contest.impContest.shB2.TangTocDuongThang;
 import com.qt.contest.impContest.shB2.VetBanhXe;
@@ -162,6 +163,13 @@ public class SH_OFF extends AbsSaHinhMode {
             }
             MCUSerialHandler.getInstance().sendReset();
             addContest(new KetThuc(speedLimit));
+        });
+        events.put("15", (key) -> {
+            if (!contests.isEmpty()) {
+                return;
+            }
+            MCUSerialHandler.getInstance().sendReset();
+            addContest(new KhanCap(5));
         });
     }
 
