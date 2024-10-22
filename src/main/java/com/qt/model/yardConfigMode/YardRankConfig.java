@@ -38,14 +38,14 @@ public class YardRankConfig {
         this.doXeDoc =  new ArrayList<>();
         this.duongS  =  new ArrayList<>();
         this.doXeNgang =  new ArrayList<>();
-        this.vetBanhXe.add(new ContestConfig(30, 10, 60, 65));
-        this.vetBanhXe.add(new ContestConfig(30, 10, 65, 70));
-        this.doXeDoc.add(new ContestConfig(5, 0, 10, 17));
+        this.vetBanhXe.add(new ContestConfig(30, 10, 0, 90));
+        this.vetBanhXe.add(new ContestConfig(30, 10, 90, 120));
+        this.doXeDoc.add(new ContestConfig(5, 0, 0, 17));
         this.doXeDoc.add(new ContestConfig(5, 0, 17, 25));
         this.doXeDoc.add(new ContestConfig(5, 0, 25, 35));
-        this.duongS.add(new ContestConfig(5, 0, 50, 62));
+        this.duongS.add(new ContestConfig(5, 0, 0, 62));
         this.duongS.add(new ContestConfig(5, 0, 62, 74));
-        this.doXeNgang.add(new ContestConfig(5, 0, 60, 68));
+        this.doXeNgang.add(new ContestConfig(5, 0, 0, 68));
         this.doXeNgang.add(new ContestConfig(5, 0, 68, 76));
     }
 

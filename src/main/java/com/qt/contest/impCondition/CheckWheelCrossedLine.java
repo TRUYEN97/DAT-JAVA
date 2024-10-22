@@ -15,12 +15,10 @@ import javax.swing.Timer;
 public class CheckWheelCrossedLine extends AbsCondition {
 
     protected final Timer timer;
-    private boolean hasFailed;
     private final ConditionActionListener actionListener;
 
     public CheckWheelCrossedLine(int spec, ConditionActionListener actionListener) {
         this.actionListener = actionListener;
-        this.hasFailed = false;
         this.timer = new Timer(spec * 1000, (e) -> {
             setErrorcode(ConstKey.ERR.WHEEL_CROSSED_LINE);
         });
@@ -28,29 +26,25 @@ public class CheckWheelCrossedLine extends AbsCondition {
 
     @Override
     public void start() {
-        this.timer.start();
         super.start(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
-    
 
     @Override
     public void stop() {
         this.timer.stop();
         super.stop(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
-    
+
     @Override
     protected boolean checkCondition() {
         if (actionListener.activate()) {
-            if (!hasFailed) {
-                hasFailed = true;
-                this.timer.restart();
+            if (!this.timer.isRunning()) {
+                this.timer.start();
                 setErrorcode(ConstKey.ERR.WHEEL_CROSSED_LINE);
             }
             return false;
         } else {
-            hasFailed = false;
-            this.timer.restart();
+            this.timer.stop();
         }
         return true;
     }
