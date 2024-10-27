@@ -14,6 +14,7 @@ import com.qt.controller.settingElement.SettingShowRoom;
 import com.qt.controller.settingElement.imp.ChangeCarId;
 import com.qt.controller.settingElement.imp.ChangePassword;
 import com.qt.controller.settingElement.imp.SettingEncoder;
+import com.qt.controller.settingElement.imp.SettingRPM;
 import com.qt.controller.settingElement.imp.SettingSignalLinghtDelayTime;
 import com.qt.controller.settingElement.imp.yardSetting.YardConfigSetting;
 import com.qt.input.camera.CameraRunner;
@@ -82,6 +83,7 @@ public class Core {
     private void initElementSetting(SettingShowRoom settingFrame) {
         settingFrame.addElementSetting(new ChangeCarId());
         settingFrame.addElementSetting(new SettingEncoder());
+        settingFrame.addElementSetting(new SettingRPM());
         settingFrame.addElementSetting(new SettingSignalLinghtDelayTime());
         settingFrame.addElementSetting(new ChangePassword());
         settingFrame.addElementSetting(new YardConfigSetting());

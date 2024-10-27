@@ -23,6 +23,7 @@ import javax.swing.Timer;
 public class KeyBoardFrame extends AbsKeylistenerFrame {
 
     private static int INDEX_INSATNCE = 0;
+    public static final String SO_RPM = "RPM";
     public static final String SO_ENCODER = "Encoder/m";
     public static final String SBD = "Số báo danh";
     public static final String SX = "Số xe";
