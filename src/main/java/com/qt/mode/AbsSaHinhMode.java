@@ -151,7 +151,7 @@ public abstract class AbsSaHinhMode extends AbsTestMode<AbsModeView> {
 
     @Override
     protected void contestDone() {
-        MCUSerialHandler.getInstance().sendReset();
+        this.carModel.setDistance(0);
     }
 
 }

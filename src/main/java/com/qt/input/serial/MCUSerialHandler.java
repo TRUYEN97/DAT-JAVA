@@ -16,6 +16,7 @@ import com.qt.controller.ProcessModelHandle;
 import com.qt.model.config.MCU_CONFIG_MODEL;
 import com.qt.model.input.CarModel;
 import com.qt.model.modelTest.process.ProcessModel;
+import com.qt.output.SoundPlayer;
 
 /**
  *
@@ -27,6 +28,8 @@ public class MCUSerialHandler {
     private final SerialHandler serialHandler;
     private CarModel model;
     private Thread threadRunner;
+    private boolean sendorStartEnable = false;
+    private boolean sendorEndEnable = false;
 
     private MCUSerialHandler() {
         this.model = new CarModel();
@@ -37,7 +40,7 @@ public class MCUSerialHandler {
                 Util.delay(500);
             }
             System.out.println("send MCU reset ok");
-            
+
         });
         this.serialHandler.setReceiver((serial, data) -> {
             try {
@@ -53,16 +56,48 @@ public class MCUSerialHandler {
                 this.model.setS3(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.S3, false));
                 this.model.setS4(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.S4, false));
                 this.model.setS5(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.S5, false));
-                this.model.setT1(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.T1, false));
-                this.model.setT2(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.T2, false));
-                this.model.setT3(json.getBooleanValue(ConstKey.CAR_MODEL_KEY.T3, false));
+                ProcessModelHandle modelHandle = ProcessModelHandle.getInstance();
+                boolean t1 = json.getBooleanValue(ConstKey.CAR_MODEL_KEY.T1, false);
+                this.model.setT1(t1);
+                boolean t2 = json.getBooleanValue(ConstKey.CAR_MODEL_KEY.T2, false);
+                this.model.setT2(t2);
+                boolean t3 = json.getBooleanValue(ConstKey.CAR_MODEL_KEY.T3, false);
+                this.model.setT3(t3);
+                if (!modelHandle.isTesting()) {
+                    SoundPlayer soundPlayer = SoundPlayer.getInstance();
+                    if (!this.sendorStartEnable) {
+                        if (t1 || t2) {
+                            this.sendorStartEnable = true;
+                            new Thread(() -> {
+                                soundPlayer.begin();
+                            }).start();
+                        }
+                    } else {
+                        this.sendorStartEnable = false;
+                    }
+                    if (!this.sendorEndEnable) {
+                        if (t3) {
+                            this.sendorEndEnable = true;
+                            new Thread(() -> {
+                                soundPlayer.endContest();
+                            }).start();
+                        }
+                    } else {
+                        this.sendorEndEnable = false;
+                    }
+                }
                 this.model.setStatus(json.getIntValue(ConstKey.CAR_MODEL_KEY.STATUS, 0));
-                this.model.setDistance(json.getDoubleValue(ConstKey.CAR_MODEL_KEY.DISTANCE));
+                this.model.setDistance(this.model.getDistance()
+                        + json.getDoubleValue(ConstKey.CAR_MODEL_KEY.DISTANCE));
                 this.model.setSpeed(json.getFloatValue(ConstKey.CAR_MODEL_KEY.SPEED));
                 this.model.setRpm(json.getIntValue(ConstKey.CAR_MODEL_KEY.RPM, 0));
-                ProcessModel processModel = ProcessModelHandle.getInstance().getProcessModel();
-                processModel.getLocation().setLatitude(json.getDoubleValue(ConstKey.CAR_MODEL_KEY.LATITUDE));
-                processModel.getLocation().setLongitude(json.getDoubleValue(ConstKey.CAR_MODEL_KEY.LONGITUDE));
+                double lat = json.getDoubleValue(ConstKey.CAR_MODEL_KEY.LATITUDE);
+                double lng = json.getDoubleValue(ConstKey.CAR_MODEL_KEY.LONGITUDE);
+                if (lng != 0 && lat != 0) {
+                    ProcessModel processModel = modelHandle.getProcessModel();
+                    processModel.getLocation().setLat(lat);
+                    processModel.getLocation().setLng(lng);
+                }
                 this.model.mathGearBoxValue();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -110,7 +145,7 @@ public class MCUSerialHandler {
 
     public boolean sendLedRedOn() {
         this.serialHandler.send("roff");
-       return this.serialHandler.send("r2");
+        return this.serialHandler.send("r2");
     }
 
     public boolean sendLedYellowOn() {

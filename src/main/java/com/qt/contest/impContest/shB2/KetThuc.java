@@ -25,7 +25,7 @@ public class KetThuc extends AbsContest {
 
     @Override
     protected boolean loop() {
-        if (this.carModel.isT1()) {
+        if (this.carModel.isT1() || this.carModel.isT2()) {
             if (!this.carModel.isNp()) {
                 addErrorCode(ConstKey.ERR.NO_SIGNAL_RIGHT_END);
             }

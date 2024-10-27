@@ -74,6 +74,7 @@ public class SH_OFF extends AbsSaHinhMode {
                 return;
             }
             MCUSerialHandler.getInstance().sendReset();
+            this.carModel.setDistance(0);
             addContest(new DungXe(yardRankConfig.getDungXeChoNg(), speedLimit));
         });
         events.put(ConstKey.KEY_BOARD.VK_3, (key) -> {
@@ -81,6 +82,7 @@ public class SH_OFF extends AbsSaHinhMode {
                 return;
             }
             MCUSerialHandler.getInstance().sendReset();
+            this.carModel.setDistance(0);
             addContest(new DungXeNgangDoc(yardRankConfig.getDungXeNgangDoc(), speedLimit));
         });
         events.put(ConstKey.KEY_BOARD.VK_4, (key) -> {
@@ -88,6 +90,7 @@ public class SH_OFF extends AbsSaHinhMode {
                 return;
             }
             MCUSerialHandler.getInstance().sendReset();
+            this.carModel.setDistance(0);
             addContest(new VetBanhXe(yardRankModel, yardRankConfig.getVetBanhXe(), speedLimit));
         });
         events.put(ConstKey.KEY_BOARD.VK_5, (key) -> {
@@ -95,6 +98,7 @@ public class SH_OFF extends AbsSaHinhMode {
                 return;
             }
             MCUSerialHandler.getInstance().sendReset();
+            this.carModel.setDistance(0);
             addContest(new NgaTu(1, yardModelHandle.getYardModel(),
                     yardRankConfig.getNgaTu1(), speedLimit));
         });
@@ -103,6 +107,7 @@ public class SH_OFF extends AbsSaHinhMode {
                 return;
             }
             MCUSerialHandler.getInstance().sendReset();
+            this.carModel.setDistance(0);
             addContest(new DuongS(yardRankModel, yardRankConfig.getDuongS(), speedLimit));
         });
         events.put(ConstKey.KEY_BOARD.VK_7, (key) -> {
@@ -110,6 +115,7 @@ public class SH_OFF extends AbsSaHinhMode {
                 return;
             }
             MCUSerialHandler.getInstance().sendReset();
+            this.carModel.setDistance(0);
             addContest(new NgaTu(2, yardModelHandle.getYardModel(),
                     yardRankConfig.getNgaTu2(), speedLimit));
         });
@@ -118,6 +124,7 @@ public class SH_OFF extends AbsSaHinhMode {
                 return;
             }
             MCUSerialHandler.getInstance().sendReset();
+            this.carModel.setDistance(0);
             addContest(new DoXeDoc(yardRankModel, yardRankConfig.getDoXeDoc(), speedLimit));
         });
         events.put(ConstKey.KEY_BOARD.VK_9, (key) -> {
@@ -125,6 +132,7 @@ public class SH_OFF extends AbsSaHinhMode {
                 return;
             }
             MCUSerialHandler.getInstance().sendReset();
+            this.carModel.setDistance(0);
             addContest(new NgaTu(3, yardModelHandle.getYardModel(),
                     yardRankConfig.getNgaTu3(), speedLimit));
         });
@@ -133,6 +141,7 @@ public class SH_OFF extends AbsSaHinhMode {
                 return;
             }
             MCUSerialHandler.getInstance().sendReset();
+            this.carModel.setDistance(0);
             addContest(new DuongTau(yardRankConfig.getDuongTau(), speedLimit));
         });
         events.put("11", (key) -> {
@@ -140,6 +149,7 @@ public class SH_OFF extends AbsSaHinhMode {
                 return;
             }
             MCUSerialHandler.getInstance().sendReset();
+            this.carModel.setDistance(0);
             addContest(new TangTocDuongThang(1, speedLimit));
         });
         events.put("12", (key) -> {
@@ -147,6 +157,7 @@ public class SH_OFF extends AbsSaHinhMode {
                 return;
             }
             MCUSerialHandler.getInstance().sendReset();
+            this.carModel.setDistance(0);
             addContest(new DoXeNgang(yardRankModel, yardRankConfig.getDoXeNgang(), speedLimit));
         });
         events.put("13", (key) -> {
@@ -154,6 +165,7 @@ public class SH_OFF extends AbsSaHinhMode {
                 return;
             }
             MCUSerialHandler.getInstance().sendReset();
+            this.carModel.setDistance(0);
             addContest(new NgaTu(4, yardModelHandle.getYardModel(),
                     yardRankConfig.getNgaTu4(), speedLimit));
         });
@@ -162,6 +174,7 @@ public class SH_OFF extends AbsSaHinhMode {
                 return;
             }
             MCUSerialHandler.getInstance().sendReset();
+            this.carModel.setDistance(0);
             addContest(new KetThuc(speedLimit));
         });
         events.put("15", (key) -> {
@@ -169,6 +182,7 @@ public class SH_OFF extends AbsSaHinhMode {
                 return;
             }
             MCUSerialHandler.getInstance().sendReset();
+            this.carModel.setDistance(0);
             addContest(new KhanCap(5));
         });
     }

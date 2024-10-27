@@ -75,6 +75,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
         this(view, name, 80, ranks);
     }
 
+    @Override
     public String getName() {
         return fullName;
     }
@@ -156,6 +157,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
             this.errorcodeHandle.clear();
             this.processlHandle.resetModel();
             MCUSerialHandler.getInstance().sendReset();
+            this.carModel.setDistance(0);
             MCUSerialHandler.getInstance().sendLedOff();
             while (!loopCheckCanTest() && !this.cancel) {
                 Util.delay(1000);
@@ -168,6 +170,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
                 this.errorcodeHandle.clear();
                 this.processlHandle.resetModel();
                 MCUSerialHandler.getInstance().sendReset();
+                this.carModel.setDistance(0);
                 this.processlHandle.startTest();
                 KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
                 MCUSerialHandler.getInstance().sendLedGreenOn();
@@ -212,7 +215,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
             return ApiService.PASS;
         }
         String id = processModel.getId();
-        if (id == null || id.equals("0")) {
+        if (id == null || id.isBlank() || id.equals("0")) {
             return ApiService.PASS;
         }
         return this.apiService.sendData(CameraRunner.getInstance().getImage(),

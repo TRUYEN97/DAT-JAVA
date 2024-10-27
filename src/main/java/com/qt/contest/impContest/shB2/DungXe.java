@@ -15,7 +15,6 @@ import com.qt.model.yardConfigMode.ContestConfig;
  */
 public class DungXe extends AbsContest {
 
-    private double oldDistance = 0;
     private final double distanceOut;
     private final double distanceLine;
 
@@ -39,7 +38,7 @@ public class DungXe extends AbsContest {
 
     @Override
     protected boolean loop() {
-        double d = getDetaDistance(oldDistance);
+        double d = this.carModel.getDistance();
         if (!hasStop && this.carModel.getStatus() == ConstKey.CAR_ST.STOP) {
             hasStop = true;
             if (d > distanceLine) {
@@ -49,7 +48,7 @@ public class DungXe extends AbsContest {
             } else {
                 soundPlayer.successSound();
             }
-        } else if (d > distanceLine && (this.carModel.isT1() || this.carModel.isT2() || this.carModel.isT3())) {
+        } else if (d > distanceOut) {
             if (!hasStop) {
                 addErrorCode(ConstKey.ERR.DONT_STOP_AS_REQUIRED);
             }
@@ -60,9 +59,9 @@ public class DungXe extends AbsContest {
 
     @Override
     protected boolean isIntoContest() {
-        if (this.carModel.isT1()) {
+        if (this.carModel.isT1() || this.carModel.isT2()) {
             hasStop = false;
-            oldDistance = this.carModel.getDistance();
+            this.carModel.setDistance(0);
             return true;
         }
         return false;

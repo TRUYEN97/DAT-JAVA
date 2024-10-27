@@ -15,7 +15,6 @@ public class TangTocDuongThang extends AbsContest {
 
     private final int beginGear;
     private final int speed;
-    private double oldDistance;
     private boolean hasBeginGear;
     private boolean firstTime;
 
@@ -30,44 +29,48 @@ public class TangTocDuongThang extends AbsContest {
     protected void init() {
     }
 
-    private boolean firstPass;
+    private int step = 0;
 
     @Override
     protected boolean loop() {
         if (firstTime) {
-            if (!hasBeginGear && this.carModel.getGearBoxValue() == this.beginGear) {
+            if (this.carModel.getGearBoxValue() != this.beginGear) {
+                addErrorCode(ConstKey.ERR.INCORRECT_GEAR_SHIFT);
                 hasBeginGear = true;
             }
-            if (getDetaDistance(oldDistance) >= 25) {
-                firstTime = false;
-                if (this.carModel.getSpeed() <= this.speed) {
-                    addErrorCode(ConstKey.ERR.FAILED_TO_REACH_REQUIRED_SPEED);
-                } else if (!hasBeginGear || this.carModel.getGearBoxValue() != beginGear + 1) {
-                    addErrorCode(ConstKey.ERR.INCORRECT_GEAR_SHIFT);
-                } else {
-                    this.firstPass = true;
-                }
+            firstTime = false;
+        }
+        if (this.carModel.getDistance() >= 25 && step == 0) {
+            if (this.carModel.getSpeed() <= this.speed) {
+                addErrorCode(ConstKey.ERR.FAILED_TO_REACH_REQUIRED_SPEED);
+                step = 1;
+            } else if (!hasBeginGear && this.carModel.getGearBoxValue() != beginGear + 1) {
+                addErrorCode(ConstKey.ERR.INCORRECT_GEAR_SHIFT);
+                step = 1;
+            } else {
+                step = 2;
             }
         }
-        if (this.firstPass && getDetaDistance(oldDistance) >= 50) {
-            if (this.carModel.getSpeed() > this.speed) {
-                addErrorCode(ConstKey.ERR.FAILED_TO_REACH_REQUIRED_SPEED);
-            } else if (this.carModel.getGearBoxValue() != beginGear) {
-                addErrorCode(ConstKey.ERR.INCORRECT_GEAR_DOWNSHIFT);
-            }else{
-                return true;
+        if (this.carModel.getDistance() >= 50) {
+            if (step == 2) {
+                if (this.carModel.getSpeed() > this.speed) {
+                    addErrorCode(ConstKey.ERR.FAILED_TO_REACH_REQUIRED_SPEED);
+                } else if (this.carModel.getGearBoxValue() != beginGear) {
+                    addErrorCode(ConstKey.ERR.INCORRECT_GEAR_DOWNSHIFT);
+                }
             }
+            return true;
         }
         return false;
     }
 
     @Override
     protected boolean isIntoContest() {
-        if (this.carModel.isT1()) {
+        if (this.carModel.isT1() || this.carModel.isT2()) {
             this.hasBeginGear = false;
-            this.firstPass = false;
             this.firstTime = true;
-            this.oldDistance = this.carModel.getDistance();
+            this.step = 0;
+            this.carModel.setDistance(0);
             return true;
         }
         return false;

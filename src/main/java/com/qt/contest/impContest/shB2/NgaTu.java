@@ -40,11 +40,7 @@ public class NgaTu extends AbsContest {
         this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
     }
 
-    @Override
-    protected void init() {
-    }
     private boolean hasStop = false;
-    private double oldDistance = 0;
 
     @Override
     public void end() {
@@ -60,8 +56,8 @@ public class NgaTu extends AbsContest {
 
     @Override
     protected boolean loop() {
-        double d = getDetaDistance(oldDistance);
-        if (d >= distanceLine) {
+        double d = this.carModel.getDistance();
+        if (d > distanceLine) {
             checkCondition();
             if (checkEndTest()) {
                 this.checkTimeOut20s.setPass();
@@ -71,7 +67,7 @@ public class NgaTu extends AbsContest {
         }
         if (!hasStop && this.carModel.getStatus() == ConstKey.CAR_ST.STOP) {
             hasStop = true;
-            d = getDetaDistance(oldDistance);
+            d = this.carModel.getDistance();
             if (d >= distanceLine) {
                 addErrorCode(ConstKey.ERR.STOP_AFTER_DES);
             } else if (d < distanceLine - 0.5) {
@@ -84,10 +80,9 @@ public class NgaTu extends AbsContest {
     }
 
     private boolean checkEndTest() {
-        double d = getDetaDistance(oldDistance);
-        if (times == 0 || times == 3) {
-            if (this.carModel.isT1() || this.carModel.isT2() || this.carModel.isT3()
-                    && this.carModel.getStatus() == ConstKey.CAR_ST.FORWARD) {
+        double d = this.carModel.getDistance();
+        if (times == 1 || times == 2) {
+            if (this.carModel.isT1() || this.carModel.isT2()) {
                 return true;
             }
             if (d >= distanceOut) {
@@ -95,7 +90,7 @@ public class NgaTu extends AbsContest {
                 return true;
             }
         } else {
-            if (this.carModel.isT1() || this.carModel.isT2() || this.carModel.isT3()) {
+            if (this.carModel.isT1() || this.carModel.isT2()) {
                 addErrorCode(ConstKey.ERR.WRONG_WAY);
                 return true;
             }
@@ -137,10 +132,14 @@ public class NgaTu extends AbsContest {
             this.dontTurnOnNp = false;
             this.ranRedLight = false;
             this.lightStatus = -1;
-            this.oldDistance = this.carModel.getDistance();
+            this.carModel.setDistance(0);
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void init() {
     }
 
 }

@@ -21,7 +21,6 @@ public class VetBanhXe extends ContestHasMutiLine {
     private final CheckWheelCrossedLine crossedLine;
     private double distanceOut;
     private double distanceOutPath;
-    private double oldDistance;
 
     public VetBanhXe(YardRankModel yardModel, List<ContestConfig> contestConfigs, int speedLimit) {
         super(ConstKey.CONTEST_NAME.VET_BANH_XE,
@@ -50,7 +49,7 @@ public class VetBanhXe extends ContestHasMutiLine {
 
     @Override
     protected boolean loop() {
-        if (getDetaDistance(this.oldDistance) < 1.5 ) {
+        if (this.carModel.getDistance() < 1.5) {
             return false;
         }
         if (this.carModel.isT2()) {
@@ -60,29 +59,28 @@ public class VetBanhXe extends ContestHasMutiLine {
             into1 = true;
         }
         if (!checkPathLineDone
-                && getDetaDistance(this.oldDistance) >= distanceOutPath
-                && this.carModel.isT1()) {
+                && this.carModel.getDistance() >= distanceOutPath) {
             if (!into || !into1) {
                 addErrorCode(ConstKey.ERR.WHEEL_OUT_OF_PATH);
             }
             crossedPath.stop();
             checkPathLineDone = true;
         }
-        return getDetaDistance(this.oldDistance) > distanceOut 
+        return this.carModel.getDistance() > distanceOut
                 && (this.carModel.isT1() || this.carModel.isT2() || this.carModel.isT3());
     }
 
     @Override
     protected boolean isIntoContest() {
-        if (this.carModel.isT3()) {
+        if (this.carModel.isT1()) {
             into = false;
             into1 = false;
             checkPathLineDone = false;
-            this.oldDistance = this.carModel.getDistance();
-            if (checkIntoContest(this.oldDistance)) {
+            if (checkIntoContest(this.carModel.getDistance())) {
                 this.distanceOut = this.distanceIntoContest.getContestConfig().getDistanceOut();
                 this.distanceOutPath = this.distanceIntoContest.getContestConfig().getDistanceLine();
             }
+            this.carModel.setDistance(0);
             return true;
         }
         return false;

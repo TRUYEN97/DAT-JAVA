@@ -15,8 +15,8 @@ import lombok.Setter;
 @Setter
 public class LocationModel {
 
-    private double longitude = 0;
-    private double latitude = 0;
+    private double lng = 0;
+    private double lat = 0;
 
     public LocationModel() {
     }

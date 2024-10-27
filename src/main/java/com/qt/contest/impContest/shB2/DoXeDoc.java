@@ -18,7 +18,6 @@ import java.util.List;
 public class DoXeDoc extends ContestHasMutiLine {
 
     private final CheckWheelCrossedLine crossedLine;
-    private double oldDistance;
     private double distanceOut = 3;
 
     public DoXeDoc(YardRankModel yardRankModel, List<ContestConfig> contestConfigs, int speedLimit) {
@@ -48,10 +47,9 @@ public class DoXeDoc extends ContestHasMutiLine {
                     && this.carModel.isT3()) {
                 success = true;
                 soundPlayer.successSound();
-                this.oldDistance = this.carModel.getDistance();
             }
         }
-        if (getDetaDistance(oldDistance) > distanceOut
+        if (this.carModel.getDistance() > distanceOut
                 && (this.carModel.isT1() || this.carModel.isT2() || this.carModel.isT3())
                 && this.carModel.getStatus() == ConstKey.CAR_ST.FORWARD) {
             if (!success) {
@@ -68,15 +66,16 @@ public class DoXeDoc extends ContestHasMutiLine {
 
     @Override
     protected boolean isIntoContest() {
-        if (this.carModel.isT1() && this.carModel.getStatus() == ConstKey.CAR_ST.FORWARD) {
+        if ((this.carModel.isT1() || this.carModel.isT2())
+                && this.carModel.getStatus() == ConstKey.CAR_ST.FORWARD) {
             hasIntoPaking = false;
             success = false;
-            this.oldDistance = this.carModel.getDistance();
-            if (this.checkIntoContest(this.oldDistance)) {
+            if (this.checkIntoContest(this.carModel.getDistance())) {
                 this.distanceOut = this.distanceIntoContest.getContestConfig().getDistanceOut();
             } else {
                 stop();
             }
+            this.carModel.setDistance(0);
             return true;
         }
         return false;

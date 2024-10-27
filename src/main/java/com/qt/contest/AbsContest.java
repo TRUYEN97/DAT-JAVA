@@ -25,6 +25,7 @@ public abstract class AbsContest implements IgetTime {
     public static final int RUNNING = 1;
     public static final int DONE = 2;
     private final ProcessModelHandle processlHandle;
+    protected final MCUSerialHandler mcuSerialHandler;
     protected final CarModel carModel;
     protected final ContestDataModel contestModel;
     protected final SoundPlayer soundPlayer;
@@ -49,6 +50,7 @@ public abstract class AbsContest implements IgetTime {
         this.timeOut = timeout < 0 ? 0 : timeout;
         this.sayContestName = sayContestName;
         this.nameSound = nameSound;
+        this.mcuSerialHandler = MCUSerialHandler.getInstance();
         this.processlHandle = ProcessModelHandle.getInstance();
         this.carModel = MCUSerialHandler.getInstance().getModel();
         this.soundPlayer = SoundPlayer.getInstance();
@@ -152,7 +154,7 @@ public abstract class AbsContest implements IgetTime {
             try {
                 status = RUNNING;
                 while (!stop && !loop()) {
-                    Util.delay(10);
+                    Util.delay(1);
                 }
                 status = DONE;
             } catch (Exception e) {

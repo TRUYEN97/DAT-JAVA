@@ -18,7 +18,6 @@ public class DungXeNgangDoc extends AbsContest {
 
     private boolean hasStop = false;
     private boolean rollBack = false;
-    private double oldDistance = 0;
     private double distanceWhenStop = 0;
     private final CheckTimeOut checkTimeOut30s;
     private final double distanceOut;
@@ -45,7 +44,7 @@ public class DungXeNgangDoc extends AbsContest {
 
     @Override
     protected boolean loop() {
-        double d = getDetaDistance(oldDistance);
+        double d = this.carModel.getDistance();
         if (!rollBack && hasStop && getDetaDistance(distanceWhenStop) < -0.5) {
             addErrorCode(ConstKey.ERR.ROLLED_BACK_OVER_50M);
             rollBack = true;
@@ -76,7 +75,7 @@ public class DungXeNgangDoc extends AbsContest {
         if (this.carModel.isT1() || this.carModel.isT2()) {
             this.hasStop = false;
             this.rollBack = false;
-            this.oldDistance = this.carModel.getDistance();
+            this.carModel.setDistance(0);
             return true;
         }
         return false;
