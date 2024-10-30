@@ -7,6 +7,7 @@ package com.qt.mode;
 import com.qt.common.API.Response;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
+import com.qt.common.Setting;
 import com.qt.common.TestStatusLogger;
 import com.qt.common.Util;
 import com.qt.common.communication.Communicate.IgetName;
@@ -67,6 +68,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
     protected final ShowErrorcode showErrorcode;
     protected final Printer printer;
     protected final Timer timer;
+    protected final MCUSerialHandler mCUSerialHandler;
     private ICommandAPIReceive<Response> commandApiReceive;
     private ModeHandle modeHandle;
     private boolean cancel;
@@ -101,6 +103,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
         this.conditionHandle = new CheckConditionHandle();
         this.printer = new Printer();
         this.commandApiReceive = new AnalysisApiCommand();
+        this.mCUSerialHandler = MCUSerialHandler.getInstance();
         this.timer = new Timer(20000, (e) -> {
             new Thread(() -> {
                 upTestDataToServer();
@@ -156,9 +159,9 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
             KeyEventManagement.getInstance().addKeyEventBackAge(prepareEventsPackage);
             this.errorcodeHandle.clear();
             this.processlHandle.resetModel();
-            MCUSerialHandler.getInstance().sendReset();
+            this.mCUSerialHandler.sendReset();
             this.carModel.setDistance(0);
-            MCUSerialHandler.getInstance().sendLedOff();
+            this.mCUSerialHandler.sendLedOff();
             while (!loopCheckCanTest() && !this.cancel) {
                 Util.delay(1000);
             }
@@ -169,11 +172,11 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
                         this.processModel.getExamId());
                 this.errorcodeHandle.clear();
                 this.processlHandle.resetModel();
-                MCUSerialHandler.getInstance().sendReset();
+                this.mCUSerialHandler.sendReset();
                 this.carModel.setDistance(0);
                 this.processlHandle.startTest();
                 KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
-                MCUSerialHandler.getInstance().sendLedGreenOn();
+                this.mCUSerialHandler.sendLedGreenOn();
                 this.soundPlayer.begin();
                 this.conditionHandle.start();
                 this.timer.start();
@@ -235,11 +238,11 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
             updateLog();
             this.printer.printTestResult(this.processModel.getId());
             this.soundPlayer.sayResultTest(score, this.processlHandle.isPass());
-            if (this.processlHandle.isPass()) {
-                MCUSerialHandler.getInstance().sendLedGreenOn();
-            } else {
-                MCUSerialHandler.getInstance().sendLedRedOn();
-            }
+//            if (this.processlHandle.isPass()) {
+//                this.mCUSerialHandler.sendLedGreenOn();
+//            } else {
+//                this.mCUSerialHandler.sendLedRedOn();
+//            }
             TestStatusLogger.getInstance().remove();
             int rs = ApiService.FAIL;
             for (int i = 0; i < 3; i++) {
@@ -323,6 +326,13 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
     public void modeInit() {
         if (this.view != null) {
             this.view.start();
+        }
+        if (this.name != null) {
+            if (this.name.equalsIgnoreCase(ConstKey.MODE_NAME.DUONG_TRUONG)) {
+                Setting.getInstance().setDuongTruongMode();
+            } else {
+                Setting.getInstance().setSaHinhMode();
+            }
         }
     }
 

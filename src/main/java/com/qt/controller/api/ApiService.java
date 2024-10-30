@@ -28,7 +28,7 @@ import java.nio.file.Files;
  * @author Admin
  */
 public class ApiService {
-    
+
     public static final int API_INVALID = -3;
     public static final int URL_INVALID = -2;
     public static final int ID_INVALID = -1;
@@ -42,7 +42,7 @@ public class ApiService {
 //    private static volatile ApiService insatnce;
     private final Setting setting;
     private final RestAPI restAPI;
-    
+
     public ApiService() {
         this.setting = Setting.getInstance();
         this.restAPI = new RestAPI();
@@ -76,7 +76,7 @@ public class ApiService {
             return false;
         }
     }
-    
+
     public UserModel checkUserId(String id, String carID) {
         try {
             if (id == null || id.isBlank() || "0".equals(id)) {
@@ -102,7 +102,7 @@ public class ApiService {
         }
     }
     protected static final String CAR_ID = "carId";
-    
+
     public int sendData(BufferedImage image, JSONObject jSONObject) {
         try {
             String url = this.setting.getSendDataUrl();
@@ -139,7 +139,7 @@ public class ApiService {
             return FAIL;
         }
     }
-    
+
     public int sendData(JSONObject jSONObject, File imgFile) {
         try {
             String url = this.setting.getSendDataUrl();
@@ -176,7 +176,7 @@ public class ApiService {
             return FAIL;
         }
     }
-    
+
     public int sendData(ProcessModel processModel, File imgFile) {
         try {
             if (processModel == null) {
@@ -194,7 +194,7 @@ public class ApiService {
             return FAIL;
         }
     }
-    
+
     public int sendData(File jsonFile, File imgFile) {
         try {
             if (jsonFile == null || !jsonFile.exists()) {
@@ -207,7 +207,7 @@ public class ApiService {
             return FAIL;
         }
     }
-    
+
     public int sendData(File jsonFile, BufferedImage image) {
         try {
             if (jsonFile == null || !jsonFile.exists()) {
@@ -261,7 +261,7 @@ public class ApiService {
             return WAIT;
         }
     }
-    
+
     public Response checkCommad(String carId) {
         try {
             if (carId == null || carId.isBlank() || carId.equals("0")) {
@@ -279,11 +279,11 @@ public class ApiService {
             return null;
         }
     }
-    
+
     public void setRootFrame(Component component) {
         this.restAPI.setComponent(component);
     }
-    
+
     public void sendCancelRequest(String id, String examId) {
         if (id == null || id.isBlank() || examId == null || examId.isBlank()) {
             return;
@@ -296,5 +296,27 @@ public class ApiService {
         restAPI.sendPost(url, JsonBodyAPI.builder()
                 .put(ID, id)
                 .put(EXAM_ID, examId), true);
+    }
+
+    public UserModel checkCarPair(String carId) {
+        try {
+            String url = this.setting.getcheckCarPairUrl();
+            if (url == null) {
+                ErrorLog.addError(this, "không tìm thấy: checkCarPair url");
+                return null;
+            }
+            JsonBodyAPI bodyAPI = JsonBodyAPI.builder().put(ID, carId);
+            Response response = restAPI.sendPost(url, bodyAPI, false);
+            if (response == null || !response.isSuccess()) {
+                return null;
+            }
+            restAPI.getLogger().addLog("POST", bodyAPI.toJSONString());
+            restAPI.getLogger().addLog("RESPONSE", "%s - %s", response.getCode(), response.getResponse());
+            return response.getData(UserModel.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorLog.addError(this, e);
+            return null;
+        }
     }
 }

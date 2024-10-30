@@ -35,8 +35,6 @@ public abstract class AbsSaHinhMode extends AbsTestMode<AbsModeView> {
     protected static enum MODEL_RANK_NAME {
         RANK_B, RANK_C, RANK_D, RANK_E
     };
-    private boolean runnable;
-    private String oldId;
     protected final YardRankModel yardRankModel;
     protected final int speedLimit;
     protected final YardModelHandle yardModelHandle;
@@ -50,8 +48,6 @@ public abstract class AbsSaHinhMode extends AbsTestMode<AbsModeView> {
         this.conditionHandle.addConditon(new CheckRPM());
         this.conditionHandle.addConditon(new ContainContestChecker(
                 ConstKey.CONTEST_NAME.KET_THUC, false, processlHandle));
-        this.runnable = false;
-        this.oldId = "";
         this.yardModelHandle = YardModelHandle.getInstance();
         YardConfigModel yardConfig = YardConfig.getInstance().getYardConfigModel();
         switch (modelRank) {
@@ -77,12 +73,32 @@ public abstract class AbsSaHinhMode extends AbsTestMode<AbsModeView> {
     @Override
     protected boolean loopCheckCanTest() {
         if (this.carModel.isNt() && this.carModel.getStatus() == ConstKey.CAR_ST.STOP) {
-            UserModel userModel = new UserModel();
-            userModel.setId("0");
-            userModel.setExamId("0");
+            if (this.carModel.isAt()) {
+                this.mCUSerialHandler.sendLedRedOn();
+            } else {
+                this.mCUSerialHandler.sendLedOff();
+            }
+            UserModel userModel = this.apiService.checkCarPair(this.processModel.getCarId());
+            if (userModel == null) {
+                Util.delay(1000);
+                return false;
+            }
+            if (userModel.getId() == null || userModel.getId().isBlank()) {
+                userModel.setId("0");
+                userModel.setExamId("0");
+            }
             this.processlHandle.setUserModel(userModel);
-            creadContestList();
-            return true;
+            switch (this.apiService.checkRunnable(userModel.getId())) {
+                case ApiService.START -> {
+                    this.mCUSerialHandler.sendLedOff();
+                    creadContestList();
+                    return true;
+                }
+                case ApiService.ID_INVALID -> {
+                    soundPlayer.userIdHasTest();
+                    Util.delay(2000);
+                }
+            }
         }
         return false;
     }
@@ -134,7 +150,6 @@ public abstract class AbsSaHinhMode extends AbsTestMode<AbsModeView> {
 
     @Override
     protected void endTest() {
-        runnable = false;
     }
 
     @Override

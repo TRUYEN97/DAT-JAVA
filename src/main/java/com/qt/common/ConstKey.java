@@ -19,6 +19,7 @@ public final class ConstKey {
         public static final String RUNNABLE_URL = "runnableUrl";
         public static final String CANCEL_REQUEST_URL = "cancelUrl";
         public static final String SERVER_PING_ADDR = "serverIp";
+        public static final String CAR_PAIR_URL = "checkCarPairUrl";
     }
 
     public static final class PATH {

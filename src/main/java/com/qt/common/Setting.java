@@ -14,12 +14,32 @@ import java.util.Properties;
 public class Setting {
 
     private static volatile Setting instance;
-    private final Properties properties;
+    private final Properties filePath;
+    private final Properties apiProperties;
 
     private Setting() {
-        this.properties = new Properties();
+        this.filePath = new Properties();
+        this.apiProperties = new Properties();
         try {
-            properties.load(ErrorLog.class.getResourceAsStream("/config.properties"));
+            filePath.load(Setting.class.getResourceAsStream("/config.properties"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            ErrorLog.addError("ApiService-constructor", ex);
+        }
+    }
+
+    public void setSaHinhMode() {
+        try {
+            apiProperties.load(Setting.class.getResourceAsStream("/ShConfig.properties"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            ErrorLog.addError("ApiService-constructor", ex);
+        }
+    }
+
+    public void setDuongTruongMode() {
+        try {
+            apiProperties.load(Setting.class.getResourceAsStream("/DtConfig.properties"));
         } catch (IOException ex) {
             ex.printStackTrace();
             ErrorLog.addError("ApiService-constructor", ex);
@@ -40,54 +60,50 @@ public class Setting {
     }
 
     public String getBackUpLogDir() {
-        return properties.getProperty(ConstKey.PATH.DIR_BACKUP_LOG, "logBackup");
+        return filePath.getProperty(ConstKey.PATH.DIR_BACKUP_LOG, "logBackup");
     }
 
     public String getLogDir() {
-        return properties.getProperty(ConstKey.PATH.DIR_LOG, "log");
+        return filePath.getProperty(ConstKey.PATH.DIR_LOG, "log");
     }
 
     public String getConfigPath() {
-        return properties.getProperty(ConstKey.PATH.CONFIG_PATH, "config/carConfig.json");
+        return filePath.getProperty(ConstKey.PATH.CONFIG_PATH, "config/carConfig.json");
     }
-    
+
     public String getYardConfigPath() {
-        return properties.getProperty(ConstKey.PATH.YARD_CONFIG_PATH, "config/yardConfig.json");
-    }
-
-    public String getProperty(String key) {
-        return properties.getProperty(key);
-    }
-
-    public String getProperty(String key, String defaultVal) {
-        return properties.getProperty(key, defaultVal);
+        return filePath.getProperty(ConstKey.PATH.YARD_CONFIG_PATH, "config/yardConfig.json");
     }
 
     public String getServerPingIp() {
-        return properties.getProperty(ConstKey.URL.SERVER_PING_ADDR);
+        return apiProperties.getProperty(ConstKey.URL.SERVER_PING_ADDR);
     }
 
     public String getSendDataUrl() {
-        return properties.getProperty(ConstKey.URL.SEND_DATA_URL);
+        return apiProperties.getProperty(ConstKey.URL.SEND_DATA_URL);
     }
 
     public String getCheckCarIdUrl() {
-        return properties.getProperty(ConstKey.URL.CHECK_CAR_ID_URL);
+        return apiProperties.getProperty(ConstKey.URL.CHECK_CAR_ID_URL);
     }
 
     public String getCheckUserIdUrl() {
-        return properties.getProperty(ConstKey.URL.CHECK_USER_ID_URL);
+        return apiProperties.getProperty(ConstKey.URL.CHECK_USER_ID_URL);
     }
 
     public String getCheckCommandUrl() {
-        return properties.getProperty(ConstKey.URL.CHECK_COMMAND_URL);
+        return apiProperties.getProperty(ConstKey.URL.CHECK_COMMAND_URL);
     }
 
     public String getCancelRequestUrl() {
-        return properties.getProperty(ConstKey.URL.CANCEL_REQUEST_URL);
+        return apiProperties.getProperty(ConstKey.URL.CANCEL_REQUEST_URL);
     }
 
     public String getCheckRunnableUrl() {
-         return properties.getProperty(ConstKey.URL.RUNNABLE_URL);
+        return apiProperties.getProperty(ConstKey.URL.RUNNABLE_URL);
+    }
+
+    public String getcheckCarPairUrl() {
+        return apiProperties.getProperty(ConstKey.URL.CAR_PAIR_URL);
     }
 }
