@@ -17,7 +17,6 @@ import java.util.List;
  */
 public class VetBanhXe extends ContestHasMutiLine {
 
-    private final CheckWheelCrossedLine crossedPath;
     private final CheckWheelCrossedLine crossedLine;
     private double distanceOut;
     private double distanceOutPath;
@@ -28,14 +27,10 @@ public class VetBanhXe extends ContestHasMutiLine {
                 true, true, true, 120, contestConfigs);
         this.distanceOut = 7;
         this.distanceOutPath = 3;
-        this.crossedPath = new CheckWheelCrossedLine(5, () -> {
-            return getWheelCrosserLineStatus(yardModel.getRoadZs());
-        });
         this.crossedLine = new CheckWheelCrossedLine(5, () -> {
             return getWheelCrosserLineStatus(yardModel.getRoadZs());
         });
         this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
-        this.conditionIntoHandle.addConditon(crossedPath);
         this.conditionIntoHandle.addConditon(crossedLine);
     }
 
@@ -49,13 +44,13 @@ public class VetBanhXe extends ContestHasMutiLine {
 
     @Override
     protected boolean loop() {
-        if (this.carModel.getDistance() < 1.5) {
+        if (this.carModel.getDistance() < 2) {
             return false;
         }
         if (this.carModel.isT2()) {
             into = true;
         }
-        if (this.carModel.isT3()) {
+        if (into && this.carModel.isT3()) {
             into1 = true;
         }
         if (!checkPathLineDone
@@ -63,11 +58,9 @@ public class VetBanhXe extends ContestHasMutiLine {
             if (!into || !into1) {
                 addErrorCode(ConstKey.ERR.WHEEL_OUT_OF_PATH);
             }
-            crossedPath.stop();
             checkPathLineDone = true;
         }
-        return this.carModel.getDistance() > distanceOut
-                && (this.carModel.isT1() || this.carModel.isT2() || this.carModel.isT3());
+        return checkPathLineDone && (this.carModel.isT1() || this.carModel.isT2());
     }
 
     @Override

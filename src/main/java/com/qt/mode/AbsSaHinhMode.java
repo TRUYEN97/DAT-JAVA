@@ -166,7 +166,6 @@ public abstract class AbsSaHinhMode extends AbsTestMode<AbsModeView> {
 
     @Override
     protected void contestDone() {
-        this.carModel.setDistance(0);
     }
 
 }

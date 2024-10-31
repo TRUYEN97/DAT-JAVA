@@ -5,16 +5,16 @@
 package com.qt.contest.impContest.shB2;
 
 import com.qt.common.ConstKey;
-import com.qt.contest.AbsContest;
 import com.qt.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
 import com.qt.contest.impCondition.timerCondition.CheckTimeOut;
+import com.qt.contest.impContest.AbsSaHinhContest;
 import com.qt.model.yardConfigMode.ContestConfig;
 
 /**
  *
  * @author Admin
  */
-public class DungXeNgangDoc extends AbsContest {
+public class DungXeNgangDoc extends AbsSaHinhContest {
 
     private boolean hasStop = false;
     private boolean rollBack = false;

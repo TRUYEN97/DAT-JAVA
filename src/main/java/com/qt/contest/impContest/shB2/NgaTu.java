@@ -5,9 +5,9 @@
 package com.qt.contest.impContest.shB2;
 
 import com.qt.common.ConstKey;
-import com.qt.contest.AbsContest;
 import com.qt.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
 import com.qt.contest.impCondition.timerCondition.CheckTimeOut;
+import com.qt.contest.impContest.AbsSaHinhContest;
 import com.qt.model.input.yard.TrafficLightModel;
 import com.qt.model.input.yard.YardModel;
 import com.qt.model.yardConfigMode.ContestConfig;
@@ -16,7 +16,7 @@ import com.qt.model.yardConfigMode.ContestConfig;
  *
  * @author Admin
  */
-public class NgaTu extends AbsContest {
+public class NgaTu extends AbsSaHinhContest {
 
     private final CheckTimeOut checkTimeOut20s;
     private final CheckTimeOut checkTimeOut30s;
@@ -81,7 +81,7 @@ public class NgaTu extends AbsContest {
 
     private boolean checkEndTest() {
         double d = this.carModel.getDistance();
-        if (times == 1 || times == 2) {
+        if (times == 2 || times == 3) {
             if (this.carModel.isT1() || this.carModel.isT2()) {
                 return true;
             }

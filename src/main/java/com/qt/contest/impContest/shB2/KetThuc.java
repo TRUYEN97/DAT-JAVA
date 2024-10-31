@@ -5,14 +5,14 @@
 package com.qt.contest.impContest.shB2;
 
 import com.qt.common.ConstKey;
-import com.qt.contest.AbsContest;
 import com.qt.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
+import com.qt.contest.impContest.AbsSaHinhContest;
 
 /**
  *
  * @author Admin
  */
-public class KetThuc extends AbsContest {
+public class KetThuc extends AbsSaHinhContest {
 
     public KetThuc(int speedLimit) {
         super(ConstKey.CONTEST_NAME.KET_THUC, ConstKey.CONTEST_NAME.KET_THUC, true, true, true, 2000);

@@ -5,8 +5,8 @@
 package com.qt.contest.impContest.shB2;
 
 import com.qt.common.ConstKey;
-import com.qt.contest.AbsContest;
 import com.qt.contest.impCondition.OnOffImp.CheckDistanceIntoContest;
+import com.qt.contest.impContest.AbsSaHinhContest;
 import com.qt.model.yardConfigMode.ContestConfig;
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Admin
  */
-public abstract class ContestHasMutiLine extends AbsContest {
+public abstract class ContestHasMutiLine extends AbsSaHinhContest {
 
     protected final CheckDistanceIntoContest distanceIntoContest;
     protected int index = -1;

@@ -30,6 +30,8 @@ public class MCUSerialHandler {
     private Thread threadRunner;
     private boolean sendorStartEnable = false;
     private boolean sendorEndEnable = false;
+    private Thread startSoundThread;
+    private Thread endSoundThread;
 
     private MCUSerialHandler() {
         this.model = new CarModel();
@@ -65,22 +67,28 @@ public class MCUSerialHandler {
                 this.model.setT3(t3);
                 if (!modelHandle.isTesting()) {
                     SoundPlayer soundPlayer = SoundPlayer.getInstance();
-                    if (!this.sendorStartEnable) {
-                        if (t1 || t2) {
+                    if (t1 || t2) {
+                        if (!this.sendorStartEnable) {
                             this.sendorStartEnable = true;
-                            new Thread(() -> {
-                                soundPlayer.begin();
-                            }).start();
+                            if (this.startSoundThread == null || !this.startSoundThread.isAlive()) {
+                                this.startSoundThread = new Thread(() -> {
+                                    soundPlayer.startContest();
+                                });
+                                this.startSoundThread.start();
+                            }
                         }
                     } else {
                         this.sendorStartEnable = false;
                     }
-                    if (!this.sendorEndEnable) {
-                        if (t3) {
+                    if (t3) {
+                        if (!this.sendorEndEnable) {
                             this.sendorEndEnable = true;
-                            new Thread(() -> {
-                                soundPlayer.endContest();
-                            }).start();
+                            if (this.endSoundThread == null || !this.endSoundThread.isAlive()) {
+                                this.endSoundThread = new Thread(() -> {
+                                    soundPlayer.endContest();
+                                });
+                                this.endSoundThread.start();
+                            }
                         }
                     } else {
                         this.sendorEndEnable = false;

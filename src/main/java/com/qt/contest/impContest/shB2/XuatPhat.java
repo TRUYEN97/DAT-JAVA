@@ -5,16 +5,15 @@
 package com.qt.contest.impContest.shB2;
 
 import com.qt.common.ConstKey;
-import com.qt.contest.AbsContest;
 import com.qt.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
 import com.qt.contest.impCondition.timerCondition.CheckTimeOut;
-import com.qt.input.serial.MCUSerialHandler;
+import com.qt.contest.impContest.AbsSaHinhContest;
 
 /**
  *
  * @author Admin
  */
-public class XuatPhat extends AbsContest {
+public class XuatPhat extends AbsSaHinhContest {
 
     private final CheckTimeOut timeOut30s;
     private final CheckTimeOut timeOut20s;
