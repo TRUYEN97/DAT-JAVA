@@ -15,15 +15,21 @@ public class ContestConfig {
     private double distanceLowerLimit = 0;
     private double distanceUpperLimit = 0;
     private Integer indexOfYardInput = 0;
-    public ContestConfig() {
-    }
+    
+    public ContestConfig(){}
 
     public ContestConfig(double distanceOut, double distanceLine, double distanceLowerLimit, double distanceUpperLimit) {
-        this();
+        this(distanceOut, distanceLine, distanceLowerLimit, distanceUpperLimit, 0);
+    }
+
+    public ContestConfig(double distanceOut, double distanceLine,
+            double distanceLowerLimit, double distanceUpperLimit,
+            int indexOfYardInput) {
         this.distanceOut = distanceOut;
         this.distanceLine = distanceLine;
         this.distanceLowerLimit = distanceLowerLimit;
         this.distanceUpperLimit = distanceUpperLimit;
+        this.indexOfYardInput = indexOfYardInput;
     }
 
     public void setIndexOfYardInput(Integer indexOfYardInput) {
@@ -33,7 +39,7 @@ public class ContestConfig {
     public Integer getIndexOfYardInput() {
         return indexOfYardInput;
     }
-    
+
     public double getDistanceOut() {
         return distanceOut;
     }
@@ -65,5 +71,5 @@ public class ContestConfig {
     public void setDistanceUpperLimit(double distanceUpperLimit) {
         this.distanceUpperLimit = distanceUpperLimit;
     }
-    
+
 }
