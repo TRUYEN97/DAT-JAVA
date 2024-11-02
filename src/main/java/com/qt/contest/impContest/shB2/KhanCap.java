@@ -16,7 +16,6 @@ import com.qt.input.serial.MCUSerialHandler;
 public class KhanCap extends AbsContest {
 
     private long oldTime;
-    private boolean hasStop;
     private boolean firstDone;
     private final double distanceBegin;
     private final WarningSoundPlayer warningSoundPlayer;
@@ -36,21 +35,24 @@ public class KhanCap extends AbsContest {
         this.oldDistance = this.carModel.getDistance();
     }
 
+    private boolean success = false;
+
     @Override
     protected boolean loop() {
-        if (getDetaTime() < 3000) {
+        if (getDetaTime() < 5000) {
             if (this.carModel.isNp() && this.carModel.isNt()) {
                 if (this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
                     addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
                     return true;
+                } else {
+                    success = true;
                 }
+            } else {
+                success = false;
             }
-        } else if (getDetaTime() < 5000) {
-            if (this.carModel.isNp() && this.carModel.isNt()) {
-                if (this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
-                    addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
-                    return true;
-                }
+            if (!success && getDetaTime() > 3000) {
+                addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
+                return true;
             }
         } else {
             this.warningSoundPlayer.stop();
@@ -83,8 +85,8 @@ public class KhanCap extends AbsContest {
     @Override
     protected boolean isIntoContest() {
         if (getDetaDistance(oldDistance) >= distanceBegin) {
-            hasStop = false;
             firstDone = false;
+            success = false;
             this.warningSoundPlayer.start();
             oldTime = System.currentTimeMillis();
             this.oldDistance = this.carModel.getDistance();
