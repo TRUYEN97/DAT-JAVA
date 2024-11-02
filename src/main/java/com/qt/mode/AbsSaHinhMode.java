@@ -90,7 +90,7 @@ public abstract class AbsSaHinhMode extends AbsTestMode<AbsModeView> {
             this.processlHandle.setUserModel(userModel);
             switch (this.apiService.checkRunnable(userModel.getId())) {
                 case ApiService.START -> {
-                    this.mCUSerialHandler.sendLedOff();
+                    this.mCUSerialHandler.sendLedRedOff();
                     creadContestList();
                     return true;
                 }

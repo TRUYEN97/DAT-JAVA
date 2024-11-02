@@ -52,13 +52,17 @@ public class NgaTu extends AbsSaHinhContest {
     private boolean ranRedLight;
     private boolean dontTurnOnNt;
     private boolean dontTurnOnNp;
+    private boolean firstTime;
     private int lightStatus;
 
     @Override
     protected boolean loop() {
         double d = this.carModel.getDistance();
         if (d > distanceLine) {
-            checkCondition();
+            if (firstTime) {
+                firstTime = false;
+                checkCondition();
+            }
             if (checkEndTest()) {
                 this.checkTimeOut20s.setPass();
                 this.checkTimeOut30s.setPass();
@@ -102,10 +106,10 @@ public class NgaTu extends AbsSaHinhContest {
     }
 
     private void checkCondition() {
+        this.checkTimeOut20s.start();
+        this.checkTimeOut30s.start();
         if (lightStatus != 1) {
             if (this.trafficLightModel.getTrafficLight() == TrafficLightModel.GREEN) {
-                this.checkTimeOut20s.start();
-                this.checkTimeOut30s.start();
                 lightStatus = 1;
             } else {
                 lightStatus = 0;
@@ -131,6 +135,7 @@ public class NgaTu extends AbsSaHinhContest {
             this.dontTurnOnNt = false;
             this.dontTurnOnNp = false;
             this.ranRedLight = false;
+            this.firstTime = true;
             this.lightStatus = -1;
             this.carModel.setDistance(0);
             return true;

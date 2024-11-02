@@ -16,6 +16,7 @@ public abstract class AbsTimerConditon extends AbsCondition {
     protected final Timer timer;
     private boolean timeout;
     protected final ImportantError importantError;
+
     public AbsTimerConditon(int spec, boolean justOneTime) {
         this(null, spec, justOneTime);
     }
@@ -66,9 +67,7 @@ public abstract class AbsTimerConditon extends AbsCondition {
     }
 
     public void resetTimer() {
-        if (this.timer.isRunning()) {
-            this.timer.restart();
-        }
+        this.timer.restart();
     }
 
     protected abstract boolean signal();

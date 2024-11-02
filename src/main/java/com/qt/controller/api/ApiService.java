@@ -267,6 +267,10 @@ public class ApiService {
             if (carId == null || carId.isBlank() || carId.equals("0")) {
                 return null;
             }
+            String ipServer = this.setting.getServerPingIp();
+            if (ipServer != null && !ipServer.isBlank() && !Util.ping(ipServer, 1)) {
+                return null;
+            }
             String url = this.setting.getCheckCommandUrl();
             if (url == null) {
                 ErrorLog.addError(this, "không tìm thấy: checkCommand url");

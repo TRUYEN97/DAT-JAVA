@@ -28,17 +28,17 @@ public class YardRankConfig {
     public YardRankConfig() {
         this.dungXeChoNg = new ContestConfig(4, 2.5, 0, 0);
         this.dungXeNgangDoc = new ContestConfig(20, 2.5, 0, 0);
-        this.ngaTu1 = new ContestConfig(15, 2.5, 0, 0);
+        this.ngaTu1 = new ContestConfig(25, 2.5, 0, 0);
         this.ngaTu2 = new ContestConfig(20, 2.5, 0, 0);
-        this.ngaTu3 = new ContestConfig(20, 2.5, 0, 0);
-        this.ngaTu4 = new ContestConfig(15, 2.5, 0, 0);
+        this.ngaTu3 = new ContestConfig(25, 2.5, 0, 0);
+        this.ngaTu4 = new ContestConfig(25, 2.5, 0, 0);
         this.duongTau = new ContestConfig(4, 2.5, 0, 0);
         this.vetBanhXe = new ArrayList<>();
         this.doXeDoc = new ArrayList<>();
         this.duongS = new ArrayList<>();
         this.doXeNgang = new ArrayList<>();
-        this.vetBanhXe.add(new ContestConfig(20, 10, 0, 90, 0));
-        this.vetBanhXe.add(new ContestConfig(20, 10, 90, 120, 1));
+        this.vetBanhXe.add(new ContestConfig(20, 12, 0, 90, 0));
+        this.vetBanhXe.add(new ContestConfig(20, 12, 90, 120, 1));
         this.doXeDoc.add(new ContestConfig(5, 0, 0, 17, 4));
         this.doXeDoc.add(new ContestConfig(5, 0, 17, 25, 5));
         this.doXeDoc.add(new ContestConfig(5, 0, 25, 35, 6));

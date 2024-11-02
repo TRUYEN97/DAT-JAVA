@@ -19,6 +19,7 @@ public class KhanCap extends AbsContest {
     private boolean hasStop;
     private boolean firstDone;
     private final double distanceBegin;
+    private final WarningSoundPlayer warningSoundPlayer;
     private double oldDistance;
     private final MCUSerialHandler uSerialHandler;
 
@@ -27,6 +28,7 @@ public class KhanCap extends AbsContest {
                 ConstKey.CONTEST_NAME.KHAN_CAP, false, false, false, 1200);
         this.distanceBegin = distanceBegin;
         this.uSerialHandler = MCUSerialHandler.getInstance();
+        this.warningSoundPlayer = new WarningSoundPlayer();
     }
 
     @Override
@@ -36,11 +38,8 @@ public class KhanCap extends AbsContest {
 
     @Override
     protected boolean loop() {
-        if (getDetaTime() < 10000) {
-            this.uSerialHandler.sendLedRedOn();
-            this.soundPlayer.alarm();
-            this.uSerialHandler.sendLedOff();
-            if (!hasStop && this.carModel.isNp() && this.carModel.isNt()) {
+        if (getDetaTime() < 3000) {
+            if (!hasStop && (this.carModel.isNp() || this.carModel.isNt())) {
                 if (this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
                     addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
                     return true;
@@ -48,26 +47,25 @@ public class KhanCap extends AbsContest {
                     this.hasStop = true;
                 }
             }
-            if (getDetaTime() > 5000 && !hasStop) {
+        } else {
+            this.warningSoundPlayer.stop();
+            if (!this.hasStop) {
                 addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
                 return true;
-            }
-        } else if (this.hasStop) {
-            this.uSerialHandler.sendLedOff();
-            if (!this.firstDone) {
-                Util.delay(200);
-                this.firstDone = true;
-                this.soundPlayer.successSound();
-            }
-            if (!this.carModel.isNp() && !this.carModel.isNt()) {
-                if (this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
-                    addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
+            } else {
+                if (!this.firstDone) {
+                    Util.delay(200);
+                    this.firstDone = true;
+                    this.soundPlayer.successSound();
                 }
-                return true;
+                if (!this.carModel.isNp() && !this.carModel.isNt()) {
+                    return true;
+                }
+                if (getDetaTime() > 5000) {
+                    addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
+                    return true;
+                }
             }
-        } else {
-            addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
-            return true;
         }
         return false;
     }
@@ -77,15 +75,50 @@ public class KhanCap extends AbsContest {
     }
 
     @Override
+    public void end() {
+        this.warningSoundPlayer.stop();
+        super.end(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+
+    @Override
     protected boolean isIntoContest() {
         if (getDetaDistance(oldDistance) >= distanceBegin) {
             hasStop = false;
             firstDone = false;
-            this.soundPlayer.alarm();
+            this.warningSoundPlayer.start();
             oldTime = System.currentTimeMillis();
+            this.oldDistance = this.carModel.getDistance();
             return true;
         }
         return false;
+    }
+
+    class WarningSoundPlayer {
+
+        Thread thread;
+        boolean stop = false;
+
+        void start() {
+            if (thread == null || !thread.isAlive()) {
+                thread = new Thread(() -> {
+                    stop = false;
+                    while (!stop) {
+                        uSerialHandler.sendLedRedOn();
+                        soundPlayer.alarm();
+                        uSerialHandler.sendLedRedOff();
+                        Util.delay(100);
+                    }
+                });
+                thread.start();
+            }
+        }
+
+        void stop() {
+            stop = true;
+            if (this.thread != null && this.thread.isAlive()) {
+                this.thread.stop();
+            }
+        }
     }
 
 }

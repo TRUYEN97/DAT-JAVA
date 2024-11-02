@@ -145,19 +145,28 @@ public class MCUSerialHandler {
     public void sendLedOff() {
         this.serialHandler.send("roff");
     }
+    
+    public void sendLedRedOff() {
+        this.serialHandler.send("r2off");
+    }
+    
+    public void sendLedGreenOff() {
+        this.serialHandler.send("r1off");
+    }
+    
+    public void sendLedYellowOff() {
+        this.serialHandler.send("r3off");
+    }
 
     public void sendLedGreenOn() {
-        this.serialHandler.send("roff");
         this.serialHandler.send("r1");
     }
 
     public boolean sendLedRedOn() {
-        this.serialHandler.send("roff");
         return this.serialHandler.send("r2");
     }
 
     public boolean sendLedYellowOn() {
-        this.serialHandler.send("roff");
         return this.serialHandler.send("r3");
     }
 

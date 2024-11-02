@@ -1,1 +1,438 @@
-{"b":{"dungXeChoNg":{"distanceOut":3.0,"distanceLine":2.1,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"dungXeNgangDoc":{"distanceOut":20.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"vetBanhXe":[{"distanceOut":30.0,"distanceLine":10.0,"distanceLowerLimit":60.0,"distanceUpperLimit":65.0,"indexOfYardInput":0},{"distanceOut":30.0,"distanceLine":10.0,"distanceLowerLimit":65.0,"distanceUpperLimit":70.0,"indexOfYardInput":0}],"ngaTu1":{"distanceOut":30.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"ngaTu2":{"distanceOut":25.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"ngaTu3":{"distanceOut":30.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"ngaTu4":{"distanceOut":25.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"duongS":[{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":50.0,"distanceUpperLimit":62.0,"indexOfYardInput":0},{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":62.0,"distanceUpperLimit":74.0,"indexOfYardInput":0}],"doXeDoc":[{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":17.0,"distanceUpperLimit":25.0,"indexOfYardInput":0},{"distanceOut":0.0,"distanceLine":0.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0}],"doXeNgang":[{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":60.0,"distanceUpperLimit":68.0,"indexOfYardInput":0},{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":68.0,"distanceUpperLimit":76.0,"indexOfYardInput":0}],"duongTau":{"distanceOut":3.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0}},"c":{"dungXeChoNg":{"distanceOut":3.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"dungXeNgangDoc":{"distanceOut":20.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"vetBanhXe":[{"distanceOut":30.0,"distanceLine":10.0,"distanceLowerLimit":60.0,"distanceUpperLimit":65.0,"indexOfYardInput":0},{"distanceOut":30.0,"distanceLine":10.0,"distanceLowerLimit":65.0,"distanceUpperLimit":70.0,"indexOfYardInput":0}],"ngaTu1":{"distanceOut":30.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"ngaTu2":{"distanceOut":25.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"ngaTu3":{"distanceOut":30.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"ngaTu4":{"distanceOut":25.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"duongS":[{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":50.0,"distanceUpperLimit":62.0,"indexOfYardInput":0},{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":62.0,"distanceUpperLimit":74.0,"indexOfYardInput":0}],"doXeDoc":[{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":10.0,"distanceUpperLimit":17.0,"indexOfYardInput":0},{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":17.0,"distanceUpperLimit":25.0,"indexOfYardInput":0},{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":25.0,"distanceUpperLimit":35.0,"indexOfYardInput":0}],"doXeNgang":[{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":60.0,"distanceUpperLimit":68.0,"indexOfYardInput":0},{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":68.0,"distanceUpperLimit":76.0,"indexOfYardInput":0}],"duongTau":{"distanceOut":3.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0}},"d":{"dungXeChoNg":{"distanceOut":3.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"dungXeNgangDoc":{"distanceOut":20.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"vetBanhXe":[{"distanceOut":30.0,"distanceLine":10.0,"distanceLowerLimit":60.0,"distanceUpperLimit":65.0,"indexOfYardInput":0},{"distanceOut":30.0,"distanceLine":10.0,"distanceLowerLimit":65.0,"distanceUpperLimit":70.0,"indexOfYardInput":0}],"ngaTu1":{"distanceOut":30.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"ngaTu2":{"distanceOut":25.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"ngaTu3":{"distanceOut":30.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"ngaTu4":{"distanceOut":25.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"duongS":[{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":50.0,"distanceUpperLimit":62.0,"indexOfYardInput":0},{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":62.0,"distanceUpperLimit":74.0,"indexOfYardInput":0}],"doXeDoc":[{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":10.0,"distanceUpperLimit":17.0,"indexOfYardInput":0},{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":17.0,"distanceUpperLimit":25.0,"indexOfYardInput":0},{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":25.0,"distanceUpperLimit":35.0,"indexOfYardInput":0}],"doXeNgang":[{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":60.0,"distanceUpperLimit":68.0,"indexOfYardInput":0},{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":68.0,"distanceUpperLimit":76.0,"indexOfYardInput":0}],"duongTau":{"distanceOut":3.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0}},"e":{"dungXeChoNg":{"distanceOut":3.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"dungXeNgangDoc":{"distanceOut":20.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"vetBanhXe":[{"distanceOut":30.0,"distanceLine":10.0,"distanceLowerLimit":60.0,"distanceUpperLimit":65.0,"indexOfYardInput":0},{"distanceOut":30.0,"distanceLine":10.0,"distanceLowerLimit":65.0,"distanceUpperLimit":70.0,"indexOfYardInput":0}],"ngaTu1":{"distanceOut":30.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"ngaTu2":{"distanceOut":25.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"ngaTu3":{"distanceOut":30.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"ngaTu4":{"distanceOut":25.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0},"duongS":[{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":50.0,"distanceUpperLimit":62.0,"indexOfYardInput":0},{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":62.0,"distanceUpperLimit":74.0,"indexOfYardInput":0}],"doXeDoc":[{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":10.0,"distanceUpperLimit":17.0,"indexOfYardInput":0},{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":17.0,"distanceUpperLimit":25.0,"indexOfYardInput":0},{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":25.0,"distanceUpperLimit":35.0,"indexOfYardInput":0}],"doXeNgang":[{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":60.0,"distanceUpperLimit":68.0,"indexOfYardInput":0},{"distanceOut":5.0,"distanceLine":0.0,"distanceLowerLimit":68.0,"distanceUpperLimit":76.0,"indexOfYardInput":0}],"duongTau":{"distanceOut":3.0,"distanceLine":2.0,"distanceLowerLimit":0.0,"distanceUpperLimit":0.0,"indexOfYardInput":0}}}
+{
+    "b": {
+        "dungXeChoNg": {
+            "distanceOut": 4.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "dungXeNgangDoc": {
+            "distanceOut": 20.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "vetBanhXe": [{
+                "distanceOut": 20.0,
+                "distanceLine": 12.0,
+                "distanceLowerLimit": 0.0,
+                "distanceUpperLimit": 90.0,
+                "indexOfYardInput": 0
+            }, {
+                "distanceOut": 20.0,
+                "distanceLine": 12.0,
+                "distanceLowerLimit": 90.0,
+                "distanceUpperLimit": 120.0,
+                "indexOfYardInput": 1
+            }],
+        "ngaTu1": {
+            "distanceOut": 25.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "ngaTu2": {
+            "distanceOut": 20.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "ngaTu3": {
+            "distanceOut": 25.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "ngaTu4": {
+            "distanceOut": 25.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "duongS": [{
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 0.0,
+                "distanceUpperLimit": 62.0,
+                "indexOfYardInput": 2
+            }, {
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 62.0,
+                "distanceUpperLimit": 74.0,
+                "indexOfYardInput": 3
+            }],
+        "doXeDoc": [{
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 0.0,
+                "distanceUpperLimit": 17.0,
+                "indexOfYardInput": 4
+            }, {
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 17.0,
+                "distanceUpperLimit": 25.0,
+                "indexOfYardInput": 5
+            }, {
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 25.0,
+                "distanceUpperLimit": 35.0,
+                "indexOfYardInput": 6
+            }],
+        "doXeNgang": [{
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 0.0,
+                "distanceUpperLimit": 68.0,
+                "indexOfYardInput": 7
+            }, {
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 68.0,
+                "distanceUpperLimit": 76.0,
+                "indexOfYardInput": 8
+            }],
+        "duongTau": {
+            "distanceOut": 4.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        }
+    },
+    "c": {
+        "dungXeChoNg": {
+            "distanceOut": 4.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "dungXeNgangDoc": {
+            "distanceOut": 20.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "vetBanhXe": [{
+                "distanceOut": 20.0,
+                "distanceLine": 12.0,
+                "distanceLowerLimit": 0.0,
+                "distanceUpperLimit": 90.0,
+                "indexOfYardInput": 0
+            }, {
+                "distanceOut": 20.0,
+                "distanceLine": 12.0,
+                "distanceLowerLimit": 90.0,
+                "distanceUpperLimit": 120.0,
+                "indexOfYardInput": 1
+            }],
+        "ngaTu1": {
+            "distanceOut": 25.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "ngaTu2": {
+            "distanceOut": 20.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "ngaTu3": {
+            "distanceOut": 25.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "ngaTu4": {
+            "distanceOut": 25.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "duongS": [{
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 0.0,
+                "distanceUpperLimit": 62.0,
+                "indexOfYardInput": 2
+            }, {
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 62.0,
+                "distanceUpperLimit": 74.0,
+                "indexOfYardInput": 3
+            }],
+        "doXeDoc": [{
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 0.0,
+                "distanceUpperLimit": 17.0,
+                "indexOfYardInput": 4
+            }, {
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 17.0,
+                "distanceUpperLimit": 25.0,
+                "indexOfYardInput": 5
+            }, {
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 25.0,
+                "distanceUpperLimit": 35.0,
+                "indexOfYardInput": 6
+            }],
+        "doXeNgang": [{
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 0.0,
+                "distanceUpperLimit": 68.0,
+                "indexOfYardInput": 7
+            }, {
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 68.0,
+                "distanceUpperLimit": 76.0,
+                "indexOfYardInput": 8
+            }],
+        "duongTau": {
+            "distanceOut": 4.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        }
+    },
+    "d": {
+        "dungXeChoNg": {
+            "distanceOut": 4.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "dungXeNgangDoc": {
+            "distanceOut": 20.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "vetBanhXe": [{
+                "distanceOut": 20.0,
+                "distanceLine": 12.0,
+                "distanceLowerLimit": 0.0,
+                "distanceUpperLimit": 90.0,
+                "indexOfYardInput": 0
+            }, {
+                "distanceOut": 20.0,
+                "distanceLine": 12.0,
+                "distanceLowerLimit": 90.0,
+                "distanceUpperLimit": 120.0,
+                "indexOfYardInput": 1
+            }],
+        "ngaTu1": {
+            "distanceOut": 25.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "ngaTu2": {
+            "distanceOut": 20.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "ngaTu3": {
+            "distanceOut": 25.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "ngaTu4": {
+            "distanceOut": 25.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "duongS": [{
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 0.0,
+                "distanceUpperLimit": 62.0,
+                "indexOfYardInput": 2
+            }, {
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 62.0,
+                "distanceUpperLimit": 74.0,
+                "indexOfYardInput": 3
+            }],
+        "doXeDoc": [{
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 0.0,
+                "distanceUpperLimit": 17.0,
+                "indexOfYardInput": 4
+            }, {
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 17.0,
+                "distanceUpperLimit": 25.0,
+                "indexOfYardInput": 5
+            }, {
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 25.0,
+                "distanceUpperLimit": 35.0,
+                "indexOfYardInput": 6
+            }],
+        "doXeNgang": [{
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 0.0,
+                "distanceUpperLimit": 68.0,
+                "indexOfYardInput": 7
+            }, {
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 68.0,
+                "distanceUpperLimit": 76.0,
+                "indexOfYardInput": 8
+            }],
+        "duongTau": {
+            "distanceOut": 4.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        }
+    },
+    "e": {
+        "dungXeChoNg": {
+            "distanceOut": 4.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "dungXeNgangDoc": {
+            "distanceOut": 20.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "vetBanhXe": [{
+                "distanceOut": 20.0,
+                "distanceLine": 12.0,
+                "distanceLowerLimit": 0.0,
+                "distanceUpperLimit": 90.0,
+                "indexOfYardInput": 0
+            }, {
+                "distanceOut": 20.0,
+                "distanceLine": 12.0,
+                "distanceLowerLimit": 90.0,
+                "distanceUpperLimit": 120.0,
+                "indexOfYardInput": 1
+            }],
+        "ngaTu1": {
+            "distanceOut": 25.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "ngaTu2": {
+            "distanceOut": 20.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "ngaTu3": {
+            "distanceOut": 25.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "ngaTu4": {
+            "distanceOut": 25.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        },
+        "duongS": [{
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 0.0,
+                "distanceUpperLimit": 62.0,
+                "indexOfYardInput": 2
+            }, {
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 62.0,
+                "distanceUpperLimit": 74.0,
+                "indexOfYardInput": 3
+            }],
+        "doXeDoc": [{
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 0.0,
+                "distanceUpperLimit": 17.0,
+                "indexOfYardInput": 4
+            }, {
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 17.0,
+                "distanceUpperLimit": 25.0,
+                "indexOfYardInput": 5
+            }, {
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 25.0,
+                "distanceUpperLimit": 35.0,
+                "indexOfYardInput": 6
+            }],
+        "doXeNgang": [{
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 0.0,
+                "distanceUpperLimit": 68.0,
+                "indexOfYardInput": 7
+            }, {
+                "distanceOut": 5.0,
+                "distanceLine": 0.0,
+                "distanceLowerLimit": 68.0,
+                "distanceUpperLimit": 76.0,
+                "indexOfYardInput": 8
+            }],
+        "duongTau": {
+            "distanceOut": 4.0,
+            "distanceLine": 2.5,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 0.0,
+            "indexOfYardInput": 0
+        }
+    }
+}
