@@ -39,32 +39,32 @@ public class KhanCap extends AbsContest {
     @Override
     protected boolean loop() {
         if (getDetaTime() < 3000) {
-            if (!hasStop && (this.carModel.isNp() || this.carModel.isNt())) {
+            if (this.carModel.isNp() && this.carModel.isNt()) {
                 if (this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
                     addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
                     return true;
-                } else {
-                    this.hasStop = true;
+                }
+            }
+        } else if (getDetaTime() < 5000) {
+            if (this.carModel.isNp() && this.carModel.isNt()) {
+                if (this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
+                    addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
+                    return true;
                 }
             }
         } else {
             this.warningSoundPlayer.stop();
-            if (!this.hasStop) {
+            if (!this.firstDone) {
+                Util.delay(200);
+                this.firstDone = true;
+                this.soundPlayer.successSound();
+            }
+            if (!this.carModel.isNp() && !this.carModel.isNt()) {
+                return true;
+            }
+            if (getDetaTime() > 8000) {
                 addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
                 return true;
-            } else {
-                if (!this.firstDone) {
-                    Util.delay(200);
-                    this.firstDone = true;
-                    this.soundPlayer.successSound();
-                }
-                if (!this.carModel.isNp() && !this.carModel.isNt()) {
-                    return true;
-                }
-                if (getDetaTime() > 5000) {
-                    addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
-                    return true;
-                }
             }
         }
         return false;
@@ -106,7 +106,7 @@ public class KhanCap extends AbsContest {
                         uSerialHandler.sendLedRedOn();
                         soundPlayer.alarm();
                         uSerialHandler.sendLedRedOff();
-                        Util.delay(100);
+                        Util.delay(50);
                     }
                 });
                 thread.start();

@@ -69,6 +69,7 @@ public class MCUSerialHandler {
                     SoundPlayer soundPlayer = SoundPlayer.getInstance();
                     if (t1 || t2) {
                         if (!this.sendorStartEnable) {
+                            this.model.setDistance(0);
                             this.sendorStartEnable = true;
                             if (this.startSoundThread == null || !this.startSoundThread.isAlive()) {
                                 this.startSoundThread = new Thread(() -> {

@@ -29,9 +29,9 @@ public class YardRankConfig {
         this.dungXeChoNg = new ContestConfig(4, 2.5, 0, 0);
         this.dungXeNgangDoc = new ContestConfig(20, 2.5, 0, 0);
         this.ngaTu1 = new ContestConfig(25, 2.5, 0, 0);
-        this.ngaTu2 = new ContestConfig(20, 2.5, 0, 0);
-        this.ngaTu3 = new ContestConfig(25, 2.5, 0, 0);
-        this.ngaTu4 = new ContestConfig(25, 2.5, 0, 0);
+        this.ngaTu2 = new ContestConfig(25, 2.5, 0, 0);
+        this.ngaTu3 = new ContestConfig(30, 2.5, 0, 0);
+        this.ngaTu4 = new ContestConfig(30, 2.5, 0, 0);
         this.duongTau = new ContestConfig(4, 2.5, 0, 0);
         this.vetBanhXe = new ArrayList<>();
         this.doXeDoc = new ArrayList<>();
