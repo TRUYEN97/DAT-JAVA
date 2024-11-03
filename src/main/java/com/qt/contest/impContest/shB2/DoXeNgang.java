@@ -24,7 +24,7 @@ public class DoXeNgang extends ContestHasMutiLine {
         super(ConstKey.CONTEST_NAME.GHEP_XE_DOC,
                 ConstKey.CONTEST_NAME.GHEP_XE_DOC, true, true, true, 120, contestConfigs);
         this.crossedLine = new CheckWheelCrossedLine(5, () -> {
-            return getWheelCrosserLineStatus(yardRankModel.getPacking1s());
+            return getWheelCrosserLineStatus(yardRankModel.getPackings1());
         });
         this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
         this.conditionIntoHandle.addConditon(crossedLine);
@@ -40,8 +40,7 @@ public class DoXeNgang extends ContestHasMutiLine {
     @Override
     protected boolean loop() {
         if (this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD) {
-            if (!hasIntoPaking && this.carModel.isT3() 
-                    && this.carModel.getDistance() < 0.3) {
+            if (!hasIntoPaking && this.carModel.isT1() && this.carModel.isT2()) {
                 hasIntoPaking = true;
             }
             if (!success && this.carModel.isT1() && this.carModel.isT2()
@@ -70,7 +69,7 @@ public class DoXeNgang extends ContestHasMutiLine {
             success = false;
             if (this.checkIntoContest(this.carModel.getDistance())) {
                 this.distanceOut = this.distanceIntoContest.getContestConfig().getDistanceOut();
-            }else{
+            } else {
                 stop();
             }
             this.carModel.setDistance(0);

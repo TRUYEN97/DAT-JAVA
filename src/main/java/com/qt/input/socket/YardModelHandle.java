@@ -106,7 +106,7 @@ public class YardModelHandle {
     private void updateRank(YardRankConfig rankConfig, JSONArray inputs, YardRankModel rankModel) {
         updateContest(rankConfig.getDoXeDoc(), inputs, rankModel.getPackings());
 
-        updateContest(rankConfig.getDoXeNgang(), inputs, rankModel.getPacking1s());
+        updateContest(rankConfig.getDoXeNgang(), inputs, rankModel.getPackings1());
 
         updateContest(rankConfig.getDuongS(), inputs, rankModel.getRoadSs());
 

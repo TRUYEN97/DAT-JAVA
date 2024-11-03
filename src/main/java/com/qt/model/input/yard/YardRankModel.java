@@ -18,13 +18,13 @@ public class YardRankModel {
         this.roadZs = new ArrayList<>();
         this.roadSs = new ArrayList<>();
         this.packings = new ArrayList<>();
-        this.packing1s = new ArrayList<>();
+        this.packings1 = new ArrayList<>();
     }
 
     private final List<Boolean> roadZs;
     private final List<Boolean> roadSs;
     private final List<Boolean> packings;
-    private final List<Boolean> packing1s;
+    private final List<Boolean> packings1;
 
     public List<Boolean> getRoadZs() {
         return roadZs;
@@ -38,8 +38,8 @@ public class YardRankModel {
         return packings;
     }
 
-    public List<Boolean> getPacking1s() {
-        return packing1s;
+    public List<Boolean> getPackings1() {
+        return packings1;
     }
     
     

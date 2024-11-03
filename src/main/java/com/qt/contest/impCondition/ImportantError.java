@@ -18,6 +18,7 @@ public class ImportantError extends AbsCondition {
     }
 
     public void setIsImportantError() {
+        this.important = true;
         this.hasFail = true;
     }
 

@@ -37,14 +37,12 @@ public class DuongS extends ContestHasMutiLine {
     @Override
     protected boolean loop() {
         return getDetaDistance(oldDistance) > distanceOut
-                && (this.carModel.isT1() || this.carModel.isT2())
-                && this.carModel.getStatus() == ConstKey.CAR_ST.FORWARD;
+                && (this.carModel.isT1() || this.carModel.isT2());
     }
 
     @Override
     protected boolean isIntoContest() {
-        if ((this.carModel.isT1() || this.carModel.isT2() || this.carModel.isT3()) 
-                && this.carModel.getStatus() == ConstKey.CAR_ST.FORWARD) {
+        if (this.carModel.isT1() || this.carModel.isT2() || this.carModel.isT3()) {
             if (checkIntoContest(this.oldDistance)) {
                 this.distanceOut = this.distanceIntoContest.getContestConfig().getDistanceOut();
             } else {
