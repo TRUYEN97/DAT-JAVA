@@ -20,9 +20,7 @@ public class XuatPhat extends AbsSaHinhContest {
     private boolean firstCheck = true;
 
     public XuatPhat(int speedLimit) {
-        super(ConstKey.CONTEST_NAME.XUAT_PHAT, ConstKey.CONTEST_NAME.XUAT_PHAT,
-                false,
-                true, true, 60);
+        super(ConstKey.CONTEST_NAME.XUAT_PHAT, "begin", true, 60);
         this.timeOut30s = new CheckTimeOut(importantError, 30, ConstKey.ERR.OVER_30S_TO_START);
         this.timeOut20s = new CheckTimeOut(null, 20, ConstKey.ERR.OVER_20S_TO_START, false);
         this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));

@@ -26,7 +26,7 @@ public abstract class AbsCondition {
         this.carModel = MCUSerialHandler.getInstance().getModel();
         this.codeHandle = ErrorcodeHandle.getInstance();
         this.important = false;
-        this.stop = false;
+        this.stop = true;
         this.hasFail = false;
     }
 

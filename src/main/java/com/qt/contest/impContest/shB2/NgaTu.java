@@ -7,7 +7,6 @@ package com.qt.contest.impContest.shB2;
 import com.qt.common.ConstKey;
 import com.qt.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
 import com.qt.contest.impCondition.timerCondition.CheckTimeOut;
-import com.qt.contest.impContest.AbsSaHinhContest;
 import com.qt.model.input.yard.TrafficLightModel;
 import com.qt.model.input.yard.YardModel;
 import com.qt.model.yardConfigMode.ContestConfig;
@@ -16,17 +15,15 @@ import com.qt.model.yardConfigMode.ContestConfig;
  *
  * @author Admin
  */
-public class NgaTu extends AbsSaHinhContest {
+public class NgaTu extends AbsConstestJustOneLine {
 
     private final CheckTimeOut checkTimeOut20s;
     private final CheckTimeOut checkTimeOut30s;
     private final TrafficLightModel trafficLightModel;
-    private final double distanceOut;
-    private final double distanceLine;
     private final int times;
 
     public NgaTu(int times, YardModel yardModel, ContestConfig contestConfig, int speedLimit) {
-        super(ConstKey.CONTEST_NAME.NGAT_TU, ConstKey.CONTEST_NAME.NGAT_TU, true, true, true, 120);
+        super(ConstKey.CONTEST_NAME.NGAT_TU, 120, contestConfig);
         this.times = times;
         this.checkTimeOut30s = new CheckTimeOut(importantError, 30, ConstKey.ERR.FAILED_PASS_INTERSECTION_OVER_30S);
         this.checkTimeOut20s = new CheckTimeOut(null, 20, ConstKey.ERR.FAILED_PASS_INTERSECTION_OVER_20S, false);
@@ -35,8 +32,6 @@ public class NgaTu extends AbsSaHinhContest {
         } else {
             this.trafficLightModel = yardModel.getTrafficLightModel();
         }
-        this.distanceOut = contestConfig.getDistanceOut();
-        this.distanceLine = contestConfig.getDistanceLine();
         this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
     }
 
@@ -58,7 +53,7 @@ public class NgaTu extends AbsSaHinhContest {
     @Override
     protected boolean loop() {
         double d = this.carModel.getDistance();
-        if (d > distanceLine) {
+        if (d > this.contestConfig.getDistanceLine()) {
             if (firstTime) {
                 firstTime = false;
                 checkCondition();
@@ -72,9 +67,9 @@ public class NgaTu extends AbsSaHinhContest {
         if (!hasStop && this.carModel.getStatus() == ConstKey.CAR_ST.STOP) {
             hasStop = true;
             d = this.carModel.getDistance();
-            if (d >= distanceLine) {
+            if (d >= this.contestConfig.getDistanceLine()) {
                 addErrorCode(ConstKey.ERR.STOP_AFTER_DES);
-            } else if (d < distanceLine - 0.5) {
+            } else if (d < this.contestConfig.getDistanceLine() - 0.5) {
                 addErrorCode(ConstKey.ERR.STOP_BEFORE_DES);
             } else {
                 soundPlayer.successSound();
@@ -87,9 +82,12 @@ public class NgaTu extends AbsSaHinhContest {
         double d = this.carModel.getDistance();
         if (times == 2 || times == 3) {
             if (this.carModel.isT1() || this.carModel.isT2()) {
+                if (times == 3 && d < 14) {
+                    addErrorCode(ConstKey.ERR.WRONG_WAY);
+                }
                 return true;
             }
-            if (d >= distanceOut) {
+            if (d >= this.contestConfig.getDistanceOut()) {
                 addErrorCode(ConstKey.ERR.WRONG_WAY);
                 return true;
             }
@@ -98,7 +96,7 @@ public class NgaTu extends AbsSaHinhContest {
                 addErrorCode(ConstKey.ERR.WRONG_WAY);
                 return true;
             }
-            if (d >= distanceOut) {
+            if (d >= this.contestConfig.getDistanceOut()) {
                 return true;
             }
         }
@@ -130,21 +128,20 @@ public class NgaTu extends AbsSaHinhContest {
     }
 
     @Override
-    protected boolean isIntoContest() {
+    protected void init() {
+    }
+
+    @Override
+    protected boolean isAccept() {
         if (this.carModel.isT1() || this.carModel.isT2()) {
             this.dontTurnOnNt = false;
             this.dontTurnOnNp = false;
             this.ranRedLight = false;
             this.firstTime = true;
             this.lightStatus = -1;
-            this.carModel.setDistance(0);
             return true;
         }
         return false;
-    }
-
-    @Override
-    protected void init() {
     }
 
 }

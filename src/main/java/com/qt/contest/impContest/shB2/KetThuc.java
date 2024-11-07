@@ -15,7 +15,7 @@ import com.qt.contest.impContest.AbsSaHinhContest;
 public class KetThuc extends AbsSaHinhContest {
 
     public KetThuc(int speedLimit) {
-        super(ConstKey.CONTEST_NAME.KET_THUC, ConstKey.CONTEST_NAME.KET_THUC, true, false, true, 2000);
+        super(ConstKey.CONTEST_NAME.KET_THUC, false, 2000);
         this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
     }
 

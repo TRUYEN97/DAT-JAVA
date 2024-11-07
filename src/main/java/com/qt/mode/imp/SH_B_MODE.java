@@ -56,7 +56,7 @@ public class SH_B_MODE extends AbsSaHinhMode {
             contests.add(new KhanCap(30));
         }
         contests.add(new DuongTau(yardRankConfig.getDuongTau(), speedLimit));
-        contests.add(new TangTocDuongThang(1, speedLimit));
+        contests.add(new TangTocDuongThang(1, speedLimit, yardRankConfig.getTangToc()));
         if (rd == 2) {
             contests.add(new KhanCap(20));
         }

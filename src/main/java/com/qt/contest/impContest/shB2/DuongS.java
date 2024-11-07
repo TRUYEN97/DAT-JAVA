@@ -15,14 +15,12 @@ import java.util.List;
  *
  * @author Admin
  */
-public class DuongS extends ContestHasMutiLine {
+public class DuongS extends AbsContestHasMutiLine {
 
     private final CheckWheelCrossedLine crossedLine;
-    private double oldDistance;
-    private double distanceOut = 1;
 
     public DuongS(YardRankModel contestConfig, List<ContestConfig> contestConfigs, int speedLimit) {
-        super(ConstKey.CONTEST_NAME.CHU_S, ConstKey.CONTEST_NAME.CHU_S, true, true, true, 120, contestConfigs);
+        super(ConstKey.CONTEST_NAME.CHU_S, 120, contestConfigs);
         this.crossedLine = new CheckWheelCrossedLine(5, () -> {
             return getWheelCrosserLineStatus(contestConfig.getRoadSs());
         });
@@ -36,22 +34,13 @@ public class DuongS extends ContestHasMutiLine {
 
     @Override
     protected boolean loop() {
-        return getDetaDistance(oldDistance) > distanceOut
+        return this.carModel.getDistance() >= getContestConfig().getDistanceOut()
                 && (this.carModel.isT1() || this.carModel.isT2());
     }
 
     @Override
-    protected boolean isIntoContest() {
-        if (this.carModel.isT1() || this.carModel.isT2() || this.carModel.isT3()) {
-            if (checkIntoContest(this.oldDistance)) {
-                this.distanceOut = this.distanceIntoContest.getContestConfig().getDistanceOut();
-            } else {
-                stop();
-            }
-            this.carModel.setDistance(0);
-            return true;
-        }
-        return false;
+    protected boolean isAccept() {
+        return this.carModel.isT1() || this.carModel.isT2() || this.carModel.isT3();
     }
 
 }

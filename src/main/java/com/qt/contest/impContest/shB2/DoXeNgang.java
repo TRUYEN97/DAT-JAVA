@@ -15,14 +15,12 @@ import java.util.List;
  *
  * @author Admin
  */
-public class DoXeNgang extends ContestHasMutiLine {
+public class DoXeNgang extends AbsContestHasMutiLine {
 
     private final CheckWheelCrossedLine crossedLine;
-    private double distanceOut = 1;
 
     public DoXeNgang(YardRankModel yardRankModel, List<ContestConfig> contestConfigs, int speedLimit) {
-        super(ConstKey.CONTEST_NAME.GHEP_XE_DOC,
-                ConstKey.CONTEST_NAME.GHEP_XE_DOC, true, true, true, 120, contestConfigs);
+        super(ConstKey.CONTEST_NAME.GHEP_XE_NGANG, 120, contestConfigs);
         this.crossedLine = new CheckWheelCrossedLine(5, () -> {
             return getWheelCrosserLineStatus(yardRankModel.getPackings1());
         });
@@ -40,7 +38,7 @@ public class DoXeNgang extends ContestHasMutiLine {
     @Override
     protected boolean loop() {
         if (this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD) {
-            if (!hasIntoPaking && this.carModel.isT1() && this.carModel.isT2()) {
+            if (!hasIntoPaking && this.carModel.isT3() && this.carModel.isT2()) {
                 hasIntoPaking = true;
             }
             if (!success && this.carModel.isT1() && this.carModel.isT2()
@@ -49,7 +47,7 @@ public class DoXeNgang extends ContestHasMutiLine {
                 soundPlayer.successSound();
             }
         }
-        if (this.carModel.getDistance() > distanceOut) {
+        if (this.carModel.getDistance() > getContestConfig().getDistanceOut()) {
             if (!success) {
                 if (hasIntoPaking) {
                     addErrorCode(ConstKey.ERR.PARCKED_WRONG_POS);
@@ -63,16 +61,10 @@ public class DoXeNgang extends ContestHasMutiLine {
     }
 
     @Override
-    protected boolean isIntoContest() {
+    protected boolean isAccept() {
         if (this.carModel.isT3() && this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD) {
             hasIntoPaking = false;
             success = false;
-            if (this.checkIntoContest(this.carModel.getDistance())) {
-                this.distanceOut = this.distanceIntoContest.getContestConfig().getDistanceOut();
-            } else {
-                stop();
-            }
-            this.carModel.setDistance(0);
             return true;
         }
         return false;

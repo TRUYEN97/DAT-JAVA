@@ -150,7 +150,7 @@ public class SH_OFF extends AbsSaHinhMode {
             }
             MCUSerialHandler.getInstance().sendReset();
             this.carModel.setDistance(0);
-            addContest(new TangTocDuongThang(1, speedLimit));
+            addContest(new TangTocDuongThang(1, speedLimit, yardRankConfig.getTangToc()));
         });
         events.put("12", (key) -> {
             if (!contests.isEmpty()) {

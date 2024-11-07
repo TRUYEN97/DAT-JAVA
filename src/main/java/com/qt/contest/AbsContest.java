@@ -4,6 +4,7 @@
  */
 package com.qt.contest;
 
+import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
 import com.qt.common.Util;
 import com.qt.contest.impCondition.ImportantError;
@@ -123,6 +124,7 @@ public abstract class AbsContest implements IgetTime {
     public Runnable begin() {
         return () -> {
             try {
+                boolean isFisrtContest =  this.processlHandle.getProcessModel().getContests().isEmpty();
                 this.contestModelHandle.reset();
                 this.status = WAIT;
                 this.stop = false;
@@ -131,7 +133,7 @@ public abstract class AbsContest implements IgetTime {
                 init();
                 this.conditionBeginHandle.start();
                 if (this.sayContestName) {
-                    this.soundPlayer.contestName(nameSound);
+                    this.soundPlayer.contestName(nameSound, isFisrtContest);
                 }
                 while (!isIntoContest() && !stop) {
                     Util.delay(10);

@@ -111,6 +111,8 @@ public class YardModelHandle {
         updateContest(rankConfig.getDuongS(), inputs, rankModel.getRoadSs());
 
         updateContest(rankConfig.getVetBanhXe(), inputs, rankModel.getRoadZs());
+        
+        updateContest(rankConfig.getDuongVuongGoc(), inputs, rankModel.getRoadZs1());
     }
 
     private void updateContest(List<ContestConfig> contestConfigs, JSONArray inputs, List<Boolean> contestInputs) {
@@ -129,11 +131,11 @@ public class YardModelHandle {
                         Boolean t = inputs.getBoolean(indexOfYardInput);
                         val = t == null ? false : t;
                     }
-                    if (contestInputs.size() <= i) {
-                        contestInputs.add(val);
-                    } else {
-                        contestInputs.set(i, val);
-                    }
+                }
+                if (contestInputs.size() <= i) {
+                    contestInputs.add(val);
+                } else {
+                    contestInputs.set(i, val);
                 }
             }
         } catch (Exception e) {

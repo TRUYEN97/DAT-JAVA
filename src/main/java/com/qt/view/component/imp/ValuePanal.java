@@ -21,6 +21,7 @@ public class ValuePanal extends UpdateValuePanel {
      * Creates new form ValuePanal
      */
     public ValuePanal() {
+        super(1000);
         initComponents();
         setOpaque(false);
         setBackground(new Color(255, 255, 255, 70));

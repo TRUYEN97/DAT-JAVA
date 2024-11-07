@@ -7,6 +7,7 @@ package com.qt.contest.impCondition.OnOffImp;
 import com.qt.input.serial.MCUSerialHandler;
 import com.qt.model.input.CarModel;
 import com.qt.model.yardConfigMode.ContestConfig;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +21,10 @@ public class CheckDistanceIntoContest {
     private ContestConfig contestConfig;
 
     public CheckDistanceIntoContest(List<ContestConfig> contestConfigs) {
-        this.contestConfigs = contestConfigs;
+        this.contestConfigs = new ArrayList<>();
+        if (contestConfigs != null && !contestConfigs.isEmpty()) {
+            this.contestConfigs.addAll(contestConfigs);
+        }
         this.carModel = MCUSerialHandler.getInstance().getModel();
     }
 
@@ -30,6 +34,23 @@ public class CheckDistanceIntoContest {
 
     public ContestConfig getContestConfig() {
         return contestConfig == null ? new ContestConfig() : contestConfig;
+    }
+
+    public boolean isDistanceOutOfSpec(double oldDistance) {
+         if (contestConfigs.isEmpty()) {
+            return false;
+        }
+        double deta = this.carModel.getDistance() - oldDistance;
+        ContestConfig config;
+        for (int i = 0; i < contestConfigs.size(); i++) {
+            if ((config = contestConfigs.get(i)) == null) {
+                continue;
+            }
+            if (deta <= config.getDistanceUpperLimit()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public int check(double oldDistance) {

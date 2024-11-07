@@ -15,21 +15,21 @@ import java.util.List;
  *
  * @author Admin
  */
-public class VetBanhXe extends ContestHasMutiLine {
+public class VetBanhXe extends AbsContestHasMutiLine {
 
     private final CheckWheelCrossedLine crossedLine;
-    private double distanceOutPath;
+    private final CheckWheelCrossedLine crossedPath;
 
-    public VetBanhXe(YardRankModel yardModel, List<ContestConfig> contestConfigs, int speedLimit) {
-        super(ConstKey.CONTEST_NAME.VET_BANH_XE,
-                ConstKey.CONTEST_NAME.VET_BANH_XE,
-                true, true, true, 120, contestConfigs);
-        this.distanceOutPath = 6;
+    public VetBanhXe(YardRankModel yardModel, List<ContestConfig> vetBanhXeConfigs, int speedLimit) {
+        super(ConstKey.CONTEST_NAME.VET_BANH_XE, 120, vetBanhXeConfigs);
         this.crossedLine = new CheckWheelCrossedLine(5, () -> {
+            return getWheelCrosserLineStatus(yardModel.getRoadZs1());
+        });
+        this.crossedPath = new CheckWheelCrossedLine(5, () -> {
             return getWheelCrosserLineStatus(yardModel.getRoadZs());
         });
         this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
-        this.conditionIntoHandle.addConditon(crossedLine);
+        this.conditionIntoHandle.addConditon(this.crossedPath);
     }
 
     @Override
@@ -47,25 +47,30 @@ public class VetBanhXe extends ContestHasMutiLine {
         if (this.carModel.isT2()) {
             into = true;
         }
-        if (!checkPathLineDone
-                && this.carModel.getDistance() >= distanceOutPath) {
-            if (!into) {
-                addErrorCode(ConstKey.ERR.WHEEL_OUT_OF_PATH);
+        if (!checkPathLineDone) {
+            if (this.carModel.getDistance() >= getContestConfig().getDistanceLine()) {
+                if (!into) {
+                    addErrorCode(ConstKey.ERR.WHEEL_OUT_OF_PATH);
+                }
+                checkPathLineDone = true;
             }
-            checkPathLineDone = true;
+        } else {
+            this.crossedPath.stop();
+            this.crossedLine.start();
+            this.crossedLine.checkPassed();
         }
-        return checkPathLineDone && (this.carModel.isT1() || this.carModel.isT2());
+        if (checkPathLineDone && (this.carModel.isT1() || this.carModel.isT2())) {
+            this.crossedLine.stop();
+            return true;
+        }
+        return false;
     }
 
     @Override
-    protected boolean isIntoContest() {
-        if (this.carModel.isT1()) {
-            into = false;
-            checkPathLineDone = false;
-            if (checkIntoContest(this.carModel.getDistance())) {
-                this.distanceOutPath = this.distanceIntoContest.getContestConfig().getDistanceLine();
-            }
-            this.carModel.setDistance(0);
+    protected boolean isAccept() {
+        if (this.carModel.isT1() || this.carModel.isT2()) {
+            this.into = false;
+            this.checkPathLineDone = false;
             return true;
         }
         return false;

@@ -47,9 +47,9 @@ public class SoundPlayer {
         } else {
             this.play(new SoundModel("congratulations1.wav"));
         }
-//            this.play(new SoundModel("theScore.wav"));
-//            sayNumber(score);
-//            this.play(new SoundModel("diem.wav", 8000));
+        this.play(new SoundModel("theScore.wav"));
+        sayNumber(score);
+        this.play(new SoundModel("diem.wav", 8000));
         if (isPass) {
             this.play(new SoundModel("success.wav"));
         } else {
@@ -58,9 +58,11 @@ public class SoundPlayer {
 //        }).start();
     }
 
-    public void contestName(String name) {
+    public void contestName(String name, boolean isFirstContest) {
         new Thread(() -> {
-            this.play(new SoundModel("contest/contest.wav"));
+            if (!isFirstContest) {
+                this.play(new SoundModel("contest/contest.wav"));
+            }
             this.play(new SoundModel(String.format("contest/%s.wav", name)));
         }).start();
     }
@@ -127,7 +129,7 @@ public class SoundPlayer {
         }).start();
     }
 
-    private void sayNumber(int num) {
+    public void sayNumber(int num) {
         if (num < 10) {
             play(new SoundModel(String.format("number/%d.wav", num)));
             return;

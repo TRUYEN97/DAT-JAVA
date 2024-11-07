@@ -10,10 +10,13 @@ import com.qt.contest.AbsContest;
  *
  * @author Admin
  */
-public abstract class AbsSaHinhContest extends AbsContest{
-    
-    public AbsSaHinhContest(String name, String nameSound, boolean sayContestName, boolean soundIn, boolean soundOut, int timeout) {
-        super(name, nameSound, sayContestName, soundIn, soundOut, timeout);
+public abstract class AbsSaHinhContest extends AbsContest {
+
+    public AbsSaHinhContest(String name, boolean soundIn, int timeout) {
+        super(name, name, true, soundIn, true, timeout);
+    }
+    public AbsSaHinhContest(String name, String soundName, boolean soundIn, int timeout) {
+        super(name, soundName, true, soundIn, true, timeout);
     }
     
     @Override
@@ -21,5 +24,5 @@ public abstract class AbsSaHinhContest extends AbsContest{
         super.end(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
         this.carModel.setDistance(0);
     }
-    
+
 }

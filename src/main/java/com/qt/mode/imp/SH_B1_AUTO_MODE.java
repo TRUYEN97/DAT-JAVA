@@ -60,7 +60,7 @@ public class SH_B1_AUTO_MODE extends AbsSaHinhMode {
             contests.add(new KhanCap(6));
         }
         contests.add(new DuongTau(yardRankConfig.getDuongTau(), speedLimit));
-        contests.add(new TangTocDuongThangB1(speedLimit));
+        contests.add(new TangTocDuongThangB1(speedLimit, yardRankConfig.getTangToc()));
         if (rd == 3) {
             contests.add(new KhanCap(6));
         }

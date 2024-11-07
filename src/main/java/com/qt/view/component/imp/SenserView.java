@@ -21,6 +21,7 @@ public class SenserView extends UpdateValuePanel {
      * Creates new form SenserView
      */
     public SenserView() {
+        super(200);
         initComponents();
         setOpaque(true);
         this.defaultColor = getBackground();

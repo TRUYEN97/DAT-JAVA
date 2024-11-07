@@ -16,16 +16,22 @@ public class YardRankModel {
 
     public YardRankModel() {
         this.roadZs = new ArrayList<>();
+        this.roadZs1 = new ArrayList<>();
         this.roadSs = new ArrayList<>();
         this.packings = new ArrayList<>();
         this.packings1 = new ArrayList<>();
     }
 
     private final List<Boolean> roadZs;
+    private final List<Boolean> roadZs1;
     private final List<Boolean> roadSs;
     private final List<Boolean> packings;
     private final List<Boolean> packings1;
 
+    public List<Boolean> getRoadZs1() {
+        return roadZs1;
+    }
+    
     public List<Boolean> getRoadZs() {
         return roadZs;
     }

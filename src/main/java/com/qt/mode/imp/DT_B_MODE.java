@@ -16,7 +16,7 @@ import com.qt.contest.impContest.dtB2.TangToc;
 import com.qt.contest.impContest.dtB2.XuatPhat;
 import com.qt.controller.api.ApiService;
 import com.qt.controller.settingElement.imp.ChangeUserId;
-import com.qt.mode.AbsTestMode;
+import com.qt.mode.AbsDuongTruongMode;
 import com.qt.pretreatment.IKeyEvent;
 import com.qt.view.modeView.DuongTruongView;
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.Map;
  *
  * @author Admin
  */
-public class DT_B_MODE extends AbsTestMode<DuongTruongView> {
+public class DT_B_MODE extends AbsDuongTruongMode {
 
     private boolean runnable;
     private String oldId;
@@ -72,12 +72,6 @@ public class DT_B_MODE extends AbsTestMode<DuongTruongView> {
         }
         return runnable && (!contests.isEmpty() && contests.peek()
                 .getName().equals(ConstKey.CONTEST_NAME.XUAT_PHAT));
-    }
-
-    @Override
-    public void end() {
-        super.end();
-        this.soundPlayer.nextId();
     }
 
     @Override

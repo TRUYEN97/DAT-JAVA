@@ -16,10 +16,12 @@ public class YardRankConfig {
     private final ContestConfig dungXeChoNg;
     private final ContestConfig dungXeNgangDoc;
     private final List<ContestConfig> vetBanhXe;
+    private final List<ContestConfig> duongVuongGoc;
     private final ContestConfig ngaTu1;
     private final ContestConfig ngaTu2;
     private final ContestConfig ngaTu3;
     private final ContestConfig ngaTu4;
+    private final ContestConfig tangToc;
     private final List<ContestConfig> duongS;
     private final List<ContestConfig> doXeDoc;
     private final List<ContestConfig> doXeNgang;
@@ -28,24 +30,32 @@ public class YardRankConfig {
     public YardRankConfig() {
         this.dungXeChoNg = new ContestConfig(4, 2.5, 0, 0);
         this.dungXeNgangDoc = new ContestConfig(20, 2.5, 0, 0);
-        this.ngaTu1 = new ContestConfig(25, 2.5, 0, 0);
-        this.ngaTu2 = new ContestConfig(25, 2.5, 0, 0);
-        this.ngaTu3 = new ContestConfig(30, 2.5, 0, 0);
-        this.ngaTu4 = new ContestConfig(30, 2.5, 0, 0);
-        this.duongTau = new ContestConfig(4, 2.5, 0, 0);
+        this.ngaTu1 = new ContestConfig(25, 2.5, 0, 55);
+        this.ngaTu2 = new ContestConfig(25, 2.5, 0, 35);
+        this.ngaTu3 = new ContestConfig(30, 2.5, 100, 180);
+        this.ngaTu4 = new ContestConfig(30, 2.5, 0, 40);
+        this.duongTau = new ContestConfig(4, 2.5, 0, 100);
+        this.tangToc = new ContestConfig(0, 0, 0, 70);
         this.vetBanhXe = new ArrayList<>();
+        this.duongVuongGoc = new ArrayList<>();
         this.doXeDoc = new ArrayList<>();
         this.duongS = new ArrayList<>();
         this.doXeNgang = new ArrayList<>();
         this.vetBanhXe.add(new ContestConfig(20, 12, 0, 90, 0));
-        this.vetBanhXe.add(new ContestConfig(20, 12, 90, 120, 1));
-        this.doXeDoc.add(new ContestConfig(5, 0, 0, 17, 4));
-        this.doXeDoc.add(new ContestConfig(5, 0, 17, 25, 5));
-        this.doXeDoc.add(new ContestConfig(5, 0, 25, 35, 6));
-        this.duongS.add(new ContestConfig(5, 0, 0, 62, 2));
-        this.duongS.add(new ContestConfig(5, 0, 62, 74, 3));
-        this.doXeNgang.add(new ContestConfig(5, 0, 0, 68, 7));
-        this.doXeNgang.add(new ContestConfig(5, 0, 68, 76, 8));
+        this.duongVuongGoc.add(new ContestConfig(0, 0, 0, 0, 1));
+        this.vetBanhXe.add(new ContestConfig(20, 12, 90, 120, 2));
+        this.duongVuongGoc.add(new ContestConfig(0, 0, 0, 0, 3));
+        this.duongS.add(new ContestConfig(5, 0, 0, 62, 4));
+        this.duongS.add(new ContestConfig(5, 0, 62, 74, 5));
+        this.doXeDoc.add(new ContestConfig(5, 0, 0, 20, 6));
+        this.doXeDoc.add(new ContestConfig(5, 0, 20, 38, 7));
+        this.doXeDoc.add(new ContestConfig(5, 0, 38, 56, 8));
+        this.doXeNgang.add(new ContestConfig(3, 0, 0, 110, 9));
+        this.doXeNgang.add(new ContestConfig(3, 0, 110, 120, 10));
+    }
+
+    public ContestConfig getTangToc() {
+        return tangToc;
     }
 
     public ContestConfig getDungXeChoNg() {
@@ -76,6 +86,10 @@ public class YardRankConfig {
         return duongTau;
     }
 
+    public List<ContestConfig> getDuongVuongGoc() {
+        return duongVuongGoc;
+    }
+    
     public List<ContestConfig> getVetBanhXe() {
         return vetBanhXe;
     }

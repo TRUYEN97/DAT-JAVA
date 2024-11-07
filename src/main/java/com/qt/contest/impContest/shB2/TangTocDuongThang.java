@@ -5,13 +5,13 @@
 package com.qt.contest.impContest.shB2;
 
 import com.qt.common.ConstKey;
-import com.qt.contest.impContest.AbsSaHinhContest;
+import com.qt.model.yardConfigMode.ContestConfig;
 
 /**
  *
  * @author Admin
  */
-public class TangTocDuongThang extends AbsSaHinhContest {
+public class TangTocDuongThang extends AbsConstestJustOneLine {
 
     private final int beginGear;
     private final int speed;
@@ -20,9 +20,8 @@ public class TangTocDuongThang extends AbsSaHinhContest {
     private boolean hasGearUp = false;
     private boolean firstTime;
 
-    public TangTocDuongThang(int beginGear, int speed) {
-        super(ConstKey.CONTEST_NAME.THAY_DOI_SO, ConstKey.CONTEST_NAME.THAY_DOI_SO,
-                true, true, true, 120);
+    public TangTocDuongThang(int beginGear, int speed, ContestConfig contestConfig) {
+        super(ConstKey.CONTEST_NAME.THAY_DOI_SO, 120, contestConfig);
         this.beginGear = beginGear;
         this.speed = speed;
     }
@@ -81,16 +80,16 @@ public class TangTocDuongThang extends AbsSaHinhContest {
             }
         }
     }
+   
 
     @Override
-    protected boolean isIntoContest() {
+    protected boolean isAccept() {
         if (this.carModel.isT1() || this.carModel.isT2()) {
             this.hasBeginGearInvaild = false;
             this.hasSpeedUp = false;
             this.hasGearUp = false;
             this.firstTime = true;
             this.step = 0;
-            this.carModel.setDistance(0);
             return true;
         }
         return false;

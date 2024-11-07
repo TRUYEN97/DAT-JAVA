@@ -70,13 +70,14 @@ public abstract class AbsSaHinhMode extends AbsTestMode<AbsModeView> {
         }
     }
 
+    private boolean st = false;
+
     @Override
     protected boolean loopCheckCanTest() {
         if (this.carModel.isNt() && this.carModel.getStatus() == ConstKey.CAR_ST.STOP) {
-            if (this.carModel.isAt()) {
+            if (!st) {
+                st = true;
                 this.mCUSerialHandler.sendLedRedOn();
-            } else {
-                this.mCUSerialHandler.sendLedOff();
             }
             UserModel userModel = this.apiService.checkCarPair(this.processModel.getCarId());
             if (userModel == null) {
@@ -99,6 +100,9 @@ public abstract class AbsSaHinhMode extends AbsTestMode<AbsModeView> {
                     Util.delay(2000);
                 }
             }
+        } else if (st) {
+            st = false;
+            this.mCUSerialHandler.sendLedOff();
         }
         return false;
     }
@@ -108,7 +112,6 @@ public abstract class AbsSaHinhMode extends AbsTestMode<AbsModeView> {
     @Override
     public void end() {
         try {
-            this.timer.stop();
             this.conditionHandle.stop();
             this.contests.clear();
             KeyEventManagement.getInstance().remove(prepareEventsPackage);

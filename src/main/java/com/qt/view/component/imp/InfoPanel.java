@@ -27,7 +27,7 @@ public class InfoPanel extends UpdateValuePanel implements IgetImgLabel {
      * Creates new form InfoPanel
      */
     public InfoPanel() {
-        super(1000);
+        super(1500);
         initComponents();
         setBackground(new Color(255, 255, 255, 70));
         this.stId.setMouseAdapter(new MouseAdapter() {

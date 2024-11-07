@@ -31,28 +31,35 @@
             "distanceOut": 25.0,
             "distanceLine": 2.5,
             "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceUpperLimit": 55.0,
             "indexOfYardInput": 0
         },
         "ngaTu2": {
-            "distanceOut": 20.0,
+            "distanceOut": 25.0,
             "distanceLine": 2.5,
             "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceUpperLimit": 35.0,
             "indexOfYardInput": 0
         },
         "ngaTu3": {
-            "distanceOut": 25.0,
+            "distanceOut": 30.0,
             "distanceLine": 2.5,
-            "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceLowerLimit": 100.0,
+            "distanceUpperLimit": 180.0,
             "indexOfYardInput": 0
         },
         "ngaTu4": {
-            "distanceOut": 25.0,
+            "distanceOut": 30.0,
             "distanceLine": 2.5,
             "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceUpperLimit": 40.0,
+            "indexOfYardInput": 0
+        },
+        "tangToc": {
+            "distanceOut": 0.0,
+            "distanceLine": 0.0,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 70.0,
             "indexOfYardInput": 0
         },
         "duongS": [{
@@ -72,39 +79,39 @@
                 "distanceOut": 5.0,
                 "distanceLine": 0.0,
                 "distanceLowerLimit": 0.0,
-                "distanceUpperLimit": 17.0,
+                "distanceUpperLimit": 20.0,
                 "indexOfYardInput": 4
             }, {
                 "distanceOut": 5.0,
                 "distanceLine": 0.0,
-                "distanceLowerLimit": 17.0,
-                "distanceUpperLimit": 25.0,
+                "distanceLowerLimit": 20.0,
+                "distanceUpperLimit": 38.0,
                 "indexOfYardInput": 5
             }, {
                 "distanceOut": 5.0,
                 "distanceLine": 0.0,
-                "distanceLowerLimit": 25.0,
-                "distanceUpperLimit": 35.0,
+                "distanceLowerLimit": 38.0,
+                "distanceUpperLimit": 56.0,
                 "indexOfYardInput": 6
             }],
         "doXeNgang": [{
-                "distanceOut": 5.0,
+                "distanceOut": 3.0,
                 "distanceLine": 0.0,
                 "distanceLowerLimit": 0.0,
-                "distanceUpperLimit": 68.0,
+                "distanceUpperLimit": 110.0,
                 "indexOfYardInput": 7
             }, {
-                "distanceOut": 5.0,
+                "distanceOut": 3.0,
                 "distanceLine": 0.0,
-                "distanceLowerLimit": 68.0,
-                "distanceUpperLimit": 76.0,
+                "distanceLowerLimit": 110.0,
+                "distanceUpperLimit": 120.0,
                 "indexOfYardInput": 8
             }],
         "duongTau": {
             "distanceOut": 4.0,
             "distanceLine": 2.5,
             "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceUpperLimit": 100.0,
             "indexOfYardInput": 0
         }
     },
@@ -140,28 +147,35 @@
             "distanceOut": 25.0,
             "distanceLine": 2.5,
             "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceUpperLimit": 55.0,
             "indexOfYardInput": 0
         },
         "ngaTu2": {
-            "distanceOut": 20.0,
+            "distanceOut": 25.0,
             "distanceLine": 2.5,
             "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceUpperLimit": 35.0,
             "indexOfYardInput": 0
         },
         "ngaTu3": {
-            "distanceOut": 25.0,
+            "distanceOut": 30.0,
             "distanceLine": 2.5,
-            "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceLowerLimit": 100.0,
+            "distanceUpperLimit": 180.0,
             "indexOfYardInput": 0
         },
         "ngaTu4": {
-            "distanceOut": 25.0,
+            "distanceOut": 30.0,
             "distanceLine": 2.5,
             "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceUpperLimit": 40.0,
+            "indexOfYardInput": 0
+        },
+        "tangToc": {
+            "distanceOut": 0.0,
+            "distanceLine": 0.0,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 70.0,
             "indexOfYardInput": 0
         },
         "duongS": [{
@@ -181,39 +195,39 @@
                 "distanceOut": 5.0,
                 "distanceLine": 0.0,
                 "distanceLowerLimit": 0.0,
-                "distanceUpperLimit": 17.0,
+                "distanceUpperLimit": 20.0,
                 "indexOfYardInput": 4
             }, {
                 "distanceOut": 5.0,
                 "distanceLine": 0.0,
-                "distanceLowerLimit": 17.0,
-                "distanceUpperLimit": 25.0,
+                "distanceLowerLimit": 20.0,
+                "distanceUpperLimit": 38.0,
                 "indexOfYardInput": 5
             }, {
                 "distanceOut": 5.0,
                 "distanceLine": 0.0,
-                "distanceLowerLimit": 25.0,
-                "distanceUpperLimit": 35.0,
+                "distanceLowerLimit": 38.0,
+                "distanceUpperLimit": 56.0,
                 "indexOfYardInput": 6
             }],
         "doXeNgang": [{
-                "distanceOut": 5.0,
+                "distanceOut": 3.0,
                 "distanceLine": 0.0,
                 "distanceLowerLimit": 0.0,
-                "distanceUpperLimit": 68.0,
+                "distanceUpperLimit": 110.0,
                 "indexOfYardInput": 7
             }, {
-                "distanceOut": 5.0,
+                "distanceOut": 3.0,
                 "distanceLine": 0.0,
-                "distanceLowerLimit": 68.0,
-                "distanceUpperLimit": 76.0,
+                "distanceLowerLimit": 110.0,
+                "distanceUpperLimit": 120.0,
                 "indexOfYardInput": 8
             }],
         "duongTau": {
             "distanceOut": 4.0,
             "distanceLine": 2.5,
             "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceUpperLimit": 100.0,
             "indexOfYardInput": 0
         }
     },
@@ -249,28 +263,35 @@
             "distanceOut": 25.0,
             "distanceLine": 2.5,
             "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceUpperLimit": 55.0,
             "indexOfYardInput": 0
         },
         "ngaTu2": {
-            "distanceOut": 20.0,
+            "distanceOut": 25.0,
             "distanceLine": 2.5,
             "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceUpperLimit": 35.0,
             "indexOfYardInput": 0
         },
         "ngaTu3": {
-            "distanceOut": 25.0,
+            "distanceOut": 30.0,
             "distanceLine": 2.5,
-            "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceLowerLimit": 100.0,
+            "distanceUpperLimit": 180.0,
             "indexOfYardInput": 0
         },
         "ngaTu4": {
-            "distanceOut": 25.0,
+            "distanceOut": 30.0,
             "distanceLine": 2.5,
             "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceUpperLimit": 40.0,
+            "indexOfYardInput": 0
+        },
+        "tangToc": {
+            "distanceOut": 0.0,
+            "distanceLine": 0.0,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 70.0,
             "indexOfYardInput": 0
         },
         "duongS": [{
@@ -290,39 +311,39 @@
                 "distanceOut": 5.0,
                 "distanceLine": 0.0,
                 "distanceLowerLimit": 0.0,
-                "distanceUpperLimit": 17.0,
+                "distanceUpperLimit": 20.0,
                 "indexOfYardInput": 4
             }, {
                 "distanceOut": 5.0,
                 "distanceLine": 0.0,
-                "distanceLowerLimit": 17.0,
-                "distanceUpperLimit": 25.0,
+                "distanceLowerLimit": 20.0,
+                "distanceUpperLimit": 38.0,
                 "indexOfYardInput": 5
             }, {
                 "distanceOut": 5.0,
                 "distanceLine": 0.0,
-                "distanceLowerLimit": 25.0,
-                "distanceUpperLimit": 35.0,
+                "distanceLowerLimit": 38.0,
+                "distanceUpperLimit": 56.0,
                 "indexOfYardInput": 6
             }],
         "doXeNgang": [{
-                "distanceOut": 5.0,
+                "distanceOut": 3.0,
                 "distanceLine": 0.0,
                 "distanceLowerLimit": 0.0,
-                "distanceUpperLimit": 68.0,
+                "distanceUpperLimit": 110.0,
                 "indexOfYardInput": 7
             }, {
-                "distanceOut": 5.0,
+                "distanceOut": 3.0,
                 "distanceLine": 0.0,
-                "distanceLowerLimit": 68.0,
-                "distanceUpperLimit": 76.0,
+                "distanceLowerLimit": 110.0,
+                "distanceUpperLimit": 120.0,
                 "indexOfYardInput": 8
             }],
         "duongTau": {
             "distanceOut": 4.0,
             "distanceLine": 2.5,
             "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceUpperLimit": 100.0,
             "indexOfYardInput": 0
         }
     },
@@ -358,28 +379,35 @@
             "distanceOut": 25.0,
             "distanceLine": 2.5,
             "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceUpperLimit": 55.0,
             "indexOfYardInput": 0
         },
         "ngaTu2": {
-            "distanceOut": 20.0,
+            "distanceOut": 25.0,
             "distanceLine": 2.5,
             "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceUpperLimit": 35.0,
             "indexOfYardInput": 0
         },
         "ngaTu3": {
-            "distanceOut": 25.0,
+            "distanceOut": 30.0,
             "distanceLine": 2.5,
-            "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceLowerLimit": 100.0,
+            "distanceUpperLimit": 180.0,
             "indexOfYardInput": 0
         },
         "ngaTu4": {
-            "distanceOut": 25.0,
+            "distanceOut": 30.0,
             "distanceLine": 2.5,
             "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceUpperLimit": 40.0,
+            "indexOfYardInput": 0
+        },
+        "tangToc": {
+            "distanceOut": 0.0,
+            "distanceLine": 0.0,
+            "distanceLowerLimit": 0.0,
+            "distanceUpperLimit": 70.0,
             "indexOfYardInput": 0
         },
         "duongS": [{
@@ -399,39 +427,39 @@
                 "distanceOut": 5.0,
                 "distanceLine": 0.0,
                 "distanceLowerLimit": 0.0,
-                "distanceUpperLimit": 17.0,
+                "distanceUpperLimit": 20.0,
                 "indexOfYardInput": 4
             }, {
                 "distanceOut": 5.0,
                 "distanceLine": 0.0,
-                "distanceLowerLimit": 17.0,
-                "distanceUpperLimit": 25.0,
+                "distanceLowerLimit": 20.0,
+                "distanceUpperLimit": 38.0,
                 "indexOfYardInput": 5
             }, {
                 "distanceOut": 5.0,
                 "distanceLine": 0.0,
-                "distanceLowerLimit": 25.0,
-                "distanceUpperLimit": 35.0,
+                "distanceLowerLimit": 38.0,
+                "distanceUpperLimit": 56.0,
                 "indexOfYardInput": 6
             }],
         "doXeNgang": [{
-                "distanceOut": 5.0,
+                "distanceOut": 3.0,
                 "distanceLine": 0.0,
                 "distanceLowerLimit": 0.0,
-                "distanceUpperLimit": 68.0,
+                "distanceUpperLimit": 110.0,
                 "indexOfYardInput": 7
             }, {
-                "distanceOut": 5.0,
+                "distanceOut": 3.0,
                 "distanceLine": 0.0,
-                "distanceLowerLimit": 68.0,
-                "distanceUpperLimit": 76.0,
+                "distanceLowerLimit": 110.0,
+                "distanceUpperLimit": 120.0,
                 "indexOfYardInput": 8
             }],
         "duongTau": {
             "distanceOut": 4.0,
             "distanceLine": 2.5,
             "distanceLowerLimit": 0.0,
-            "distanceUpperLimit": 0.0,
+            "distanceUpperLimit": 100.0,
             "indexOfYardInput": 0
         }
     }

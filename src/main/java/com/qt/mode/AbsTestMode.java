@@ -38,7 +38,6 @@ import java.util.Queue;
 import lombok.Getter;
 import lombok.Setter;
 import com.qt.controller.api.ICommandAPIReceive;
-import javax.swing.Timer;
 
 /**
  *
@@ -66,8 +65,6 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
     protected final ApiService apiService;
     protected final CheckConditionHandle conditionHandle;
     protected final ShowErrorcode showErrorcode;
-    protected final Printer printer;
-    protected final Timer timer;
     protected final MCUSerialHandler mCUSerialHandler;
     private ICommandAPIReceive<Response> commandApiReceive;
     private ModeHandle modeHandle;
@@ -101,14 +98,8 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
         this.fileTestService = FileTestService.getInstance();
         this.apiService = new ApiService();
         this.conditionHandle = new CheckConditionHandle();
-        this.printer = new Printer();
         this.commandApiReceive = new AnalysisApiCommand();
         this.mCUSerialHandler = MCUSerialHandler.getInstance();
-        this.timer = new Timer(20000, (e) -> {
-            new Thread(() -> {
-                upTestDataToServer();
-            }).start();
-        });
     }
 
     private String creareFullName(List<String> ranks) {
@@ -152,7 +143,6 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
 
     public void begin() {
         try {
-            this.timer.stop();
             this.cancel = false;
             this.processlHandle.setTesting(false);
             CameraRunner.getInstance().resetImage();
@@ -177,9 +167,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
                 this.processlHandle.startTest();
                 KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
                 this.mCUSerialHandler.sendLedGreenOn();
-                this.soundPlayer.begin();
                 this.conditionHandle.start();
-                this.timer.start();
                 updateLog();
                 new Thread(() -> {
                     upTestDataToServer();
@@ -196,7 +184,6 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
             this.processlHandle.update();
             updateLog();
             new Thread(() -> {
-                this.timer.restart();
                 upTestDataToServer();
             }).start();
             contestDone();
@@ -225,48 +212,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
                 processlHandle.toProcessModelJson());
     }
 
-    public void end() {
-        try {
-            this.timer.stop();
-            this.conditionHandle.stop();
-            this.contests.clear();
-            KeyEventManagement.getInstance().remove(prepareEventsPackage);
-            KeyEventManagement.getInstance().remove(testEventsPackage);
-            Util.delay(2000);
-            int score = this.processModel.getScore();
-            this.processModel.setContestsResult(score >= scoreSpec ? ProcessModel.PASS : ProcessModel.FAIL);
-            updateLog();
-            this.printer.printTestResult(this.processModel.getId());
-            this.soundPlayer.sayResultTest(score, this.processlHandle.isPass());
-//            if (this.processlHandle.isPass()) {
-//                this.mCUSerialHandler.sendLedGreenOn();
-//            } else {
-//                this.mCUSerialHandler.sendLedRedOn();
-//            }
-            TestStatusLogger.getInstance().remove();
-            int rs = ApiService.FAIL;
-            for (int i = 0; i < 3; i++) {
-                rs = upTestDataToServer();
-                if (rs == ApiService.PASS) {
-                    break;
-                }
-            }
-            if (rs == ApiService.DISCONNECT) {
-                String id = processModel.getId();
-                this.soundPlayer.sendlostConnect();
-                this.fileTestService.saveBackupLog(id, processlHandle.toProcessModelJson().toString(),
-                        CameraRunner.getInstance().getImage());
-            } else if (rs == ApiService.FAIL) {
-                this.soundPlayer.sendResultFailed();
-            }
-            endTest();
-            this.processModel.setId("");
-            this.processlHandle.setTesting(false);
-        } catch (Exception e) {
-            e.printStackTrace();
-            ErrorLog.addError(this, e);
-        }
-    }
+    public abstract void end();
 
     private KeyEventsPackage initPrepareKeyEventPackage() {
         Map<String, IKeyEvent> events = new HashMap<>();

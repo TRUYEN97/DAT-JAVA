@@ -41,7 +41,7 @@ public class YardRankSetting implements IElementSetting {
                     }
                     t.run();
                     return true;
-                }, null, 3, 4);
+                }, null, 4, 4);
         this.menuShowRoom.setShowRoomName(name);
         this.menuShowRoom.addElement(new YardContestConfigSetting(ConstKey.CONTEST_NAME.DUNG_XE_CNDB
                 , yardRankCf.getDungXeChoNg()));
@@ -49,6 +49,7 @@ public class YardRankSetting implements IElementSetting {
                 , yardRankCf.getDungXeNgangDoc()));
         this.menuShowRoom.addElement(new YardContestConfigSetting(ConstKey.CONTEST_NAME.VET_BANH_XE
                 , yardRankCf.getVetBanhXe()));
+        this.menuShowRoom.addElement(new YardContestConfigSetting("DV_GOC", yardRankCf.getDuongVuongGoc()));
         this.menuShowRoom.addElement(new YardContestConfigSetting(ConstKey.CONTEST_NAME.NGAT_TU+" 1"
                 , yardRankCf.getNgaTu1()));
         this.menuShowRoom.addElement(new YardContestConfigSetting(ConstKey.CONTEST_NAME.CHU_S
@@ -61,6 +62,8 @@ public class YardRankSetting implements IElementSetting {
                 , yardRankCf.getNgaTu3()));
         this.menuShowRoom.addElement(new YardContestConfigSetting(ConstKey.CONTEST_NAME.DUONG_TAU
                 , yardRankCf.getDuongTau()));
+        this.menuShowRoom.addElement(new YardContestConfigSetting(ConstKey.CONTEST_NAME.THAY_DOI_SO
+                , yardRankCf.getTangToc()));
         this.menuShowRoom.addElement(new YardContestConfigSetting(ConstKey.CONTEST_NAME.GHEP_XE_NGANG
                 , yardRankCf.getDoXeNgang()));
         this.menuShowRoom.addElement(new YardContestConfigSetting(ConstKey.CONTEST_NAME.NGAT_TU+" 4"
