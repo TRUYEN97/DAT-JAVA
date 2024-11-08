@@ -18,6 +18,7 @@ import java.util.List;
 public class DoXeDoc extends AbsContestHasMutiLine {
 
     private final CheckWheelCrossedLine crossedLine;
+    private double oldDistance;
 
     public DoXeDoc(YardRankModel yardRankModel, List<ContestConfig> contestConfigs, int speedLimit) {
         super(ConstKey.CONTEST_NAME.GHEP_XE_DOC, 120, contestConfigs);
@@ -31,6 +32,14 @@ public class DoXeDoc extends AbsContestHasMutiLine {
     @Override
     protected void init() {
     }
+
+    @Override
+    public void end() {
+        super.end(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        this.carModel.setDistance(oldDistance);
+    }
+    
+    
 
     private boolean success = false;
     private boolean hasIntoPaking = false;
@@ -65,6 +74,7 @@ public class DoXeDoc extends AbsContestHasMutiLine {
         if(this.carModel.isT1() || this.carModel.isT2()) {
             hasIntoPaking = false;
             success = false;
+            oldDistance = this.carModel.getDistance();
             return true;
         }
         return false;
