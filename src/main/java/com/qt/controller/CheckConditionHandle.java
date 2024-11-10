@@ -36,16 +36,16 @@ public class CheckConditionHandle {
         }
         this.conditions.add(condition);
     }
-    
-    public void start(){
+
+    public void start() {
         for (AbsCondition condition : conditions) {
             if (condition != null) {
                 condition.start();
             }
         }
     }
-    
-    public void stop(){
+
+    public void stop() {
         for (AbsCondition condition : conditions) {
             if (condition != null) {
                 condition.stop();
@@ -60,5 +60,9 @@ public class CheckConditionHandle {
             }
         }
         return false;
+    }
+
+    public void clear() {
+        this.conditions.clear();
     }
 }

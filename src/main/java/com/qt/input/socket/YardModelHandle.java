@@ -90,7 +90,7 @@ public class YardModelHandle {
             }
             if (ob.containsKey(TRAFFIC_LIGHT_MODEL1)) {
                 JSONObject tl = ob.getJSONObject(TRAFFIC_LIGHT_MODEL1);
-                if (tl != null && this.yardModel.getTrafficLightModel() != null) {
+                if (tl != null && this.yardModel.getTrafficLightModel1() != null) {
                     this.yardModel.getTrafficLightModel1()
                             .setTrafficLight(tl.getIntValue(TRAFFIC_LIGHT, 0));
                     this.yardModel.getTrafficLightModel1()

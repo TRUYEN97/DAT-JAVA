@@ -80,13 +80,9 @@ public abstract class AbsSaHinhMode extends AbsTestMode<AbsModeView> {
                 this.mCUSerialHandler.sendLedRedOn();
             }
             UserModel userModel = this.apiService.checkCarPair(this.processModel.getCarId());
-            if (userModel == null) {
+            if (userModel == null || userModel.getId() == null || userModel.getId().isBlank()) {
                 Util.delay(1000);
                 return false;
-            }
-            if (userModel.getId() == null || userModel.getId().isBlank()) {
-                userModel.setId("0");
-                userModel.setExamId("0");
             }
             this.processlHandle.setUserModel(userModel);
             switch (this.apiService.checkRunnable(userModel.getId())) {
@@ -95,8 +91,11 @@ public abstract class AbsSaHinhMode extends AbsTestMode<AbsModeView> {
                     creadContestList();
                     return true;
                 }
+                case ApiService.WAIT -> {
+                    Util.delay(2000);
+                }
                 case ApiService.ID_INVALID -> {
-                    soundPlayer.userIdHasTest();
+                    soundPlayer.userIdInvalid();
                     Util.delay(2000);
                 }
             }

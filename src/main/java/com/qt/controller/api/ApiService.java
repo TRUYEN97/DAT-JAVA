@@ -254,7 +254,10 @@ public class ApiService {
                 return API_INVALID;
             }
             Integer data = response.getData();
-            return data == null ? ID_INVALID : START;
+            if(data != null){
+                return data;
+            }
+            return ID_INVALID;
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);

@@ -20,6 +20,10 @@ public class CheckWheelCrossedLine extends AbsCondition {
     public CheckWheelCrossedLine(int spec, ConditionActionListener actionListener) {
         this.actionListener = actionListener;
         this.timer = new Timer(spec * 1000, (e) -> {
+            if (stop) {
+                stop();
+                return;
+            }
             setErrorcode(ConstKey.ERR.WHEEL_CROSSED_LINE);
         });
     }
@@ -38,7 +42,7 @@ public class CheckWheelCrossedLine extends AbsCondition {
     @Override
     protected boolean checkCondition() {
         if (actionListener.activate()) {
-            if (!this.timer.isRunning()) {
+            if (!stop && !this.timer.isRunning()) {
                 this.timer.start();
                 setErrorcode(ConstKey.ERR.WHEEL_CROSSED_LINE);
             }

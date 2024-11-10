@@ -48,17 +48,17 @@ public class SH_B_MODE extends AbsSaHinhMode {
                 yardRankConfig.getNgaTu2(), speedLimit));
         contests.add(new DoXeDoc(yardRankModel, yardRankConfig.getDoXeDoc(), speedLimit));
         if (rd == 0) {
-            contests.add(new KhanCap(20));
+            contests.add(new KhanCap(40));
         }
         contests.add(new NgaTu(3, yardModelHandle.getYardModel(),
                 yardRankConfig.getNgaTu3(), speedLimit));
         if (rd == 1) {
-            contests.add(new KhanCap(30));
+            contests.add(new KhanCap(50));
         }
         contests.add(new DuongTau(yardRankConfig.getDuongTau(), speedLimit));
         contests.add(new TangTocDuongThang(1, speedLimit, yardRankConfig.getTangToc()));
         if (rd == 2) {
-            contests.add(new KhanCap(20));
+            contests.add(new KhanCap(30));
         }
         contests.add(new DoXeNgang(yardRankModel, yardRankConfig.getDoXeNgang(), speedLimit));
         contests.add(new NgaTu(4, yardModelHandle.getYardModel(),

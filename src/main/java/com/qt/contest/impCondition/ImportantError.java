@@ -14,7 +14,7 @@ public class ImportantError extends AbsCondition {
 
     @Override
     protected boolean checkCondition() {
-        return true;
+        return !this.hasFail;
     }
 
     public void setIsImportantError() {
