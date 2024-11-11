@@ -28,6 +28,11 @@ public class ModeManagement {
         this.modeHandle = new ModeHandle();
 
     }
+    
+    public boolean isOffLineMode(){
+        AbsTestMode testMode = this.modeHandle.getTestMode();
+        return testMode == null || !testMode.isOnline();
+    }
 
     public List<AbsTestMode> getModes() {
         return modes;

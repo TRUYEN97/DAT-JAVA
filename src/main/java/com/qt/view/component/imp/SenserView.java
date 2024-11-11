@@ -23,7 +23,6 @@ public class SenserView extends UpdateValuePanel {
     public SenserView() {
         super(200);
         initComponents();
-        setOpaque(true);
         this.defaultColor = getBackground();
         this.modelHandle = YardModelHandle.getInstance();
     }
@@ -59,6 +58,9 @@ public class SenserView extends UpdateValuePanel {
         stT3 = new com.qt.view.element.StatusPanel();
         stT1 = new com.qt.view.element.StatusPanel();
 
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 153, 255)));
+        setOpaque(false);
+
         stT2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/circle.png"))); // NOI18N
         stT2.setIconName("T2");
 
@@ -78,7 +80,7 @@ public class SenserView extends UpdateValuePanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(stT2, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(stT3, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+                .addComponent(stT3, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -86,7 +88,7 @@ public class SenserView extends UpdateValuePanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(stT3, javax.swing.GroupLayout.PREFERRED_SIZE, 98, Short.MAX_VALUE)
+                    .addComponent(stT3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(stT2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(stT1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())

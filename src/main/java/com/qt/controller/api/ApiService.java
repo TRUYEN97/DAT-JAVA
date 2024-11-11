@@ -82,6 +82,7 @@ public class ApiService {
             if (id == null || id.isBlank() || "0".equals(id)) {
                 UserModel userModel = new UserModel();
                 userModel.setId("0");
+                userModel.setExamId("0");
                 return userModel;
             }
             String url = this.setting.getCheckUserIdUrl();
@@ -254,7 +255,7 @@ public class ApiService {
                 return API_INVALID;
             }
             Integer data = response.getData();
-            if(data != null){
+            if (data != null) {
                 return data;
             }
             return ID_INVALID;

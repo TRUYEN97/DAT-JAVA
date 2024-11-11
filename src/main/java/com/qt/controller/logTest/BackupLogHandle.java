@@ -7,6 +7,7 @@ package com.qt.controller.logTest;
 import com.qt.common.ErrorLog;
 import com.qt.common.Util;
 import com.qt.controller.api.ApiService;
+import com.qt.main.Core;
 import java.io.File;
 
 /**
@@ -30,20 +31,22 @@ public class BackupLogHandle implements Runnable {
     public void run() {
         File[] files;
         while (true) {
-            try {
-                if (backupDir != null) {
-                    files = backupDir.listFiles();
-                    if (files != null && files.length > 0) {
-                        for (File file : files) {
-                            if (file != null && upload(file)) {
-                                file.delete();
+            if (!Core.getInstance().getModeManagement().isOffLineMode()) {
+                try {
+                    if (backupDir != null) {
+                        files = backupDir.listFiles();
+                        if (files != null && files.length > 0) {
+                            for (File file : files) {
+                                if (file != null && upload(file)) {
+                                    file.delete();
+                                }
                             }
                         }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ErrorLog.addError(this, e);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                ErrorLog.addError(this, e);
             }
             Util.delay(10000);
         }

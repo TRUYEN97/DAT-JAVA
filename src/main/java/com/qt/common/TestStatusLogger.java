@@ -5,6 +5,7 @@
 package com.qt.common;
 
 import com.qt.controller.api.ApiService;
+import com.qt.main.Core;
 
 /**
  *
@@ -36,7 +37,7 @@ public class TestStatusLogger {
 
     public void check() {
         String data = this.carConfig.getTestStatusValue();
-        if (data == null || data.isBlank()) {
+        if (data == null || data.isBlank() || Core.getInstance().getModeManagement().isOffLineMode()) {
             return;
         }
         String[] elems = data.trim().split(",");

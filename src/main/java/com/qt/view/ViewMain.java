@@ -93,6 +93,7 @@ public class ViewMain extends AbsKeylistenerFrame {
         pnHome.setBackground(new java.awt.Color(204, 204, 255));
         pnHome.setLayout(new javax.swing.BoxLayout(pnHome, javax.swing.BoxLayout.LINE_AXIS));
 
+        messagePanel.setBackground(new java.awt.Color(0, 102, 102));
         messagePanel.setLayout(new javax.swing.BoxLayout(messagePanel, javax.swing.BoxLayout.LINE_AXIS));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

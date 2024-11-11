@@ -23,7 +23,7 @@ import javax.swing.Timer;
  * @param <T>
  */
 public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implements Runnable {
-
+    
     private static int count = 0;
     private final T[] elements;
     private final ButtonDesign[] buttonDesigns;
@@ -132,54 +132,54 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
             this.add(panel);
         }
     }
-
+    
     public int getIndex() {
         return index;
     }
-
+    
     public T getCurrentElement() {
         return this.elements[index];
     }
-
+    
     public IActionCallback<T> getOkAction() {
         return okAction;
     }
-
+    
     public IActionCallback<T> getCloseAction() {
         return closeAction;
     }
-
+    
     public IActionCallback<T> getTimeOutAction() {
         return timeOutAction;
     }
-
+    
     public KeyEventsPackage getEventsPackage() {
         return eventsPackage;
     }
-
+    
     public void stopTimer() {
         this.timer.stop();
     }
-
+    
     public void setTimeOutAction(IActionCallback<T> timeOutAction) {
         this.timeOutAction = timeOutAction;
     }
-
+    
     public void setTimeOut(int timeOut) {
         if (timeOut < 5) {
             timeOut = 5;
         }
         this.timer.setDelay(timeOut * 1000);
     }
-
+    
     public void setOkAction(IActionCallback<T> okAction) {
         this.okAction = okAction;
     }
-
+    
     public void setCloseAction(IActionCallback<T> closeAction) {
         this.closeAction = closeAction;
     }
-
+    
     public boolean removeElement(int index) {
         if (index >= 0 && index < this.elements.length && this.elements[index] == null) {
             setElem(index, null);
@@ -188,7 +188,7 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
         }
         return false;
     }
-
+    
     public void removeElement(T element) {
         if (element == null) {
             return;
@@ -203,7 +203,7 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
         }
         highLight(false);
     }
-
+    
     public boolean addElement(T element) {
         if (element == null) {
             return false;
@@ -222,7 +222,7 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
             return false;
         }
     }
-
+    
     private void setElem(int i, T element) {
         this.elements[i] = element;
         this.buttonDesigns[i].setText(element != null ? element.getName() : "");
@@ -231,12 +231,16 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
     }
 
     public void display() {
-        index = 0;
+        display(0);
+    }
+    
+    public void display(int index) {
+        this.index = index < 0 ? 0 : index;
         highLight(true);
         this.eventManagement.addKeyEventBackAge(eventsPackage);
         this.timer.start();
     }
-
+    
     public void close() {
         this.eventManagement.remove(eventsPackage);
         this.timer.stop();
@@ -248,7 +252,7 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
             }
         }
     }
-
+    
     private boolean highLight(boolean st) {
         int tt = (row * col) - 1;
         if (index < 0) {
@@ -284,12 +288,12 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
             }
         }
     }
-
+    
     @Override
     public void run() {
         display();
     }
-
+    
     public void removeAllElement() {
         for (int i = 0; i < this.elements.length; i++) {
             removeElement(i);
@@ -307,6 +311,10 @@ public class ShowRoomBroad<T extends IgetName> extends javax.swing.JPanel implem
 
         setLayout(new java.awt.GridLayout());
     }// </editor-fold>//GEN-END:initComponents
+
+    public void setIndex(int index) {
+        this.index = index < 0 ? 0 : index;
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

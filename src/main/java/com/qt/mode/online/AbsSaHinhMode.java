@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.qt.mode;
+package com.qt.mode.online;
 
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
@@ -17,6 +17,7 @@ import com.qt.controller.api.ApiService;
 import com.qt.input.camera.CameraRunner;
 import com.qt.input.serial.MCUSerialHandler;
 import com.qt.input.socket.YardModelHandle;
+import com.qt.mode.AbsTestMode;
 import com.qt.model.input.UserModel;
 import com.qt.model.input.yard.YardRankModel;
 import com.qt.model.modelTest.process.ProcessModel;
@@ -40,8 +41,9 @@ public abstract class AbsSaHinhMode extends AbsTestMode<AbsModeView> {
     protected final YardModelHandle yardModelHandle;
     protected final YardRankConfig yardRankConfig;
 
-    public AbsSaHinhMode(AbsModeView hinhView, int speedLimit, int timeOut, MODEL_RANK_NAME modelRank, List<String> ranks) {
-        super(hinhView, ConstKey.MODE_NAME.SA_HINH, ranks);
+    public AbsSaHinhMode(AbsModeView hinhView, int speedLimit, int timeOut,
+            MODEL_RANK_NAME modelRank, List<String> ranks, boolean isOnline) {
+        super(hinhView, ConstKey.MODE_NAME.SA_HINH, ranks, isOnline);
         this.speedLimit = speedLimit;
         this.conditionHandle.addConditon(new TatalTimeOut(timeOut, processModel));
         this.conditionHandle.addConditon(new CheckCM());
@@ -79,25 +81,33 @@ public abstract class AbsSaHinhMode extends AbsTestMode<AbsModeView> {
                 st = true;
                 this.mCUSerialHandler.sendLedRedOn();
             }
-            UserModel userModel = this.apiService.checkCarPair(this.processModel.getCarId());
-            if (userModel == null || userModel.getId() == null || userModel.getId().isBlank()) {
-                Util.delay(1000);
-                return false;
-            }
-            this.processlHandle.setUserModel(userModel);
-            switch (this.apiService.checkRunnable(userModel.getId())) {
-                case ApiService.START -> {
-                    this.mCUSerialHandler.sendLedRedOff();
-                    creadContestList();
-                    return true;
+            if (isOnline) {
+                UserModel userModel = this.apiService.checkCarPair(this.processModel.getCarId());
+                if (userModel == null || userModel.getId() == null || userModel.getId().isBlank()) {
+                    Util.delay(1000);
+                    return false;
                 }
-                case ApiService.WAIT -> {
-                    Util.delay(2000);
+                this.processlHandle.setUserModel(userModel);
+                switch (this.apiService.checkRunnable(userModel.getId())) {
+                    case ApiService.START -> {
+                        this.mCUSerialHandler.sendLedRedOff();
+                        creadContestList();
+                        return true;
+                    }
+                    case ApiService.WAIT -> {
+                        Util.delay(2000);
+                    }
+                    case ApiService.ID_INVALID -> {
+                        soundPlayer.userIdInvalid();
+                        Util.delay(2000);
+                    }
                 }
-                case ApiService.ID_INVALID -> {
-                    soundPlayer.userIdInvalid();
-                    Util.delay(2000);
-                }
+            } else {
+                UserModel userModel = new UserModel();
+                userModel.setId("0");
+                userModel.setExamId("0");
+                this.processlHandle.setUserModel(userModel);
+                return true;
             }
         } else if (st) {
             st = false;
@@ -126,24 +136,26 @@ public abstract class AbsSaHinhMode extends AbsTestMode<AbsModeView> {
                 MCUSerialHandler.getInstance().sendLedRedOn();
             }
             TestStatusLogger.getInstance().remove();
-            int rs = ApiService.FAIL;
-            for (int i = 0; i < 3; i++) {
-                rs = upTestDataToServer();
-                if (rs == ApiService.PASS) {
-                    break;
+            if (isOnline) {
+                int rs = ApiService.FAIL;
+                for (int i = 0; i < 3; i++) {
+                    rs = upTestDataToServer();
+                    if (rs == ApiService.PASS) {
+                        break;
+                    }
+                }
+                if (rs == ApiService.DISCONNECT) {
+                    String id = processModel.getId();
+                    this.soundPlayer.sendlostConnect();
+                    this.fileTestService.saveBackupLog(id, processlHandle.toProcessModelJson().toString(),
+                            CameraRunner.getInstance().getImage());
+                } else if (rs == ApiService.FAIL) {
+                    this.soundPlayer.sendResultFailed();
                 }
             }
-            if (rs == ApiService.DISCONNECT) {
-                String id = processModel.getId();
-                this.soundPlayer.sendlostConnect();
-                this.fileTestService.saveBackupLog(id, processlHandle.toProcessModelJson().toString(),
-                        CameraRunner.getInstance().getImage());
-            } else if (rs == ApiService.FAIL) {
-                this.soundPlayer.sendResultFailed();
-            }
             endTest();
-            this.processModel.setId("");
             this.processlHandle.setTesting(false);
+            this.processModel.setId("");
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);

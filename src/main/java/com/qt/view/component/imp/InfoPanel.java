@@ -9,6 +9,9 @@ import com.qt.common.ErrorLog;
 import com.qt.common.Setting;
 import com.qt.common.Util;
 import com.qt.common.communication.Communicate.Impl.Cmd.Cmd;
+import com.qt.controller.modeController.ModeManagement;
+import com.qt.main.Core;
+import com.qt.mode.AbsTestMode;
 import com.qt.pretreatment.KeyEventManagement;
 import com.qt.view.component.UpdateValuePanel;
 import com.qt.view.modeView.IgetImgLabel;
@@ -22,6 +25,8 @@ import javax.swing.JLabel;
  * @author Admin
  */
 public class InfoPanel extends UpdateValuePanel implements IgetImgLabel {
+
+    private CheckPing checkPing;
 
     /**
      * Creates new form InfoPanel
@@ -49,22 +54,22 @@ public class InfoPanel extends UpdateValuePanel implements IgetImgLabel {
         this.btIn.setMouseClicked((design) -> {
             this.carModel.setRemoteValue(ConstKey.KEY_BOARD.IN);
         });
-        try {
-            String ip = Setting.getInstance().getServerPingIp();
-            new Thread(() -> {
-                Cmd cmd = new Cmd();
-                while (true) {
-                    if (cmd.ping(ip, 2)) {
-                        this.stServer.setOn();
-                    } else {
-                        this.stServer.setOff();
-                    }
-                    Util.delay(1000);
-                }
-            }).start();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            ErrorLog.addError("ApiService-constructor", ex);
+    }
+
+    @Override
+    public void start() {
+        super.start(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        if (this.checkPing == null) {
+            this.checkPing = new CheckPing();
+        }
+        this.checkPing.start();
+    }
+
+    @Override
+    public void stop() {
+        super.stop(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        if (this.checkPing != null) {
+            this.checkPing.stop();
         }
     }
 
@@ -73,6 +78,41 @@ public class InfoPanel extends UpdateValuePanel implements IgetImgLabel {
         this.stCarId.setValue(this.testDataModel.getCarId());
         this.stId.setValue(this.testDataModel.getId());
         this.stModeName.setValue(this.testDataModel.getModeFullName());
+    }
+
+    private class CheckPing {
+
+        private Thread thread;
+        private boolean stop = false;
+
+        void start() {
+            if (thread == null || !thread.isAlive()) {
+                thread = new Thread(() -> {
+                    String ip = Setting.getInstance().getServerPingIp();
+                    Cmd cmd = new Cmd();
+                    ModeManagement management = Core.getInstance().getModeManagement();
+                    AbsTestMode testMode;
+                    this.stop = false;
+                    while (!this.stop) {
+                        testMode = management.getCurrentMode();
+                        if (testMode != null && testMode.isOnline() && cmd.ping(ip, 1)) {
+                            stServer.setOn();
+                        } else {
+                            stServer.setOff();
+                        }
+                        Util.delay(2000);
+                    }
+                });
+                thread.start();
+            }
+        }
+
+        void stop() {
+            this.stop = true;
+            if (thread != null && thread.isAlive()) {
+                thread.stop();
+            }
+        }
     }
 
     /**
@@ -90,14 +130,18 @@ public class InfoPanel extends UpdateValuePanel implements IgetImgLabel {
         lbImg = new javax.swing.JLabel();
         stServer = new com.qt.view.element.StatusPanel();
         btIn = new com.qt.view.element.ButtonDesign();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 153, 255)));
         setOpaque(false);
 
         stId.setIconName("SBD");
 
         stCarId.setIconName("Số Xe");
 
-        stModeName.setIconName("Phần thi");
+        stModeName.setIconName("");
 
         lbImg.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -106,49 +150,91 @@ public class InfoPanel extends UpdateValuePanel implements IgetImgLabel {
 
         btIn.setText("In phiếu điểm");
 
+        jPanel1.setBackground(new java.awt.Color(0, 102, 102));
+        jPanel1.setOpaque(false);
+
+        jLabel1.setFont(new java.awt.Font("Sitka Display", 3, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel1.setText("NextOne");
+        jLabel1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 2, 16)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel2.setText("company");
+        jLabel2.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(stModeName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lbImg, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(stModeName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(stCarId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(stId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(stServer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btIn, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btIn, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(lbImg, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lbImg, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbImg, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(stId, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
-                    .addComponent(stCarId, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(stCarId, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
+                    .addComponent(stId, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(stModeName, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(stModeName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(stServer, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
-                    .addComponent(btIn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(8, Short.MAX_VALUE))
+                    .addComponent(stServer, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+                    .addComponent(btIn, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.qt.view.element.ButtonDesign btIn;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lbImg;
     private com.qt.view.element.StatusPanel stCarId;
     private com.qt.view.element.StatusPanel stId;

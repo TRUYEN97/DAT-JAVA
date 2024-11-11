@@ -23,6 +23,7 @@ public class CarConfig {
     private static final String YARD_IP = "yardIp";
     private static final String EXAM_ID = "examId";
     private static final String YARD_PORT = "yardPort";
+    private static final String MODE_INDEX = "modeIndex";
     private static volatile CarConfig instance;
     private final JSONObject jsono;
     private final String path;
@@ -34,7 +35,7 @@ public class CarConfig {
         this.fileService = new FileService();
         this.path = setting.getConfigPath();
         try {
-            File f = new File(this.path );
+            File f = new File(this.path);
             if (!f.exists()) {
                 setDefaultConfig();
                 return;
@@ -69,6 +70,7 @@ public class CarConfig {
         this.jsono.put(YARD_RANK, "1");
         this.jsono.put(YARD_IP, "192.168.1.168");
         this.jsono.put(YARD_PORT, 6868);
+        this.jsono.put(MODE_INDEX, 0);
         update();
     }
 
@@ -120,7 +122,7 @@ public class CarConfig {
 
     public synchronized final void update() {
         try {
-            this.fileService.writeFile(this.path , this.jsono.toString(), false);
+            this.fileService.writeFile(this.path, this.jsono.toString(), false);
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
@@ -187,6 +189,15 @@ public class CarConfig {
     public String getString(String key, String defaultVal) {
         String val = this.jsono.getString(key);
         return val == null || val.isBlank() ? defaultVal : val;
+    }
+
+    public void setModeIndex(int index) {
+        this.jsono.put(MODE_INDEX, index < 0 ? 0 : index);
+        update();
+    }
+
+    public int getIndexOfModel() {
+        return this.jsono.getIntValue(MODE_INDEX, 0);
     }
 
 }

@@ -24,7 +24,6 @@ import com.qt.input.serial.MCUSerialHandler;
 import com.qt.model.input.CarModel;
 import com.qt.model.modelTest.process.ProcessModel;
 import com.qt.output.SoundPlayer;
-import com.qt.output.printer.Printer;
 import com.qt.pretreatment.IKeyEvent;
 import com.qt.pretreatment.KeyEventManagement;
 import com.qt.pretreatment.KeyEventsPackage;
@@ -69,9 +68,10 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
     private ICommandAPIReceive<Response> commandApiReceive;
     private ModeHandle modeHandle;
     private boolean cancel;
+    protected final boolean isOnline;
 
-    protected AbsTestMode(V view, String name, List<String> ranks) {
-        this(view, name, 80, ranks);
+    protected AbsTestMode(V view, String name, List<String> ranks, boolean isOnline) {
+        this(view, name, 80, ranks, isOnline);
     }
 
     @Override
@@ -79,9 +79,10 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
         return fullName;
     }
 
-    protected AbsTestMode(V view, String name, int scoreSpec, List<String> ranks) {
+    protected AbsTestMode(V view, String name, int scoreSpec, List<String> ranks, boolean isOnline) {
         this.view = view;
         this.name = name;
+        this.isOnline = isOnline;
         this.fullName = creareFullName(ranks);
         this.ranks = ranks;
         this.cancel = false;
@@ -109,6 +110,9 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
             builder.append(" ").append(rank);
         }
         builder.append(" )");
+        if (!isOnline) {
+            builder.append("F");
+        }
         return builder.toString();
     }
 
@@ -157,9 +161,6 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
             }
             KeyEventManagement.getInstance().remove(prepareEventsPackage);
             if (!cancel) {
-                TestStatusLogger.getInstance().setTestStatus(
-                        this.processModel.getId(),
-                        this.processModel.getExamId());
                 this.errorcodeHandle.clear();
                 this.processlHandle.resetModel();
                 this.mCUSerialHandler.sendReset();
@@ -169,9 +170,14 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
                 this.mCUSerialHandler.sendLedGreenOn();
                 this.conditionHandle.start();
                 updateLog();
-                new Thread(() -> {
-                    upTestDataToServer();
-                }).start();
+                if (isOnline) {
+                    new Thread(() -> {
+                        TestStatusLogger.getInstance().setTestStatus(
+                                this.processModel.getId(),
+                                this.processModel.getExamId());
+                        upTestDataToServer();
+                    }).start();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -183,9 +189,11 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
         try {
             this.processlHandle.update();
             updateLog();
-            new Thread(() -> {
-                upTestDataToServer();
-            }).start();
+            if (isOnline) {
+                new Thread(() -> {
+                    upTestDataToServer();
+                }).start();
+            }
             contestDone();
         } catch (Exception e) {
             e.printStackTrace();
@@ -201,7 +209,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
     }
 
     protected int upTestDataToServer() {
-        if (cancel) {
+        if (cancel || !isOnline) {
             return ApiService.PASS;
         }
         String id = processModel.getId();

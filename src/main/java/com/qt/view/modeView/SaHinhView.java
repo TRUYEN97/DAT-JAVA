@@ -34,6 +34,8 @@ public class SaHinhView extends AbsModeView {
         carStatusPanal = new com.qt.view.component.imp.CarStatusPanal();
         senserView1 = new com.qt.view.component.imp.SenserView();
 
+        setBackground(new java.awt.Color(0, 153, 153));
+
         infoPanel.setBackground(new java.awt.Color(102, 102, 255));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

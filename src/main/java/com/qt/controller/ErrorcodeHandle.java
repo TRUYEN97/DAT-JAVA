@@ -8,6 +8,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.ErrorLog;
 import com.qt.common.MyObjectMapper;
 import com.qt.controller.api.ApiService;
+import com.qt.main.Core;
 import com.qt.model.modelTest.ErrorCode;
 import com.qt.model.modelTest.ErrorcodeWithContestNameModel;
 import com.qt.model.modelTest.contest.ContestDataModel;
@@ -83,17 +84,19 @@ public class ErrorcodeHandle {
             this.ewcnms.add(new ErrorcodeWithContestNameModel(errorcode, ""));
             this.soundPlayer.sayErrorCode(errorcode.getErrKey());
             this.processModel.subtract(errorcode.getErrPoint());
-            new Thread(() -> {
-                String id = this.processModel.getId();
-                if (id == null || id.isBlank() || id.equals("0")) {
-                    return;
-                }
-                JSONObject testData = MyObjectMapper.convertValue(this.processModel, JSONObject.class);
-                if (jsono != null) {
-                    testData.putAll(jsono);
-                }
-                this.apiService.sendData(testData, null);
-            }).start();
+            if (!Core.getInstance().getModeManagement().isOffLineMode()) {
+                new Thread(() -> {
+                    String id = this.processModel.getId();
+                    if (id == null || id.isBlank() || id.equals("0")) {
+                        return;
+                    }
+                    JSONObject testData = MyObjectMapper.convertValue(this.processModel, JSONObject.class);
+                    if (jsono != null) {
+                        testData.putAll(jsono);
+                    }
+                    this.apiService.sendData(testData, null);
+                }).start();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);
@@ -113,13 +116,15 @@ public class ErrorcodeHandle {
             this.soundPlayer.sayErrorCode(errorcode.getErrKey());
             dataModel.addErrorCode(errorcode);
             this.processModel.subtract(errorcode.getErrPoint());
-            new Thread(() -> {
-                String id = this.processModel.getId();
-                if (id == null || id.isBlank() || id.equals("0")) {
-                    return;
-                }
-                this.apiService.sendData(this.processModelHandle.toProcessModelJson(), null);
-            }).start();
+            if (!Core.getInstance().getModeManagement().isOffLineMode()) {
+                new Thread(() -> {
+                    String id = this.processModel.getId();
+                    if (id == null || id.isBlank() || id.equals("0")) {
+                        return;
+                    }
+                    this.apiService.sendData(this.processModelHandle.toProcessModelJson(), null);
+                }).start();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);

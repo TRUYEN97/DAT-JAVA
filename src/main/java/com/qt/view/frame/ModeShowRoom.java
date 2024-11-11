@@ -4,6 +4,7 @@
  */
 package com.qt.view.frame;
 
+import com.qt.common.CarConfig;
 import com.qt.controller.modeController.ModeManagement;
 import com.qt.mode.AbsTestMode;
 import com.qt.view.AbsKeylistenerFrame;
@@ -16,6 +17,7 @@ public class ModeShowRoom extends AbsKeylistenerFrame {
 
     private final ShowRoomBroad<AbsTestMode> showRoomBroad;
     private final ModeManagement modeManagement;
+    private final CarConfig carConfig;
 
     /**
      * Creates new form ModeShowRoom
@@ -64,6 +66,7 @@ public class ModeShowRoom extends AbsKeylistenerFrame {
             return true;
         });
         this.jPanel1.add(this.showRoomBroad);
+        this.carConfig = CarConfig.getInstance();
     }
 
     private void close() {
@@ -85,11 +88,16 @@ public class ModeShowRoom extends AbsKeylistenerFrame {
         }
         if (modes.size() > 1) {
             init();
+            int index = this.carConfig.getIndexOfModel();
             this.setVisible(true);
-            this.showRoomBroad.display();
+            this.showRoomBroad.display(index);
         } else {
             modeManagement.updateMode(modes.get(0));
         }
+    }
+    
+    public int getIndexOfMode(){
+        return this.showRoomBroad.getIndex();
     }
 
     /**

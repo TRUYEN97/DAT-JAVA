@@ -94,6 +94,10 @@ public class DuongTruongContestPanel extends UpdateValuePanel {
         btRg = new com.qt.view.element.ButtonDesign();
         btTn = new com.qt.view.element.ButtonDesign();
 
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 153, 255)));
+        setFocusCycleRoot(true);
+
+        pnBaiThi.setOpaque(false);
         pnBaiThi.setLayout(new java.awt.GridLayout(1, 4));
 
         btXp.setText("Xuất phát");
@@ -108,6 +112,7 @@ public class DuongTruongContestPanel extends UpdateValuePanel {
         btKt.setText("Kết thúc");
         pnBaiThi.add(btKt);
 
+        pnTruDiem.setOpaque(false);
         pnTruDiem.setLayout(new java.awt.GridLayout(1, 5));
 
         btCl.setText("CL");
@@ -129,16 +134,16 @@ public class DuongTruongContestPanel extends UpdateValuePanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnBaiThi, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
+            .addComponent(pnBaiThi, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
             .addComponent(pnTruDiem, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(pnBaiThi, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnTruDiem, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(pnBaiThi, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(pnTruDiem, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 

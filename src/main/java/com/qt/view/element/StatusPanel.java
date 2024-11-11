@@ -193,12 +193,14 @@ public class StatusPanel extends javax.swing.JPanel {
         setOpaque(false);
 
         lbNameTop.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        lbNameTop.setForeground(new java.awt.Color(255, 255, 255));
         lbNameTop.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbNameTop.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         lbNameTop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         lbNameTop.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
         lbName.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        lbName.setForeground(new java.awt.Color(255, 255, 255));
         lbName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbName.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         lbName.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -223,13 +225,13 @@ public class StatusPanel extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(2, 2, 2)
+                .addGap(0, 0, 0)
                 .addComponent(lbNameTop)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
+                .addComponent(lbIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
                 .addComponent(lbName)
-                .addGap(4, 4, 4))
+                .addGap(0, 0, 0))
         );
     }// </editor-fold>//GEN-END:initComponents
 

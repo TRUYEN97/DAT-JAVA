@@ -62,7 +62,10 @@ public class ShowMessagePanel extends javax.swing.JPanel {
 
         lbMess = new javax.swing.JLabel();
 
+        setOpaque(false);
         setLayout(new java.awt.BorderLayout());
+
+        lbMess.setForeground(new java.awt.Color(255, 255, 255));
         add(lbMess, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 

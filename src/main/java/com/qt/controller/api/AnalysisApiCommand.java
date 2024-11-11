@@ -11,9 +11,9 @@ import com.qt.common.CarConfig;
 import com.qt.common.ErrorLog;
 import com.qt.controller.ErrorcodeHandle;
 import com.qt.controller.ProcessModelHandle;
-import static com.qt.controller.api.ApiService.FAIL;
 import com.qt.controller.logTest.FileTestService;
 import com.qt.input.camera.CameraRunner;
+import com.qt.main.Core;
 import com.qt.model.modelTest.process.ProcessModel;
 import java.io.File;
 import java.nio.file.Files;
@@ -85,7 +85,7 @@ public class AnalysisApiCommand implements ICommandAPIReceive<Response> {
 
     private void checkCommandWithCurrentExamId(String examId, JSONObject json) {
         String id = json.getString(USER_ID);
-        if (id == null || examId == null) {
+        if (id == null || examId == null || Core.getInstance().getModeManagement().isOffLineMode()) {
             return;
         }
         String errKey = json.getString(ERROR_KEY);

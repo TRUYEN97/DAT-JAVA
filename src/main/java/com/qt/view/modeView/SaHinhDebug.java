@@ -35,6 +35,8 @@ public class SaHinhDebug extends AbsModeView {
         senserView1 = new com.qt.view.component.imp.SenserView();
         chooseContestShPanel1 = new com.qt.view.component.imp.ChooseContestShPanel();
 
+        setBackground(new java.awt.Color(0, 153, 153));
+
         infoPanel.setBackground(new java.awt.Color(102, 102, 255));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

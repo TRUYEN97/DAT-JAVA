@@ -44,6 +44,8 @@ public class ChooseContestShPanel extends UpdateValuePanel {
 
         btChoose = new com.qt.view.element.ButtonDesign();
 
+        setOpaque(false);
+
         btChoose.setText("Chọn bài thi");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

@@ -1,0 +1,58 @@
+2024-11-11 16:29:50.537:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 16:29:52.055:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 16:29:57.149:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 16:29:57.574:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 16:30:11.536:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 16:30:11.964:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 16:38:42.942:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 16:38:43.930:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 16:38:49.156:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 16:38:49.557:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 16:38:54.648:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 16:38:55.117:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 16:39:00.207:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 16:39:00.687:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 16:44:46.526:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 16:44:47.428:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 16:44:52.524:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 16:44:52.910:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 16:46:39.871:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 16:46:41.068:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 16:50:31.044:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 16:50:31.944:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 16:50:55.039:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 16:50:55.517:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 16:59:42.566:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 16:59:43.981:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 16:59:49.074:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 16:59:49.478:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 17:25:14.639:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 17:25:16.106:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 17:25:51.585:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 17:25:52.502:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 17:26:06.568:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 17:26:07.011:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 17:39:12.413:   [POST] https://thilaixe.theworldbelongsto.us/api/road/v1/command: {"carId":"8"}
+2024-11-11 17:39:14.074:   [RESPONSE] 404 - {"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}
+2024-11-11 17:39:19.170:   [POST] https://thilaixe.theworldbelongsto.us/api/road/v1/command: {"carId":"8"}
+2024-11-11 17:39:19.576:   [RESPONSE] 404 - {"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}
+2024-11-11 17:40:17.104:   [POST] https://thilaixe.theworldbelongsto.us/api/road/v1/checkcontestant: {"id":"5","carId":"8"}
+2024-11-11 17:40:17.533:   [RESPONSE] 404 - {"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}
+2024-11-11 18:01:22.435:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 18:01:24.386:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 18:01:29.542:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 18:01:29.992:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 19:11:43.567:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 19:11:48.315:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 19:11:53.404:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 19:11:53.807:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 19:16:36.165:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 19:16:37.103:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 19:16:51.057:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/command: {"carId":"8"}
+2024-11-11 19:16:51.506:   [RESPONSE] 200 - {"status":true,"message":"","data":[{"examId":"2","update":[]}]}
+2024-11-11 19:17:00.884:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/checkcar: {"id":"9"}
+2024-11-11 19:17:01.324:   [RESPONSE] 200 - {"status":true,"message":"","data":true}
+2024-11-11 19:17:15.209:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/checkcar: {"id":"9"}
+2024-11-11 19:17:15.642:   [RESPONSE] 200 - {"status":true,"message":"","data":true}
+2024-11-11 19:17:27.133:   [POST] https://thilaixe.theworldbelongsto.us/api/v1/checkcar: {"id":"111"}
+2024-11-11 19:17:27.501:   [RESPONSE] 200 - {"status":false,"message":"Invalid car ID","data":false}

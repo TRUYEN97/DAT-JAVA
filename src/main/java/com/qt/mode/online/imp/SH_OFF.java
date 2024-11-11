@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.qt.mode.imp;
+package com.qt.mode.online.imp;
 
 import com.qt.common.ConstKey;
 import com.qt.contest.impContest.shB2.DoXeDoc;
@@ -18,7 +18,7 @@ import com.qt.contest.impContest.shB2.TangTocDuongThang;
 import com.qt.contest.impContest.shB2.VetBanhXe;
 import com.qt.contest.impContest.shB2.XuatPhat;
 import com.qt.input.serial.MCUSerialHandler;
-import com.qt.mode.AbsSaHinhMode;
+import com.qt.mode.online.AbsSaHinhMode;
 import com.qt.model.input.UserModel;
 import com.qt.pretreatment.IKeyEvent;
 import com.qt.view.frame.KeyBoardFrame;
@@ -33,7 +33,7 @@ import java.util.Map;
 public class SH_OFF extends AbsSaHinhMode {
 
     public SH_OFF(AbsModeView hinhView) {
-        super(hinhView, 24, 1800, MODEL_RANK_NAME.RANK_B, List.of("off"));
+        super(hinhView, 24, 1800, MODEL_RANK_NAME.RANK_B, List.of("off"), false);
     }
 
     @Override

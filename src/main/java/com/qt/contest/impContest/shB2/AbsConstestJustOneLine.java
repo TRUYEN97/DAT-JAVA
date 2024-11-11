@@ -15,7 +15,7 @@ import com.qt.model.yardConfigMode.ContestConfig;
 public abstract class AbsConstestJustOneLine extends AbsSaHinhContest {
 
     protected final ContestConfig contestConfig;
-    protected final double intoDis;
+    private final double intoDis;
 
     public AbsConstestJustOneLine(String name, int timeout, ContestConfig contestConfig) {
         super(name, true, timeout);

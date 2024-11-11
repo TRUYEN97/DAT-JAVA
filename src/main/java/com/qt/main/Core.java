@@ -4,6 +4,7 @@
  */
 package com.qt.main;
 
+import com.qt.common.CarConfig;
 import com.qt.common.ConstKey;
 import com.qt.common.TestStatusLogger;
 import com.qt.common.Util;
@@ -18,10 +19,10 @@ import com.qt.controller.settingElement.imp.SettingRPM;
 import com.qt.controller.settingElement.imp.SettingSignalLinghtDelayTime;
 import com.qt.controller.settingElement.imp.yardSetting.YardConfigSetting;
 import com.qt.input.camera.CameraRunner;
-import com.qt.mode.imp.DT_B1_AUTO_MODE;
-import com.qt.mode.imp.DT_B_MODE;
-import com.qt.mode.imp.SH_B_MODE;
-import com.qt.mode.imp.SH_OFF;
+import com.qt.mode.online.imp.DT_B1_AUTO_MODE;
+import com.qt.mode.online.imp.DT_B_MODE;
+import com.qt.mode.online.imp.SH_B_MODE;
+import com.qt.mode.online.imp.SH_OFF;
 import com.qt.model.modelTest.ErrorCode;
 import com.qt.output.SoundPlayer;
 import com.qt.pretreatment.KeyEventManagement;
@@ -40,7 +41,7 @@ import lombok.Getter;
  */
 @Getter
 public class Core {
-
+    
     private static volatile Core instance;
     private final ModeManagement modeManagement;
     private final ViewMain viewMain;
@@ -50,7 +51,7 @@ public class Core {
     private final KeyEventManagement eventManagement;
     private final KeyEventsPackage eventsPackage;
     private Timer timer;
-
+    
     private Core() {
         this.viewMain = ViewMain.getInstance();
         this.cameraRunner = CameraRunner.getInstance();
@@ -75,7 +76,7 @@ public class Core {
         addMode();
         initErrorcode();
     }
-
+    
     private void initElementSetting(SettingShowRoom settingFrame) {
         settingFrame.addElementSetting(new ChangeCarId());
         settingFrame.addElementSetting(new SettingEncoder());
@@ -84,13 +85,13 @@ public class Core {
         settingFrame.addElementSetting(new ChangePassword());
         settingFrame.addElementSetting(new YardConfigSetting());
     }
-
+    
     private void moveSettingEvent() {
         this.eventsPackage.remove(ConstKey.KEY_BOARD.SETTING);
         this.timer.stop();
         this.timer = null;
     }
-
+    
     private void initErrorcode() {
         putErrorCode(ConstKey.ERR.SPEED_LIMIT_EXCEEDED, "Chạy quá tốc độ", 1);
         putErrorCode(ConstKey.ERR.OVERALL_TIME_EXCEEDED, "Quá tổng thời gian", 1);
@@ -148,18 +149,18 @@ public class Core {
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.TT, new ErrorCode("TT", 5, "KO TANG TOC DO"));
         this.errorcodeHandle.putErrorCode(ConstKey.ERR.GT, new ErrorCode("GT", 5, "KO GIAM TOC DO"));
     }
-
+    
     private void putErrorCode(String errName, String description, int point) {
         putErrorCode(errName, errName, description, point);
     }
-
+    
     private void putErrorCode(String errCode, String errName, String description, int point) {
         if (errCode == null || errName == null) {
             return;
         }
         this.errorcodeHandle.putErrorCode(errCode, new ErrorCode(errName, point, description));
     }
-
+    
     public static Core getInstance() {
         Core ins = instance;
         if (ins == null) {
@@ -172,20 +173,22 @@ public class Core {
         }
         return ins;
     }
-
+    
     private void addMode() {
         DuongTruongView truongView = new DuongTruongView();
         SaHinhView hinhView = new SaHinhView();
         this.modeManagement.addMode(new SH_OFF(new SaHinhDebug()));
-        this.modeManagement.addMode(new DT_B1_AUTO_MODE(truongView));
-        this.modeManagement.addMode(new DT_B_MODE(truongView));
-        this.modeManagement.addMode(new SH_B_MODE(hinhView));
+        this.modeManagement.addMode(new DT_B1_AUTO_MODE(truongView, true));
+        this.modeManagement.addMode(new DT_B_MODE(truongView, true));
+        this.modeManagement.addMode(new SH_B_MODE(hinhView, true));
+        this.modeManagement.addMode(new DT_B_MODE(truongView, false));
+        this.modeManagement.addMode(new SH_B_MODE(hinhView, false));
 //        this.modeManagement.addMode(new SH_B1_AUTO_MODE(hinhView));
 //        this.modeManagement.addMode(new SH_C_MODE(hinhView));
 //        this.modeManagement.addMode(new SH_D_MODE(hinhView));
 //        this.modeManagement.addMode(new SH_E_MODE(hinhView));
     }
-
+    
     public void start() {
         SoundPlayer.getInstance().sayWelcome();
         this.eventManagement.start();
@@ -194,10 +197,11 @@ public class Core {
         while (this.chooseModeFrame.isShowing()) {            
             Util.delay(1000);
         }
+        CarConfig.getInstance().setModeIndex(this.chooseModeFrame.getIndexOfMode());
         this.viewMain.display();
         TestStatusLogger.getInstance().check();
         this.eventManagement.addKeyEventBackAge(eventsPackage);
         this.timer.start();
     }
-
+    
 }

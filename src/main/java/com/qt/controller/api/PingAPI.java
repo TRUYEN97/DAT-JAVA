@@ -8,6 +8,7 @@ import com.qt.common.API.Response;
 import com.qt.common.CarConfig;
 import com.qt.common.ErrorLog;
 import com.qt.common.Util;
+import com.qt.main.Core;
 
 /**
  *
@@ -49,11 +50,13 @@ public class PingAPI {
                 ICommandAPIReceive<Response> aPIReceive;
                 CarConfig carConfig = CarConfig.getInstance();
                 while (!stop) {
-                    aPIReceive = this.pingAPIReceive;
-                    if (aPIReceive != null) {
-                        response = this.apiService.checkCommad(carConfig.getCarId());
-                        if (response != null) {
-                            aPIReceive.receive(response);
+                    if (!Core.getInstance().getModeManagement().isOffLineMode()) {
+                        aPIReceive = this.pingAPIReceive;
+                        if (aPIReceive != null) {
+                            response = this.apiService.checkCommad(carConfig.getCarId());
+                            if (response != null) {
+                                aPIReceive.receive(response);
+                            }
                         }
                     }
                     Util.delay(5000);
