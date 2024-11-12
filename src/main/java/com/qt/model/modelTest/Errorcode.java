@@ -9,12 +9,12 @@ package com.qt.model.modelTest;
  * @author Admin
  */
 
-public class ErrorCode {
+public class Errorcode {
     protected String errKey;
     protected int errPoint;
     protected String errName;
 
-    public ErrorCode() {
+    public Errorcode() {
     }
 
     public void setErrKey(String errKey) {
@@ -30,7 +30,7 @@ public class ErrorCode {
     }
     
 
-    public ErrorCode(String errKey, int errPoint, String errName) {
+    public Errorcode(String errKey, int errPoint, String errName) {
         this.errKey = errKey;
         this.errPoint = errPoint;
         this.errName = errName;

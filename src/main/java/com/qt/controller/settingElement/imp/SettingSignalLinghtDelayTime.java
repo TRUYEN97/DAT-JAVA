@@ -39,8 +39,11 @@ public class SettingSignalLinghtDelayTime extends AbsElementSetting implements I
             mcu_config_model.setNp_time(delay);
             mcu_config_model.setNt_time(delay);
             this.carConfig.updateMcuConfig(mcu_config_model);
-            MCUSerialHandler.getInstance().sendConfig(mcu_config_model);
-            this.soundPlayer.changeSucess();
+            if (MCUSerialHandler.getInstance().sendConfig(mcu_config_model)) {
+                this.soundPlayer.changeSucess();
+            }else{
+                this.soundPlayer.canNotChange();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);

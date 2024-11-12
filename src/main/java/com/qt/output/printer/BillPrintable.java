@@ -6,7 +6,7 @@ package com.qt.output.printer;
 
 import com.qt.common.CarConfig;
 import com.qt.common.ErrorLog;
-import com.qt.model.modelTest.ErrorCode;
+import com.qt.model.modelTest.Errorcode;
 import com.qt.model.modelTest.ErrorcodeWithContestNameModel;
 import com.qt.model.modelTest.contest.ContestDataModel;
 import com.qt.model.modelTest.process.ProcessModel;
@@ -98,7 +98,7 @@ public class BillPrintable implements Printable {
         List<ErrorcodeWithContestNameModel> errorcodes = new ArrayList<>();
         try {
             if (!this.processData.getErrorCodes().isEmpty()) {
-                for (ErrorCode errorCode : this.processData.getErrorCodes()) {
+                for (Errorcode errorCode : this.processData.getErrorCodes()) {
                     errorcodes.add(new ErrorcodeWithContestNameModel(errorCode, ""));
                 }
             }
@@ -110,7 +110,7 @@ public class BillPrintable implements Printable {
                     if (contestModel == null || contestModel.getErrorCodes().isEmpty()) {
                         continue;
                     }
-                    for (ErrorCode errorCode : contestModel.getErrorCodes()) {
+                    for (Errorcode errorCode : contestModel.getErrorCodes()) {
                         errorcodes.add(new ErrorcodeWithContestNameModel(errorCode, contestModel.getContestName()));
                     }
                 }

@@ -9,7 +9,7 @@ import com.qt.common.ErrorLog;
 import com.qt.common.MyObjectMapper;
 import com.qt.controller.api.ApiService;
 import com.qt.main.Core;
-import com.qt.model.modelTest.ErrorCode;
+import com.qt.model.modelTest.Errorcode;
 import com.qt.model.modelTest.ErrorcodeWithContestNameModel;
 import com.qt.model.modelTest.contest.ContestDataModel;
 import com.qt.model.modelTest.process.ProcessModel;
@@ -29,7 +29,7 @@ public class ErrorcodeHandle {
     private final ProcessModelHandle processModelHandle;
     private final ProcessModel processModel;
     private final SoundPlayer soundPlayer;
-    private final Map<String, ErrorCode> mapErrorcodes;
+    private final Map<String, Errorcode> mapErrorcodes;
     private final List<ErrorcodeWithContestNameModel> ewcnms;
     private final ApiService apiService;
 
@@ -63,7 +63,7 @@ public class ErrorcodeHandle {
         return ewcnms;
     }
 
-    public void putErrorCode(String key, ErrorCode errorcode) {
+    public void putErrorCode(String key, Errorcode errorcode) {
         if (errorcode == null) {
             return;
         }
@@ -76,7 +76,7 @@ public class ErrorcodeHandle {
 
     public void addBaseErrorCode(String key, JSONObject jsono) {
         try {
-            ErrorCode errorcode = this.mapErrorcodes.get(key);
+            Errorcode errorcode = this.mapErrorcodes.get(key);
             if (errorcode == null || errorcode.getErrKey() == null) {
                 return;
             }
@@ -108,7 +108,7 @@ public class ErrorcodeHandle {
             if (dataModel == null) {
                 return;
             }
-            ErrorCode errorcode = this.mapErrorcodes.get(key);
+            Errorcode errorcode = this.mapErrorcodes.get(key);
             if (errorcode == null || errorcode.getErrKey() == null) {
                 return;
             }

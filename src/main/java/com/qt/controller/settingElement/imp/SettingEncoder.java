@@ -37,8 +37,11 @@ public class SettingEncoder extends AbsElementSetting {
             Double encoderScale = Double.valueOf(value);
             mcu_config_model.setEncoder(encoderScale);
             this.carConfig.updateMcuConfig(mcu_config_model);
-            MCUSerialHandler.getInstance().sendConfig(mcu_config_model);
-            this.soundPlayer.changeSucess();
+            if (MCUSerialHandler.getInstance().sendConfig(mcu_config_model)) {
+                this.soundPlayer.changeSucess();
+            }else{
+                this.soundPlayer.canNotChange();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLog.addError(this, e);

@@ -23,7 +23,7 @@ import com.qt.mode.online.imp.DT_B1_AUTO_MODE;
 import com.qt.mode.online.imp.DT_B_MODE;
 import com.qt.mode.online.imp.SH_B_MODE;
 import com.qt.mode.online.imp.SH_OFF;
-import com.qt.model.modelTest.ErrorCode;
+import com.qt.model.modelTest.Errorcode;
 import com.qt.output.SoundPlayer;
 import com.qt.pretreatment.KeyEventManagement;
 import com.qt.pretreatment.KeyEventsPackage;
@@ -146,8 +146,8 @@ public class Core {
         putErrorCode(ConstKey.ERR.FAILED_COMPLETE_PARKING, "Không hoàn thành ghép xe", 25);
         putErrorCode(ConstKey.ERR.DISQUALIFIED, "Bị truất quyền thi", 25);
         /////////////////////
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TT, new ErrorCode("TT", 5, "KO TANG TOC DO"));
-        this.errorcodeHandle.putErrorCode(ConstKey.ERR.GT, new ErrorCode("GT", 5, "KO GIAM TOC DO"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.TT, new Errorcode("TT", 5, "KO TANG TOC DO"));
+        this.errorcodeHandle.putErrorCode(ConstKey.ERR.GT, new Errorcode("GT", 5, "KO GIAM TOC DO"));
     }
     
     private void putErrorCode(String errName, String description, int point) {
@@ -158,7 +158,7 @@ public class Core {
         if (errCode == null || errName == null) {
             return;
         }
-        this.errorcodeHandle.putErrorCode(errCode, new ErrorCode(errName, point, description));
+        this.errorcodeHandle.putErrorCode(errCode, new Errorcode(errName, point, description));
     }
     
     public static Core getInstance() {
