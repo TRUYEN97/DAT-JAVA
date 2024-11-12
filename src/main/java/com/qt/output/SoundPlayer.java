@@ -90,7 +90,7 @@ public class SoundPlayer {
 //        new Thread(() -> {
         try {
             int num = Integer.parseInt(numString.trim());
-            play(new SoundModel("user/welcomeId.wav"));
+            play(new SoundModel("user/welcomeid.wav"));
             sayNumber(num);
         } catch (Exception e) {
             e.printStackTrace();
