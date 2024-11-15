@@ -42,6 +42,7 @@ public class KhanCap extends AbsContest {
         if (getDetaTime() < 5000) {
             if (this.carModel.isNp() && this.carModel.isNt()) {
                 if (this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
+                    this.warningSoundPlayer.stop();
                     addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
                     return true;
                 } else {
@@ -51,6 +52,7 @@ public class KhanCap extends AbsContest {
                 success = false;
             }
             if (!success && getDetaTime() > 3000) {
+                this.warningSoundPlayer.stop();
                 addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
                 return true;
             }
@@ -61,11 +63,11 @@ public class KhanCap extends AbsContest {
                 this.firstDone = true;
                 this.soundPlayer.successSound();
             }
-            if (!this.carModel.isNp() && !this.carModel.isNt()) {
+            if (getDetaTime() > 8000 || this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
+                addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
                 return true;
             }
-            if (getDetaTime() > 8000) {
-                addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
+            if (!this.carModel.isNp() && !this.carModel.isNt()) {
                 return true;
             }
         }

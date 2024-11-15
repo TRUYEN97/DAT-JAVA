@@ -76,7 +76,7 @@ public class Setting {
     }
 
     public String getServerPingIp() {
-        return filePath.getProperty(ConstKey.URL.SERVER_PING_ADDR);
+        return apiProperties.getProperty(ConstKey.URL.SERVER_PING_ADDR);
     }
 
     public String getSendDataUrl() {
