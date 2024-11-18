@@ -4,7 +4,7 @@
  */
 package com.qt.mode.online.imp;
 
-import com.qt.contest.impContest.shB2.DoXeDoc;
+import com.qt.contest.impContest.shB2.DoXeNgang;
 import com.qt.contest.impContest.shB2.DungXe;
 import com.qt.contest.impContest.shB2.DungXeNgangDoc;
 import com.qt.contest.impContest.shB2.DuongS;
@@ -16,23 +16,30 @@ import com.qt.contest.impContest.shB2.TangTocDuongThang;
 import com.qt.contest.impContest.shB2.VetBanhXe;
 import com.qt.contest.impContest.shB2.XuatPhat;
 import com.qt.mode.online.AbsSaHinhMode;
+import com.qt.pretreatment.IKeyEvent;
 import com.qt.view.modeView.SaHinhView;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
  *
  * @author Admin
  */
-public abstract class AbsCDE_Mode extends AbsSaHinhMode {
+public class SH_E_MODE extends AbsSaHinhMode {
 
-    public AbsCDE_Mode(SaHinhView hinhView, int speedLimit, int timeOut,
-            MODEL_RANK_NAME modelRank, List<String> ranks, boolean isOnline) {
-        super(hinhView, speedLimit, timeOut, modelRank, ranks, isOnline);
+    public SH_E_MODE(SaHinhView hinhView, boolean isOnline) {
+        super(hinhView, 20, 1200, MODEL_RANK_NAME.RANK_E, List.of("E"), isOnline);
     }
 
-   
+    @Override
+    protected void createPrepareKeyEvents(Map<String, IKeyEvent> events) {
+    }
 
+    @Override
+    protected void createTestKeyEvents(Map<String, IKeyEvent> events) {
+    }
+    
     @Override
     protected void creadContestList() {
         contests.clear();
@@ -42,15 +49,15 @@ public abstract class AbsCDE_Mode extends AbsSaHinhMode {
         contests.add(new DungXe(yardRankConfig.getDungXeChoNg(), speedLimit));
         contests.add(new DungXeNgangDoc(yardRankConfig.getDungXeNgangDoc(), speedLimit));
         contests.add(new VetBanhXe(yardRankModel, yardRankConfig.getVetBanhXe(), speedLimit));
+        if (rd == 0) {
+            contests.add(new KhanCap(30));
+        }
         contests.add(new NgaTu(1, yardModelHandle.getYardModel(),
                 yardRankConfig.getNgaTu1(), speedLimit));
         contests.add(new DuongS(yardRankModel, yardRankConfig.getDuongS(), speedLimit));
         contests.add(new NgaTu(2, yardModelHandle.getYardModel(),
                 yardRankConfig.getNgaTu2(), speedLimit));
-        if (rd == 0) {
-            contests.add(new KhanCap(40));
-        }
-        contests.add(new DoXeDoc(yardRankModel, yardRankConfig.getDoXeDoc(), speedLimit));
+        contests.add(new DoXeNgang(yardRankModel, yardRankConfig.getDoXeNgang(), speedLimit));
         contests.add(new NgaTu(3, yardModelHandle.getYardModel(),
                 yardRankConfig.getNgaTu3(), speedLimit));
         if (rd == 2) {
