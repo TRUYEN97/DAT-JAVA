@@ -183,7 +183,7 @@ public class SH_OFF extends AbsSaHinhMode {
             }
             MCUSerialHandler.getInstance().sendReset();
             this.carModel.setDistance(0);
-            addContest(new KhanCap(5));
+            addContest(new KhanCap(0));
         });
     }
 

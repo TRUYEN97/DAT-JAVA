@@ -63,7 +63,7 @@ public class KhanCap extends AbsContest {
                 this.firstDone = true;
                 this.soundPlayer.successSound();
             }
-            if (getDetaTime() > 8000 || this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
+            if (getDetaTime() > 9000 || this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
                 addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
                 return true;
             }
