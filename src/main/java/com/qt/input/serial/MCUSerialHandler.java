@@ -26,6 +26,7 @@ public class MCUSerialHandler {
 
     private static volatile MCUSerialHandler instance;
     private final SerialHandler serialHandler;
+    private final GearBoxer gearBoxer;
     private CarModel model;
     private Thread threadRunner;
     private boolean sendorStartEnable = false;
@@ -35,6 +36,7 @@ public class MCUSerialHandler {
 
     private MCUSerialHandler() {
         this.model = new CarModel();
+        this.gearBoxer = new GearBoxer();
         this.serialHandler = new SerialHandler("ttyS0", 115200); //ttyS0
         this.serialHandler.setFirstConnectAction(() -> {
             System.out.println("send MCU config");
@@ -107,7 +109,7 @@ public class MCUSerialHandler {
                     processModel.getLocation().setLat(lat);
                     processModel.getLocation().setLng(lng);
                 }
-                this.model.mathGearBoxValue();
+                this.gearBoxer.mathGearBoxValue();
             } catch (Exception e) {
                 e.printStackTrace();
                 ErrorLog.addError(this, e);
@@ -146,15 +148,15 @@ public class MCUSerialHandler {
     public void sendLedOff() {
         this.serialHandler.send("roff");
     }
-    
+
     public void sendLedRedOff() {
         this.serialHandler.send("r2off");
     }
-    
+
     public void sendLedGreenOff() {
         this.serialHandler.send("r1off");
     }
-    
+
     public void sendLedYellowOff() {
         this.serialHandler.send("r3off");
     }
@@ -198,6 +200,14 @@ public class MCUSerialHandler {
         } catch (JsonProcessingException ex) {
             ex.printStackTrace();
             return false;
+        }
+    }
+
+    class GearBoxer {
+
+        public void mathGearBoxValue() {
+            model.setGearBoxValue(Util.getGearBoxVal(model.isS1(), model.isS2(), 
+                    model.isS3(), model.isS4()));
         }
     }
 }

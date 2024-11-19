@@ -4,7 +4,6 @@
  */
 package com.qt.model.input;
 
-import com.qt.common.Util;
 import com.qt.model.modelTest.process.LocationModel;
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -44,10 +43,7 @@ public class CarModel {
     public CarModel() {
         this.location = new LocationModel();
     }
-
-    public void mathGearBoxValue() {
-        gearBoxValue = Util.getGearBoxVal(s1, s2, s3, s4);
-    }
+    
     private final Queue<String> remoteValues = new ArrayDeque<>();
 
     public void setRemoteValue(String value) {

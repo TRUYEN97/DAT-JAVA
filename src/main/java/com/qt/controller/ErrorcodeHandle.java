@@ -8,6 +8,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.qt.common.ErrorLog;
 import com.qt.common.MyObjectMapper;
 import com.qt.controller.api.ApiService;
+import com.qt.input.camera.CameraRunner;
 import com.qt.main.Core;
 import com.qt.model.modelTest.Errorcode;
 import com.qt.model.modelTest.ErrorcodeWithContestNameModel;
@@ -94,7 +95,8 @@ public class ErrorcodeHandle {
                     if (jsono != null) {
                         testData.putAll(jsono);
                     }
-                    this.apiService.sendData(testData, null);
+                    this.apiService.sendData(CameraRunner.getInstance().getImage(),
+                            testData);
                 }).start();
             }
         } catch (Exception e) {
@@ -122,7 +124,8 @@ public class ErrorcodeHandle {
                     if (id == null || id.isBlank() || id.equals("0")) {
                         return;
                     }
-                    this.apiService.sendData(this.processModelHandle.toProcessModelJson(), null);
+                    this.apiService.sendData(CameraRunner.getInstance().getImage(), 
+                            this.processModelHandle.toProcessModelJson());
                 }).start();
             }
         } catch (Exception e) {
