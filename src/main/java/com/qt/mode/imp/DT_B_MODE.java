@@ -2,14 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.qt.mode.online.imp;
+package com.qt.mode.imp;
 
 import com.qt.common.ConstKey;
 import com.qt.contest.impCondition.timerCondition.CheckSo3;
 import com.qt.contest.impContest.dtB2.GiamToc;
 import com.qt.contest.impContest.dtB2.KetThuc;
 import com.qt.contest.impContest.dtB2.TangToc;
-import com.qt.mode.online.AbsDuongTruongMode;
+import com.qt.mode.AbsDuongTruongMode;
 import com.qt.pretreatment.IKeyEvent;
 import com.qt.view.modeView.DuongTruongView;
 import java.util.List;

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.qt.mode.online;
+package com.qt.mode;
 
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
@@ -17,7 +17,6 @@ import com.qt.controller.api.ApiService;
 import com.qt.input.camera.CameraRunner;
 import com.qt.input.serial.MCUSerialHandler;
 import com.qt.input.socket.YardModelHandle;
-import com.qt.mode.AbsTestMode;
 import com.qt.model.input.UserModel;
 import com.qt.model.input.yard.YardRankModel;
 import com.qt.model.modelTest.process.ProcessModel;
@@ -107,6 +106,7 @@ public abstract class AbsSaHinhMode extends AbsTestMode<AbsModeView> {
                 userModel.setId("0");
                 userModel.setExamId("0");
                 this.processlHandle.setUserModel(userModel);
+                creadContestList();
                 return true;
             }
         } else if (st) {

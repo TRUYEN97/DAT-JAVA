@@ -52,11 +52,15 @@ public class SerialHandler implements Runnable {
         this.receiver = receiver;
     }
 
-    public boolean send(String command, Object... params) {
+    public synchronized boolean send(String command, Object... params) {
         if (!isConnect()) {
             return false;
         }
-        return this.startSerial.sendCommand(command, params);
+        if (this.startSerial.sendCommand(command, params)) {
+            this.checkConntect.update();
+            return true;
+        }
+        return false;
     }
 
     @Override

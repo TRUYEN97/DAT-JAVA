@@ -24,8 +24,6 @@ public class XuatPhat extends AbsSaHinhContest {
         this.timeOut30s = new CheckTimeOut(importantError, 30, ConstKey.ERR.OVER_30S_TO_START);
         this.timeOut20s = new CheckTimeOut(null, 20, ConstKey.ERR.OVER_20S_TO_START, false);
         this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
-        this.conditionBeginHandle.addConditon(this.timeOut30s);
-        this.conditionBeginHandle.addConditon(this.timeOut20s);
     }
 
     @Override

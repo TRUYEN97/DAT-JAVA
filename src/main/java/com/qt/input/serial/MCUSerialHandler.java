@@ -6,7 +6,6 @@
 package com.qt.input.serial;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.qt.common.CarConfig;
 import com.qt.common.ConstKey;
 import com.qt.common.ErrorLog;
@@ -43,7 +42,7 @@ public class MCUSerialHandler {
             while (!sendConfig(CarConfig.getInstance().getMcuConfig())) {
                 Util.delay(500);
             }
-            System.out.println("send MCU reset ok");
+            System.out.println("send MCU config ok");
 
         });
         this.serialHandler.setReceiver((serial, data) -> {
@@ -193,12 +192,28 @@ public class MCUSerialHandler {
         threadRunner.start();
     }
 
+    public boolean sendConfig(String config) {
+        try {
+            if (config == null || config.isBlank()) {
+                return false;
+            }
+            return this.serialHandler.send(config);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLog.addError(this, ex);
+            return false;
+        }
+    }
+
     public boolean sendConfig(MCU_CONFIG_MODEL config) {
         try {
+            if (config == null) {
+                return false;
+            }
             String configString = MyObjectMapper.writeValueAsString(config);
             return this.serialHandler.send(configString);
-        } catch (JsonProcessingException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
+            ErrorLog.addError(this, ex);
             return false;
         }
     }
@@ -206,7 +221,7 @@ public class MCUSerialHandler {
     class GearBoxer {
 
         public void mathGearBoxValue() {
-            model.setGearBoxValue(Util.getGearBoxVal(model.isS1(), model.isS2(), 
+            model.setGearBoxValue(Util.getGearBoxVal(model.isS1(), model.isS2(),
                     model.isS3(), model.isS4()));
         }
     }

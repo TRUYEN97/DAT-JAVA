@@ -296,4 +296,8 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
         }
     }
 
+    public void clearContest() {
+        this.contests.clear();
+    }
+
 }

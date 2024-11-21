@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.qt.mode.online.imp;
+package com.qt.mode.imp;
 
 import com.qt.contest.impContest.shB2.DoXeDoc;
 import com.qt.contest.impContest.shB2.DoXeNgang;
@@ -16,7 +16,7 @@ import com.qt.contest.impContest.shB2.NgaTu;
 import com.qt.contest.impContest.shB2.TangTocDuongThang;
 import com.qt.contest.impContest.shB2.VetBanhXe;
 import com.qt.contest.impContest.shB2.XuatPhat;
-import com.qt.mode.online.AbsSaHinhMode;
+import com.qt.mode.AbsSaHinhMode;
 import com.qt.pretreatment.IKeyEvent;
 import com.qt.view.modeView.SaHinhView;
 import java.util.List;
@@ -41,12 +41,12 @@ public class SH_B_MODE extends AbsSaHinhMode {
         contests.add(new DungXe(yardRankConfig.getDungXeChoNg(), speedLimit));
         contests.add(new DungXeNgangDoc(yardRankConfig.getDungXeNgangDoc(), speedLimit));
         contests.add(new VetBanhXe(yardRankModel, yardRankConfig.getVetBanhXe(), speedLimit));
+        if (rd == 0) {
+            contests.add(new KhanCap(20));
+        }
         contests.add(new NgaTu(1, yardModelHandle.getYardModel(),
                 yardRankConfig.getNgaTu1(), speedLimit));
         contests.add(new DuongS(yardRankModel, yardRankConfig.getDuongS(), speedLimit));
-        if (rd == 0) {
-            contests.add(new KhanCap(15));
-        }
         contests.add(new NgaTu(2, yardModelHandle.getYardModel(),
                 yardRankConfig.getNgaTu2(), speedLimit));
         contests.add(new DoXeDoc(yardRankModel, yardRankConfig.getDoXeDoc(), speedLimit));

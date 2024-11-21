@@ -31,6 +31,7 @@ public abstract class AbsTimerConditon extends AbsCondition {
                     hasFail = true;
                     if (importantError != null) {
                         importantError.setIsImportantError();
+                        System.out.println("import");
                     }
                 }
                 if (justOneTime) {

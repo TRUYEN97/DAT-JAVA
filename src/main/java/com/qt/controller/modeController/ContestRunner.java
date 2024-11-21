@@ -80,12 +80,23 @@ public class ContestRunner implements Runnable {
         while (!future.isDone()) {
             currContest.stop();
             future.cancel(true);
-            Util.delay(200);
+            if (currContest.isTestCondisionsFailed()) {
+                stop();
+                break;
+            }
+            if (testMode == null || testMode.isTestCondisionsFailed()) {
+                stop();
+                break;
+            }
+            Util.delay(100);
         }
     }
 
     public void stop() {
         this.testDone = true;
+        if (testMode != null) {
+            testMode.clearContest();
+        }
     }
 
     public boolean isRunning() {
