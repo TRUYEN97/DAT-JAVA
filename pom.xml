@@ -115,7 +115,7 @@
                         <configuration>
                             <archive>
                                 <manifestEntries>
-                                    <SplashScreen-Image>loading.gif</SplashScreen-Image>
+                                    <SplashScreen-Image>loading.jpg</SplashScreen-Image>
                                 </manifestEntries>
                                 <manifest>
                                     <mainClass>${exec.mainClass}</mainClass>

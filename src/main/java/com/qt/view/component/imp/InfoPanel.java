@@ -18,6 +18,7 @@ import com.qt.view.modeView.IgetImgLabel;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 /**
@@ -35,6 +36,11 @@ public class InfoPanel extends UpdateValuePanel implements IgetImgLabel {
         super(1500);
         initComponents();
         setBackground(new Color(255, 255, 255, 70));
+        this.lbImg.setIcon(
+                Util.resizeImageIcon(
+                        new ImageIcon(
+                                getClass().getResource("/loading.jpg")),
+                        320, 240));
         this.stId.setMouseAdapter(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
