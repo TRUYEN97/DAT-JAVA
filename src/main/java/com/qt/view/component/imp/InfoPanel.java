@@ -5,7 +5,6 @@
 package com.qt.view.component.imp;
 
 import com.qt.common.ConstKey;
-import com.qt.common.ErrorLog;
 import com.qt.common.Setting;
 import com.qt.common.Util;
 import com.qt.common.communication.Communicate.Impl.Cmd.Cmd;

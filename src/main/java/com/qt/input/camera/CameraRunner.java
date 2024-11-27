@@ -28,17 +28,17 @@ import org.opencv.videoio.Videoio;
  * @author Admin
  */
 public class CameraRunner implements IStarter {
-    
+
     private static volatile CameraRunner instance;
     private final ExecutorService threadPool;
     private final Camera camera;
     private Future future;
-    
+
     private CameraRunner() {
         this.threadPool = Executors.newSingleThreadExecutor();
         this.camera = new Camera();
     }
-    
+
     public static CameraRunner getInstance() {
         CameraRunner ins = instance;
         if (ins == null) {
@@ -51,27 +51,27 @@ public class CameraRunner implements IStarter {
         }
         return ins;
     }
-    
+
     public void setFps(int fps) {
         this.camera.setFps(fps);
     }
-    
+
     public void setSize(int w, int h) {
         this.camera.setSize(w, h);
     }
-    
+
     public void setCamera(int index) {
         camera.setCamera(index);
     }
-    
+
     public BufferedImage getImage() {
         return this.camera.image;
     }
-    
+
     public void setImageLabel(JLabel ImgLb) {
         this.camera.imageLabel = ImgLb;
     }
-    
+
     public boolean saveImg(File file) {
         if (file == null) {
             return false;
@@ -91,7 +91,7 @@ public class CameraRunner implements IStarter {
             return false;
         }
     }
-    
+
     @Override
     public void start() {
         if (isStarted()) {
@@ -99,7 +99,7 @@ public class CameraRunner implements IStarter {
         }
         this.future = this.threadPool.submit(camera);
     }
-    
+
     @Override
     public void stop() {
         if (!isStarted()) {
@@ -111,12 +111,12 @@ public class CameraRunner implements IStarter {
             Util.delay(500);
         }
     }
-    
+
     @Override
     public boolean isStarted() {
         return this.future != null && !this.future.isDone();
     }
-    
+
     public void setTestModeView(IgetImgLabel imgLabel) {
         if (imgLabel == null) {
             return;
@@ -127,30 +127,30 @@ public class CameraRunner implements IStarter {
     public void resetImage() {
         this.camera.image = null;
     }
-    
+
     class Camera implements Runnable {
-        
+
         private boolean stop;
         private boolean firstTime = true;
         private int cameraId = 0;
-        private int fps = 5;
+        private int fps = 6;
         private JLabel imageLabel;
         private BufferedImage image;
         private int h = 240;
         private int w = 320;
-        
+
         private void setCamera(int cameraID) {
             this.cameraId = cameraID < 0 ? 0 : cameraID;
         }
-        
+
         public void setFps(int fps) {
             this.fps = fps < 1 ? 1 : fps;
         }
-        
+
         private void stop() {
             this.stop = true;
         }
-        
+
         private boolean openCamera(VideoCapture camera) {
             try {
                 if (camera.open(cameraId) && camera.isOpened()) {
@@ -165,7 +165,7 @@ public class CameraRunner implements IStarter {
                 return false;
             }
         }
-        
+
         @Override
         public void run() {
             if (firstTime) {
@@ -176,8 +176,15 @@ public class CameraRunner implements IStarter {
             this.stop = false;
             while (!stop) {
                 try {
+                    image = null;
+                    if (imageLabel != null) {
+                        imageLabel.setIcon(Util.resizeImageIcon(
+                                new ImageIcon(
+                                        getClass().getResource("/loading.jpg")),
+                                320, 240));
+                    }
                     while (!openCamera(camera)) {
-                        Util.delay(5000);
+                        Util.delay(3000);
                     }
                     Mat frameMat = new Mat();
                     while (!stop) {
@@ -200,9 +207,9 @@ public class CameraRunner implements IStarter {
             }
             camera.release();
         }
-        
+
         private void updateView(Image img) {
-            if (img == null || imageLabel == null) {
+            if (imageLabel == null) {
                 return;
             }
             try {
@@ -213,7 +220,7 @@ public class CameraRunner implements IStarter {
                 ErrorLog.addError(this, e);
             }
         }
-        
+
         private BufferedImage matToBufferedImage(Mat mat) {
             int type = BufferedImage.TYPE_BYTE_GRAY;
             if (mat.channels() > 1) {
@@ -227,7 +234,7 @@ public class CameraRunner implements IStarter {
             System.arraycopy(buffer, 0, targetPixels, 0, buffer.length);
             return img;
         }
-        
+
         private void setSize(int w, int h) {
             this.w = w < 320 ? 320 : w;
             this.h = h < 240 ? 240 : h;

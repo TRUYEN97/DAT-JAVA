@@ -112,6 +112,9 @@ public class Util {
     }
 
     public static ImageIcon resizeImageIcon(ImageIcon icon, int width, int height) {
+        if (icon == null) {
+            return null;
+        }
         Image img = icon.getImage();
         return resizeImg(img, width, height);
     }
