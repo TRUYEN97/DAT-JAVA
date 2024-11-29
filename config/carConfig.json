@@ -1,1 +1,1 @@
-{"MCU":{"encoder":6.59,"rpm":60.0,"nt_time":666,"np_time":666},"carId":"9","centerName":"","examId":"0","password":"e10adc3949ba59abbe56e057f20f883e","yardRank":"1","yardIp":"192.168.137.18","yardPort":6868,"modeIndex":5}
+{"MCU":{"encoder":10.5,"np_time":666,"nt_time":666,"rpm":60.0},"carId":"0","centerName":"","examId":"0","password":"e10adc3949ba59abbe56e057f20f883e","yardIp":"192.168.137.230","yardPort":6868,"modeIndex":5,"yardpassword":"f3cea34ed1507b50f09c236045bb1067","yardusername":"client"}

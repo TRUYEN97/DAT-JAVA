@@ -19,11 +19,12 @@ public class CarConfig {
     private static final String CAR_ID_KEY = "carId";
     private static final String TEST_STATUS_KEY = "testStatus";
     private static final String PASSWORD = "password";
-    private static final String YARD_RANK = "yardRank";
     private static final String YARD_IP = "yardIp";
     private static final String EXAM_ID = "examId";
     private static final String YARD_PORT = "yardPort";
     private static final String MODE_INDEX = "modeIndex";
+    private static final String YARDUSERNAME = "yardusername";
+    private static final String YARDPASSWORD = "yardpassword";
     private static volatile CarConfig instance;
     private final JSONObject jsono;
     private final String path;
@@ -67,10 +68,11 @@ public class CarConfig {
         this.jsono.put(CENTER_NAME, "");
         this.jsono.put(EXAM_ID, "0");
         this.jsono.put(PASSWORD, "e10adc3949ba59abbe56e057f20f883e");
-        this.jsono.put(YARD_RANK, "1");
         this.jsono.put(YARD_IP, "192.168.1.168");
         this.jsono.put(YARD_PORT, 6868);
         this.jsono.put(MODE_INDEX, 0);
+        this.jsono.put(YARDPASSWORD, "f3cea34ed1507b50f09c236045bb1067");
+        this.jsono.put(YARDUSERNAME, "client");
         update();
     }
 
@@ -178,10 +180,6 @@ public class CarConfig {
     }
     protected static final String CENTER_NAME = "centerName";
 
-    public int getYardRank() {
-        return this.jsono.getIntValue(YARD_RANK, 1);
-    }
-
     public String getString(String key) {
         return this.jsono.getString(key);
     }
@@ -198,6 +196,14 @@ public class CarConfig {
 
     public int getIndexOfModel() {
         return this.jsono.getIntValue(MODE_INDEX, 0);
+    }
+
+    public String getYardPassword() {
+        return this.getString(YARDPASSWORD, "f3cea34ed1507b50f09c236045bb1067");
+    }
+
+    public String getYardUser() {
+        return this.getString(YARDUSERNAME, "client");
     }
 
 }

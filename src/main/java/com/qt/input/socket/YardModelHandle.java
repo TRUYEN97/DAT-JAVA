@@ -18,6 +18,7 @@ import com.qt.model.yardConfigMode.ContestConfig;
 import com.qt.model.yardConfigMode.YardConfigModel;
 import com.qt.model.yardConfigMode.YardRankConfig;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -41,7 +42,7 @@ public class YardModelHandle {
         this.carConfig = CarConfig.getInstance();
         this.yardConfig = YardConfig.getInstance().getYardConfigModel();
         IReceiver<SocketClient> receiver = (SocketClient commnunication, String data) -> {
-            createReciver(data);
+            analysisReciver(data);
         };
         this.socketClient = new SocketClient(this.carConfig.getYardIp(),
                 this.carConfig.getYardPort(), receiver);
@@ -65,7 +66,7 @@ public class YardModelHandle {
         return ins;
     }
 
-    private void createReciver(String data) {
+    private void analysisReciver(String data) {
         if (data == null || data.isBlank()) {
             return;
         }
@@ -111,7 +112,7 @@ public class YardModelHandle {
         updateContest(rankConfig.getDuongS(), inputs, rankModel.getRoadSs());
 
         updateContest(rankConfig.getVetBanhXe(), inputs, rankModel.getRoadZs());
-        
+
         updateContest(rankConfig.getDuongVuongGoc(), inputs, rankModel.getRoadZs1());
     }
 
@@ -155,12 +156,17 @@ public class YardModelHandle {
             this.thread = new Thread(() -> {
                 while (!stop) {
                     System.out.println("YardStart");
+                    Util.delay(1000);
                     while (!this.socketClient.connect() && !stop) {
-                        Util.delay(1000);
+                        Util.delay(2000);
                     }
-                    System.out.println("Yard connected");
                     if (!stop) {
+                        while (!sendApplyConnect()) {
+                            Util.delay(1000);
+                        }
+                        System.out.println("Yard connected");
                         this.socketClient.run();
+                        System.out.println("Yard disconnected");
                     }
                 }
             });
@@ -169,6 +175,14 @@ public class YardModelHandle {
             e.printStackTrace();
             ErrorLog.addError(this, e);
         }
+    }
+
+    private boolean sendApplyConnect() {
+        return this.socketClient.send(
+                new JSONObject(
+                        Map.of("username", this.carConfig.getYardUser(),
+                                "password", this.carConfig.getYardPassword()))
+                        .toString());
     }
 
     public void stop() {
